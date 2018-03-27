@@ -57,3 +57,7 @@ typings/
 # dotenv environment variables file
 .env
 
+.idea/
+/example/Initiator_Peer/mewConnect.js
+/example/Initiator_Peer/mewConnectUtils.js
+/example/Initiator_Peer/mewRTC.js
