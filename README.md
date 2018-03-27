@@ -4,19 +4,29 @@ Client For mew-signer-hs
 
 ### Getting Started
 
->git clone <repo address>
 
->npm install
+### Running the Example:
+>Clone the repo:
 
-Start the server serving the example initiator and receiver
->npm start
+`git clone <repo address>`
 
-Start the signaling server
->npm start:signal
+>Install the dependencies:
 
-navigate one tab/window to https://localhost:3000/initiator
+`npm install`
 
-navigate another tab/window to https://localhost:3000/receiver
+>Start the server serving the example initiator and receiver:
+
+`npm start`
+
+>Start the signaling server:
+
+`npm start:signal`
+
+>Open two browser tabs/windows:
+
+navigate one to https://localhost:3000/initiator
+
+navigate the other to https://localhost:3000/receiver
 
 _**Note:** You may need to navigate to https://localhost:3001 to accept the self-signed certificate used in the example_
 
