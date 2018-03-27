@@ -60,14 +60,7 @@ var urlBase = "localhost";
 // Separate the connection ID from the confirmation key and send both to the signaling server
 function connect(code){
     socketKeyButtonState();
-    let qrString = code;
-    console.log(qrString);
-    let connParts = qrString.split("-");
-    console.log('connParts', connParts); // todo remove debug item
-    let options = {
-        connId: connParts[1].trim(),
-        key: connParts[0].trim()
-    };
+    let options = MewConnectClient.parseConnectionCodeString(code);
     mewConnect.receiverStart(`https://${urlBase}:3001`, options);
 }
 

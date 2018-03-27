@@ -39,11 +39,15 @@ Two Peers are needed with one designated as the Initiator and the other as the R
 
 
 ```javascript
-let mewConnect = new MewConnect(signalStateChange, logger, depends);
+let mewConnect = new MewConnect(communicatorFunc, loggingFunc, depends);
 ```
-The constructor takes:
-- first argument:  
-    - A listener for lifecycle events or null
+The MewConnect takes:
+- communicatorFunc:  
+    - A function or null
+    - If a function it is called on each lifeCycle event.
+    - with two arguments:
+      - a String denoting the specific signal
+      - null or an object containing data related to the signal;
   ```javascript
         let signalStateChange = function(signal, data){
           if(signal === "codeDisplay"){
@@ -51,15 +55,21 @@ The constructor takes:
             };
           };
    ```
-    - If null listeners can be attached for specific lifecycle events via ```javascript registerLifeCycleListener```
+    - If null listeners can be attached for specific lifecycle events via ``` registerLifeCycleListener```
 
 
-- second argument:
-    - a optional logger or null (to use the default)
-- third argument: 
+- loggingFunc:
+    - a optional function to provide logging or null (to use the default)
+- additionalLibs: 
     - a dictionary (object) containing dependencies as they are declared in the scope.
+      - the dependencies are:
+        - node.js crypto or polyfill
+        - secp256k1
+        - ethereumjs-util
+        - node.js buffer.Buffer  (e.g. require("buffer").Buffer) or polyfill
+        - simple-peer or MewRTC (an ES6 port of simple-peer)
     - ```javascript
-          let cryptoFuncs = new MewConnectCrypto(CCrypto.crypto, CCrypto.secp256k1, EthUtilities, BBuffer.Buffer);
+          let cryptoFuncs = new MewConnectCrypto(crypto, secp256k1, ethereumjs-util, buffer.Buffer);
           
           let depends = {wrtc: MewRTC,
                cryptoImpl: cryptoFuncs,

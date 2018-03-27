@@ -1055,6 +1055,18 @@ class MewConnectReceiver extends MewConnectSimplePeer {
         this.triedTurn = false;
     }
 
+    static parseConnectionCodeString(str){
+        try {
+            let connParts = str.split("-");
+            return {
+                connId: connParts[1].trim(),
+                key: connParts[0].trim()
+            };
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     /**
      *
      * @param url
@@ -1087,7 +1099,6 @@ class MewConnectReceiver extends MewConnectSimplePeer {
         } catch(e) {
             console.error(e);
         }
-
     }
 
     /**
