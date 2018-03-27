@@ -8,7 +8,7 @@ Client For mew-signer-hs
 ### Running the Example:
 >Clone the repo:
 
-`git clone <repo address>`
+`git clone https://github.com/MyEtherWallet/mew-signer-peer.git`
 
 >Install the dependencies:
 
