@@ -9,8 +9,6 @@ let devWallet = {
 function getDevWallet() {
   return devWallet;
 }
-
-
 //==================================================================
 let connectionState = document.getElementById("connState");
 let disconnectBtn = document.getElementById("disconnect");
@@ -20,7 +18,7 @@ let testRTCBtn = document.getElementById("testRTC");
 
 disconnectBtn.disabled = true;
 socketKeyBtn.disabled = false;
-
+let scanCaptured = false;
 
 // Create an Instance of the Initiator Peer
 let mewConnect = new MewConnectClient(signalStateChange, logger, {wrtc: MewRTC, cryptoImpl: new MewConnectCrypto(CCrypto.crypto, CCrypto.secp256k1, EthUtilities, BBuffer.Buffer), io: io, ethUtils: ""});
@@ -31,7 +29,8 @@ var urlBase = "localhost";
 // Separate the connection ID from the confirmation key and send both to the signaling server
 function connect(code){
     socketKeyButtonState();
-    let options = MewConnectClient.parseConnectionCodeString(code);
+    let options = mewConnect.parseConnectionCodeString(code);
+    console.log("main:34", options); //todo remove dev item
     mewConnect.receiverStart(`https://${urlBase}:3001`, options);
 }
 
@@ -39,8 +38,13 @@ function connect(code){
 document.getElementById("startScan").addEventListener("click", event => {
     let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
     scanner.addListener('scan', function (content) {
-        console.log(content);
+            scanCaptured = true;
+            if(content != undefined){
+                console.log("content", content);
         connect(content);
+                scanner.stop();
+            }
+
     });
     Instascan.Camera.getCameras().then(function (cameras) {
         if (cameras.length > 0) {

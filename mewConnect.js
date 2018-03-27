@@ -162,8 +162,8 @@ class MewConnectCommon {
                 "address": "address",
                 "signMessage":"signMessage",
                 "signTx":"signTx"
-            }
-
+            },
+            "connectionCodeSeparator": "_"
         }
     }
 
@@ -617,7 +617,7 @@ class MewConnectInitiator extends MewConnectSimplePeer {
     displayCode(data) {
         this.logger("handshake", data);
         this.socketKey = data;
-        let qrCodeString = data + "-" + this.connId;
+        let qrCodeString = data + this.jsonDetails.connectionCodeSeparator + this.connId;
         this.qrCodeString = qrCodeString;
         this.applyDatahandlers(JSON.stringify({type: "codeDisplay", data: qrCodeString}));
         this.uiCommunicator("codeDisplay", qrCodeString);
@@ -1050,14 +1050,17 @@ class MewConnectReceiver extends MewConnectSimplePeer {
     constructor(uiCommunicatorFunc, loggingFunc, additionalLibs) {
         super(uiCommunicatorFunc, loggingFunc, additionalLibs);
 
+        console.log(this.jsonDetails.connectionCodeSeparator);
         this.mewCrypto = additionalLibs.cryptoImpl;
         this.io = additionalLibs.io;
+        this.tryTurn = true;
         this.triedTurn = false;
     }
 
-    static parseConnectionCodeString(str){
+    parseConnectionCodeString(str){
         try {
-            let connParts = str.split("-");
+            let connParts = str.split(this.jsonDetails.connectionCodeSeparator);
+            console.log(connParts);
             return {
                 connId: connParts[1].trim(),
                 key: connParts[0].trim()
@@ -1106,6 +1109,7 @@ class MewConnectReceiver extends MewConnectSimplePeer {
      * @param data
      */
     retryViaTurn(data){
+        console.log("TURN TOKEN RECIEVED");
         // this.receiverTurnRTC(data);
     }
 
@@ -1116,6 +1120,7 @@ class MewConnectReceiver extends MewConnectSimplePeer {
      */
     async socketHandshake(data) {
         // this.signed = "321"; //todo remove dev item
+        console.log("socketHandshake", data);
         this.signed = await this.mewCrypto.signMessage(data.toSign); //todo uncomment after dev
         this.uiCommunicator("signatureCheck", this.signed);
         this.socketEmit("signature", {signed: this.signed, connId: this.connId});
@@ -1166,6 +1171,7 @@ class MewConnectReceiver extends MewConnectSimplePeer {
         this.rtcSend({type: "text", data: "From Web"});
         this.uiCommunicator("RtcConnectedEvent");
         this.socketEmit("rtcConnected", this.connId);
+        this.tryTurn = false;
         this.socketDisconnect();
     }
 
@@ -1176,7 +1182,7 @@ class MewConnectReceiver extends MewConnectSimplePeer {
     onClose(data) {
         console.error("WRTC CLOSE");
         this.uiCommunicator("RtcClosedEvent");
-        if(!this.triedTurn){
+        if(!this.triedTurn && this.tryTurn){
             this.attemptTurnConnect();
         }
     }
