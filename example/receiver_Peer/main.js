@@ -1,40 +1,11 @@
 "use strict";
 //==================================================================
 // DEV USER VARIABLES
-
+// Just a random private key
 let devWallet = {
-  // privateKey: "cc8cdea919c19781a971b4c290d27dec25d503b611abff7b725051e220cab5f6",
-  // publicKey: "0xa285efbee9bd70e1f595b880b00e112a9c7d126370e31e297833c76fa77c8fc2d4fe5087be7803e38c81f4e05c78e6c70323586fb77cf57189b544d8756949dd",
-  // password: "123456789",
-    privateKey:"9b11121e377bfde0375bfc1d6726f156bdceec1ca2e2e6b4ce877777f3a2c1be",
-  V3: {
-    "version": 3,
-    "id": "dd9e92fa-17d6-4449-a7d6-488109deb5b2",
-    "address": "a842d06bb63912e6062b6be8d7095e603bc58b9d",
-    "Crypto": {
-      "ciphertext": "2867d6310ef4146bbf79f5c138be7d8595d270265ee2993dc344555050bcade4",
-      "cipherparams": {"iv": "f744630c7fdbf7647a161c55b8e01ff7"},
-      "cipher": "aes-128-ctr",
-      "kdf": "scrypt",
-      "kdfparams": {
-        "dklen": 32,
-        "salt": "ffbd991f8d317d4a6ec687f7b7f5f4b5c2374a5e8bb197283b1291ef1e1aebf7",
-        "n": 8192,
-        "r": 8,
-        "p": 1
-      },
-      "mac": "b760ad4cebb72504f207669c3353d671886b6ed177778f0c137891e19aaf8e73"
-    }
-  }
+    privateKey: "2582d0e7659f380a60c282f122194fae2acb55b3f69615b3d01c5f066cfaa03f"
 };
 
-let v2Signed = {
-  "address": "0xa842d06bb63912e6062b6be8d7095e603bc58b9d",
-  "msg": "signMessage",
-  "sig": "0xf1168923b0f014cd5b41b4bbe2039f2f69bd88c4009d38700422749a308ea7057c842e81caf039edc22c8ffd4e4dd36bfdbbc018b1dd8ccf451e6c99be056b001b",
-  "version": "3",
-  "signer": "MEW"
-}
 function getDevWallet() {
   return devWallet;
 }

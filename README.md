@@ -41,6 +41,7 @@ Two Peers are needed with one designated as the Initiator and the other as the R
 ```javascript
 let mewConnect = new MewConnect(communicatorFunc, loggingFunc, depends);
 ```
+
 The MewConnect takes:
 - communicatorFunc:  
     - A function or null
