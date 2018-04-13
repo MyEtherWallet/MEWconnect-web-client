@@ -96,7 +96,7 @@ The url of the signaling server and an object containing the key and connection 
 
 ```javascript
 let parameters = {
-    key: "parth of the connection code before the dash",
+    key: "part of the connection code before the dash",
     connId: "part of the connection code after the dash"
 };
 ```
