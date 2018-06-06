@@ -1,0 +1,8 @@
+{
+  "rules":{
+    "class-methods-use-this": "off",
+    "no-underscore-dangle": "off",
+      "prefer-destructuring": ["error", {"object": false, "array": false}]
+  },
+  "extends": "airbnb-base"
+}

@@ -1,5 +1,17 @@
+/* eslint-disable no-console */
 
-const {version, versions, connectionCodeSchemas, connectionCodeSeparator, signal, rtc, stages, lifeCycle, communicationTypes} = require("./config")
+const {
+  version,
+  versions,
+  connectionCodeSchemas,
+  connectionCodeSeparator,
+  signal,
+  rtc,
+  stages,
+  lifeCycle,
+  communicationTypes,
+} = require('./config');
+
 /**
  *
  */
@@ -12,34 +24,36 @@ class MewConnectCommon {
   constructor(uiCommunicatorFunc, loggingFunc) {
     // if null it calls the middleware registered to each specific lifecycle event
     this.uiCommunicatorFunc = uiCommunicatorFunc || this.applyLifeCycleListeners;
-    this.logger = loggingFunc || function (arg1, arg2) {
+    // eslint-disable-next-line func-names
+    this.logger = loggingFunc || function () {
     };
     this.isBrowser = typeof window !== 'undefined'
+    // eslint-disable-next-line no-undef
       && ({}).toString.call(window) === '[object Window]';
     this.middleware = [];
     this.lifeCycleListeners = [];
 
     this.jsonDetails = {
-      "signals": {
-        ...signal
+      signals: {
+        ...signal,
       },
-      "stages": {
-        ...stages
+      stages: {
+        ...stages,
       },
-      "lifeCycle": {
-        ...lifeCycle
+      lifeCycle: {
+        ...lifeCycle,
       },
-      "rtc": {
-        ...rtc
+      rtc: {
+        ...rtc,
       },
-      "communicationTypes":{
-        ...communicationTypes
+      communicationTypes: {
+        ...communicationTypes,
       },
-      "connectionCodeSeparator": connectionCodeSeparator,
-      "version" : version,
-      "versions": versions,
-      "connectionCodeSchemas": connectionCodeSchemas
-    }
+      connectionCodeSeparator,
+      version,
+      versions,
+      connectionCodeSchemas,
+    };
   }
 
   /**
@@ -52,14 +66,14 @@ class MewConnectCommon {
 
   /**
    *
-   * @param signal
+   * @param _signal
    * @param data
    */
-  commDefault(signal, data) {
-    console.log("DEFAULT COMMUNICATION FUNCTION");//todo remove dev item
-    console.log("CUSTON EVENT", signal);//todo remove dev item
-    console.log("DATA: ", data);//todo remove dev item
-  }
+  // commDefault(_signal, data) {
+  //   console.log('DEFAULT COMMUNICATION FUNCTION');// todo remove dev item
+  //   console.log('CUSTON EVENT', signal);// todo remove dev item
+  //   console.log('DATA: ', data);// todo remove dev item
+  // }
 
   /**
    *
@@ -69,12 +83,14 @@ class MewConnectCommon {
     this.middleware.push(func);
   }
 
+  // eslint-disable-next-line consistent-return
   useDataHandlers(input, fn) {
-    var fns = this.middleware.slice(0);
+    const fns = this.middleware.slice(0);
     if (!fns.length) return fn(null);
 
     function run(i) {
-      fns[i](input, function (err) {
+      // eslint-disable-next-line consistent-return
+      fns[i](input, (err) => {
         // upon error, short-circuit
         if (err) return fn(err);
 
@@ -90,66 +106,65 @@ class MewConnectCommon {
   }
 
   applyDatahandlers(data) {
-    let _this = this;
+    const _this = this;
     // function that runs after all middleware
-    let next = function (args) {
-
-      if(args === null){
-        if(_this.jsonDetails.communicationTypes[data.type]){
-          throw new Error(`No Handler Exists for ${data.type}`)
+    function next(args) {
+      if (args === null) {
+        if (_this.jsonDetails.communicationTypes[data.type]) {
+          throw new Error(`No Handler Exists for ${data.type}`);
         }
         // console.log(`No Handler Exists for ${data}`); // todo remove dev item
       }
       return args;
-    };
+    }
     this.useDataHandlers(data, next);
   }
 
   /**
    *
-   * @param signal
+   * @param _signal
    * @param func
    */
-  registerLifeCycleListener(signal, func) {
-    if (this.lifeCycleListeners[signal]) {
-      this.lifeCycleListeners[signal].push(func);
+  registerLifeCycleListener(_signal, func) {
+    if (this.lifeCycleListeners[_signal]) {
+      this.lifeCycleListeners[_signal].push(func);
     } else {
-      this.lifeCycleListeners[signal] = [];
-      this.lifeCycleListeners[signal].push(func);
+      this.lifeCycleListeners[_signal] = [];
+      this.lifeCycleListeners[_signal].push(func);
     }
-
   }
 
-  useLifeCycleListeners(signal, input, fn) {
-    if (this.lifeCycleListeners[signal]) {
-
-      var fns = this.lifeCycleListeners[signal].slice(0);
+  // eslint-disable-next-line consistent-return
+  useLifeCycleListeners(_signal, input, fn) {
+    if (this.lifeCycleListeners[_signal]) {
+      const fns = this.lifeCycleListeners[_signal].slice(0);
       if (!fns.length) return fn(null);
 
+      // eslint-disable-next-line no-use-before-define
       run(0);
     }
 
     function run(i) {
-      fns[i](input, function (err) {
+      // eslint-disable-next-line no-undef,consistent-return
+      fns[i](input, (err) => {
         // upon error, short-circuit
         if (err) return fn(err);
+        // eslint-disable-next-line no-undef
+        if (!fns[i + 1]) return fn(null); // if no middleware left, summon callback
 
-        // if no middleware left, summon callback
-        if (!fns[i + 1]) return fn(null);
 
         // go on to next
         run(i + 1);
       });
     }
-
   }
 
-  applyLifeCycleListeners(signal, data) {
+  applyLifeCycleListeners(_signal, data) {
     // function that runs after all middleware
-    let next = function (args) {
+    function next(args) {
       return args;
-    };
-    this.useLifeCycleListeners(signal, data, next);
+    }
+    this.useLifeCycleListeners(_signal, data, next);
   }
 
   /*
@@ -159,10 +174,10 @@ class MewConnectCommon {
     // console.log(this.uiCommunicatorFunc); // todo remove dev item
     return data ? this.uiCommunicatorFunc(event, data) : this.uiCommunicatorFunc(event, null);
   }
-
-  isJSON(arg){
-    try{
-      JSON.parse(arg)
+  // eslint-disable-next-line class-methods-use-this
+  isJSON(arg) {
+    try {
+      JSON.parse(arg);
       return true;
     } catch (e) {
       return false;
@@ -170,9 +185,8 @@ class MewConnectCommon {
   }
 
   // check necessary plugable functions are present
-  functionCheck() {}
-
+  // functionCheck() {}
 }
 
 
-module.exports = MewConnectCommon
+module.exports = MewConnectCommon;

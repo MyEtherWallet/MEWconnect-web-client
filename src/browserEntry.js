@@ -1,13 +1,19 @@
-'use strict';
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-undef */
+/* eslint-disable global-require */
+
 
 // TODO Look to combine with index.js
-if(!window._babelPolyfill){ // This is the primary difference between this and index.js
-  require("babel-polyfill")
+if (typeof window !== 'undefined') {
+  if (!window._babelPolyfill) { // This is the primary difference between this and index.js
+    require('babel-polyfill');
+  }
 }
 
 // COMPLETE BROWSER BUILD
 // INITIATOR CLIENT
-// The initiator client is the integration end of the connection, and sends the connection details to
+// The initiator client is the integration end of the connection,
+// and sends the connection details to
 // the signal server which then waits for a corresponding receiver connection.
 
 // RECEIVER CLIENT

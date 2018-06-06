@@ -1,9 +1,10 @@
 // require("babel-polyfill")
-const MewConnectReceiver = require("./MewConnectReceiver")
+const MewConnectReceiver = require('./MewConnectReceiver');
 
 class MewConnectReceiverClient extends MewConnectReceiver {
   /**
-   *  extensions to plug callbacks into specific events/occupancies without needing to construct separate checking mechanisms
+   *  extensions to plug callbacks into specific events/occupancies
+   *  without needing to construct separate checking mechanisms
    *  and expose a factory method.  Primarily for usage in
    * @param uiCommunicatorFunc
    * @param loggingFunc
@@ -32,7 +33,14 @@ class MewConnectReceiverClient extends MewConnectReceiver {
    * @returns {MewConnect}
    */
   static init(uiCommunicatorFunc, loggingFunc, additionalLibs) {
-    this.instance = new MewConnect(uiCommunicatorFunc, loggingFunc, additionalLibs);
+    if (typeof MewConnect !== 'undefined') {
+      // eslint-disable-next-line no-undef
+      this.instance = new MewConnect(uiCommunicatorFunc, loggingFunc, additionalLibs);
+    } else {
+      // eslint-disable-next-line max-len
+      this.instance = new MewConnectReceiverClient(uiCommunicatorFunc, loggingFunc, additionalLibs);
+    }
+    // this.instance = new MewConnect(uiCommunicatorFunc, loggingFunc, additionalLibs);
     return this.instance;
   }
 
@@ -105,7 +113,7 @@ class MewConnectReceiverClient extends MewConnectReceiver {
    * @param func
    */
   registerCodeDisplayCallback(func) {
-    this.registerLifeCycleListener("codeDisplay", func);
+    this.registerLifeCycleListener('codeDisplay', func);
   }
 
   /**
@@ -113,7 +121,7 @@ class MewConnectReceiverClient extends MewConnectReceiver {
    * @param func
    */
   registerRtcConnectedCallback(func) {
-    this.registerLifeCycleListener("RtcConnectedEvent", func);
+    this.registerLifeCycleListener('RtcConnectedEvent', func);
   }
 
   /**
@@ -121,7 +129,7 @@ class MewConnectReceiverClient extends MewConnectReceiver {
    * @param func
    */
   registerRtcClosedCallback(func) {
-    this.registerLifeCycleListener("RtcClosedEvent", func);
+    this.registerLifeCycleListener('RtcClosedEvent', func);
   }
 
   /**
@@ -134,14 +142,14 @@ class MewConnectReceiverClient extends MewConnectReceiver {
         if (data) {
           if (data.type) {
             switch (data.type) {
-              case "codeDisplay":
+              case 'codeDisplay':
                 if (!this.codeDisplayCallback) {
                   next();
                 } else {
                   this.codeDisplayCallback(data.data);
                 }
                 break;
-              case "RtcConnectedEvent":
+              case 'RtcConnectedEvent':
                 this.connected = true;
                 // if (this.instance) this.instance.connected = true;
                 if (!this.rtcConnectedCallback) {
@@ -152,7 +160,7 @@ class MewConnectReceiverClient extends MewConnectReceiver {
                 break;
               // case "rtcDisconnect":
               // case "RtcDisconnectEvent":
-              case "RtcClosedEvent":
+              case 'RtcClosedEvent':
                 if (!this.rtcClosedCallback) {
                   next();
                 } else {
@@ -169,9 +177,7 @@ class MewConnectReceiverClient extends MewConnectReceiver {
         } else {
           next();
         }
-
-
-      })
+      });
     }
   }
 
@@ -181,33 +187,33 @@ class MewConnectReceiverClient extends MewConnectReceiver {
   configureInternalMiddleware() {
     if (!this.internalMiddlewareActive) {
       this.internalMiddlewareActive = true;
-      console.log("mewConnect:721 configureInternalMiddleware",); //todo remove dev item
+      console.log('mewConnect:721 configureInternalMiddleware'); // todo remove dev item
       this.use((data, next) => {
         if (data) {
           if (data.type) {
             switch (data.type) {
-              case "address":
+              case 'address':
                 if (!this.addressCallback) {
                   next();
                 } else {
                   this.addressCallback(data.data);
                 }
                 break;
-              case "sign":
+              case 'sign':
                 if (!this.signerCallback) {
                   next();
                 } else {
                   this.signerCallback(data.data);
                 }
                 break;
-              case "signMessage":
+              case 'signMessage':
                 if (!this.messageSignerCallback) {
                   next();
                 } else {
                   this.messageSignerCallback(data.data);
                 }
                 break;
-              case "signTx":
+              case 'signTx':
                 if (!this.transactionSignerCallback) {
                   next();
                 } else {
@@ -224,12 +230,10 @@ class MewConnectReceiverClient extends MewConnectReceiver {
         } else {
           next();
         }
-
-
-      })
+      });
     }
   }
 }
 
 
-module.exports = MewConnectReceiverClient
+module.exports = MewConnectReceiverClient;

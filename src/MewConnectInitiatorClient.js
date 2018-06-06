@@ -1,9 +1,10 @@
 // require("babel-polyfill")
-const MewConnectInitiator = require("./MewConnectInitiator")
+const MewConnectInitiator = require('./MewConnectInitiator');
 
 class MewConnectInitiatorClient extends MewConnectInitiator {
   /**
-   *  extensions to plug callbacks into specific events/occurrences without needing to construct separate checking mechanisms
+   *  extensions to plug callbacks into specific events/occurrences
+   *  without needing to construct separate checking mechanisms
    *  and expose a factory method.
    */
   constructor(uiCommunicatorFunc, loggingFunc, additionalLibs) {
@@ -22,10 +23,17 @@ class MewConnectInitiatorClient extends MewConnectInitiator {
   }
 
   /**
-   * Factory Method that also attaches the created instance to the creating static instance (I think...)
+   * Factory Method that also attaches the created instance to
+   * the creating static instance (I think...)
    */
   static init(uiCommunicatorFunc, loggingFunc, additionalLibs) {
-    this.instance = new MewConnect(uiCommunicatorFunc, loggingFunc, additionalLibs);
+    if (typeof MewConnect !== 'undefined') {
+      // eslint-disable-next-line no-undef
+      this.instance = new MewConnect(uiCommunicatorFunc, loggingFunc, additionalLibs);
+    } else {
+      // eslint-disable-next-line max-len
+      this.instance = new MewConnectInitiatorClient(uiCommunicatorFunc, loggingFunc, additionalLibs);
+    }
     return this.instance;
   }
 
@@ -36,11 +44,9 @@ class MewConnectInitiatorClient extends MewConnectInitiator {
     return this.instance;
   }
 
-
   isInternalMiddlewareActive() {
     return this.internalMiddlewareActive;
   }
-
 
   isInternalLifeCycleActive() {
     return this.internalLifeCycleActive;
@@ -57,7 +63,7 @@ class MewConnectInitiatorClient extends MewConnectInitiator {
    * [don't believe this is used]
    * set a function to handle
    */
-  //TODO check if this is used or useful
+  // TODO check if this is used or useful
   setSignerCallback(func) {
     this.signerCallback = func;
   }
@@ -87,25 +93,26 @@ class MewConnectInitiatorClient extends MewConnectInitiator {
    * set a function to handle receipt of the connection detail string (i.e. used to make QR Code)
    */
   registerCodeDisplayCallback(func) {
-    this.registerLifeCycleListener("codeDisplay", func);
+    this.registerLifeCycleListener('codeDisplay', func);
   }
 
   /**
    * set a function to handle communicating the establishment of the WebRTC session
    */
   registerRtcConnectedCallback(func) {
-    this.registerLifeCycleListener("RtcConnectedEvent", func);
+    this.registerLifeCycleListener('RtcConnectedEvent', func);
   }
 
   /**
    * set a function to handle communicating the WebRTC session closing
    */
   registerRtcClosedCallback(func) {
-    this.registerLifeCycleListener("RtcClosedEvent", func);
+    this.registerLifeCycleListener('RtcClosedEvent', func);
   }
 
   /**
-   * Call the defined lifeCycle handler functions if they exist, else proceed with applying lifeCycle middleware until one handles the message type (purpose) or it is not handled
+   * Call the defined lifeCycle handler functions if they exist, else proceed with
+   * applying lifeCycle middleware until one handles the message type (purpose) or it is not handled
    */
   configureInternalLifecycle() {
     if (!this.internalLifeCycleActive) {
@@ -114,14 +121,14 @@ class MewConnectInitiatorClient extends MewConnectInitiator {
         if (data) {
           if (data.type) {
             switch (data.type) {
-              case "codeDisplay":
+              case 'codeDisplay':
                 if (!this.codeDisplayCallback) {
                   next();
                 } else {
                   this.codeDisplayCallback(data.data);
                 }
                 break;
-              case "RtcConnectedEvent":
+              case 'RtcConnectedEvent':
                 this.connected = true;
                 // if (this.instance) this.instance.connected = true;
                 if (!this.rtcConnectedCallback) {
@@ -132,7 +139,7 @@ class MewConnectInitiatorClient extends MewConnectInitiator {
                 break;
               // case "rtcDisconnect":
               // case "RtcDisconnectEvent":
-              case "RtcClosedEvent":
+              case 'RtcClosedEvent':
                 if (!this.rtcClosedCallback) {
                   next();
                 } else {
@@ -149,14 +156,13 @@ class MewConnectInitiatorClient extends MewConnectInitiator {
         } else {
           next();
         }
-
-
-      })
+      });
     }
   }
 
   /**
-   * Call a defined message type handler function if it exist, else proceed with applying message middleware until one handles the message type (purpose) or it is not handled
+   * Call a defined message type handler function if it exist, else proceed with
+   * applying message middleware until one handles the message type (purpose) or it is not handled
    */
   configureInternalMiddleware() {
     if (!this.internalMiddlewareActive) {
@@ -165,28 +171,28 @@ class MewConnectInitiatorClient extends MewConnectInitiator {
         if (data) {
           if (data.type) {
             switch (data.type) {
-              case "address":
+              case 'address':
                 if (!this.addressCallback) {
                   next();
                 } else {
                   this.addressCallback(data.data);
                 }
                 break;
-              case "sign":
+              case 'sign':
                 if (!this.signerCallback) {
                   next();
                 } else {
                   this.signerCallback(data.data);
                 }
                 break;
-              case "signMessage":
+              case 'signMessage':
                 if (!this.messageSignerCallback) {
                   next();
                 } else {
                   this.messageSignerCallback(data.data);
                 }
                 break;
-              case "signTx":
+              case 'signTx':
                 if (!this.transactionSignerCallback) {
                   next();
                 } else {
@@ -203,14 +209,9 @@ class MewConnectInitiatorClient extends MewConnectInitiator {
         } else {
           next();
         }
-
-
-      })
+      });
     }
   }
-
-
 }
-
 
 module.exports = MewConnectInitiatorClient;
