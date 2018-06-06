@@ -3,7 +3,7 @@
 
 
 ### Running the Example:
-The example requires both MEWconnect-Client and MEWconnect-Signal-Server
+The example requires both MEWconnect-Client (this repo) and MEWconnect-Signal-Server (mew-signer-hs)
 >Clone the repo:
 
 `git clone <repo address>`
@@ -32,11 +32,11 @@ The example requires both MEWconnect-Client and MEWconnect-Signal-Server
 
 >Open two browser tabs/windows:
 
-navigate one to https://localhost:3000/initiator
+navigate one to https://localhost:3100/initiator
 
-navigate the other to https://localhost:3000/receiver
+navigate the other to https://localhost:3100/receiver
 
-_**Note:** You may need to navigate to https://localhost:3001 to accept the self-signed certificate used in the example_
+_**Note:** You may need to navigate to https://localhost:3200 to accept the self-signed certificate used in the example_
 
 ### Launching demo
 

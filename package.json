@@ -4,13 +4,13 @@
   "main": "./dist/MewConnect.min.js",
   "private": true,
   "scripts": {
-    "start": "node ./example/peer_server/www.js"
+    "start": "node ./example/peer_server/www.js",
     "build": "webpack --config webpack.prod.config.js --progress",
     "buildBrowser": "webpack --config webpack.browser.config.js --progress",
     "buildBrowserPack": "webpack --config webpack.pack.config.js --progress",
     "watch": "webpack --config webpack.config.js --progress -w",
     "watchBrowser": "webpack --config webpack.browser.config.js --progress -w",
-    "watchBrowserPack": "webpack --config webpack.pack.config.js --progress -w",
+    "watchBrowserPack": "webpack --config webpack.pack.config.js --progress -w"
   },
   "dependencies": {
     "@babel/core": "^7.0.0-beta.49",
