@@ -45,6 +45,7 @@ class MewConnectInitiator extends MewConnectCommon {
     this.rtcEvents = this.jsonDetails.rtc;
     this.version = this.jsonDetails.version;
     this.versions = this.jsonDetails.versions;
+    this.lifeCycle = this.jsonDetails.lifeCycle;
 
     // Library used to facilitate the WebRTC connection and subsequent communications
     this.Peer = additionalLibs.wrtc || SimplePeer;
@@ -85,10 +86,13 @@ class MewConnectInitiator extends MewConnectCommon {
     const separator = this.jsonDetails.connectionCodeSeparator;
     const qrCodeString = this.version + separator + data + separator + this.connId;
     this.qrCodeString = qrCodeString;
-    this.applyDatahandlers(JSON.stringify({ type: 'codeDisplay', data: qrCodeString }));
-    this.uiCommunicator('codeDisplay', qrCodeString);
-    this.uiCommunicator('checkNumber', data);
-    this.uiCommunicator('ConnectionId', this.connId);
+    this.applyDatahandlers(JSON.stringify({
+      type: this.lifeCycle.codeDisplay,
+      data: qrCodeString,
+    }));
+    this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
+    this.uiCommunicator(this.lifeCycle.checkNumber, data);
+    this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
   }
 
   // ////////////// Initialize Communication Process //////////////////////////////
@@ -102,7 +106,7 @@ class MewConnectInitiator extends MewConnectCommon {
     this.signed = await this.mewCrypto.signMessage(this.keys.pvt.toString('hex'));
     this.connId = this.mewCrypto.bufferToConnId(this.keys.pub);
     this.displayCode(this.keys.pvt.toString('hex'));
-    this.uiCommunicator('signatureCheck', this.signed);
+    this.uiCommunicator(this.lifeCycle.signatureCheck, this.signed);
     const options = {
       query: {
         stage: 'initiator',
@@ -128,7 +132,7 @@ class MewConnectInitiator extends MewConnectCommon {
    */
   initiatorConnect(socket) {
     console.log('INITIATOR CONNECT'); // todo remove dev item
-    this.uiCommunicator('SocketConnectedEvent');
+    this.uiCommunicator(this.lifeCycle.SocketConnectedEvent);
 
     this.socket.on(this.signals.connect, () => {
       console.log('SOCKET CONNECTED'); // todo remove dev item
@@ -141,17 +145,17 @@ class MewConnectInitiator extends MewConnectCommon {
     this.socketOn(this.signals.answer, this.recieveAnswer.bind(this));
     // Handle Failure due to an attempt to join a connection with two existing endpoints
     this.socketOn(this.signals.confirmationFailedBusy, () => {
-      this.uiCommunicator('confirmationFailedBusyEvent');
+      this.uiCommunicator(this.lifeCycle.confirmationFailedBusyEvent);
       this.logger('confirmation Failed: Busy');
     });
     // Handle Failure due to the handshake/ verify details being invalid for the connection ID
     this.socketOn(this.signals.confirmationFailed, () => {
-      this.uiCommunicator('confirmationFailedEvent');
+      this.uiCommunicator(this.lifeCycle.confirmationFailedEvent);
       this.logger('confirmation Failed: invalid confirmation');
     });
     // Handle Failure due to no opposing peer existing
     this.socketOn(this.signals.invalidConnection, () => {
-      this.uiCommunicator('invalidConnectionEvent'); // should be different error message
+      this.uiCommunicator(this.lifeCycle.invalidConnectionEvent); // should be different error message
       this.logger('confirmation Failed: no opposite peer found');
     });
     // Handle Socket Disconnect Event
@@ -200,7 +204,7 @@ class MewConnectInitiator extends MewConnectCommon {
       const plainTextVersion = await this.mewCrypto.decrypt(data.version);
       console.log('plainTextVersion', plainTextVersion); // todo remove dev item
       this.peerVersion = plainTextVersion;
-      this.uiCommunicator('receiverVersion', plainTextVersion);
+      this.uiCommunicator(this.lifeCycle.receiverVersion, plainTextVersion);
       console.log('RECEIVER VERSION:', plainTextVersion); // todo remove dev item
     }
     this.logger('sendOffer', data);
@@ -294,7 +298,7 @@ class MewConnectInitiator extends MewConnectCommon {
       simpleOptions.wrtc = this.nodeWebRTC;
     }
 
-    this.uiCommunicator('RtcInitiatedEvent');
+    this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
     this.p = new this.Peer(simpleOptions);
     this.p.on(this.rtcEvents.error, this.onError.bind(this));
     this.p.on(this.rtcEvents.connect, this.onConnect.bind(this));
@@ -312,7 +316,7 @@ class MewConnectInitiator extends MewConnectCommon {
     this.logger('CONNECT', 'ok');
     this.connected = true;
     this.rtcSend({ type: 'text', data: 'From Mobile' });
-    this.uiCommunicator('RtcConnectedEvent');
+    this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
     this.applyDatahandlers(JSON.stringify({ type: 'rtcConnected', data: null }));
     this.socketEmit(this.signals.rtcConnected, this.socketKey);
     this.socketDisconnect();
@@ -351,7 +355,7 @@ class MewConnectInitiator extends MewConnectCommon {
   onClose(data) {
     this.logger('WRTC CLOSE');
     this.connected = false;
-    this.uiCommunicator('RtcClosedEvent', data);
+    this.uiCommunicator(this.lifeCycle.RtcClosedEvent, data);
   }
 
   /**
@@ -360,6 +364,7 @@ class MewConnectInitiator extends MewConnectCommon {
   onError(err) {
     console.error('WRTC ERROR');
     this.logger('error', err);
+    this.uiCommunicator(this.lifeCycle.RtcErrorEvent, err);
   }
 
   // /////////////////////// WebRTC Communication Methods /////////////////////////////////////////
@@ -397,7 +402,7 @@ class MewConnectInitiator extends MewConnectCommon {
   disconnectRTCClosure() {
     const _this = this;
     return function () {
-      _this.uiCommunicator('RtcDisconnectEvent');
+      _this.uiCommunicator(_this.lifeCycle.RtcDisconnectEvent);
       _this.applyDatahandlers(JSON.stringify({ type: 'rtcDisconnect', data: null }));
       _this.rtcDestroy();
       this.instance = null;
@@ -408,9 +413,9 @@ class MewConnectInitiator extends MewConnectCommon {
    * Disconnect the current RTC connection, and call any clean up methods
    */
   disconnectRTC() {
-    this.uiCommunicator('RtcDisconnectEvent');
-    this.applyDatahandlers(JSON.stringify({ type: 'rtcDisconnect', data: null }));
     this.rtcDestroy();
+    this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+    this.applyDatahandlers(JSON.stringify({ type: 'rtcDisconnect', data: null }));
     this.instance = null;
   }
 

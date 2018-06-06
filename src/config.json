@@ -45,9 +45,11 @@
     "codeDisplay": "codeDisplay",
     "checkNumber": "checkNumber",
     "ConnectionId": "ConnectionId",
+    "receiverVersion" : "receiverVersion",
     "RtcConnectedEvent": "RtcConnectedEvent",
     "RtcClosedEvent": "RtcClosedEvent",
-    "RtcDisconnectEvent": "RtcDisconnectEvent"
+    "RtcDisconnectEvent": "RtcDisconnectEvent",
+    "RtcErrorEvent": "RtcErrorEvent"
   },
   "communicationTypes":{
     "address": "address",

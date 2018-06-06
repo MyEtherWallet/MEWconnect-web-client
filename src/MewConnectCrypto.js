@@ -88,7 +88,7 @@ class MewConnectCrypto {
   encrypt(dataToSend) {
     const publicKeyA = eccrypto.getPublic(this.prvt);
     return new Promise((resolve, reject) => {
-      this.eccrypto.encrypt(publicKeyA, this.buffer.from(dataToSend))
+      this.eccrypto.encrypt(publicKeyA, this.Buffer.from(dataToSend))
         .then((_initial) => {
           resolve(_initial);
         })

@@ -24,6 +24,7 @@ class MewConnectCommon {
   constructor(uiCommunicatorFunc, loggingFunc) {
     // if null it calls the middleware registered to each specific lifecycle event
     this.uiCommunicatorFunc = uiCommunicatorFunc || this.applyLifeCycleListeners;
+    // Need to think of a little better way to do the above (to have built in and custom)
     // eslint-disable-next-line func-names
     this.logger = loggingFunc || function () {
     };
@@ -136,8 +137,9 @@ class MewConnectCommon {
 
   // eslint-disable-next-line consistent-return
   useLifeCycleListeners(_signal, input, fn) {
+    let fns;
     if (this.lifeCycleListeners[_signal]) {
-      const fns = this.lifeCycleListeners[_signal].slice(0);
+      fns = this.lifeCycleListeners[_signal].slice(0);
       if (!fns.length) return fn(null);
 
       // eslint-disable-next-line no-use-before-define
