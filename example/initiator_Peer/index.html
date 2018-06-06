@@ -54,25 +54,22 @@
 
 </head>
 <body id="body">
-    <h1>Initiator Peer</h1>
+    <h1>Initiator Peer </h1>
     <ul id="messages"></ul>
     <h3 id="connState"></h3>
     <button type="button" id="testRTC">TestRTC</button>
     <button type="button" id="disconnect"> disconnect</button>
-    <!--<button type="button" id="initiateRTC" > InitiateRTC</button>-->
     <br>
-    <button id="begin">Begin</button>
-    <br>
-    <br>
-    <span>Signature: <span id="createdSignature"></span></span>
+    <button id="begin">Begin WebRTC Sequence</button>
     <br>
     <br>
-    <h3>Private: <span id="checkNumber"></span></h3>    <br>
-
+    <span>(for dev) Connection Received: <span id="connRecd"></span></span>
+    <br>
+    <span>(for dev) Receiver (mobile) Schema Version: <span id="recVer"></span></span>
     <br>
     <h3>connId: <span id="connId"></span></h3>
     <br>
-    <h3>QR String: </h3>
+    <h3>String encoded in the QR code: </h3>
     <span id="qrString"></span>
     <br>
     <br>
@@ -80,26 +77,21 @@
     <br>
     <button type="button" id="getAddress">Get Address</button>
     <br>
-    <button type="button" id="signMessage">Sign Message</button>
-    <br>
-    <br>
     <span>Address: <span id="yourAddress"></span></span>
+    <br>
+    <br>
+    <button type="button" id="signMessage">Sign Message</button>
     <br>
     <span>SignedMessage: <span id="signedMessage"></span></span>
     <br>
-    <br>
-    <br>
-    <script src="/vendor/eventEmitter3.js"></script>
-    <script src="/vendor/SStream.js"></script>
     <script src="/vendor/qrcode.js"></script>
-    <script src="/vendor/Crypto.js"></script>
-    <script src="/vendor/ethUtils.js"></script>
-    <script src="/vendor/ethWallet.js"></script>
-    <script src="/vendor/Buffer.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/adapterjs/0.15.0/adapter.min.js"></script>
-    <script src="/src/mewRTC.js"></script>
-    <script src="/src/mewConnect.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/adapterjs/0.15.0/adapter.min.js"></script>-->
+    <script src="/vendor/adapter.js"></script>
+    <script src="/vendor/socketIO.min.js"></script>
+    <script src="/vendor/SimplePeer.js"></script>
+    <!--<script src="/src/mewRTC.js"></script>-->
+    <script src="/browser/MewConnectExample.min.js"></script>
     <script src="/Initiator_Peer/main.js"></script>
 </body>
 </html>

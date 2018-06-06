@@ -1,14 +1,12 @@
-# mew-signer-peer
-Client For mew-signer-hs
-
 
 ### Getting Started
 
 
 ### Running the Example:
+The example requires both MEWconnect-Client and MEWconnect-Signal-Server
 >Clone the repo:
 
-`git clone https://github.com/MyEtherWallet/mew-signer-peer.git`
+`git clone <repo address>`
 
 >Install the dependencies:
 
@@ -18,9 +16,19 @@ Client For mew-signer-hs
 
 `npm start`
 
+###### Get the signaling server
+>Clone the repo:
+
+`git clone <repo address>`
+
+>Install the dependencies:
+
+`npm install`
+
 >Start the signaling server:
 
-`npm start:signal`
+`npm start`
+
 
 >Open two browser tabs/windows:
 
@@ -34,16 +42,18 @@ _**Note:** You may need to navigate to https://localhost:3001 to accept the self
 
 
 ### Usage
+> In the browser via the file /browser/MewConnect.min.js
 
 Two Peers are needed with one designated as the Initiator and the other as the Receiver.
 
 
 ```javascript
-let mewConnect = new MewConnect(communicatorFunc, loggingFunc, depends);
+let mewConnect = new MewConnect.Client(communicatorFunc, loggingFunc, depends);
 ```
+_(MewConnect.Client takes the same parameters)_
 
 The MewConnect takes:
-- communicatorFunc:  
+- communicatorFunc:
     - A function or null
     - If a function it is called on each lifeCycle event.
     - with two arguments:
@@ -61,7 +71,7 @@ The MewConnect takes:
 
 - loggingFunc:
     - a optional function to provide logging or null (to use the default)
-- additionalLibs: 
+- additionalLibs:
     - a dictionary (object) containing dependencies as they are declared in the scope.
       - the dependencies are:
         - node.js crypto or polyfill
@@ -70,11 +80,11 @@ The MewConnect takes:
         - node.js buffer.Buffer  (e.g. require("buffer").Buffer) or polyfill
         - simple-peer or MewRTC (an ES6 port of simple-peer)
     - ```javascript
-          let cryptoFuncs = new MewConnectCrypto(crypto, secp256k1, ethereumjs-util, buffer.Buffer);
-          
+          let cryptoFuncs = new MewConnect.Crypto(crypto, secp256k1, ethereumjs-util, buffer.Buffer);
+
           let depends = {wrtc: MewRTC,
                cryptoImpl: cryptoFuncs,
-                io: io, 
+                io: io,
                 ethUtils: ""
           };
       ```
@@ -82,14 +92,22 @@ The MewConnect takes:
 
 #### Initiator
 
+```javascript
+let mewConnectClient = new MewConnect.Client(communicatorFunc, loggingFunc, depends);
+```
+
 The url of the signaling server is passed to the _initiatorStart_ method on MewConnectInitiator which begins the sequence by connecting to the signaling server and waiting for the signal indicating a receiver peer is ready.
 ```javascript
 let url = "https://localhost:3001";  //Url to the signaling server
-mewConnect.initiatorStart(url);
+mewConnectCore.initiatorStart(url);
 ```
 
 
 #### Receiver
+
+```javascript
+let mewConnectReceiver = new MewConnect.Receiver(communicatorFunc, loggingFunc, depends);
+```
 
 The url of the signaling server and an object containing the key and connection Id from the initiator is passed to the _receiverStart_ method on MewConnect.  This begins the sequence of connecting to the signaling server and then creating the WebRTC connection between the Initiator and Receiver.
 - if no initiator peer exists for the Receiver then the connection will fail.
@@ -103,10 +121,30 @@ let parameters = {
 _or using the helper on MewConnect_
 
 ```javascript
-let parameters = MewConnect.parseConnectionDetailString(connectionCode);
+let parameters = mewConnectReceiver.parseConnectionDetailString(connectionCode);
 ```
 
 ```javascript
 let url = "https://localhost:3001"; //Url to the signaling server
-mewConnect.receiverStart(url, parameters);
+mewConnectReceiver.receiverStart(url, parameters);
 ```
+
+
+##### Webpack
+
+The dist folder version contains only the Web Client for use in a bundle via a require call.
+
+##### Browser
+The contents of the browser directory expose all the components for setting up the Web Core, and a Client on window.
+
+It can be added via a script tag:
+```
+<script src="./browser/MewConnect.min.js"></script>
+```
+
+
+<!-- ##### API -->
+
+
+
+

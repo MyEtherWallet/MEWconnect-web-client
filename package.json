@@ -1,30 +1,44 @@
 {
   "name": "mew-signer-peer",
   "version": "0.0.1",
+  "main": "./dist/MewConnect.min.js",
   "private": true,
   "scripts": {
-    "start": "node ./example/peer_server/www.js",
-    "start:signal": "node ./example/signal_server/signalServer.js",
-    "devServer": "nodemon ./example/peer_server/www.js",
-    "devServer:android": "nodemon ./example/peer_server/www.js android",
-    "devServer:plain": "node ./example/peer_server/www.js",
-    "devServer:plainAndroid": "node ./example/peer_server/www.js android",
-    "docs": "jsdoc -c ./jsdoc.json"
+    "start": "node ./example/peer_server/www.js"
+    "build": "webpack --config webpack.prod.config.js --progress",
+    "buildBrowser": "webpack --config webpack.browser.config.js --progress",
+    "buildBrowserPack": "webpack --config webpack.pack.config.js --progress",
+    "watch": "webpack --config webpack.config.js --progress -w",
+    "watchBrowser": "webpack --config webpack.browser.config.js --progress -w",
+    "watchBrowserPack": "webpack --config webpack.pack.config.js --progress -w",
   },
   "dependencies": {
-    "body-parser": "~1.18.2",
-    "cookie-parser": "~1.4.3",
+    "@babel/core": "^7.0.0-beta.49",
+    "@babel/preset-env": "^7.0.0-beta.49",
+    "babel-loader": "^8.0.0-beta.3",
+    "babel-polyfill": "^6.26.0",
+    "crypto-js": "^3.1.9-1",
     "debug": "~2.6.9",
     "dotenv": "^5.0.1",
+    "eccrypto": "^1.0.3",
     "ethereumjs-util": "^5.1.5",
     "eventemitter3": "^3.0.1",
-    "express": "~4.15.5",
-    "hbs": "~4.0.1",
     "morgan": "~1.9.0",
     "readable-stream": "^2.3.5",
     "secp256k1": "^3.5.0",
-    "serve-favicon": "~2.4.5",
     "socket.io": "^2.0.4",
-    "socket.io-client": "^2.0.4"
+    "socket.io-client": "^2.0.4",
+    "webpack": "^4.10.2",
+    "winston": "^2.4.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "simple-peer": "^9.1.2",
+    "tape": "^4.9.0",
+    "twilio": "^3.17.1",
+    "webpack-cli": "^2.1.5",
+    "wrtc": "^0.1.4"
   }
 }

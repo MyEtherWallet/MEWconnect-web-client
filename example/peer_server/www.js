@@ -12,13 +12,17 @@ console.log(path.resolve(".."));
 console.log(path.resolve("."));
 console.log(__dirname);
 var options = {
-    key: fs.readFileSync(path.join(path.resolve("."), "example", "sampleCerts","devCert.key")),
-    cert: fs.readFileSync(path.join(path.resolve("."), "example", "sampleCerts","devCert.cert")),
+  key: fs.readFileSync(path.resolve(__dirname, "../../example/sampleCerts/devCert.key")),
+  cert: fs.readFileSync(path.resolve(__dirname, "../../example/sampleCerts/devCert.cert")),
+  // key: fs.readFileSync(path.join(path.resolve("../.."), "example", "sampleCerts", "devCert.key")),
+  // cert: fs.readFileSync(path.join(path.resolve("../.."), "example", "sampleCerts", "devCert.cert")),
+    // key: fs.readFileSync(path.join(path.resolve("."), "example", "sampleCerts","devCert.key")),
+    // cert: fs.readFileSync(path.join(path.resolve("."), "example", "sampleCerts","devCert.cert")),
     requestCert: false,
     rejectUnauthorized: false
 };
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3100');
 app.set('port', port);
 
 

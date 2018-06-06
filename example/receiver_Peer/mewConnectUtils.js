@@ -6,7 +6,8 @@ function getAddress(key) {
     let address = ethUtil.publicToAddress(pubKey);
     console.log("mewConnectUtils:7 : ", pubKey ); //todo remove dev item
     console.log(address.toString("hex"));
-    return {address: address.toString("hex"), pub: pubKey.toString("hex")};
+    // return {address: address.toString("hex"), pub: pubKey.toString("hex")};
+    return {address: address.toString("hex")}
 }
 
 function getNakedAddress(address) {
@@ -34,6 +35,7 @@ function signTransaction(thisMessage, key) {
         //         s: BBuffer.Buffer.from(signed.s).toString("hex")
         //     };
         //     // let jsonString = JSON.stringify(signedJSON);
+        console.log("signed", signed);
         return resolve(signed);
         // let msg = ethUtil.hashPersonalMessage(ethUtil.toBuffer(thisMessage));
         // let signed = ethUtil.ecsign(msg, wallet.getPrivateKey());
@@ -69,6 +71,7 @@ function signTransaction(thisMessage, key) {
 
 function signMessage(thisMessage, key) {
     return new Promise((resolve, reject) => {
+        console.log(thisMessage);
         let wallet = new Wallet(new BBuffer.Buffer(key, "hex"));
         // let msg = ethUtil.hashPersonalMessage(ethUtil.toBuffer(thisMessage));
         // let signed = ethUtil.ecsign(msg, wallet.getPrivateKey());

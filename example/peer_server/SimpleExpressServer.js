@@ -5,14 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-// var index = require('./routes');
-console.log(process.cwd())
-let receiverPeerPath = path.join(path.resolve("."), "example", 'receiver_Peer');
-let initiatorPeerPath = path.join(path.resolve("."), "example", 'initiator_Peer');
+let receiverPeerPath = path.resolve(__dirname, "../../example/receiver_Peer");
+let initiatorPeerPath = path.resolve(__dirname, "../../example/initiator_Peer");
 // ============= Routes =============
 var router = express.Router();
 let root = path.resolve("../..");
-
+var srcDir = path.resolve("..", "etherwallet/dist");
 /* GET home page. */
 router.get('/', function (req, res, next) {
     res.sendFile(path.join(__dirname, "index.html"));
@@ -30,9 +28,25 @@ router.get('/receiver', function (req, res, next) {
     res.status(200);
     res.sendFile(path.join(receiverPeerPath, "index.html"));
 });
+
+router.get('/devSite', function (req, res, next) {
+    res.type("text/html");
+    res.status(200);
+    res.sendFile(path.join(srcDir, "index.html"));
+});
+
+router.get('/msgSign', function (req, res, next) {
+    res.type("text/html");
+    res.status(200);
+    res.sendFile(path.join(srcDir, "signmsg.html"));
+});
 // =========================
 
 var app = express();
+
+
+
+
 
 // view engine setup
 app.set('views', __dirname);
@@ -47,10 +61,17 @@ app.use(cookieParser());
 // console.log(process.env.LOGNAME);
 
 
-app.use("/vendor", express.static(path.join(path.resolve("."), "example", 'vendor')));
-app.use("/src", express.static(path.resolve(".")));
+app.use("/vendor", express.static(path.resolve(__dirname, "../../example/vendor")));
+app.use("/src", express.static(path.resolve("../..")));
+app.use("/browser", express.static(path.resolve(__dirname, "../../browser")));
 app.use("/Initiator_Peer", express.static(initiatorPeerPath));
 app.use("/Receiver_Peer", express.static(receiverPeerPath));
+
+// My Ether Wallet Development Site (with MEW Connect Integration)
+app.use("/images", express.static(path.join(srcDir, 'images')));
+app.use("/css", express.static(path.join(srcDir, 'css')));
+app.use("/js", express.static(path.join(srcDir, 'js')));
+app.use("/fonts", express.static(path.join(srcDir, "fonts")));
 
 app.use('/', router);
 

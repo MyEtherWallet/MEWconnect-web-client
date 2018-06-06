@@ -59,29 +59,30 @@
     <button type="button" id="disconnect"> disconnect</button>
     <button type="button" id="testRTC">TestRTC</button>
     <br>
-    <input type="text" placeholder="private key" id="socketKey">
-    <button id="socketKeyBtn">Begin</button>
+    <input type="text" placeholder="String encoded in the QR code" id="socketKey">
+    <button id="socketKeyBtn">Begin Receiver Connection Sequence</button>
     <br>
-    <span>Signature: <span id="signed"></span></span>
+    <!--<span>Signature: <span id="signed"></span></span>-->
     <br>
     <br>
     <br>
     <button id="startScan">Start Scan</button>
     <video id="preview"></video>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/adapterjs/0.15.0/adapter.min.js"></script>
-    <script src="/vendor/ethereumjs-tx-1.3.3.js"></script>
-    <script src="/vendor/eventEmitter3.js"></script>
-    <script src="/vendor/SStream.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/adapterjs/0.15.0/adapter.min.js"></script>-->
+    <script src="/vendor/adapter.js"></script>
+    <script src="/vendor/socketIO.min.js"></script>
     <script src="/vendor/qrcode.js"></script>
-    <script src="/vendor/Crypto.js"></script>
+    <!-- Scripts to provided signing functionality in the example  -->
     <script src="/vendor/ethUtils.js"></script>
     <script src="/vendor/ethWallet.js"></script>
+    <script src="/vendor/ethereumjs-tx-1.3.3.js"></script>
     <script src="/vendor/Buffer.js"></script>
+    <script src="/vendor/SimplePeer.js"></script>
     <script src="/Receiver_Peer/mewConnectUtils.js"></script>
-    <script src="/src/mewRTC.js"></script>
-    <script src="/src/mewConnect.js"></script>
-    <script type="text/javascript" src="../vendor/instascan.min.js"></script>
+    <!-- Script directly related to basic client operation-->
+    <script src="/browser/MewConnectExample.min.js"></script>
+    <!-- Simple UI For Example -->
     <script src="/Receiver_Peer/main.js"></script>
 </body>
 </html>
