@@ -17,6 +17,7 @@ class MewConnectInitiatorClient extends MewConnectInitiator {
     this.codeDisplayCallback = null;
     this.rtcConnectedCallback = null;
     this.rtcClosedCallback = null;
+    this.rtcErrorCallback = null;
     this.connected = false;
     this.internalMiddlewareActive = false;
     this.internalLifeCycleActive = false;
@@ -111,6 +112,13 @@ class MewConnectInitiatorClient extends MewConnectInitiator {
   }
 
   /**
+   * set a function to handle communicating an error from the WebRTC session
+   */
+  registerRtcErrorCallback(func) {
+    this.registerLifeCycleListener('RtcErrorEvent', func);
+  }
+
+  /**
    * Call the defined lifeCycle handler functions if they exist, else proceed with
    * applying lifeCycle middleware until one handles the message type (purpose) or it is not handled
    */
@@ -144,6 +152,13 @@ class MewConnectInitiatorClient extends MewConnectInitiator {
                   next();
                 } else {
                   this.rtcClosedCallback(data.data);
+                }
+                break;
+              case 'RtcErrorEvent':
+                if (!this.rtcErrorCallback) {
+                  next();
+                } else {
+                  this.rtcErrorCallback(data.data);
                 }
                 break;
               default:
