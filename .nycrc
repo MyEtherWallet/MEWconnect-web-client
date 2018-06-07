@@ -1,0 +1,32 @@
+{
+  "description": "These are just examples for demonstration, nothing prescriptive",
+  "nyc": {
+    "check-coverage": true,
+    "per-file": true,
+    "lines": 99,
+    "statements": 99,
+    "functions": 99,
+    "branches": 99,
+    "include": [
+      "src/**/*.js"
+    ],
+    "exclude": [
+      "src/**/*.spec.js"
+    ],
+    "ignore-class-method": "methodToIgnore",
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "require": [
+      "./test/helpers/some-helper.js"
+    ],
+    "extension": [
+      ".jsx"
+    ],
+    "cache": true,
+    "all": true,
+    "temp-directory": "./alternative-tmp",
+    "report-dir": "./alternative"
+  }
+}

@@ -4,7 +4,7 @@ module.exports = {
   mode: 'none', // "production" | "development" | "none"
   // Chosen mode tells webpack to use its built-in optimizations accordingly.
   entry: {
-    MewConnect: './src/browserEntry.js',
+    MewConnect: './src/index.js',
     // ReceiverClient: "./src/MewConnectInitiatorClient.js",
     // Crypto: "./src/MewConnectInitiatorClient.js"
     // MewConnectReceiver: "./src/MewConnectReceiverClient.js",
@@ -21,9 +21,15 @@ module.exports = {
     // publicPath: "/assets/", // string
     // the url to the output directory resolved relative to the HTML page
     library: 'MewConnect', // string,
+    // library: {
+    //   root: "MyLibrary",
+    //   amd: "my-library",
+    //   commonjs: "my-common-library"
+    // },
     // the name of the exported library
     // TODO figure out the best option to use here
     libraryTarget: 'umd', // "var" | "assign" | "this" | "window" | "global" | "commonjs" | "commonjs2" | "amd" | "umd"
+    globalObject: 'this',
     // the type of the exported library
     /* Advanced output configuration (click to show) */
   },
@@ -35,9 +41,9 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          },
+          // options: {
+          //   presets: ['env'],
+          // },
         },
       },
     ],

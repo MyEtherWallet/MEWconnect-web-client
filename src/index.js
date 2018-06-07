@@ -1,5 +1,16 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-undef */
+/* eslint-disable global-require */
 
-
+if (typeof window !== 'undefined') {
+  if (!window._babelPolyfill) { // This is the primary difference between this and index.js
+    require('babel-polyfill');
+  }
+} else if (typeof global !== 'undefined') {
+  if (!global._babelPolyfill) {
+    require('babel-polyfill');
+  }
+}
 // INITIATOR CLIENT
 // The initiator client is the integration end of the connection,
 // and sends the connection details to
@@ -17,7 +28,14 @@
 
 const MewConnect = require('./MewConnect');
 
-// export {Crypto, InitiatorClient as Core} from "./MewConnect"
 module.exports.Crypto = MewConnect.Crypto;
 module.exports.Client = MewConnect.InitiatorClient;
 module.exports.Receiver = MewConnect.ReceiverClient;
+
+// module.exports = (function () {
+//   return {
+//     Crypto: MewConnect.Crypto,
+//     Client: MewConnect.InitiatorClient,
+//     Receiver: MewConnect.ReceiverClient,
+//   };
+// });

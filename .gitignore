@@ -61,3 +61,4 @@ typings/
 /example/Initiator_Peer/mewConnect.js
 /example/Initiator_Peer/mewConnectUtils.js
 /example/Initiator_Peer/mewRTC.js
+/browser/package.json

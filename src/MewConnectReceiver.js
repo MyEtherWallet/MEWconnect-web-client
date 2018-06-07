@@ -241,7 +241,7 @@ class MewConnectReceiver extends MewConnectCommon {
    */
   onConnect() {
     this.logger('CONNECTED');
-    this.rtcSend({ type: 'text', data: 'From Web' });
+    // this.rtcSend({ type: 'text', data: 'From Web' });
     this.uiCommunicator('RtcConnectedEvent');
     this.socketEmit(this.signals.rtcConnected, this.connId);
     this.tryTurn = false;

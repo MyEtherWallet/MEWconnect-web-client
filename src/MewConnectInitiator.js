@@ -315,11 +315,15 @@ class MewConnectInitiator extends MewConnectCommon {
   onConnect() {
     this.logger('CONNECT', 'ok');
     this.connected = true;
-    this.rtcSend({ type: 'text', data: 'From Mobile' });
-    this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
-    this.applyDatahandlers(JSON.stringify({ type: 'rtcConnected', data: null }));
+    // this.rtcSend({ type: 'text', data: 'From Mobile' });
     this.socketEmit(this.signals.rtcConnected, this.socketKey);
     this.socketDisconnect();
+    // set a small timeout before informing the ui that the connection occurred
+    // avoid race condition (particularly in MewCore and other tests)
+    setTimeout(() => {
+      this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+      this.applyDatahandlers(JSON.stringify({ type: 'rtcConnected', data: null }));
+    }, 100);
   }
 
   /**
