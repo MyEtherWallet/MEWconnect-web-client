@@ -389,7 +389,8 @@ class MewConnectInitiator extends MewConnectCommon {
   sendRtcMessageClosure(type, msg) {
     return function () {
       const _this = this;
-      _this.rtcSend(JSON.stringify({ type, data: msg }));
+      // eslint-disable-next-line object-shorthand
+      _this.rtcSend(JSON.stringify({ type: type, data: msg }));
     }.bind(this);
   }
 
@@ -397,7 +398,8 @@ class MewConnectInitiator extends MewConnectCommon {
    * prepare a message to send through the rtc connection
    */
   sendRtcMessage(type, msg) {
-    this.rtcSend(JSON.stringify({ type, data: msg }));
+  // eslint-disable-next-line object-shorthand
+    this.rtcSend(JSON.stringify({ type: type, data: msg }));
   }
 
   /**

@@ -312,7 +312,8 @@ class MewConnectReceiver extends MewConnectCommon {
     return function () {
       const _this = this;
       // console.log('peer 2 sendRtcMessage', msg);
-      _this.rtcSend(JSON.stringify({ type, data: msg }));
+      // eslint-disable-next-line object-shorthand
+      _this.rtcSend(JSON.stringify({ type: type, data: msg }));
     }.bind(this);
   }
 
@@ -321,7 +322,9 @@ class MewConnectReceiver extends MewConnectCommon {
    */
   sendRtcMessageResponse(type, msg) {
     console.log('peer 2 sendRtcMessage', msg);
-    this.rtcSend(JSON.stringify({ type, data: msg }));
+    console.log('peer 2 sendRtcMessage type', type);
+    // eslint-disable-next-line object-shorthand
+    this.rtcSend(JSON.stringify({ type: type, data: msg }));
   }
 
   /**
