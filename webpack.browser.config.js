@@ -4,7 +4,7 @@ module.exports = {
   mode: 'production', // "production" | "development" | "none"
   // Chosen mode tells webpack to use its built-in optimizations accordingly.
   entry: {
-    MewConnectExample: './src/index.js',
+    MewConnect: './src/index.js',
     // ReceiverClient: "./src/MewConnectInitiatorClient.js",
     // Crypto: "./src/MewConnectInitiatorClient.js"
     // MewConnectReceiver: "./src/MewConnectReceiverClient.js",
@@ -36,7 +36,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env'],
+            presets: ['babel-preset-env'],
           },
         },
       },

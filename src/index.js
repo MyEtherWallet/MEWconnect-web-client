@@ -28,8 +28,9 @@ if (typeof window !== 'undefined') {
 
 const MewConnect = require('./MewConnect');
 
-module.exports.Crypto = MewConnect.Crypto;
 module.exports.Client = MewConnect.InitiatorClient;
+module.exports.Crypto = MewConnect.Crypto;
+module.exports.Initiator = MewConnect.Initiator;
 module.exports.Receiver = MewConnect.ReceiverClient;
 
 // module.exports = (function () {

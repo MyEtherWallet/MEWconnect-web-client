@@ -1,12 +1,13 @@
 {
-  "name": "mew-signer-peer",
-  "version": "0.0.1",
-  "main": "./dist/MewConnect.min.js",
+  "name": "mew-connect-client",
+  "version": "0.0.1-alpha.0",
+  "main": "./dist/index.js",
   "private": true,
   "scripts": {
     "start": "node ./example/peer_server/www.js",
-    "build": "webpack --config webpack.prod.config.js --progress",
-    "buildBrowser": "webpack --config webpack.browser.config.js --progress",
+    "build": "rimraf dist/ && babel ./src --out-dir dist/ && npm run buildProdBrowser",
+    "buildProdBrowser": "webpack --config webpack.browser.config.js",
+    "buildDevBrowser": "webpack --config webpack.browser.config.js --progress",
     "buildBrowserPack": "webpack --config webpack.pack.config.js --progress",
     "watch": "webpack --config webpack.config.js --progress -w",
     "watchBrowser": "webpack --config webpack.browser.config.js --progress -w",
@@ -30,6 +31,7 @@
     "winston": "^2.4.2"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-plugin-add-module-exports": "^0.2.1",
