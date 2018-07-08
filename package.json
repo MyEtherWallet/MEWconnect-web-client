@@ -29,7 +29,12 @@
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4",
     "webpack": "^4.10.2",
-    "winston": "^2.4.2"
+    "winston": "^2.4.2",
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "express": "~4.15.5",
+    "hbs": "~4.0.1",
+    "serve-favicon": "~2.4.5"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
