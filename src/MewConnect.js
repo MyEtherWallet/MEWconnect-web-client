@@ -1,5 +1,4 @@
 
-
 // INITIATOR CLIENT
 // The initiator client is the integration end of the connection,
 // and sends the connection details to
@@ -15,12 +14,12 @@
 // the crypto constructor is a collection of methods used by both the initiator and receiver
 // in creating the direct connection
 
-const MewConnectInitiator = require('./MewConnectInitiator');
-const MewConnectCrypto = require('./MewConnectCrypto');
-const MewConnectInitiatorClient = require('./MewConnectInitiatorClient');
-const MewConnectReceiverClient = require('./MewConnectReceiverClient');
+const MewConnectInitiator = require('./MewConnectInitiator')
+const MewConnectCrypto = require('./MewConnectCrypto')
+const MewConnectInitiatorClient = require('./MewConnectInitiatorClient')
+const MewConnectReceiverClient = require('./MewConnectReceiverClient')
 
-module.exports.Crypto = MewConnectCrypto;
-module.exports.Initiator = MewConnectInitiator;
-module.exports.InitiatorClient = MewConnectInitiatorClient;
-module.exports.ReceiverClient = MewConnectReceiverClient;
+module.exports.Crypto = MewConnectCrypto
+module.exports.Initiator = MewConnectInitiator
+module.exports.InitiatorClient = MewConnectInitiatorClient
+module.exports.ReceiverClient = MewConnectReceiverClient

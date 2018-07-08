@@ -4,11 +4,11 @@
 
 if (typeof window !== 'undefined') {
   if (!window._babelPolyfill) { // This is the primary difference between this and index.js
-    require('babel-polyfill');
+    require('babel-polyfill')
   }
 } else if (typeof global !== 'undefined') {
   if (!global._babelPolyfill) {
-    require('babel-polyfill');
+    require('babel-polyfill')
   }
 }
 // INITIATOR CLIENT
@@ -26,12 +26,12 @@ if (typeof window !== 'undefined') {
 // the crypto constructor is a collection of methods used by both the initiator and receiver
 // in creating the direct connection
 
-const MewConnect = require('./MewConnect');
+const MewConnect = require('./MewConnect')
 
-module.exports.Client = MewConnect.InitiatorClient;
-module.exports.Crypto = MewConnect.Crypto;
-module.exports.Initiator = MewConnect.Initiator;
-module.exports.Receiver = MewConnect.ReceiverClient;
+module.exports.Client = MewConnect.InitiatorClient
+module.exports.Crypto = MewConnect.Crypto
+module.exports.Initiator = MewConnect.Initiator
+module.exports.Receiver = MewConnect.ReceiverClient
 
 // module.exports = (function () {
 //   return {

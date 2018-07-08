@@ -1,10 +1,10 @@
-const path = require('path');
+const path = require('path')
 
 module.exports = {
   mode: 'development', // "production" | "development" | "none"
   // Chosen mode tells webpack to use its built-in optimizations accordingly.
   entry: {
-    MewConnect: './src/index.js',
+    MewConnect: './src/index.js'
     // MewConnectReceiver: "./src/MewConnectReceiverClient.js",
   }, // ["babel-polyfill", "./src/index.js"] , // string | object | array
   // Here the application starts executing
@@ -21,12 +21,13 @@ module.exports = {
     library: 'MewConnect', // string,
     // the name of the exported library
     libraryTarget: 'umd', // "var" | "assign" | "this" | "window" | "global" | "commonjs" | "commonjs2" | "amd" | "umd"
+    globalObject: 'this'
     // the type of the exported library
     /* Advanced output configuration (click to show) */
   },
-  externals: {
+  /*  externals: {
     eccrypto: 'eccrypto',
-  },
+  }, */
   module: {
     // configuration regarding modules
     rules: [
@@ -36,27 +37,27 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['babel-preset-env'],
-          },
-        },
-      },
-    ],
+            presets: ['babel-preset-env']
+          }
+        }
+      }
+    ]
   },
   resolve: {
     // options for resolving module requests
     // (does not apply to resolving to loaders)
     modules: [
       'node_modules',
-      path.resolve(__dirname, 'src'),
+      path.resolve(__dirname, 'src')
     ],
     // directories where to look for modules
-    extensions: ['.js', '.json', '.jsx', '.css'],
+    extensions: ['.js', '.json', '.jsx', '.css']
     // extensions that are used
   },
   performance: {
     hints: 'warning', // enum
     maxAssetSize: 200000, // int (in bytes),
-    maxEntrypointSize: 400000, // int (in bytes)
+    maxEntrypointSize: 400000 // int (in bytes)
   },
   recordsPath: path.join(__dirname, 'records.json'),
   devtool: 'source-map', // enum
@@ -71,6 +72,6 @@ module.exports = {
   // changes chunk loading behavior and available modules
   plugins: [
     // ...
-  ],
+  ]
   // list of additional plugins
-};
+}

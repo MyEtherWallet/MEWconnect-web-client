@@ -4,7 +4,7 @@ module.exports = {
   mode: 'production', // "production" | "development" | "none"
   // Chosen mode tells webpack to use its built-in optimizations accordingly.
   entry: {
-    MewConnect: './src/index.js',
+    MewConnect_Browser: './src/index.js',
     // ReceiverClient: "./src/MewConnectInitiatorClient.js",
     // Crypto: "./src/MewConnectInitiatorClient.js"
     // MewConnectReceiver: "./src/MewConnectReceiverClient.js",
