@@ -32,9 +32,9 @@ socketKeyBtn.disabled = false
 let scanCaptured = false
 
 // Create an Instance of the Initiator Peer
-let mewConnect = new MewConnect.Receiver(signalStateChange, logger, {
+let mewConnect = new MewConnect_Browser.Receiver(signalStateChange, logger, {
   wrtc: SimplePeer,
-  // cryptoImpl: new MewConnect.Crypto(CCrypto.crypto, CCrypto.secp256k1, EthUtilities, BBuffer.Buffer),
+  // cryptoImpl: new MewConnect_Browser.Crypto(CCrypto.crypto, CCrypto.secp256k1, EthUtilities, BBuffer.Buffer),
   io: io,
   ethUtils: ''
 })

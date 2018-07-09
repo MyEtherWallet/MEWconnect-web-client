@@ -9,7 +9,7 @@ axios.get('/configValues')
     window.configValues = _response.data.initiator
   })
 // ----------------------------------------
-
+let MewConnect_Browser = MewConnect_Browser
 //= =================================================================
 let connectionState = document.getElementById('connState')
 let disconnectBtn = document.getElementById('disconnect')
@@ -29,11 +29,11 @@ begin.disabled = false
 let addMsg = 'getAddress'
 let signMsg = 'signMessage'
 
-console.log(MewConnect) // todo remove dev item
+console.log(MewConnect_Browser) // todo remove dev item
 // Create an Instance of the Initiator Peer
-let mewConnect = new MewConnect.Initiator(null, logger, {
+let mewConnect = new MewConnect_Browser.Initiator(null, logger, {
   wrtc: SimplePeer,
-  // cryptoImpl: new MewConnect.Crypto(CCrypto.crypto, CCrypto.secp256k1, EthUtilities, BBuffer.Buffer),
+  // cryptoImpl: new MewConnect_Browser.Crypto(CCrypto.crypto, CCrypto.secp256k1, EthUtilities, BBuffer.Buffer),
   io: io,
   ethUtils: ''
 })

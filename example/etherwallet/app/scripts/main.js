@@ -60,7 +60,6 @@ var domainsale = require('./domainsale')
 window.domainsale = domainsale
 var translate = require('./translations/translate.js')
 var socketIo = require('./staticJS/socketIO.min') // using the npm version breaks mewConnect
-
 window.socketIo = socketIo
 if (IS_CX) {
   var cxFuncs = require('./cxFuncs')
@@ -88,8 +87,8 @@ if (IS_CX) {
 
   require('./staticJS/adapter') // adapter to ensure a common api for webRTC
   var MewConnectEth = require('./staticJS/mewConnectEth')
-  var MewConnect = require('../../../../dist/MewConnect.min').Initiator
-  var MewConnectCrypto = require('../../../../dist/MewConnect.min').Crypto
+  var MewConnect = require('./staticJS/MewConnect.min').Initiator
+  var MewConnectCrypto = require('./staticJS/MewConnect.min').Crypto
   window.u2f = u2f
   window.Ledger3 = ledger3
   window.ledgerEth = ledgerEth

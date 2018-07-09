@@ -76,6 +76,7 @@ app.use(cookieParser())
 
 app.use('/vendor', express.static(path.resolve(__dirname, '../../example/vendor')))
 app.use('/src', express.static(path.resolve('../..')))
+console.log(path.resolve(__dirname, '../../browser')) // todo remove dev item
 app.use('/browser', express.static(path.resolve(__dirname, '../../browser')))
 app.use('/Initiator_Peer', express.static(initiatorPeerPath))
 app.use('/Receiver_Peer', express.static(receiverPeerPath))

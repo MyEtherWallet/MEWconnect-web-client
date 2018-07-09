@@ -8,17 +8,17 @@ const app = require('./SimpleExpressServer')
 const http = require('http')
 const fs = require('fs')
 
-
-const options = {
-  key: fs.readFileSync(path.resolve(__dirname, '../../example/sampleCerts/devCert.key')),
-  cert: fs.readFileSync(path.resolve(__dirname, '../../example/sampleCerts/devCert.cert')),
-  requestCert: false,
-  rejectUnauthorized: false
-}
+//
+// const options = {
+//   key: fs.readFileSync(path.resolve(__dirname, '../../example/sampleCerts/devCert.key')),
+//   cert: fs.readFileSync(path.resolve(__dirname, '../../example/sampleCerts/devCert.cert')),
+//   requestCert: false,
+//   rejectUnauthorized: false
+// }
 console.log(process.env.BIND_SERVER) // todo remove dev item
 // eslint-disable-next-line no-use-before-define
-const port = normalizePort(process.env.APP_PORT || '3100')
-const host = process.env.APP_SERVER || '127.0.0.1'
+const port = normalizePort(process.env.APP_PORT || '8080')
+const host = process.env.APP_SERVER || '0.0.0.0'
 app.set('port', port)
 
 const server = http.createServer(app)
