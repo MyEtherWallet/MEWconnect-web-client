@@ -1,8 +1,3 @@
-// const eccrypto = require('eccrypto');
-// const ethUtils = require('ethereumjs-util');
-// const crypto = require('crypto');
-// const secp256k1 = require('secp256k1');
-// const buffer = require('buffer').Buffer;
 const io = require('socket.io-client')
 const SimplePeer = require('simple-peer')
 
@@ -49,7 +44,7 @@ class MewConnectInitiator extends MewConnectCommon {
 
     // Library used to facilitate the WebRTC connection and subsequent communications
     this.Peer = additionalLibs.wrtc || SimplePeer
-    this.nodeWebRTC = additionalLibs.webRTC || null
+    // this.nodeWebRTC = additionalLibs.webRTC || null
 
     // Initial (STUN) server set used to initiate a WebRTC connection
     this.stunServers = [
@@ -200,13 +195,12 @@ class MewConnectInitiator extends MewConnectCommon {
    *  Initial Step in beginning the webRTC setup
    */
   async sendOffer (data) {
-    if (Reflect.has(data, 'version')) {
-      const plainTextVersion = await this.mewCrypto.decrypt(data.version)
-      console.log('plainTextVersion', plainTextVersion) // todo remove dev item
-      this.peerVersion = plainTextVersion
-      this.uiCommunicator(this.lifeCycle.receiverVersion, plainTextVersion)
-      console.log('RECEIVER VERSION:', plainTextVersion) // todo remove dev item
-    }
+    const plainTextVersion = await this.mewCrypto.decrypt(data.version)
+    console.log('plainTextVersion', plainTextVersion) // todo remove dev item
+    this.peerVersion = plainTextVersion
+    this.uiCommunicator(this.lifeCycle.receiverVersion, plainTextVersion)
+    console.log('RECEIVER VERSION:', plainTextVersion) // todo remove dev item
+
     this.logger('sendOffer', data)
     const options = {
       signalListener: this.initiatorSignalListener,
@@ -226,31 +220,34 @@ class MewConnectInitiator extends MewConnectCommon {
     // TODO encrypt the options object
     return async function offerEmmiter (data) {
       const _this = this
-      const listenerSignal = this.signals.offerSignal
-      this.logger('SIGNAL', JSON.stringify(data))
-      const encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(data))
+      const listenerSignal = _this.signals.offerSignal
+      _this.logger('SIGNAL', JSON.stringify(data))
+      const encryptedSend = await _this.mewCrypto.encrypt(JSON.stringify(data))
       // console.log("OPTIONS", options); // todo remove dev item
       // let encryptedOptions = await this.mewCrypto.encrypt(JSON.stringify(options));
+      _this.logger('encryptedSend', encryptedSend)
+      console.log('listenerSignal', listenerSignal)
       _this.socketEmit(listenerSignal, {
         data: encryptedSend,
-        connId: this.connId /* , options: encryptedOptions */
+        connId: _this.connId,
+        options: options.servers
       })
     }
   }
 
   // eslint-disable-next-line no-unused-vars
-  initiatorSignalListenerOriginal (socket, options) {
-    // TODO encrypt the options object
-    return async function offerEmmiter (data) {
-      const _this = this
-      const listenerSignal = this.signals.offerSignal
-      this.logger('SIGNAL', JSON.stringify(data))
-      _this.socketEmit(listenerSignal, {
-        data: JSON.stringify(data),
-        connId: this.connId /* , options: encryptedOptions */
-      })
-    }
-  }
+  // initiatorSignalListenerOriginal (socket, options) {
+  //   // TODO encrypt the options object
+  //   return async function offerEmmiter (data) {
+  //     const _this = this
+  //     const listenerSignal = this.signals.offerSignal
+  //     this.logger('SIGNAL', JSON.stringify(data))
+  //     _this.socketEmit(listenerSignal, {
+  //       data: JSON.stringify(data),
+  //       connId: this.connId /* , options: encryptedOptions */
+  //     })
+  //   }
+  // }
 
   async recieveAnswer (data) {
     try {
@@ -281,7 +278,7 @@ class MewConnectInitiator extends MewConnectCommon {
   initiatorStartRTC (socket, options) {
     const webRtcConfig = options.webRtcConfig || {}
     // eslint-disable-next-line max-len
-    const signalListener = options.signalListener(socket, webRtcConfig) || this.initiatorSignalListener(socket, webRtcConfig)
+    const signalListener = options.signalListener(socket, webRtcConfig) || this.initiatorSignalListener(socket, webRtcConfig.servers)
     const webRtcServers = webRtcConfig.servers || this.stunServers
 
     const simpleOptions = {
@@ -294,9 +291,9 @@ class MewConnectInitiator extends MewConnectCommon {
       }
     }
 
-    if (!this.isBrowser && this.nodeWebRTC) {
-      simpleOptions.wrtc = this.nodeWebRTC
-    }
+    // if (!this.isBrowser && this.nodeWebRTC) {
+    //   simpleOptions.wrtc = this.nodeWebRTC
+    // }
 
     this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent)
     this.p = new this.Peer(simpleOptions)

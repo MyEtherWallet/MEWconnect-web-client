@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-
+const events = require('events')
+const EventEmitter = events.EventEmitter
 const {
   version,
   versions,
@@ -9,60 +10,61 @@ const {
   rtc,
   stages,
   lifeCycle,
-  communicationTypes,
-} = require('./config');
+  communicationTypes
+} = require('./config')
 
 /**
  *
  */
-class MewConnectCommon {
+class MewConnectCommon extends EventEmitter {
   /**
    *
    * @param uiCommunicatorFunc
    * @param loggingFunc
    */
-  constructor(uiCommunicatorFunc, loggingFunc) {
+  constructor (uiCommunicatorFunc, loggingFunc) {
+    super()
     // if null it calls the middleware registered to each specific lifecycle event
-    this.uiCommunicatorFunc = uiCommunicatorFunc || this.applyLifeCycleListeners;
+    this.uiCommunicatorFunc = uiCommunicatorFunc || this.applyLifeCycleListeners
     // Need to think of a little better way to do the above (to have built in and custom)
     // eslint-disable-next-line func-names
     this.logger = loggingFunc || function () {
-    };
-    this.isBrowser = typeof window !== 'undefined'
+    }
+    this.isBrowser = typeof window !== 'undefined' &&
     // eslint-disable-next-line no-undef
-      && ({}).toString.call(window) === '[object Window]';
-    this.middleware = [];
-    this.lifeCycleListeners = [];
+      ({}).toString.call(window) === '[object Window]'
+    this.middleware = []
+    this.lifeCycleListeners = []
 
     this.jsonDetails = {
       signals: {
-        ...signal,
+        ...signal
       },
       stages: {
-        ...stages,
+        ...stages
       },
       lifeCycle: {
-        ...lifeCycle,
+        ...lifeCycle
       },
       rtc: {
-        ...rtc,
+        ...rtc
       },
       communicationTypes: {
-        ...communicationTypes,
+        ...communicationTypes
       },
       connectionCodeSeparator,
       version,
       versions,
-      connectionCodeSchemas,
-    };
+      connectionCodeSchemas
+    }
   }
 
   /**
    *
    * @param uiCommunicationFunc
    */
-  setCommunicationFunction(uiCommunicationFunc) {
-    this.uiCommunicatorFunc = uiCommunicationFunc;
+  setCommunicationFunction (uiCommunicationFunc) {
+    this.uiCommunicatorFunc = uiCommunicationFunc
   }
 
   /**
@@ -80,45 +82,45 @@ class MewConnectCommon {
    *
    * @param func
    */
-  use(func) {
-    this.middleware.push(func);
+  use (func) {
+    this.middleware.push(func)
   }
 
   // eslint-disable-next-line consistent-return
-  useDataHandlers(input, fn) {
-    const fns = this.middleware.slice(0);
-    if (!fns.length) return fn(null);
+  useDataHandlers (input, fn) {
+    const fns = this.middleware.slice(0)
+    if (!fns.length) return fn(null)
 
-    function run(i) {
+    function run (i) {
       // eslint-disable-next-line consistent-return
       fns[i](input, (err) => {
         // upon error, short-circuit
-        if (err) return fn(err);
+        if (err) return fn(err)
 
         // if no middleware left, summon callback
-        if (!fns[i + 1]) return fn(null);
+        if (!fns[i + 1]) return fn(null)
 
         // go on to next
-        run(i + 1);
-      });
+        run(i + 1)
+      })
     }
 
-    run(0);
+    run(0)
   }
 
-  applyDatahandlers(data) {
-    const _this = this;
+  applyDatahandlers (data) {
+    const _this = this
     // function that runs after all middleware
-    function next(args) {
+    function next (args) {
       if (args === null) {
         if (_this.jsonDetails.communicationTypes[data.type]) {
-          throw new Error(`No Handler Exists for ${data.type}`);
+          throw new Error(`No Handler Exists for ${data.type}`)
         }
         // console.log(`No Handler Exists for ${data}`); // todo remove dev item
       }
-      return args;
+      return args
     }
-    this.useDataHandlers(data, next);
+    this.useDataHandlers(data, next)
   }
 
   /**
@@ -126,63 +128,62 @@ class MewConnectCommon {
    * @param _signal
    * @param func
    */
-  registerLifeCycleListener(_signal, func) {
+  registerLifeCycleListener (_signal, func) {
     if (this.lifeCycleListeners[_signal]) {
-      this.lifeCycleListeners[_signal].push(func);
+      this.lifeCycleListeners[_signal].push(func)
     } else {
-      this.lifeCycleListeners[_signal] = [];
-      this.lifeCycleListeners[_signal].push(func);
+      this.lifeCycleListeners[_signal] = []
+      this.lifeCycleListeners[_signal].push(func)
     }
   }
 
   // eslint-disable-next-line consistent-return
-  useLifeCycleListeners(_signal, input, fn) {
-    let fns;
+  useLifeCycleListeners (_signal, input, fn) {
+    let fns
     if (this.lifeCycleListeners[_signal]) {
-      fns = this.lifeCycleListeners[_signal].slice(0);
-      if (!fns.length) return fn(null);
+      fns = this.lifeCycleListeners[_signal].slice(0)
+      if (!fns.length) return fn(null)
 
       // eslint-disable-next-line no-use-before-define
-      run(0);
+      run(0)
     }
 
-    function run(i) {
+    function run (i) {
       // eslint-disable-next-line no-undef,consistent-return
       fns[i](input, (err) => {
         // upon error, short-circuit
-        if (err) return fn(err);
+        if (err) return fn(err)
         // eslint-disable-next-line no-undef
-        if (!fns[i + 1]) return fn(null); // if no middleware left, summon callback
-
+        if (!fns[i + 1]) return fn(null) // if no middleware left, summon callback
 
         // go on to next
-        run(i + 1);
-      });
+        run(i + 1)
+      })
     }
   }
 
-  applyLifeCycleListeners(_signal, data) {
+  applyLifeCycleListeners (_signal, data) {
     // function that runs after all middleware
-    function next(args) {
-      return args;
+    function next (args) {
+      return args
     }
-    this.useLifeCycleListeners(_signal, data, next);
+    this.useLifeCycleListeners(_signal, data, next)
   }
 
   /*
   * allows external function to listen for lifecycle events
   */
-  uiCommunicator(event, data) {
+  uiCommunicator (event, data) {
     // console.log(this.uiCommunicatorFunc); // todo remove dev item
-    return data ? this.uiCommunicatorFunc(event, data) : this.uiCommunicatorFunc(event, null);
+    return data ? this.uiCommunicatorFunc(event, data) : this.uiCommunicatorFunc(event, null)
   }
   // eslint-disable-next-line class-methods-use-this
-  isJSON(arg) {
+  isJSON (arg) {
     try {
-      JSON.parse(arg);
-      return true;
+      JSON.parse(arg)
+      return true
     } catch (e) {
-      return false;
+      return false
     }
   }
 
@@ -190,5 +191,4 @@ class MewConnectCommon {
   // functionCheck() {}
 }
 
-
-module.exports = MewConnectCommon;
+module.exports = MewConnectCommon

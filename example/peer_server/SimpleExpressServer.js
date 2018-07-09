@@ -9,7 +9,7 @@ const receiverPeerPath = path.resolve(__dirname, '../../example/receiver_Peer')
 const initiatorPeerPath = path.resolve(__dirname, '../../example/initiator_Peer')
 // ============= Routes =============
 const router = express.Router()
-const srcDir = path.resolve('..', 'etherwallet/dist')
+const srcDir = path.resolve('.', './example/etherwallet/dist')
 /* GET home page. */
 router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'))
