@@ -1,4 +1,4 @@
-const io = require('./vendor/socketIO.min')
+const io = require('socket.io-client')
 const SimplePeer = require('simple-peer')
 
 const MewConnectCommon = require('./MewConnectCommon')
@@ -34,7 +34,7 @@ class MewConnectInitiator extends MewConnectCommon {
     this.socketConnected = false
     this.connected = false
 
-    this.io = /* additionalLibs.io || */ io
+    this.io =  additionalLibs.io ||  io
 
     this.signals = this.jsonDetails.signals
     this.rtcEvents = this.jsonDetails.rtc

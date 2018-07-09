@@ -85,6 +85,7 @@ if (IS_CX) {
   var digitalBitboxEth = require('./staticJS/digitalBitboxEth')
   var secalotUsb = require('./staticJS/secalotUsb')
   var secalotEth = require('./staticJS/secalotEth')
+
   require('./staticJS/adapter') // adapter to ensure a common api for webRTC
   var MewConnectEth = require('./staticJS/mewConnectEth')
   var MewConnect = require('../../../../dist/MewConnect.min').Initiator
