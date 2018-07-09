@@ -9,6 +9,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'), // string
     filename: '[name].min.js',
     library: 'MewConnect', // string,
+    // the name of the exported library
     // TODO figure out the best option to use here
     libraryTarget: 'umd', // umd', // "var" | "assign" | "this" | "window" | "global" | "commonjs" | "commonjs2" | "amd" | "umd"
     // the type of the exported library

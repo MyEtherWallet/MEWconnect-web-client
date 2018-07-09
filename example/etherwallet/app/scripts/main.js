@@ -59,7 +59,8 @@ window.ens = ens
 var domainsale = require('./domainsale')
 window.domainsale = domainsale
 var translate = require('./translations/translate.js')
-var socketIo = require('socket.io-client')
+var socketIo = require('./staticJS/socketIO.min') // using the npm version breaks mewConnect
+
 window.socketIo = socketIo
 if (IS_CX) {
   var cxFuncs = require('./cxFuncs')
@@ -84,10 +85,8 @@ if (IS_CX) {
   var digitalBitboxEth = require('./staticJS/digitalBitboxEth')
   var secalotUsb = require('./staticJS/secalotUsb')
   var secalotEth = require('./staticJS/secalotEth')
+  require('./staticJS/adapter') // adapter to ensure a common api for webRTC
   var MewConnectEth = require('./staticJS/mewConnectEth')
-  var mewconnectpath = '../../../../dist/MewConnect.min'
-
-  console.log(mewconnectpath, require(mewconnectpath)) // todo remove dev item
   var MewConnect = require('../../../../dist/MewConnect.min').Initiator
   var MewConnectCrypto = require('../../../../dist/MewConnect.min').Crypto
   window.u2f = u2f

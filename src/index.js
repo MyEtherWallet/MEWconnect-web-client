@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable global-require */
 
+require('./vendor/adapter')
 if (typeof window !== 'undefined') {
   if (!window._babelPolyfill) { // This is the primary difference between this and index.js
     require('babel-polyfill')
@@ -28,15 +29,7 @@ if (typeof window !== 'undefined') {
 
 const MewConnect = require('./MewConnect')
 
-module.exports.Client = MewConnect.InitiatorClient
-module.exports.Crypto = MewConnect.Crypto
-module.exports.Initiator = MewConnect.Initiator
-module.exports.Receiver = MewConnect.ReceiverClient
-
-// module.exports = (function () {
-//   return {
-//     Crypto: MewConnect.Crypto,
-//     Client: MewConnect.InitiatorClient,
-//     Receiver: MewConnect.ReceiverClient,
-//   };
-// });
+module.exports.Client = MewConnect.InitiatorClient // wrapper around initiator exposing callback hooks
+module.exports.Crypto = MewConnect.Crypto // crypto related functionality specific to mew connect
+module.exports.Initiator = MewConnect.Initiator // core endpoint client to begin connection
+module.exports.Receiver = MewConnect.ReceiverClient // (dev) wrapper around 'mobile'/remote endpoint client
