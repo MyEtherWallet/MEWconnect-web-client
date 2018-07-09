@@ -31,7 +31,7 @@ let signMsg = 'signMessage'
 
 console.log(MewConnect) // todo remove dev item
 // Create an Instance of the Initiator Peer
-let mewConnect = new MewConnect.Client(signalStateChange, logger, {
+let mewConnect = new MewConnect.Initiator(null, logger, {
   wrtc: SimplePeer,
   // cryptoImpl: new MewConnect.Crypto(CCrypto.crypto, CCrypto.secp256k1, EthUtilities, BBuffer.Buffer),
   io: io,
@@ -49,16 +49,11 @@ function initiateSocketConnection () {
 }
 
 // create qrCode and String for transfer to receiver peer to identify the connection endpoints and begin the WebRTC connection process
-function codeDisplay (event) {
-  console.log('codeDisplay', event)
-  if (event.detail) {
-    qrString.textContent = event.detail
-  } else {
-    qrString = event
-  }
-
+function codeDisplay (detail) {
+  console.log('codeDisplay', detail)
+  qrString.textContent = detail
   var qrcode = new QRCode(document.getElementById('qrcode'), {
-    text: event.detail,
+    text: detail,
     width: 128,
     height: 128,
     colorDark: '#000000',
@@ -84,84 +79,111 @@ disconnectBtn.addEventListener('click', mewConnect.disconnectRTCClosure())
 // These are the functions that handle the responses received from the receiver peer
 // They may also be
 
-mewConnect.use((data, next) => {
-  if (data.type === 'address') {
-    console.log('address data:', data)
-    yourAddress.textContent = data.data.address
-  } else {
-    next()
+mewConnect.on('address', (data) => {
+  console.log('address data:', data)
+  yourAddress.textContent = data.data.address
+})
+mewConnect.on('signMessage', (data) => {
+  try {
+    signedMessage.textContent = data.data
+  } catch (e) {
+    console.error('signMessage RAW data:', data)
   }
 })
-
-mewConnect.use((data, next) => {
-  if (data.type === 'signMessage') {
-    try {
-      let signed
-      if (typeof data.data === 'string') {
-        console.log('signMessage data.sig:', data.data.sig)
-        signed = JSON.parse(data.data)
-      } else {
-        signed = data.data
-      }
-      // console.log(signed);
-      signedMessage.textContent = data.data
-    } catch (e) {
-      console.error('signMessage RAW data:', data)
-    }
-  } else {
-    next()
+mewConnect.on('signTx', (data) => {
+  console.log('address data:', data)
+  try {
+    console.log('signTx data:', data.data)
+    signedMessage.textContent = data.data
+  } catch (e) {
+    console.error('signTx RAW data:', data)
   }
 })
+// mewConnect.use((data, next) => {
+//   if (data.type === 'address') {
+//     console.log('address data:', data)
+//     yourAddress.textContent = data.data.address
+//   } else {
+//     next()
+//   }
+// })
 
-mewConnect.use((data, next) => {
-  if (data.type === 'signTx') {
-    try {
-      let signed
-      if (typeof data.data === 'string') {
-        signed = JSON.parse(data.data)
-      } else {
-        signed = data.data
-      }
-      console.log('signTx data:', data.data)
-      signedMessage.textContent = data.data
-    } catch (e) {
-      console.error('signTx RAW data:', data)
-    }
-  } else {
-    next()
-  }
-})
+// mewConnect.use((data, next) => {
+//   if (data.type === 'signMessage') {
+//     try {
+//       let signed
+//       if (typeof data.data === 'string') {
+//         console.log('signMessage data.sig:', data.data.sig)
+//         signed = JSON.parse(data.data)
+//       } else {
+//         signed = data.data
+//       }
+//       // console.log(signed);
+//       signedMessage.textContent = data.data
+//     } catch (e) {
+//       console.error('signMessage RAW data:', data)
+//     }
+//   } else {
+//     next()
+//   }
+// })
+//
+// mewConnect.use((data, next) => {
+//   if (data.type === 'signTx') {
+//     try {
+//       let signed
+//       if (typeof data.data === 'string') {
+//         signed = JSON.parse(data.data)
+//       } else {
+//         signed = data.data
+//       }
+//       console.log('signTx data:', data.data)
+//       signedMessage.textContent = data.data
+//     } catch (e) {
+//       console.error('signTx RAW data:', data)
+//     }
+//   } else {
+//     next()
+//   }
+// })
+//
+// mewConnect.use((data, next) => {
+//   if (data.type === 'text') {
+//     try {
+//       if (typeof data === 'string') {
+//         document.getElementById('connRecd').textContent = data
+//       } else {
+//         document.getElementById('connRecd').textContent = JSON.stringify(data)
+//       }
+//     } catch (e) {
+//       console.error(e)
+//     }
+//   } else {
+//     next()
+//   }
+// })
 
-mewConnect.use((data, next) => {
-  if (data.type === 'text') {
-    try {
-      if (typeof data === 'string') {
-        document.getElementById('connRecd').textContent = data
-      } else {
-        document.getElementById('connRecd').textContent = JSON.stringify(data)
-      }
-    } catch (e) {
-      console.error(e)
-    }
-  } else {
-    next()
-  }
-})
-
-document.addEventListener('checkNumber', function (event) {
+mewConnect.on('checkNumber', function (event) {
   // checkNumber.textContent = event.detail;
   // console.log(event);
 })
-document.addEventListener('ConnectionId', function (event) {
+mewConnect.on('ConnectionId', function (event) {
   connId.textContent = event.detail
   // console.log(event);
 })
-document.addEventListener('codeDisplay', codeDisplay)
-document.addEventListener('SocketConnectedEvent', initiateSocketButtonState)
-document.addEventListener('RtcInitiatedEvent', initiateRtcButtonState)
-document.addEventListener('RtcConnectedEvent', rtcConnectButtonState)
-document.addEventListener('RtcDisconnectEvent', disconnectRtcButtonState)
-document.addEventListener('RtcClosedEvent', rtcCloseButtonState)
+// document.addEventListener('codeDisplay', codeDisplay)
+// document.addEventListener('SocketConnectedEvent', initiateSocketButtonState)
+// document.addEventListener('RtcInitiatedEvent', initiateRtcButtonState)
+// document.addEventListener('RtcConnectedEvent', rtcConnectButtonState)
+// document.addEventListener('RtcDisconnectEvent', disconnectRtcButtonState)
+// document.addEventListener('RtcClosedEvent', rtcCloseButtonState)
+
+mewConnect.on('codeDisplay', codeDisplay)
+mewConnect.on('SocketConnectedEvent', initiateSocketButtonState)
+mewConnect.on('RtcInitiatedEvent', initiateRtcButtonState)
+mewConnect.on('RtcConnectedEvent', rtcConnectButtonState)
+mewConnect.on('RtcDisconnectEvent', disconnectRtcButtonState)
+mewConnect.on('RtcClosedEvent', rtcCloseButtonState)
 
 function initiateSocketButtonState () {
   disconnectBtn.disabled = true
@@ -197,7 +219,7 @@ function disconnectRtcButtonState () {
 * receiver side to allow the connection.
 * ( otherwise they are basically just for display and user feedback purposes)
 */
-function signalStateChange (event, data) {
+/* function signalStateChange (event, data) {
   switch (event) {
     case 'RtcDisconnectEvent':
       document.dispatchEvent(new Event('RtcDisconnectEvent'))
@@ -239,7 +261,7 @@ function signalStateChange (event, data) {
       document.dispatchEvent(new CustomEvent('codeDisplay', {detail: data}))
       break
   }
-}
+} */
 
 // misc function
 function logger (tag, err) {

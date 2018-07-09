@@ -174,8 +174,9 @@ class MewConnectCommon extends EventEmitter {
   * allows external function to listen for lifecycle events
   */
   uiCommunicator (event, data) {
+    this.emit(event, data)
     // console.log(this.uiCommunicatorFunc); // todo remove dev item
-    return data ? this.uiCommunicatorFunc(event, data) : this.uiCommunicatorFunc(event, null)
+    // return data ? this.uiCommunicatorFunc(event, data) : this.uiCommunicatorFunc(event, null)
   }
   // eslint-disable-next-line class-methods-use-this
   isJSON (arg) {

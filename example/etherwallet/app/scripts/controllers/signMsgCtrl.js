@@ -144,7 +144,7 @@ var signMsgCtrl = function($scope, $sce, walletService) {
                     }
                 })
 
-                // Sign via PK
+                //================= Mew Connect (start)==============================
             } else if (typeof hwType != "undefined" && hwType == "mewConnect") {
               //TODO reset ui when rtc disconnects
               var msg = Buffer.from(thisMessage).toString("hex");
