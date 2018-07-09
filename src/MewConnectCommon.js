@@ -2,7 +2,6 @@
 const events = require('events')
 const EventEmitter = events.EventEmitter
 const {
-  version,
   versions,
   connectionCodeSchemas,
   connectionCodeSeparator,
@@ -11,8 +10,11 @@ const {
   stages,
   lifeCycle,
   communicationTypes
+} = require('./constants')
+const {
+  version,
+  stunServers
 } = require('./config')
-
 /**
  *
  */
@@ -37,6 +39,9 @@ class MewConnectCommon extends EventEmitter {
     this.lifeCycleListeners = []
 
     this.jsonDetails = {
+      stunSrvers: [
+        ...stunServers
+      ],
       signals: {
         ...signal
       },

@@ -4,7 +4,8 @@ const path = require('path')
 console.log(path.resolve(__dirname, '.env')) // todo remove dev item
 
 const app = require('./SimpleExpressServer')
-const https = require('https')
+// const https = require('https')
+const http = require('http')
 const fs = require('fs')
 
 
@@ -20,7 +21,8 @@ const port = normalizePort(process.env.APP_PORT || '3100')
 const host = process.env.APP_SERVER || '127.0.0.1'
 app.set('port', port)
 
-const server = https.createServer(options, app)
+const server = http.createServer(app)
+// const server = https.createServer(options, app)
 
 function normalizePort (val) {
   const portInner = parseInt(val, 10)

@@ -3,19 +3,21 @@ run.config:
     - package.json
   cache_dirs:
     - node_modules
+    - example/etherwallet/node_modules
   engine: nodejs
   engine.config:
     dep_manager: npm
     runtime: nodejs-9.3
+    python_version: python-2.7
   extra_packages:
     - bash
   build_triggers:
     - package.json
   extra_steps:
     - npm install && npm run build
+    - cd example/etherwallet && npm install
+    - cd example/etherwallet && npm run build
 web.client:
-#  ports:
-#    - "tcp:8080:3200"
   routes:
     - /
   start:

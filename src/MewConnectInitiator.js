@@ -34,7 +34,7 @@ class MewConnectInitiator extends MewConnectCommon {
     this.socketConnected = false
     this.connected = false
 
-    this.io =  additionalLibs.io ||  io
+    this.io = additionalLibs.io || io
 
     this.signals = this.jsonDetails.signals
     this.rtcEvents = this.jsonDetails.rtc
@@ -46,9 +46,10 @@ class MewConnectInitiator extends MewConnectCommon {
     this.Peer = additionalLibs.wrtc || SimplePeer
 
     // Initial (STUN) server set used to initiate a WebRTC connection
-    this.stunServers = [
+    this.stunServers = this.jsonDetails.stunSrvers
+    /* [
       { url: 'stun:global.stun.twilio.com:3478?transport=udp' }
-    ]
+    ] */
     // Initialization of the array to hold the TURN server
     // information if the initial connection attempt fails
     this.turnServers = []

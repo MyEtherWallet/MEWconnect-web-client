@@ -11,9 +11,17 @@ const initiatorPeerPath = path.resolve(__dirname, '../../example/initiator_Peer'
 const router = express.Router()
 const srcDir = path.resolve('.', './example/etherwallet/dist')
 /* GET home page. */
-router.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'))
+router.get('/', (req, res) => { // set mew site as default
+  res.type('text/html')
+  res.status(200)
+  res.sendFile(path.join(srcDir, 'index.html'))
   // res.render('index', { title: 'Express' });
+})
+
+router.get('/devSite', (req, res) => {
+  res.type('text/html')
+  res.status(200)
+  res.sendFile(path.join(__dirname, 'index.html'))
 })
 
 router.get('/initiator', (req, res) => {
@@ -26,12 +34,6 @@ router.get('/receiver', (req, res) => {
   res.type('text/html')
   res.status(200)
   res.sendFile(path.join(receiverPeerPath, 'index.html'))
-})
-
-router.get('/devSite', (req, res) => {
-  res.type('text/html')
-  res.status(200)
-  res.sendFile(path.join(srcDir, 'index.html'))
 })
 
 router.get('/msgSign', (req, res) => {
