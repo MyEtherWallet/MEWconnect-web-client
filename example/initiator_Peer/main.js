@@ -9,7 +9,7 @@ axios.get('/configValues')
     window.configValues = _response.data.initiator
   })
 // ----------------------------------------
-let MewConnect_Browser = MewConnect_Browser
+// let MewConnect_Browser = MewConnect_Browser
 //= =================================================================
 let connectionState = document.getElementById('connState')
 let disconnectBtn = document.getElementById('disconnect')

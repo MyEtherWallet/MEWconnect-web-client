@@ -47,14 +47,14 @@ router.get('/configValues', (req, res) => {
   res.status(200)
   res.send({
     initiator: {
-      host: process.env.SIGNAL_SERVER || '172.20.0.24', // 'localhost', // '0.0.0.0', //
+      host: process.env.SIGNAL_SERVER || 'connect.mewapi.io', // 'localhost', // '0.0.0.0', //
       port: (process.env.USES_SIGNAL_PORT === 'false') ? null : process.env.SIGNAL_PORT || 8080, // 3200, //
-      proto: process.env.SIGNAL_PROTO || 'http'
+      proto: process.env.SIGNAL_PROTO || 'https'
     },
     receiver: {
-      host: process.env.SIGNAL_SERVER || '172.20.0.24', // 'localhost', // '0.0.0.0', //
+      host: process.env.SIGNAL_SERVER || 'connect.mewapi.io', // 'localhost', // '0.0.0.0', //
       port: (process.env.USES_SIGNAL_PORT === 'false') ? null : process.env.SIGNAL_PORT || 8080, // 3200, //
-      proto: process.env.SIGNAL_PROTO || 'http'
+      proto: process.env.SIGNAL_PROTO || 'https'
     }
   })
 })
