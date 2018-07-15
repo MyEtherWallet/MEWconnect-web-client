@@ -435,7 +435,7 @@ var decryptWalletCtrl = function ($scope, $sce, walletService) {
     // $scope.mewConnect.on('SocketConnectedEvent', initiateSocketButtonState)
     // $scope.mewConnect.on('RtcInitiatedEvent', initiateRtcButtonState)
     $scope.mewConnect.on('RtcConnectedEvent', rtcConnected)
-    $scope.mewConnect.on('RtcDisconnectEvent', rtcClosed)
+    // $scope.mewConnect.on('RtcDisconnectEvent', rtcClosed)
     $scope.mewConnect.on('RtcClosedEvent', rtcClosed)
 
     $scope.mewConnect.on('address', makeWallet)
@@ -475,7 +475,7 @@ var decryptWalletCtrl = function ($scope, $sce, walletService) {
     function makeWallet (data) {
       // console.log('decryptWalletCtrl:370', data) // todo remove dev item
       var wallet = app.createWallet(data)
-      $scope.notifier.info(globalFuncs.successMsgs[1])
+      // $scope.notifier.info(globalFuncs.successMsgs[1])
       $scope.wallet = wallet
       walletService.wallet = wallet
       $scope.$apply()
