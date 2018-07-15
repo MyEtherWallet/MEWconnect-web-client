@@ -1,15 +1,29 @@
+### Release v3.21.17
+### New
+- Add ELY and DRVH tokens [#1955](https://github.com/kvhnuke/etherwallet/pull/1955)
+- Add Billfodl affiliate link and CFC token [#1954](https://github.com/kvhnuke/etherwallet/pull/1954)
+- Misc CSS fixes [#1935](https://github.com/kvhnuke/etherwallet/pull/1935)
+- Misc CSS fixes [#1937](https://github.com/kvhnuke/etherwallet/pull/1937)
+- Add Cubrix token [#1952](https://github.com/kvhnuke/etherwallet/pull/1952)
+- Update REP token address [#1951](https://github.com/kvhnuke/etherwallet/pull/1951)
+- Add Cubrix contract abi [#1950](https://github.com/kvhnuke/etherwallet/pull/1950)
+
 ### Release v3.21.16
 ### New
+- Add ECP gas limit [#1947](https://github.com/kvhnuke/etherwallet/pull/1947)
+- Update LEMO token, Add OLT and ECP token [#1948](https://github.com/kvhnuke/etherwallet/pull/1948)
 - Add ethorse rewards abi [#1942](https://github.com/kvhnuke/etherwallet/pull/1942)
 - Add OWN, PURC, FXC and MFT tokens from ethereum-list [#1945](https://github.com/kvhnuke/etherwallet/pull/1945)
 - Add FAN, RING, AKC, PLS and OMT tokens from ethereum-list [#1941](https://github.com/kvhnuke/etherwallet/pull/1941)
 ### Update
-- Update DGX token [#1939](https://github.com/kvhnuke/etherwallet/pull/1939)  
+- Update DGX token [#1939](https://github.com/kvhnuke/etherwallet/pull/1939)
+### Fixes
+- Correct Kyber Network address sourcing
 
 ### Release v3.21.15
 ### Update
 - Remove console logs and rebuild [#1934](https://github.com/kvhnuke/etherwallet/pull/1934)
-- Change myetherapi nodes to myetherwallet nodes [Commit](https://github.com/kvhnuke/etherwallet/commit/29137ae373e7408322f82bc4f2cbc13fecf8298a)  
+- Change myetherapi nodes to myetherwallet nodes [Commit](https://github.com/kvhnuke/etherwallet/commit/29137ae373e7408322f82bc4f2cbc13fecf8298a)
 
 
 ### Release v3.21.14
@@ -40,12 +54,12 @@
 - Fix branding style [#1906](https://github.com/kvhnuke/etherwallet/pull/1906)
 - Add OJX, and BTT in eth list. Add CTGA to rin. [#1905](https://github.com/kvhnuke/etherwallet/pull/1905)
 - Add GoChain Node [#1904](https://github.com/kvhnuke/etherwallet/pull/1904)
-- Add WORK token [#1902](https://github.com/kvhnuke/etherwallet/pull/1902)  
+- Add WORK token [#1902](https://github.com/kvhnuke/etherwallet/pull/1902)
 
 ### Update
 - Update Korean translations [#1875](https://github.com/kvhnuke/etherwallet/pull/1875)
 - Update error msgs [Commit](https://github.com/kvhnuke/etherwallet/commit/b0ae1a74a023c4e9cacc7e1652c60d6f399acd54)
-- Update checksum article on the error msg [Commit](https://github.com/kvhnuke/etherwallet/commit/ea4d61d13cd767804da6c0acf28fba70b3e384aa)  
+- Update checksum article on the error msg [Commit](https://github.com/kvhnuke/etherwallet/commit/ea4d61d13cd767804da6c0acf28fba70b3e384aa)
 
 ### Release v3.21.13
 ### Update
@@ -97,7 +111,7 @@
 ### Update
 - Update VRS token [#1863](https://github.com/kvhnuke/etherwallet/pull/1863)
 - Update custom networks [#1850](https://github.com/kvhnuke/etherwallet/pull/1850)
-- Removed duplicate entries for IOST and DCA. Added BLZ, LEND, NCASH, and WTC. [#1853](https://github.com/kvhnuke/etherwallet/pull/1853)  
+- Removed duplicate entries for IOST and DCA. Added BLZ, LEND, NCASH, and WTC. [#1853](https://github.com/kvhnuke/etherwallet/pull/1853)
 
 ### Release v3.21.11
 ### Fixes

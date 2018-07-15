@@ -780,6 +780,12 @@
 		"type": "default"
 	},
 	{
+		"address": "0x5dff89a2caa4d76bc286f74d67bd718eb834da61",
+		"symbol": "CFC",
+		"decimal": 18,
+		"type": "default"
+	},
+	{
 		"address": "0x12FEF5e57bF45873Cd9B62E9DBd7BFb99e32D73e",
 		"symbol": "CFI",
 		"decimal": 18,
@@ -998,6 +1004,12 @@
 	{
 		"address": "0x662aBcAd0b7f345AB7FfB1b1fbb9Df7894f18e66",
 		"symbol": "CTX",
+		"decimal": 18,
+		"type": "default"
+	},
+	{
+		"address": "0x05c3617cbf1304b9260aa61ec960f115d67becea",
+		"symbol": "Cubrix",
 		"decimal": 18,
 		"type": "default"
 	},
@@ -1254,6 +1266,12 @@
 		"type": "default"
 	},
 	{
+		"address": "0x62d4c04644314f35868ba4c65cc27a77681de7a9",
+		"symbol": "DRVH",
+		"decimal": 18,
+		"type": "default"
+	},
+	{
 		"address": "0x2799d90c6d44cb9aa5fbc377177f16c33e056b82",
 		"symbol": "DRP (Dripcoin)",
 		"decimal": 0,
@@ -1326,6 +1344,12 @@
 		"type": "default"
 	},
 	{
+		"address": "0xAEA1C18A992984831002D0cf90E291FB52d72649",
+		"symbol": "ECP",
+		"decimal": 18,
+		"type": "default"
+	},
+	{
 		"address": "0x17F93475d2A978f527c3f7c44aBf44AdfBa60D5C",
 		"symbol": "ECO2",
 		"decimal": 2,
@@ -1389,6 +1413,12 @@
 		"address": "0x44197a4c44d6a059297caf6be4f7e172bd56caaf",
 		"symbol": "ELTCOIN",
 		"decimal": 8,
+		"type": "default"
+	},
+	{
+		"address": "0xa95592DCFfA3C080B4B40E459c5f5692F67DB7F8",
+		"symbol": "ELY",
+		"decimal": 18,
 		"type": "default"
 	},
 	{
@@ -2184,7 +2214,7 @@
 		"type": "default"
 	},
 	{
-		"address": "0xB5AE848EdB296C21259b7467331467d2647eEcDf",
+		"address": "0x60C24407d01782C2175D32fe7C8921ed732371D1",
 		"symbol": "LEMO",
 		"decimal": 18,
 		"type": "default"
@@ -2706,6 +2736,12 @@
 		"type": "default"
 	},
 	{
+		"address": "0x64A60493D888728Cf42616e034a0dfEAe38EFCF0",
+		"symbol": "OLT",
+		"decimal": 18,
+		"type": "default"
+	},
+	{
 		"address": "0xd26114cd6EE289AccF82350c8d8487fedB8A0C07",
 		"symbol": "OMG",
 		"decimal": 18,
@@ -3132,7 +3168,7 @@
 		"type": "default"
 	},
 	{
-		"address": "0xE94327D07Fc17907b4DB788E5aDf2ed424adDff6",
+		"address": "0x1985365e9f78359a9B6AD760e32412f4a445E862",
 		"symbol": "REP",
 		"decimal": 18,
 		"type": "default"
