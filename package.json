@@ -1,10 +1,10 @@
 {
-  "name": "mew-connect-client",
-  "version": "0.0.1-alpha.0",
+  "name": "@myetherwallet/mewconnect-web-client",
+  "version": "0.0.1-alpha.2",
   "main": "./dist/index.js",
-  "private": true,
   "scripts": {
     "start": "node ./example/peer_server/www.js",
+    "buildMew": "npm --prefix 'example/etherwallet' run build",
     "build": "rimraf dist/ && babel ./src --out-dir dist/ && npm run buildProd",
     "buildProd": "webpack --config webpack.config.js",
     "buildProdBrowser": "webpack --config webpack.browser.config.js",
@@ -12,7 +12,8 @@
     "buildBrowserPack": "webpack --config webpack.pack.config.js --progress",
     "watch": "webpack --config webpack.config.js --progress -w",
     "watchBrowser": "webpack --config webpack.browser.config.js --progress -w",
-    "watchBrowserPack": "webpack --config webpack.pack.config.js --progress -w"
+    "watchBrowserPack": "webpack --config webpack.pack.config.js --progress -w",
+    "nanobox": "nanobox deploy"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",

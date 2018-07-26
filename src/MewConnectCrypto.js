@@ -1,9 +1,11 @@
+import createLogger from 'logging'
 const eccrypto = require('eccrypto/browser');
 const ethUtils = require('ethereumjs-util');
 const crypto = require('crypto');
 const secp256k1 = require('secp256k1');
 const buffer = require('buffer').Buffer;
 
+const logger = createLogger('MewCrypto')
 /**
  *
  */
@@ -35,7 +37,6 @@ class MewConnectCrypto {
    */
   setPrivate(pvtKey) {
     this.prvt = Buffer.from(pvtKey, 'hex');
-    // console.log(this.prvt); // todo remove dev item
   }
 
   /**
@@ -126,9 +127,9 @@ class MewConnectCrypto {
               result = _initial.toString();
             }
           } catch (e) {
-            console.error(e);
+            logger.error(e);
           }
-          console.log('decrypt', result); // todo remove dev item
+          // logger.debug('decrypt', result);
           resolve(JSON.stringify(result));
         })
         .catch((error) => {
@@ -145,8 +146,6 @@ class MewConnectCrypto {
   signMessage(msgToSign) {
     return new Promise((resolve, reject) => {
       try {
-        // console.log('signMessage msgToSign', msgToSign);
-        // console.log('Private Key', this.prvt.toString('hex')); // todo remove dev item
         const msg = this.ethUtil.hashPersonalMessage(this.ethUtil.toBuffer(msgToSign));
         const signed = this.ethUtil.ecsign(this.Buffer.from(msg), new this.Buffer(this.prvt, 'hex'));
         // eslint-disable-next-line max-len
@@ -179,8 +178,7 @@ class MewConnectCrypto {
    */
   // eslint-disable-next-line class-methods-use-this
   bufferToConnId(buf) {
-    // return "321"; //todo remove dev item
-    return buf.toString('hex').slice(32); // todo uncomment after dev
+    return buf.toString('hex').slice(32);
   }
   // eslint-disable-next-line class-methods-use-this
   isJSON(arg) {

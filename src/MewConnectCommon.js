@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import createLogger from 'logging'
 const events = require('events')
 const EventEmitter = events.EventEmitter
 const {
@@ -15,12 +16,11 @@ const {
   version,
   stunServers
 } = require('./config')
-/**
- *
- */
+
+const logger = createLogger('MewConnectCommon')
+
 class MewConnectCommon extends EventEmitter {
   /**
-   *
    * @param uiCommunicatorFunc
    * @param loggingFunc
    */
@@ -30,8 +30,8 @@ class MewConnectCommon extends EventEmitter {
     this.uiCommunicatorFunc = uiCommunicatorFunc || this.applyLifeCycleListeners
     // Need to think of a little better way to do the above (to have built in and custom)
     // eslint-disable-next-line func-names
-    this.logger = loggingFunc || function () {
-    }
+    this.logger = loggingFunc || function () {}
+
     this.isBrowser = typeof window !== 'undefined' &&
     // eslint-disable-next-line no-undef
       ({}).toString.call(window) === '[object Window]'
@@ -74,17 +74,6 @@ class MewConnectCommon extends EventEmitter {
 
   /**
    *
-   * @param _signal
-   * @param data
-   */
-  // commDefault(_signal, data) {
-  //   console.log('DEFAULT COMMUNICATION FUNCTION');// todo remove dev item
-  //   console.log('CUSTON EVENT', signal);// todo remove dev item
-  //   console.log('DATA: ', data);// todo remove dev item
-  // }
-
-  /**
-   *
    * @param func
    */
   use (func) {
@@ -121,7 +110,6 @@ class MewConnectCommon extends EventEmitter {
         if (_this.jsonDetails.communicationTypes[data.type]) {
           throw new Error(`No Handler Exists for ${data.type}`)
         }
-        // console.log(`No Handler Exists for ${data}`); // todo remove dev item
       }
       return args
     }
@@ -180,7 +168,6 @@ class MewConnectCommon extends EventEmitter {
   */
   uiCommunicator (event, data) {
     this.emit(event, data)
-    // console.log(this.uiCommunicatorFunc); // todo remove dev item
     // return data ? this.uiCommunicatorFunc(event, data) : this.uiCommunicatorFunc(event, null)
   }
   // eslint-disable-next-line class-methods-use-this
@@ -192,9 +179,6 @@ class MewConnectCommon extends EventEmitter {
       return false
     }
   }
-
-  // check necessary plugable functions are present
-  // functionCheck() {}
 }
 
 module.exports = MewConnectCommon

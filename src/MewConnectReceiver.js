@@ -1,13 +1,10 @@
-// const eccrypto = require('eccrypto');
-// const ethUtils = require('ethereumjs-util');
-// const crypto = require('crypto');
-// const secp256k1 = require('secp256k1');
-// const buffer = require('buffer').Buffer;
+import createLogger from 'logging'
 const io = require('socket.io-client');
 const SimplePeer = require('simple-peer');
 
 const MewConnectCrypto = require('./MewConnectCrypto');
 const MewConnectCommon = require('./MewConnectCommon');
+const logger = createLogger('MewConnectReceiver')
 
 class MewConnectReceiver extends MewConnectCommon {
   /**
@@ -41,7 +38,7 @@ class MewConnectReceiver extends MewConnectCommon {
     this.version = this.jsonDetails.version;
     this.versions = this.jsonDetails.versions;
 
-    console.log(this.versions); // todo remove dev item
+    // logger.debug(this.versions); // todo remove dev item
     // Library used to facilitate the WebRTC connection and subsequent communications
     this.Peer = additionalLibs.wrtc || SimplePeer;
     this.nodeWebRTC = additionalLibs.webRTC || null;
@@ -72,7 +69,6 @@ class MewConnectReceiver extends MewConnectCommon {
   parseConnectionCodeString(str) {
     try {
       const connParts = str.split(this.jsonDetails.connectionCodeSeparator);
-      // console.log('connParts', connParts);
       if (this.versions.indexOf(connParts[0].trim()) > -1) {
         return {
           connId: connParts[2].trim(),
@@ -85,7 +81,7 @@ class MewConnectReceiver extends MewConnectCommon {
         key: connParts[0].trim(),
       };
     } catch (e) {
-      console.error(e);
+      logger.error(e);
     }
   }
 
@@ -96,9 +92,9 @@ class MewConnectReceiver extends MewConnectCommon {
    */
   async receiverStart(url, params) {
     const _this = this;
-    console.log(url, params); // todo remove dev item
+    // logger.debug(url, params); // todo remove dev item
     try {
-      console.log(params);
+      // logger.debug(params);
       // Set the private key sent via a QR code scan
       this.mewCrypto.setPrivate(params.key); // todo uncomment after dev
       const signed = await this.mewCrypto.signMessage(params.key);
@@ -111,7 +107,7 @@ class MewConnectReceiver extends MewConnectCommon {
         },
         secure: true,
       };
-      console.log('receiverStart options', options);
+      // logger.debug('receiverStart options', options);
       this.socketManager = this.io(url, options);
       this.socket = this.socketManager.connect();
 
@@ -129,7 +125,7 @@ class MewConnectReceiver extends MewConnectCommon {
         this.retryViaTurn(data);
       });
     } catch (e) {
-      console.error(e);
+      logger.error(e);
     }
   }
 
@@ -157,8 +153,7 @@ class MewConnectReceiver extends MewConnectCommon {
 
   // Wrapper around socket.on listener registration method
   socketOn(signal, func) {
-    // console.log('socketOn', typeof func === 'function'); // todo remove dev item
-    if (typeof func !== 'function') console.log('not a function?', signal); // one of the handlers is/was not initializing properly
+    if (typeof func !== 'function') logger.error('not a function?', signal); // one of the handlers is/was not initializing properly
     this.socket.on(signal, func);
   }
 
@@ -173,7 +168,7 @@ class MewConnectReceiver extends MewConnectCommon {
    */
   async processOfferReceipt(data) {
     try {
-      console.log('processOfferReceipt', data); // todo remove dev item
+      // logger.debug('processOfferReceipt', data); // todo remove dev item
       const decryptedOffer = await this.mewCrypto.decrypt(data.data);
       // let decryptedOptions = await this.mewCrypto.decrypt(data.options);
 
@@ -181,10 +176,10 @@ class MewConnectReceiver extends MewConnectCommon {
         data: decryptedOffer,
         // options: decryptedOptions //TODO should also encrypt this (decrypted here)
       };
-      console.log(decryptedData); // todo remove dev item
+      // logger.debug(decryptedData); // todo remove dev item
       this.receiveOffer(decryptedData);
     } catch (e) {
-      console.error(e);
+      logger.error(e);
     }
   }
 
@@ -223,7 +218,7 @@ class MewConnectReceiver extends MewConnectCommon {
       simpleOptions.wrtc = this.nodeWebRTC;
     }
 
-    console.log(data); // todo remove dev item
+    // logger.debug(data); // todo remove dev item
 
     this.p = new this.Peer(simpleOptions);
     this.p.signal(JSON.parse(data.data));
@@ -266,7 +261,7 @@ class MewConnectReceiver extends MewConnectCommon {
         this.applyDatahandlers(decryptedData);
       }
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       this.logger('peer2 ERROR: data=', data);
       this.logger('peer2 ERROR: data.toString()=', data.toString());
       // this.applyDatahandlers(data);
@@ -289,8 +284,8 @@ class MewConnectReceiver extends MewConnectCommon {
    * Emitted when there is an error with the webRTC connection
    */
   onError(err) {
-    console.error('WRTC ERROR');
-    console.error(err);
+    logger.error('WRTC ERROR');
+    logger.error(err);
   }
 
   // /////////////////////////// WebRTC Communication Methods ///////////////////////////////////
@@ -311,7 +306,6 @@ class MewConnectReceiver extends MewConnectCommon {
   sendRtcMessage(type, msg) {
     return function () {
       const _this = this;
-      // console.log('peer 2 sendRtcMessage', msg);
       // eslint-disable-next-line object-shorthand
       _this.rtcSend(JSON.stringify({ type: type, data: msg }));
     }.bind(this);
@@ -321,8 +315,8 @@ class MewConnectReceiver extends MewConnectCommon {
    * prepare a message to send through the rtc connection
    */
   sendRtcMessageResponse(type, msg) {
-    console.log('peer 2 sendRtcMessage', msg);
-    console.log('peer 2 sendRtcMessage type', type);
+    // logger.debug('peer 2 sendRtcMessage', msg);
+    // logger.debug('peer 2 sendRtcMessage type', type);
     // eslint-disable-next-line object-shorthand
     this.rtcSend(JSON.stringify({ type: type, data: msg }));
   }
@@ -350,7 +344,7 @@ class MewConnectReceiver extends MewConnectCommon {
       encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
       // this.p.send(JSON.stringify(arg));
     }
-    console.log('ENCRYPTED: ', encryptedSend); // todo remove dev item
+    // logger.debug('ENCRYPTED: ', encryptedSend); // todo remove dev item
     this.p.send(JSON.stringify(encryptedSend));
   }
 
@@ -368,14 +362,14 @@ class MewConnectReceiver extends MewConnectCommon {
    */
   attemptTurnConnect() {
     this.triedTurn = true;
-    console.log('TRY TURN CONNECTION');
+    // logger.debug('TRY TURN CONNECTION');
     this.socketEmit(this.signals.tryTurn, { connId: this.connId, cont: true });
   }
 
   // TODO Check if this does anything or is used anywhere
   // eslint-disable-next-line no-unused-vars
   retryViaTurn(data) {
-    console.log('TURN TOKEN RECIEVED');
+    // logger.debug('TURN TOKEN RECIEVED');
     // this.receiverTurnRTC(data);
   }
 }

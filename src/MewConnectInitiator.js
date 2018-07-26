@@ -1,8 +1,10 @@
+import createLogger from 'logging'
 const io = require('socket.io-client')
 const SimplePeer = require('simple-peer')
 
 const MewConnectCommon = require('./MewConnectCommon')
 const MewConnectCrypto = require('./MewConnectCrypto')
+const logger = createLogger('MewConnectInitiator')
 
 /**
  *  Primary Web end of a MEW Connect communication channel
@@ -58,6 +60,9 @@ class MewConnectInitiator extends MewConnectCommon {
     this.mewCrypto = additionalLibs.cryptoImpl || MewConnectCrypto.create()
   }
 
+  /**
+   * Factory function
+   */
   static init (uiCommunicatorFunc, loggingFunc, additionalLibs) {
     return new MewConnectInitiator(uiCommunicatorFunc, loggingFunc, additionalLibs)
   }
@@ -130,11 +135,11 @@ class MewConnectInitiator extends MewConnectCommon {
    * Setup message handlers for communication with the signal server
    */
   initiatorConnect (socket) {
-    console.log('INITIATOR CONNECT') // todo remove dev item
+    this.logger('INITIATOR CONNECT') // todo remove dev item
     this.uiCommunicator(this.lifeCycle.SocketConnectedEvent)
 
     this.socket.on(this.signals.connect, () => {
-      console.log('SOCKET CONNECTED') // todo remove dev item
+      this.logger('SOCKET CONNECTED') // todo remove dev item
       this.socketConnected = true
       this.applyDatahandlers(JSON.stringify({ type: 'socketConnected', data: null }))
     })
@@ -200,10 +205,10 @@ class MewConnectInitiator extends MewConnectCommon {
    */
   async sendOffer (data) {
     const plainTextVersion = await this.mewCrypto.decrypt(data.version)
-    console.log('plainTextVersion', plainTextVersion) // todo remove dev item
+    // logger.debug('plainTextVersion', plainTextVersion) // todo remove dev item
     this.peerVersion = plainTextVersion
     this.uiCommunicator(this.lifeCycle.receiverVersion, plainTextVersion)
-    console.log('RECEIVER VERSION:', plainTextVersion) // todo remove dev item
+    // logger.debug('RECEIVER VERSION:', plainTextVersion) // todo remove dev item
 
     this.logger('sendOffer', data)
     const options = {
@@ -228,43 +233,27 @@ class MewConnectInitiator extends MewConnectCommon {
         const listenerSignal = _this.signals.offerSignal
         _this.logger('SIGNAL', JSON.stringify(data))
         const encryptedSend = await _this.mewCrypto.encrypt(JSON.stringify(data))
-        // console.log("OPTIONS", options); // todo remove dev item
-        // let encryptedOptions = await this.mewCrypto.encrypt(JSON.stringify(options));
-        _this.logger('encryptedSend', encryptedSend)
-        console.log('listenerSignal', listenerSignal)
+        // logger.debug('encryptedSend', encryptedSend)
+        // logger.debug('listenerSignal', listenerSignal)
         _this.socketEmit(_this.signals.offerSignal, {
           data: encryptedSend,
           connId: _this.connId,
           options: options.servers
         })
       } catch (e) {
-        console.error(e)
+        logger.error(e)
       }
     }
   }
 
-  // eslint-disable-next-line no-unused-vars
-  // initiatorSignalListenerOriginal (socket, options) {
-  //   // TODO encrypt the options object
-  //   return async function offerEmmiter (data) {
-  //     const _this = this
-  //     const listenerSignal = this.signals.offerSignal
-  //     this.logger('SIGNAL', JSON.stringify(data))
-  //     _this.socketEmit(listenerSignal, {
-  //       data: JSON.stringify(data),
-  //       connId: this.connId /* , options: encryptedOptions */
-  //     })
-  //   }
-  // }
-
   async recieveAnswer (data) {
     try {
-      console.log('recieveAnswer', data) // todo remove dev item
+      // logger.debug('recieveAnswer', data) // todo remove dev item
       let plainTextOffer
       plainTextOffer = await this.mewCrypto.decrypt(data.data)
       this.rtcRecieveAnswer({ data: plainTextOffer })
     } catch (e) {
-      console.error(e)
+      logger.error(e)
     }
   }
 
@@ -290,10 +279,6 @@ class MewConnectInitiator extends MewConnectCommon {
         iceServers: webRtcServers
       }
     }
-
-    // if (!this.isBrowser && this.nodeWebRTC) {
-    //   simpleOptions.wrtc = this.nodeWebRTC
-    // }
 
     this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent)
     this.p = new this.Peer(simpleOptions)
@@ -327,8 +312,8 @@ class MewConnectInitiator extends MewConnectCommon {
    * Emitted when the data is received via the webRTC connection
    */
   async onData (data) {
-    console.log(data) // todo remove dev item
-    console.log(data.toString()) // todo remove dev item
+    // logger.debug(data) // todo remove dev item
+    // logger.debug(data.toString()) // todo remove dev item
     this.logger('DATA RECEIVED', data.toString())
     try {
       let decryptedData
@@ -346,7 +331,7 @@ class MewConnectInitiator extends MewConnectCommon {
         // this.applyDatahandlers(decryptedData)
       }
     } catch (e) {
-      console.error(e)
+      logger.error(e)
       this.logger('peer2 ERROR: data=', data)
       this.logger('peer2 ERROR: data.toString()=', data.toString())
       // this.applyDatahandlers(data);
@@ -366,7 +351,7 @@ class MewConnectInitiator extends MewConnectCommon {
    * Emitted when there is an error with the webRTC connection
    */
   onError (err) {
-    console.error('WRTC ERROR')
+    logger.error('WRTC ERROR')
     this.logger('error', err)
     this.uiCommunicator(this.lifeCycle.RtcErrorEvent, err)
   }

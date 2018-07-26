@@ -187,7 +187,6 @@ class MewConnectReceiverClient extends MewConnectReceiver {
   configureInternalMiddleware() {
     if (!this.internalMiddlewareActive) {
       this.internalMiddlewareActive = true;
-      console.log('mewConnect:721 configureInternalMiddleware'); // todo remove dev item
       this.use((data, next) => {
         if (data) {
           if (data.type) {

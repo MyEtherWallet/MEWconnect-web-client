@@ -2,7 +2,15 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _logging = require('logging');
+
+var _logging2 = _interopRequireDefault(_logging);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var logger = (0, _logging2.default)('MewConnectEth');
 
 var MewConnectEth = function () {
   function MewConnectEth(callback) {
@@ -15,7 +23,7 @@ var MewConnectEth = function () {
       // this.callback = this.mewConnectCallback;
     }
     this.walletCallback = null;
-    this.signalerUrl = 'https://35.160.138.139:3001';
+    this.signalerUrl = '';
   }
 
   _createClass(MewConnectEth, [{
@@ -54,7 +62,7 @@ var MewConnectEth = function () {
       if (address.substring(0, 2) !== '0x') {
         address = '0x' + address;
       }
-      console.log('decryptWalletCtrl:334', data); // todo remove dev item
+      // // logger.debug('decryptWalletCtrl:334', data) // todo remove dev item
       // eslint-disable-next-line no-undef
       if (Validator.isValidAddress(address)) {
         // eslint-disable-next-line no-undef
@@ -66,7 +74,7 @@ var MewConnectEth = function () {
         var balance = tempWallet.setBalance(function (_data) {
           return _data;
         });
-        console.log(balance); // todo remove dev item
+        // logger.debug(balance) // todo remove dev item
         wallet = {
           // type: "addressOnly",
           type: 'mewConnect',
@@ -83,21 +91,15 @@ var MewConnectEth = function () {
 
           setBalance: tempWallet.setBalance,
           setTokens: tempWallet.setTokens,
-          getPath: function getPath() {
-            console.log('mewConnectEth:209', 'GET PATH'); // todo remove dev item
-          },
-          getHWTransport: function getHWTransport() {
-            console.log('mewConnectEth:212', 'GET HARDWARE TRANSPORT'); // todo remove dev item
-          },
+          getPath: function getPath() {},
+          getHWTransport: function getHWTransport() {},
           getHWType: function getHWType() {
-            console.log('mewConnectEth:215', 'GET HARDWARE TYPE'); // todo remove dev item
             return 'mewConnect';
           }
         };
         return wallet;
       }
       // todo add error message (address not valid)
-      console.error('decryptWalletCtrl:355', 'NOT VALID?'); // todo remove dev item
       return false;
     }
   }, {
@@ -112,7 +114,6 @@ var MewConnectEth = function () {
       self.comm.sendRtcMessage('publicKey', '');
       self.comm.use(function (data, next) {
         if (data.type === 'publicKey') {
-          console.log(data);
           callback('publicKey', data.data);
         } else {
           next();
@@ -124,7 +125,7 @@ var MewConnectEth = function () {
     value: function signTransaction(eTx, rawTx) {
       var self = this;
       // const hashToSign = eTx.hash(false).toString('hex');
-      console.log('mewConnectEth:326', rawTx); // todo remove dev item
+      // // logger.debug('mewConnectEth:326', rawTx) // todo remove dev item
       self.comm.sendRtcMessageDirect('signTx', JSON.stringify(rawTx));
     }
   }, {

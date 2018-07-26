@@ -1,7 +1,8 @@
 const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
-  mode: 'none', // "production" | "development" | "none"
+  mode: 'production', // "production" | "development" | "none"
   entry: {
     MewConnect: './src/index.js'
   },
@@ -43,6 +44,9 @@ module.exports = {
   },
   devtool: 'source-map', // enum
   context: __dirname, // string (absolute path!)
-  target: 'web' // enum
+  target: 'web', // enum
   // the environment in which the bundle should run
+  plugins: [
+    new webpack.DefinePlugin({'process.env.NODE_ENV': JSON.stringify('production')})
+  ]
 }

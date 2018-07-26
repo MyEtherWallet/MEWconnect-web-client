@@ -2,6 +2,12 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _logging = require('logging');
+
+var _logging2 = _interopRequireDefault(_logging);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -10,16 +16,12 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// const eccrypto = require('eccrypto');
-// const ethUtils = require('ethereumjs-util');
-// const crypto = require('crypto');
-// const secp256k1 = require('secp256k1');
-// const buffer = require('buffer').Buffer;
 var io = require('socket.io-client');
 var SimplePeer = require('simple-peer');
 
 var MewConnectCrypto = require('./MewConnectCrypto');
 var MewConnectCommon = require('./MewConnectCommon');
+var logger = (0, _logging2.default)('MewConnectReceiver');
 
 var MewConnectReceiver = function (_MewConnectCommon) {
   _inherits(MewConnectReceiver, _MewConnectCommon);
@@ -58,7 +60,7 @@ var MewConnectReceiver = function (_MewConnectCommon) {
     _this2.version = _this2.jsonDetails.version;
     _this2.versions = _this2.jsonDetails.versions;
 
-    console.log(_this2.versions); // todo remove dev item
+    // logger.debug(this.versions); // todo remove dev item
     // Library used to facilitate the WebRTC connection and subsequent communications
     _this2.Peer = additionalLibs.wrtc || SimplePeer;
     _this2.nodeWebRTC = additionalLibs.webRTC || null;
@@ -92,7 +94,6 @@ var MewConnectReceiver = function (_MewConnectCommon) {
     value: function parseConnectionCodeString(str) {
       try {
         var connParts = str.split(this.jsonDetails.connectionCodeSeparator);
-        // console.log('connParts', connParts);
         if (this.versions.indexOf(connParts[0].trim()) > -1) {
           return {
             connId: connParts[2].trim(),
@@ -105,7 +106,7 @@ var MewConnectReceiver = function (_MewConnectCommon) {
           key: connParts[0].trim()
         };
       } catch (e) {
-        console.error(e);
+        logger.error(e);
       }
     }
 
@@ -128,17 +129,17 @@ var MewConnectReceiver = function (_MewConnectCommon) {
             switch (_context.prev = _context.next) {
               case 0:
                 _this = this;
+                // logger.debug(url, params); // todo remove dev item
 
-                console.log(url, params); // todo remove dev item
-                _context.prev = 2;
+                _context.prev = 1;
 
-                console.log(params);
+                // logger.debug(params);
                 // Set the private key sent via a QR code scan
                 this.mewCrypto.setPrivate(params.key); // todo uncomment after dev
-                _context.next = 7;
+                _context.next = 5;
                 return this.mewCrypto.signMessage(params.key);
 
-              case 7:
+              case 5:
                 signed = _context.sent;
 
                 this.connId = params.connId;
@@ -150,8 +151,8 @@ var MewConnectReceiver = function (_MewConnectCommon) {
                   },
                   secure: true
                 };
+                // logger.debug('receiverStart options', options);
 
-                console.log('receiverStart options', options);
                 this.socketManager = this.io(url, options);
                 this.socket = this.socketManager.connect();
 
@@ -168,21 +169,21 @@ var MewConnectReceiver = function (_MewConnectCommon) {
                 this.socketOn(this.signals.turnToken, function (data) {
                   _this3.retryViaTurn(data);
                 });
-                _context.next = 22;
+                _context.next = 19;
                 break;
 
+              case 16:
+                _context.prev = 16;
+                _context.t0 = _context['catch'](1);
+
+                logger.error(_context.t0);
+
               case 19:
-                _context.prev = 19;
-                _context.t0 = _context['catch'](2);
-
-                console.error(_context.t0);
-
-              case 22:
               case 'end':
                 return _context.stop();
             }
           }
-        }, _callee, this, [[2, 19]]);
+        }, _callee, this, [[1, 16]]);
       }));
 
       function receiverStart(_x, _x2) {
@@ -258,8 +259,7 @@ var MewConnectReceiver = function (_MewConnectCommon) {
   }, {
     key: 'socketOn',
     value: function socketOn(signal, func) {
-      // console.log('socketOn', typeof func === 'function'); // todo remove dev item
-      if (typeof func !== 'function') console.log('not a function?', signal); // one of the handlers is/was not initializing properly
+      if (typeof func !== 'function') logger.error('not a function?', signal); // one of the handlers is/was not initializing properly
       this.socket.on(signal, func);
     }
 
@@ -283,12 +283,10 @@ var MewConnectReceiver = function (_MewConnectCommon) {
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.prev = 0;
-
-                console.log('processOfferReceipt', data); // todo remove dev item
-                _context3.next = 4;
+                _context3.next = 3;
                 return this.mewCrypto.decrypt(data.data);
 
-              case 4:
+              case 3:
                 decryptedOffer = _context3.sent;
 
                 // let decryptedOptions = await this.mewCrypto.decrypt(data.options);
@@ -297,24 +295,24 @@ var MewConnectReceiver = function (_MewConnectCommon) {
                   data: decryptedOffer
                   // options: decryptedOptions //TODO should also encrypt this (decrypted here)
                 };
+                // logger.debug(decryptedData); // todo remove dev item
 
-                console.log(decryptedData); // todo remove dev item
                 this.receiveOffer(decryptedData);
-                _context3.next = 13;
+                _context3.next = 11;
                 break;
 
-              case 10:
-                _context3.prev = 10;
+              case 8:
+                _context3.prev = 8;
                 _context3.t0 = _context3['catch'](0);
 
-                console.error(_context3.t0);
+                logger.error(_context3.t0);
 
-              case 13:
+              case 11:
               case 'end':
                 return _context3.stop();
             }
           }
-        }, _callee3, this, [[0, 10]]);
+        }, _callee3, this, [[0, 8]]);
       }));
 
       function processOfferReceipt(_x4) {
@@ -390,7 +388,7 @@ var MewConnectReceiver = function (_MewConnectCommon) {
         simpleOptions.wrtc = this.nodeWebRTC;
       }
 
-      console.log(data); // todo remove dev item
+      // logger.debug(data); // todo remove dev item
 
       this.p = new this.Peer(simpleOptions);
       this.p.signal(JSON.parse(data.data));
@@ -468,7 +466,7 @@ var MewConnectReceiver = function (_MewConnectCommon) {
                 _context5.prev = 15;
                 _context5.t0 = _context5['catch'](1);
 
-                console.error(_context5.t0);
+                logger.error(_context5.t0);
                 this.logger('peer2 ERROR: data=', data);
                 this.logger('peer2 ERROR: data.toString()=', data.toString());
                 // this.applyDatahandlers(data);
@@ -510,8 +508,8 @@ var MewConnectReceiver = function (_MewConnectCommon) {
   }, {
     key: 'onError',
     value: function onError(err) {
-      console.error('WRTC ERROR');
-      console.error(err);
+      logger.error('WRTC ERROR');
+      logger.error(err);
     }
 
     // /////////////////////////// WebRTC Communication Methods ///////////////////////////////////
@@ -538,7 +536,6 @@ var MewConnectReceiver = function (_MewConnectCommon) {
     value: function sendRtcMessage(type, msg) {
       return function () {
         var _this = this;
-        // console.log('peer 2 sendRtcMessage', msg);
         // eslint-disable-next-line object-shorthand
         _this.rtcSend(JSON.stringify({ type: type, data: msg }));
       }.bind(this);
@@ -551,8 +548,8 @@ var MewConnectReceiver = function (_MewConnectCommon) {
   }, {
     key: 'sendRtcMessageResponse',
     value: function sendRtcMessageResponse(type, msg) {
-      console.log('peer 2 sendRtcMessage', msg);
-      console.log('peer 2 sendRtcMessage type', type);
+      // logger.debug('peer 2 sendRtcMessage', msg);
+      // logger.debug('peer 2 sendRtcMessage type', type);
       // eslint-disable-next-line object-shorthand
       this.rtcSend(JSON.stringify({ type: type, data: msg }));
     }
@@ -607,10 +604,10 @@ var MewConnectReceiver = function (_MewConnectCommon) {
                 encryptedSend = _context6.sent;
 
               case 10:
-                console.log('ENCRYPTED: ', encryptedSend); // todo remove dev item
+                // logger.debug('ENCRYPTED: ', encryptedSend); // todo remove dev item
                 this.p.send(JSON.stringify(encryptedSend));
 
-              case 12:
+              case 11:
               case 'end':
                 return _context6.stop();
             }
@@ -645,7 +642,7 @@ var MewConnectReceiver = function (_MewConnectCommon) {
     key: 'attemptTurnConnect',
     value: function attemptTurnConnect() {
       this.triedTurn = true;
-      console.log('TRY TURN CONNECTION');
+      // logger.debug('TRY TURN CONNECTION');
       this.socketEmit(this.signals.tryTurn, { connId: this.connId, cont: true });
     }
 
@@ -655,7 +652,7 @@ var MewConnectReceiver = function (_MewConnectCommon) {
   }, {
     key: 'retryViaTurn',
     value: function retryViaTurn(data) {
-      console.log('TURN TOKEN RECIEVED');
+      // logger.debug('TURN TOKEN RECIEVED');
       // this.receiverTurnRTC(data);
     }
   }]);

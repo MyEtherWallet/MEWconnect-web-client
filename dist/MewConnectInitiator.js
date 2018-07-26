@@ -2,6 +2,12 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _logging = require('logging');
+
+var _logging2 = _interopRequireDefault(_logging);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -15,6 +21,7 @@ var SimplePeer = require('simple-peer');
 
 var MewConnectCommon = require('./MewConnectCommon');
 var MewConnectCrypto = require('./MewConnectCrypto');
+var logger = (0, _logging2.default)('MewConnectInitiator');
 
 /**
  *  Primary Web end of a MEW Connect communication channel
@@ -80,6 +87,11 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     _this2.mewCrypto = additionalLibs.cryptoImpl || MewConnectCrypto.create();
     return _this2;
   }
+
+  /**
+   * Factory function
+   */
+
 
   _createClass(MewConnectInitiator, [{
     key: 'getSocketConnectionState',
@@ -193,11 +205,11 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     value: function initiatorConnect(socket) {
       var _this3 = this;
 
-      console.log('INITIATOR CONNECT'); // todo remove dev item
+      this.logger('INITIATOR CONNECT'); // todo remove dev item
       this.uiCommunicator(this.lifeCycle.SocketConnectedEvent);
 
       this.socket.on(this.signals.connect, function () {
-        console.log('SOCKET CONNECTED'); // todo remove dev item
+        _this3.logger('SOCKET CONNECTED'); // todo remove dev item
         _this3.socketConnected = true;
         _this3.applyDatahandlers(JSON.stringify({ type: 'socketConnected', data: null }));
       });
@@ -286,10 +298,10 @@ var MewConnectInitiator = function (_MewConnectCommon) {
               case 2:
                 plainTextVersion = _context2.sent;
 
-                console.log('plainTextVersion', plainTextVersion); // todo remove dev item
+                // logger.debug('plainTextVersion', plainTextVersion) // todo remove dev item
                 this.peerVersion = plainTextVersion;
                 this.uiCommunicator(this.lifeCycle.receiverVersion, plainTextVersion);
-                console.log('RECEIVER VERSION:', plainTextVersion); // todo remove dev item
+                // logger.debug('RECEIVER VERSION:', plainTextVersion) // todo remove dev item
 
                 this.logger('sendOffer', data);
                 options = {
@@ -301,7 +313,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
 
                 this.initiatorStartRTC(this.socket, options);
 
-              case 10:
+              case 8:
               case 'end':
                 return _context2.stop();
             }
@@ -345,30 +357,28 @@ var MewConnectInitiator = function (_MewConnectCommon) {
                 case 6:
                   encryptedSend = _context3.sent;
 
-                  // console.log("OPTIONS", options); // todo remove dev item
-                  // let encryptedOptions = await this.mewCrypto.encrypt(JSON.stringify(options));
-                  _this.logger('encryptedSend', encryptedSend);
-                  console.log('listenerSignal', listenerSignal);
+                  // logger.debug('encryptedSend', encryptedSend)
+                  // logger.debug('listenerSignal', listenerSignal)
                   _this.socketEmit(_this.signals.offerSignal, {
                     data: encryptedSend,
                     connId: _this.connId,
                     options: options.servers
                   });
-                  _context3.next = 15;
+                  _context3.next = 13;
                   break;
 
-                case 12:
-                  _context3.prev = 12;
+                case 10:
+                  _context3.prev = 10;
                   _context3.t0 = _context3['catch'](0);
 
-                  console.error(_context3.t0);
+                  logger.error(_context3.t0);
 
-                case 15:
+                case 13:
                 case 'end':
                   return _context3.stop();
               }
             }
-          }, _callee3, this, [[0, 12]]);
+          }, _callee3, this, [[0, 10]]);
         }));
 
         function offerEmmiter(_x4) {
@@ -378,21 +388,6 @@ var MewConnectInitiator = function (_MewConnectCommon) {
         return offerEmmiter;
       }();
     }
-
-    // eslint-disable-next-line no-unused-vars
-    // initiatorSignalListenerOriginal (socket, options) {
-    //   // TODO encrypt the options object
-    //   return async function offerEmmiter (data) {
-    //     const _this = this
-    //     const listenerSignal = this.signals.offerSignal
-    //     this.logger('SIGNAL', JSON.stringify(data))
-    //     _this.socketEmit(listenerSignal, {
-    //       data: JSON.stringify(data),
-    //       connId: this.connId /* , options: encryptedOptions */
-    //     })
-    //   }
-    // }
-
   }, {
     key: 'recieveAnswer',
     value: function () {
@@ -404,30 +399,30 @@ var MewConnectInitiator = function (_MewConnectCommon) {
               case 0:
                 _context4.prev = 0;
 
-                console.log('recieveAnswer', data); // todo remove dev item
+                // logger.debug('recieveAnswer', data) // todo remove dev item
                 plainTextOffer = void 0;
-                _context4.next = 5;
+                _context4.next = 4;
                 return this.mewCrypto.decrypt(data.data);
 
-              case 5:
+              case 4:
                 plainTextOffer = _context4.sent;
 
                 this.rtcRecieveAnswer({ data: plainTextOffer });
-                _context4.next = 12;
+                _context4.next = 11;
                 break;
 
-              case 9:
-                _context4.prev = 9;
+              case 8:
+                _context4.prev = 8;
                 _context4.t0 = _context4['catch'](0);
 
-                console.error(_context4.t0);
+                logger.error(_context4.t0);
 
-              case 12:
+              case 11:
               case 'end':
                 return _context4.stop();
             }
           }
-        }, _callee4, this, [[0, 9]]);
+        }, _callee4, this, [[0, 8]]);
       }));
 
       function recieveAnswer(_x5) {
@@ -462,12 +457,9 @@ var MewConnectInitiator = function (_MewConnectCommon) {
         config: {
           iceServers: webRtcServers
         }
+      };
 
-        // if (!this.isBrowser && this.nodeWebRTC) {
-        //   simpleOptions.wrtc = this.nodeWebRTC
-        // }
-
-      };this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
+      this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
       this.p = new this.Peer(simpleOptions);
       this.p.on(this.rtcEvents.error, this.onError.bind(this));
       this.p.on(this.rtcEvents.connect, this.onConnect.bind(this));
@@ -513,33 +505,33 @@ var MewConnectInitiator = function (_MewConnectCommon) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                console.log(data); // todo remove dev item
-                console.log(data.toString()); // todo remove dev item
+                // logger.debug(data) // todo remove dev item
+                // logger.debug(data.toString()) // todo remove dev item
                 this.logger('DATA RECEIVED', data.toString());
-                _context5.prev = 3;
+                _context5.prev = 1;
                 decryptedData = void 0;
 
                 if (!this.isJSON(data)) {
-                  _context5.next = 11;
+                  _context5.next = 9;
                   break;
                 }
 
-                _context5.next = 8;
+                _context5.next = 6;
                 return this.mewCrypto.decrypt(JSON.parse(data.toString()));
 
-              case 8:
+              case 6:
                 decryptedData = _context5.sent;
-                _context5.next = 14;
+                _context5.next = 12;
                 break;
 
-              case 11:
-                _context5.next = 13;
+              case 9:
+                _context5.next = 11;
                 return this.mewCrypto.decrypt(JSON.parse(data.toString()));
 
-              case 13:
+              case 11:
                 decryptedData = _context5.sent;
 
-              case 14:
+              case 12:
                 if (this.isJSON(decryptedData)) {
                   parsed = JSON.parse(decryptedData);
 
@@ -549,24 +541,24 @@ var MewConnectInitiator = function (_MewConnectCommon) {
                   this.emit(decryptedData.type, decryptedData.data);
                   // this.applyDatahandlers(decryptedData)
                 }
-                _context5.next = 22;
+                _context5.next = 20;
                 break;
 
-              case 17:
-                _context5.prev = 17;
-                _context5.t0 = _context5['catch'](3);
+              case 15:
+                _context5.prev = 15;
+                _context5.t0 = _context5['catch'](1);
 
-                console.error(_context5.t0);
+                logger.error(_context5.t0);
                 this.logger('peer2 ERROR: data=', data);
                 this.logger('peer2 ERROR: data.toString()=', data.toString());
                 // this.applyDatahandlers(data);
 
-              case 22:
+              case 20:
               case 'end':
                 return _context5.stop();
             }
           }
-        }, _callee5, this, [[3, 17]]);
+        }, _callee5, this, [[1, 15]]);
       }));
 
       function onData(_x6) {
@@ -595,7 +587,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'onError',
     value: function onError(err) {
-      console.error('WRTC ERROR');
+      logger.error('WRTC ERROR');
       this.logger('error', err);
       this.uiCommunicator(this.lifeCycle.RtcErrorEvent, err);
     }

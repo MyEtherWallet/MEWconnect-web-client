@@ -226,7 +226,6 @@ var MewConnectReceiverClient = function (_MewConnectReceiver) {
 
       if (!this.internalMiddlewareActive) {
         this.internalMiddlewareActive = true;
-        console.log('mewConnect:721 configureInternalMiddleware'); // todo remove dev item
         this.use(function (data, next) {
           if (data) {
             if (data.type) {

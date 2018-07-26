@@ -1,6 +1,0 @@
-{
-  "version" : "0.0.1",
-  "stunServers": [
-    { "url": "stun:global.stun.twilio.com:3478?transport=udp" }
-  ]
-}

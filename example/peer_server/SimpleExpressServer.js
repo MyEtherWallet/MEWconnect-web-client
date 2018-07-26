@@ -5,60 +5,23 @@ const logger = require('morgan')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 
-const receiverPeerPath = path.resolve(__dirname, '../../example/receiver_Peer')
-const initiatorPeerPath = path.resolve(__dirname, '../../example/initiator_Peer')
 // ============= Routes =============
 const router = express.Router()
 const srcDir = path.resolve('.', './example/etherwallet/dist')
 /* GET home page. */
-router.get('/', (req, res) => { // set mew site as default
-  res.type('text/html')
-  res.status(200)
-  res.sendFile(path.join(srcDir, 'index.html'))
-  // res.render('index', { title: 'Express' });
+router.get('/', (req, res, next) => { // set mew site as default
+  try {
+    res.type('text/html')
+    res.status(200)
+    res.sendFile(path.join(srcDir, 'index.html'), function (error) {
+      if (error) {
+        next('file not found')
+      }
+    })
+  } catch (e) {
+    next('error')
+  }
 })
-
-router.get('/devSite', (req, res) => {
-  res.type('text/html')
-  res.status(200)
-  res.sendFile(path.join(__dirname, 'index.html'))
-})
-
-router.get('/initiator', (req, res) => {
-  res.type('text/html')
-  res.status(200)
-  res.sendFile(path.join(initiatorPeerPath, 'index.html'))
-})
-
-router.get('/receiver', (req, res) => {
-  res.type('text/html')
-  res.status(200)
-  res.sendFile(path.join(receiverPeerPath, 'index.html'))
-})
-
-router.get('/msgSign', (req, res) => {
-  res.type('text/html')
-  res.status(200)
-  res.sendFile(path.join(srcDir, 'signmsg.html'))
-})
-
-router.get('/configValues', (req, res) => {
-  res.type('text/html')
-  res.status(200)
-  res.send({
-    initiator: {
-      host: process.env.SIGNAL_SERVER || 'connect.mewapi.io', // 'localhost', // '0.0.0.0', //
-      port: (process.env.USES_SIGNAL_PORT === 'false') ? null : process.env.SIGNAL_PORT || 8080, // 3200, //
-      proto: process.env.SIGNAL_PROTO || 'https'
-    },
-    receiver: {
-      host: process.env.SIGNAL_SERVER || 'connect.mewapi.io', // 'localhost', // '0.0.0.0', //
-      port: (process.env.USES_SIGNAL_PORT === 'false') ? null : process.env.SIGNAL_PORT || 8080, // 3200, //
-      proto: process.env.SIGNAL_PROTO || 'https'
-    }
-  })
-})
-// =========================
 
 const app = express()
 
@@ -66,20 +29,11 @@ const app = express()
 app.set('views', __dirname)
 app.set('view engine', 'hbs')
 
-// uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// set up express
 app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
-// console.log(process.env.LOGNAME);
-
-app.use('/vendor', express.static(path.resolve(__dirname, '../../example/vendor')))
-app.use('/src', express.static(path.resolve('../..')))
-console.log(path.resolve(__dirname, '../../browser')) // todo remove dev item
-app.use('/browser', express.static(path.resolve(__dirname, '../../browser')))
-app.use('/Initiator_Peer', express.static(initiatorPeerPath))
-app.use('/Receiver_Peer', express.static(receiverPeerPath))
 
 // My Ether Wallet Development Site (with MEW Connect Integration)
 app.use('/images', express.static(path.join(srcDir, 'images')))
@@ -89,22 +43,16 @@ app.use('/fonts', express.static(path.join(srcDir, 'fonts')))
 
 app.use('/', router)
 
-// catch 404 and forward to error handler
+// catch 404
 app.use((req, res, next) => {
-  const err = new Error('Not Found')
-  err.status = 404
-  next(err)
+  res.status(404)
+  res.render('four-o-four', {message: 'Page Not Found'})
 })
 
-// error handler
+// final error handler
 app.use((err, req, res) => {
-  // set locals, only providing error in development
-  res.locals.message = err.message
-  res.locals.error = req.app.get('env') === 'development' ? err : {}
-
-  // render the error page
-  res.status(err.status || 500)
-  res.render('error')
+  res.status(500) // .send({ message: 'Something Went Wrong' })
+  res.render('error', { message: 'Something Went Wrong' })
 })
 
 module.exports = app

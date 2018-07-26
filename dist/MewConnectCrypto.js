@@ -2,6 +2,12 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _logging = require('logging');
+
+var _logging2 = _interopRequireDefault(_logging);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var eccrypto = require('eccrypto/browser');
@@ -10,6 +16,7 @@ var crypto = require('crypto');
 var secp256k1 = require('secp256k1');
 var buffer = require('buffer').Buffer;
 
+var logger = (0, _logging2.default)('MewCrypto');
 /**
  *
  */
@@ -38,7 +45,6 @@ var MewConnectCrypto = function () {
      */
     value: function setPrivate(pvtKey) {
       this.prvt = Buffer.from(pvtKey, 'hex');
-      // console.log(this.prvt); // todo remove dev item
     }
 
     /**
@@ -148,9 +154,9 @@ var MewConnectCrypto = function () {
               result = _initial.toString();
             }
           } catch (e) {
-            console.error(e);
+            logger.error(e);
           }
-          console.log('decrypt', result); // todo remove dev item
+          // logger.debug('decrypt', result);
           resolve(JSON.stringify(result));
         }).catch(function (error) {
           reject(error);
@@ -171,8 +177,6 @@ var MewConnectCrypto = function () {
 
       return new Promise(function (resolve, reject) {
         try {
-          // console.log('signMessage msgToSign', msgToSign);
-          // console.log('Private Key', this.prvt.toString('hex')); // todo remove dev item
           var msg = _this3.ethUtil.hashPersonalMessage(_this3.ethUtil.toBuffer(msgToSign));
           var signed = _this3.ethUtil.ecsign(_this3.Buffer.from(msg), new _this3.Buffer(_this3.prvt, 'hex'));
           // eslint-disable-next-line max-len
@@ -211,8 +215,7 @@ var MewConnectCrypto = function () {
   }, {
     key: 'bufferToConnId',
     value: function bufferToConnId(buf) {
-      // return "321"; //todo remove dev item
-      return buf.toString('hex').slice(32); // todo uncomment after dev
+      return buf.toString('hex').slice(32);
     }
     // eslint-disable-next-line class-methods-use-this
 

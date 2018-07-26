@@ -4,15 +4,21 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _logging = require('logging');
+
+var _logging2 = _interopRequireDefault(_logging);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* eslint-disable no-console */
 
-/* eslint-disable no-console */
+
 var events = require('events');
 var EventEmitter = events.EventEmitter;
 
@@ -29,16 +35,13 @@ var _require = require('./constants'),
 var _require2 = require('./config'),
     version = _require2.version,
     stunServers = _require2.stunServers;
-/**
- *
- */
 
+var logger = (0, _logging2.default)('MewConnectCommon');
 
 var MewConnectCommon = function (_EventEmitter) {
   _inherits(MewConnectCommon, _EventEmitter);
 
   /**
-   *
    * @param uiCommunicatorFunc
    * @param loggingFunc
    */
@@ -52,6 +55,7 @@ var MewConnectCommon = function (_EventEmitter) {
     // Need to think of a little better way to do the above (to have built in and custom)
     // eslint-disable-next-line func-names
     _this2.logger = loggingFunc || function () {};
+
     _this2.isBrowser = typeof window !== 'undefined' &&
     // eslint-disable-next-line no-undef
     {}.toString.call(window) === '[object Window]';
@@ -84,17 +88,6 @@ var MewConnectCommon = function (_EventEmitter) {
     value: function setCommunicationFunction(uiCommunicationFunc) {
       this.uiCommunicatorFunc = uiCommunicationFunc;
     }
-
-    /**
-     *
-     * @param _signal
-     * @param data
-     */
-    // commDefault(_signal, data) {
-    //   console.log('DEFAULT COMMUNICATION FUNCTION');// todo remove dev item
-    //   console.log('CUSTON EVENT', signal);// todo remove dev item
-    //   console.log('DATA: ', data);// todo remove dev item
-    // }
 
     /**
      *
@@ -141,7 +134,6 @@ var MewConnectCommon = function (_EventEmitter) {
           if (_this.jsonDetails.communicationTypes[data.type]) {
             throw new Error('No Handler Exists for ' + data.type);
           }
-          // console.log(`No Handler Exists for ${data}`); // todo remove dev item
         }
         return args;
       }
@@ -210,7 +202,6 @@ var MewConnectCommon = function (_EventEmitter) {
     key: 'uiCommunicator',
     value: function uiCommunicator(event, data) {
       this.emit(event, data);
-      // console.log(this.uiCommunicatorFunc); // todo remove dev item
       // return data ? this.uiCommunicatorFunc(event, data) : this.uiCommunicatorFunc(event, null)
     }
     // eslint-disable-next-line class-methods-use-this
@@ -225,10 +216,6 @@ var MewConnectCommon = function (_EventEmitter) {
         return false;
       }
     }
-
-    // check necessary plugable functions are present
-    // functionCheck() {}
-
   }]);
 
   return MewConnectCommon;
