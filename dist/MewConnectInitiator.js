@@ -62,7 +62,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     _this2.qrCodeString = null;
     _this2.socketConnected = false;
     _this2.connected = false;
-    console.log('latest'); // todo remove dev item
+
     _this2.io = additionalLibs.io || io;
 
     _this2.signals = _this2.jsonDetails.signals;

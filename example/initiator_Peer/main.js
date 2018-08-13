@@ -31,7 +31,7 @@ let signMsg = 'signMessage'
 
 console.log(MewConnect_Browser) // todo remove dev item
 // Create an Instance of the Initiator Peer
-let mewConnect = new MewConnect_Browser.Initiator(null, logger, {
+let mewConnect = new MewConnect_Browser.Client(null, logger, {
   wrtc: SimplePeer,
   // cryptoImpl: new MewConnect_Browser.Crypto(CCrypto.crypto, CCrypto.secp256k1, EthUtilities, BBuffer.Buffer),
   io: io,

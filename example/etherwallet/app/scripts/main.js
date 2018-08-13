@@ -59,8 +59,7 @@ window.ens = ens
 var domainsale = require('./domainsale')
 window.domainsale = domainsale
 var translate = require('./translations/translate.js')
-// var socketIo = require('./staticJS/socketIO.min') // using the npm version breaks mewConnect
-// window.socketIo = socketIo
+
 if (IS_CX) {
   var cxFuncs = require('./cxFuncs')
   var punycode = require('punycode')
@@ -87,8 +86,7 @@ if (IS_CX) {
 
   require('./staticJS/adapter') // adapter to ensure a common api for webRTC
   var MewConnectEth = require('./staticJS/mewConnectEth')
-  // var MewConnect = require('@myetherwallet/mewconnect-web-client').Client
-  var MewConnect = require('../../../../dist/index.js')
+  var MewConnect = require('@myetherwallet/mewconnect-web-client').Initiator
   window.u2f = u2f
   window.Ledger3 = ledger3
   window.ledgerEth = ledgerEth
@@ -98,8 +96,7 @@ if (IS_CX) {
   window.SecalotUsb = secalotUsb
   window.SecalotEth = secalotEth
   window.MewConnectEth = MewConnectEth
-  window.MewConnect = MewConnect.Client
-  // window.MewRTC = require('simple-peer')
+  window.MewConnect = MewConnect
 }
 var CustomGasMessages = require('./customGas.js')
 window.CustomGasMessages = CustomGasMessages

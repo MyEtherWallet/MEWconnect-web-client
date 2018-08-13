@@ -29,7 +29,7 @@ if (typeof window !== 'undefined') {
 
 const MewConnect = require('./MewConnect')
 
-module.exports.Client = MewConnect.InitiatorClient // wrapper around initiator exposing callback hooks
+module.exports.Client = MewConnect.Initiator // core endpoint client to begin connection
 module.exports.Crypto = MewConnect.Crypto // crypto related functionality specific to mew connect
-module.exports.Initiator = MewConnect.Initiator // core endpoint client to begin connection
+module.exports.Initiator = MewConnect.InitiatorClient // wrapper around initiator exposing callback hooks
 module.exports.Receiver = MewConnect.ReceiverClient // (dev) wrapper around 'mobile'/remote endpoint client
