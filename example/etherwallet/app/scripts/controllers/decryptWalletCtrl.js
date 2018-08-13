@@ -317,9 +317,9 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
     var app = new MewConnectEth()
 
     $scope.mewConnect = MewConnect.init(null, null, {
-      wrtc: MewRTC,
-      io: window.socketIo,
-      ethUtils: window.ethUtil
+      // wrtc: MewConnectUtils.webRTC,
+      // io: MewConnectUtils.socketIO,
+      // ethUtils: window.ethUtil
     })
 
     Reflect.defineProperty(MewConnect, 'instance', {

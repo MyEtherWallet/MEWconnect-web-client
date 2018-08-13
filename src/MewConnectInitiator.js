@@ -1,4 +1,5 @@
 import createLogger from 'logging'
+
 const io = require('socket.io-client')
 const SimplePeer = require('simple-peer')
 
@@ -141,7 +142,7 @@ class MewConnectInitiator extends MewConnectCommon {
     this.socket.on(this.signals.connect, () => {
       this.logger('SOCKET CONNECTED') // todo remove dev item
       this.socketConnected = true
-      this.applyDatahandlers(JSON.stringify({ type: 'socketConnected', data: null }))
+      this.applyDatahandlers(JSON.stringify({type: 'socketConnected', data: null}))
     })
     // A connection pair exists, create and send WebRTC OFFER
     this.socketOn(this.signals.confirmation, this.sendOffer.bind(this)) // response
@@ -181,7 +182,7 @@ class MewConnectInitiator extends MewConnectCommon {
 
   // Wrapper around socket.emit method
   socketEmit (signal, data) {
-    this.socket.emit(signal, data)
+    this.socket.binary(false).emit(signal, data)
   }
 
   // Wrapper around socket.disconnect method
@@ -251,7 +252,7 @@ class MewConnectInitiator extends MewConnectCommon {
       // logger.debug('recieveAnswer', data) // todo remove dev item
       let plainTextOffer
       plainTextOffer = await this.mewCrypto.decrypt(data.data)
-      this.rtcRecieveAnswer({ data: plainTextOffer })
+      this.rtcRecieveAnswer({data: plainTextOffer})
     } catch (e) {
       logger.error(e)
     }
@@ -304,7 +305,7 @@ class MewConnectInitiator extends MewConnectCommon {
     // avoid race condition (particularly in MewCore and other tests)
     setTimeout(() => {
       this.uiCommunicator(this.lifeCycle.RtcConnectedEvent)
-      this.applyDatahandlers(JSON.stringify({ type: 'rtcConnected', data: null }))
+      this.applyDatahandlers(JSON.stringify({type: 'rtcConnected', data: null}))
     }, 100)
   }
 
@@ -363,7 +364,7 @@ class MewConnectInitiator extends MewConnectCommon {
   testRTC (msg) {
     return function () {
       const _this = this
-      _this.rtcSend(JSON.stringify({ type: 2, text: msg }))
+      _this.rtcSend(JSON.stringify({type: 2, text: msg}))
     }.bind(this)
   }
 
@@ -375,7 +376,7 @@ class MewConnectInitiator extends MewConnectCommon {
     return function () {
       const _this = this
       // eslint-disable-next-line object-shorthand
-      _this.rtcSend(JSON.stringify({ type: type, data: msg }))
+      _this.rtcSend(JSON.stringify({type: type, data: msg}))
     }.bind(this)
   }
 
@@ -383,8 +384,8 @@ class MewConnectInitiator extends MewConnectCommon {
    * prepare a message to send through the rtc connection
    */
   sendRtcMessage (type, msg) {
-  // eslint-disable-next-line object-shorthand
-    this.rtcSend(JSON.stringify({ type: type, data: msg }))
+    // eslint-disable-next-line object-shorthand
+    this.rtcSend(JSON.stringify({type: type, data: msg}))
   }
 
   /**
@@ -394,7 +395,7 @@ class MewConnectInitiator extends MewConnectCommon {
     const _this = this
     return function () {
       _this.uiCommunicator(_this.lifeCycle.RtcDisconnectEvent)
-      _this.applyDatahandlers(JSON.stringify({ type: 'rtcDisconnect', data: null }))
+      _this.applyDatahandlers(JSON.stringify({type: 'rtcDisconnect', data: null}))
       _this.rtcDestroy()
       this.instance = null
     }.bind(this)
@@ -406,7 +407,7 @@ class MewConnectInitiator extends MewConnectCommon {
   disconnectRTC () {
     this.rtcDestroy()
     this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent)
-    this.applyDatahandlers(JSON.stringify({ type: 'rtcDisconnect', data: null }))
+    this.applyDatahandlers(JSON.stringify({type: 'rtcDisconnect', data: null}))
     this.instance = null
   }
 

@@ -47,6 +47,6 @@ module.exports = {
   target: 'web', // enum
   // the environment in which the bundle should run
   plugins: [
-    new webpack.DefinePlugin({'process.env.NODE_ENV': JSON.stringify('production')})
+    new webpack.DefinePlugin({'process.env.NODE_ENV': JSON.stringify('production')}),
   ]
 }

@@ -30,8 +30,14 @@ if (typeof window !== 'undefined') {
 // in creating the direct connection
 
 var MewConnect = require('./MewConnect');
+// const io = require('./vendor/socketIO.min')
+// const MewRTC = require('simple-peer')
 
 module.exports.Client = MewConnect.InitiatorClient; // wrapper around initiator exposing callback hooks
 module.exports.Crypto = MewConnect.Crypto; // crypto related functionality specific to mew connect
 module.exports.Initiator = MewConnect.Initiator; // core endpoint client to begin connection
 module.exports.Receiver = MewConnect.ReceiverClient; // (dev) wrapper around 'mobile'/remote endpoint client
+// module.exports.utils = {
+//   socketIO: io,
+//   webRTC: MewRTC
+// }
