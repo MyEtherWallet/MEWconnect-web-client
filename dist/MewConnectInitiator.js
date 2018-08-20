@@ -1,5 +1,7 @@
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _logging = require('logging');
@@ -15,6 +17,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var debug = require('debug')('MEWconnect:initiator');
 
 var io = require('socket.io-client');
 var SimplePeer = require('simple-peer');
@@ -449,7 +453,8 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       var signalListener = this.initiatorSignalListener(socket, webRtcConfig.servers);
       var webRtcServers = webRtcConfig.servers || this.stunServers;
 
-      var simpleOptions = {
+      var suppliedOptions = options.webRtcOptions || {};
+      var defaultOptions = {
         initiator: true,
         trickle: false,
         reconnectTimer: 100,
@@ -459,6 +464,10 @@ var MewConnectInitiator = function (_MewConnectCommon) {
         }
       };
 
+      var simpleOptions = _extends({}, defaultOptions, {
+        suppliedOptions: suppliedOptions
+      });
+
       this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
       this.p = new this.Peer(simpleOptions);
       this.p.on(this.rtcEvents.error, this.onError.bind(this));
@@ -466,6 +475,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       this.p.on(this.rtcEvents.close, this.onClose.bind(this));
       this.p.on(this.rtcEvents.data, this.onData.bind(this));
       this.p.on(this.rtcEvents.signal, signalListener.bind(this));
+      this.logger('simple peer', this.p);
     }
 
     // ////////////// WebRTC Communication Event Handlers //////////////////////////////
@@ -535,11 +545,11 @@ var MewConnectInitiator = function (_MewConnectCommon) {
                 if (this.isJSON(decryptedData)) {
                   parsed = JSON.parse(decryptedData);
 
+                  this.logger('DECRYPTED DATA RECEIVED', parsed);
                   this.emit(parsed.type, parsed.data);
-                  // this.applyDatahandlers(JSON.parse(decryptedData))
                 } else {
+                  this.logger('DECRYPTED DATA RECEIVED', decryptedData);
                   this.emit(decryptedData.type, decryptedData.data);
-                  // this.applyDatahandlers(decryptedData)
                 }
                 _context5.next = 20;
                 break;
@@ -551,7 +561,6 @@ var MewConnectInitiator = function (_MewConnectCommon) {
                 logger.error(_context5.t0);
                 this.logger('peer2 ERROR: data=', data);
                 this.logger('peer2 ERROR: data.toString()=', data.toString());
-                // this.applyDatahandlers(data);
 
               case 20:
               case 'end':
@@ -616,6 +625,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     value: function sendRtcMessageClosure(type, msg) {
       return function () {
         var _this = this;
+        _this.logger('[SEND RTC MESSAGE] type: ', type, ' message: ', msg);
         // eslint-disable-next-line object-shorthand
         _this.rtcSend(JSON.stringify({ type: type, data: msg }));
       }.bind(this);
@@ -628,6 +638,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'sendRtcMessage',
     value: function sendRtcMessage(type, msg) {
+      this.logger('[SEND RTC MESSAGE] type: ', type, ' message: ', msg);
       // eslint-disable-next-line object-shorthand
       this.rtcSend(JSON.stringify({ type: type, data: msg }));
     }
@@ -721,7 +732,9 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'rtcDestroy',
     value: function rtcDestroy() {
-      this.p.destroy();
+      if (this.p !== null) {
+        this.p.destroy();
+      }
     }
 
     // ////////////// WebRTC Communication TURN Fallback Initiator/Handler ///////////////////////////

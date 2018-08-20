@@ -17,7 +17,7 @@ const {
   stunServers
 } = require('./config')
 
-const logger = createLogger('MewConnectCommon')
+const logger = createLogger('MewConnect-Logger')
 
 class MewConnectCommon extends EventEmitter {
   /**
@@ -30,7 +30,7 @@ class MewConnectCommon extends EventEmitter {
     this.uiCommunicatorFunc = uiCommunicatorFunc || this.applyLifeCycleListeners
     // Need to think of a little better way to do the above (to have built in and custom)
     // eslint-disable-next-line func-names
-    this.logger = loggingFunc || function () {}
+    this.logger = typeof loggingFunc === 'undefined' ? function () {} : typeof loggingFunc === 'boolean' ? logger.debug : loggingFunc
 
     this.isBrowser = typeof window !== 'undefined' &&
     // eslint-disable-next-line no-undef
@@ -167,6 +167,7 @@ class MewConnectCommon extends EventEmitter {
   * allows external function to listen for lifecycle events
   */
   uiCommunicator (event, data) {
+    console.log(event, data) // todo remove dev item
     this.emit(event, data)
     // return data ? this.uiCommunicatorFunc(event, data) : this.uiCommunicatorFunc(event, null)
   }

@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use strict'
 var signMsgCtrl = function($scope, $sce, walletService) {
     walletService.wallet = null;
@@ -147,19 +148,22 @@ var signMsgCtrl = function($scope, $sce, walletService) {
                 //================= Mew Connect (start)==============================
             } else if (typeof hwType != "undefined" && hwType == "mewConnect") {
               //TODO reset ui when rtc disconnects
-              var msg = Buffer.from(thisMessage).toString("hex");
+              // var msg = Buffer.from(thisMessage).toString("hex");
               var connectApp = new MewConnectEth();
               var mewConnect = MewConnect.instance;
               connectApp.setMewConnect(mewConnect);
                 mewConnect.on('signMessage', (data) =>{
+                    console.log('signMessage Response', data) // todo remove dev item
                     $scope.signMsg.signedMsg = JSON.parse(data);
                     $scope.notifier.success('Successfully Signed Message with ' + $scope.wallet.getAddressString());
                 })
                 mewConnect.on('sign', (data) =>{
                     $scope.signMsg.signedMsg = JSON.parse(data);
-                    $scope.notifier.success('Successfully Signed Message with ' + $scope.wallet.getAddressString());
+                  console.log('sign Response', data) // todo remove dev item
+                  $scope.notifier.success('Successfully Signed Message with ' + $scope.wallet.getAddressString());
                 })
               //TODO hash message before send.  Currently sending as plain text
+              ethUtil.hashPersonalMessage(ethUtil.toBuffer(thisMessage)).toString('hex')
               connectApp.signMessage(thisMessage);
 
               //================= Mew Connect (end)==============================

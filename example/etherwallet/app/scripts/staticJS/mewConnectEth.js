@@ -80,19 +80,28 @@ class MewConnectEth{
   }
 
   signMessageSend(msg) {
-    this.comm.sendRtcMessage("sign", msg);
+    var hashToSign = ethUtil.hashPersonalMessage(msg)
+    this.comm.sendRtcMessage("signMessage", hashToSign);
   }
 
   signTransaction(eTx, rawTx, txData) {
     var self = this;
-    var hashToSign = eTx.hash(false).toString('hex');
-    self.comm.sendRtcMessage("signTx", JSON.stringify(rawTx));
+    const sendTxData = {
+      nonce: rawTx.nonce,
+      gasPrice: rawTx.gasPrice,
+      to: rawTx.to,
+      value: rawTx.value,
+      data: rawTx.data,
+      chainId: rawTx.chainId,
+      gas: rawTx.gasLimit
+    }
+    self.comm.sendRtcMessage("signTx", JSON.stringify(sendTxData));
   }
 
   signMessage(messageHex) {
     var self = this;
-    var hashToSign = messageHex.toString('hex');
-    self.comm.sendRtcMessage("signMessage", messageHex);
+    var hashToSign = ethUtil.hashPersonalMessage(ethUtil.toBuffer(messageHex))
+    self.comm.sendRtcMessage("signMessage", hashToSign.toString('hex'));
   }
 
   static getBrowserRTC() {

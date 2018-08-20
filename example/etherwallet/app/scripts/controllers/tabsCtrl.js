@@ -321,5 +321,13 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
     angular.element(document.querySelectorAll('.nav-scroll')[0]).bind('scroll', $scope.setOnScrollArrows);
     globalFuncs.changeHash = $scope.setHash;
 
+
+    $scope.displayMEWconnectState = function(state){
+        console.log(state) // todo remove dev item
+        $scope.MEWconnectState = state
+  }
+
+  globalFuncs.MEWconnectStatus.register($scope.displayMEWconnectState.bind(this))
+
 };
 module.exports = tabsCtrl;

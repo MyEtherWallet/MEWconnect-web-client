@@ -23,6 +23,19 @@ router.get('/', (req, res, next) => { // set mew site as default
   }
 })
 
+router.get('/signmsg', (req, res, next) => { // set mew site as default
+  try {
+    res.type('text/html')
+    res.status(200)
+    res.sendFile(path.join(srcDir, 'signmsg.html'), function (error) {
+      if (error) {
+        next('file not found')
+      }
+    })
+  } catch (e) {
+    next('error')
+  }
+})
 const app = express()
 
 // view engine setup

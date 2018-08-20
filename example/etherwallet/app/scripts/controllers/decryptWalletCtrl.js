@@ -314,15 +314,17 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
 
   // ================= Mew Connect (start)==============================
   $scope.scanMewConnect = function () {
+    globalFuncs.MEWconnectStatus.update(0)
     var app = new MewConnectEth()
 
-    $scope.mewConnect = MewConnect.init(null, null, {})
+    $scope.mewConnect = MewConnect.init(null, console.log, {})
 
     Reflect.defineProperty(MewConnect, 'instance', {
       value: $scope.mewConnect
     })
 
     $scope.$on('$destroy', function () {
+      globalFuncs.MEWconnectStatus.update(0)
       $scope.mewConnect.disconnectRTC()
       if (MewConnect.instance) {
         Reflect.deleteProperty(MewConnect, 'instance')
@@ -332,6 +334,7 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
     $scope.mewConnect.on('codeDisplay', codeDisplay)
     $scope.mewConnect.on('RtcConnectedEvent', rtcConnected)
     $scope.mewConnect.on('RtcClosedEvent', rtcClosed)
+    // $scope.mewConnect.on('RtcDisconnectEvent', rtcDisconnected)
     $scope.mewConnect.on('address', makeWallet)
 
     app.setMewConnect($scope.mewConnect)
@@ -343,6 +346,7 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
       if ($scope.connectionCodeTimeout) {
         clearTimeout($scope.connectionCodeTimeout)
       }
+      globalFuncs.MEWconnectStatus.update(2)
       $scope.connectionCodeTimeout = null
       uiFuncs.notifier.info('Connected Via Mew Connect')
       $scope.mewConnect.sendRtcMessage('address', '')
@@ -350,18 +354,23 @@ var decryptWalletCtrl = function($scope, $sce, walletService) {
     }
 
     function rtcClosed (data) {
-      $scope.mewConnectionStatus = 0
+      globalFuncs.MEWconnectStatus.update(4)
+      $scope.mewConnectionStatus = 4
       $scope.wallet = null
       walletService.wallet = null
       uiFuncs.notifier.danger('Disconnected', 10000)
       if (!$scope.$$phase) $scope.$apply()
     }
 
+
     function codeDisplay (data) {
+      console.log(data) // todo remove dev item
       $scope.mewConnectionStatus = 1
+      globalFuncs.MEWconnectStatus.update(1)
       $scope.mewConnectCode = data
       $scope.connectionCodeTimeout = setTimeout(() => {
         $scope.mewConnectionStatus = 3
+        globalFuncs.MEWconnectStatus.update(3)
         if (!$scope.$$phase) $scope.$apply()
       }, 119800) // 200ms before the actual server timeout happens. (to account for transit time, ui lag, etc.)
       if (!$scope.$$phase) $scope.$apply()
