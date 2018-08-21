@@ -86,8 +86,7 @@ if (IS_CX) {
 
   require('./staticJS/adapter') // adapter to ensure a common api for webRTC
   var MewConnectEth = require('./staticJS/mewConnectEth')
-  // var MewConnect = require('@myetherwallet/mewconnect-web-client').Initiator
-  var MewConnect = require('../../../../dist/index.js').Initiator
+  var MewConnect = require('@myetherwallet/mewconnect-web-client').Initiator
   window.u2f = u2f
   window.Ledger3 = ledger3
   window.ledgerEth = ledgerEth
