@@ -1,4 +1,4 @@
-##### Note This Repository Nees Some Cleaning
+<!--##### Note This Repository Nees Some Cleaning-->
 
 ### Getting Started
 
@@ -30,17 +30,15 @@ The example requires both MEWconnect-Client (this repo) and MEWconnect-Signal-Se
 
 `npm start`
 
+<!--### Launching demo-->
 
->Open two browser tabs/windows:
+<!-->Open two browser tabs/windows:-->
 
-navigate one to https://localhost:3100/initiator
+<!--navigate one to https://localhost:3100/initiator-->
 
-navigate the other to https://localhost:3100/receiver
+<!--navigate the other to https://localhost:3100/receiver-->
 
-_**Note:** You may need to navigate to https://localhost:3200 to accept the self-signed certificate used in the example_
-
-### Launching demo
-
+<!--_**Note:** You may need to navigate to https://localhost:3200 to accept the self-signed certificate used in the example_-->
 
 ### Usage
 > In the browser via the file /browser/MewConnect.min.js
@@ -49,12 +47,12 @@ Two Peers are needed with one designated as the Initiator and the other as the R
 
 
 ```javascript
-let mewConnect = new MewConnect.Client(communicatorFunc, loggingFunc, depends);
+let mewConnectClient = new MewConnect.Client(communicatorFunc, loggingFunc, depends);
 ```
 _(MewConnect.Client takes the same parameters)_
 
 The MewConnect takes:
-- communicatorFunc:
+- communicatorFunc (Optional):
     - A function or null
     - If a function it is called on each lifeCycle event.
     - with two arguments:
@@ -70,9 +68,9 @@ The MewConnect takes:
     - If null listeners can be attached for specific lifecycle events via ``` registerLifeCycleListener```
 
 
-- loggingFunc:
+- loggingFunc (Optional):
     - a optional function to provide logging or null (to use the default)
-- additionalLibs:
+- additionalLibs (Optional):
     - a dictionary (object) containing dependencies as they are declared in the scope.
       - the dependencies are:
         - node.js crypto or polyfill
@@ -89,19 +87,20 @@ The MewConnect takes:
                 ethUtils: ""
           };
       ```
-        - Note: If running under node (e.g. using webpack or browserfy) this can be omitted as the dependencies will be required via node.js's require during the build process.
-
-#### Initiator
-
-```javascript
-let mewConnectClient = new MewConnect.Client(communicatorFunc, loggingFunc, depends);
-```
 
 The url of the signaling server is passed to the _initiatorStart_ method on MewConnectInitiator which begins the sequence by connecting to the signaling server and waiting for the signal indicating a receiver peer is ready.
 ```javascript
 let url = "https://localhost:3001";  //Url to the signaling server
-mewConnectCore.initiatorStart(url);
+mewConnectInitiator.initiatorStart(url);
 ```
+
+#### Initiator
+
+```javascript
+let mewConnectInitiator = new MewConnect.Initiator(communicatorFunc, loggingFunc, depends);
+```
+
+
 
 
 #### Receiver
