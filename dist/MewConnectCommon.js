@@ -36,7 +36,7 @@ var _require2 = require('./config'),
     version = _require2.version,
     stunServers = _require2.stunServers;
 
-var logger = (0, _logging2.default)('MewConnectCommon');
+var logger = (0, _logging2.default)('MewConnect-Logger');
 
 var MewConnectCommon = function (_EventEmitter) {
   _inherits(MewConnectCommon, _EventEmitter);
@@ -54,7 +54,7 @@ var MewConnectCommon = function (_EventEmitter) {
     _this2.uiCommunicatorFunc = uiCommunicatorFunc || _this2.applyLifeCycleListeners;
     // Need to think of a little better way to do the above (to have built in and custom)
     // eslint-disable-next-line func-names
-    _this2.logger = loggingFunc || function () {};
+    _this2.logger = typeof loggingFunc === 'undefined' ? function () {} : typeof loggingFunc === 'boolean' ? logger.debug : loggingFunc;
 
     _this2.isBrowser = typeof window !== 'undefined' &&
     // eslint-disable-next-line no-undef
@@ -201,6 +201,7 @@ var MewConnectCommon = function (_EventEmitter) {
   }, {
     key: 'uiCommunicator',
     value: function uiCommunicator(event, data) {
+      console.log(event, data); // todo remove dev item
       this.emit(event, data);
       // return data ? this.uiCommunicatorFunc(event, data) : this.uiCommunicatorFunc(event, null)
     }

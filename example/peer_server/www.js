@@ -6,7 +6,7 @@ console.log(path.resolve(__dirname, '.env')) // todo remove dev item
 const app = require('./SimpleExpressServer')
 // const https = require('https')
 const http = require('http')
-const fs = require('fs')
+// const fs = require('fs')
 
 //
 // const options = {

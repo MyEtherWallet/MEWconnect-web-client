@@ -1,4 +1,5 @@
 import createLogger from 'logging'
+const debug = require('debug')('MEWconnect:initiator')
 
 const io = require('socket.io-client')
 const SimplePeer = require('simple-peer')
@@ -271,7 +272,8 @@ class MewConnectInitiator extends MewConnectCommon {
     const signalListener = this.initiatorSignalListener(socket, webRtcConfig.servers)
     const webRtcServers = webRtcConfig.servers || this.stunServers
 
-    const simpleOptions = {
+    const suppliedOptions = options.webRtcOptions || {}
+    const defaultOptions = {
       initiator: true,
       trickle: false,
       reconnectTimer: 100,
@@ -281,6 +283,11 @@ class MewConnectInitiator extends MewConnectCommon {
       }
     }
 
+    const simpleOptions = {
+      ...defaultOptions,
+      suppliedOptions
+    }
+
     this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent)
     this.p = new this.Peer(simpleOptions)
     this.p.on(this.rtcEvents.error, this.onError.bind(this))
@@ -288,6 +295,7 @@ class MewConnectInitiator extends MewConnectCommon {
     this.p.on(this.rtcEvents.close, this.onClose.bind(this))
     this.p.on(this.rtcEvents.data, this.onData.bind(this))
     this.p.on(this.rtcEvents.signal, signalListener.bind(this))
+    this.logger('simple peer', this.p)
   }
 
   // ////////////// WebRTC Communication Event Handlers //////////////////////////////
@@ -325,17 +333,16 @@ class MewConnectInitiator extends MewConnectCommon {
       }
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData)
+        this.logger('DECRYPTED DATA RECEIVED', parsed)
         this.emit(parsed.type, parsed.data)
-        // this.applyDatahandlers(JSON.parse(decryptedData))
       } else {
+        this.logger('DECRYPTED DATA RECEIVED', decryptedData)
         this.emit(decryptedData.type, decryptedData.data)
-        // this.applyDatahandlers(decryptedData)
       }
     } catch (e) {
       logger.error(e)
       this.logger('peer2 ERROR: data=', data)
       this.logger('peer2 ERROR: data.toString()=', data.toString())
-      // this.applyDatahandlers(data);
     }
   }
 
@@ -375,6 +382,7 @@ class MewConnectInitiator extends MewConnectCommon {
   sendRtcMessageClosure (type, msg) {
     return function () {
       const _this = this
+      _this.logger('[SEND RTC MESSAGE] type: ', type, ' message: ', msg)
       // eslint-disable-next-line object-shorthand
       _this.rtcSend(JSON.stringify({type: type, data: msg}))
     }.bind(this)
@@ -384,6 +392,7 @@ class MewConnectInitiator extends MewConnectCommon {
    * prepare a message to send through the rtc connection
    */
   sendRtcMessage (type, msg) {
+    this.logger('[SEND RTC MESSAGE] type: ', type, ' message: ', msg)
     // eslint-disable-next-line object-shorthand
     this.rtcSend(JSON.stringify({type: type, data: msg}))
   }
@@ -430,7 +439,9 @@ class MewConnectInitiator extends MewConnectCommon {
    * Disconnect/Destroy the current RTC connection
    */
   rtcDestroy () {
-    this.p.destroy()
+    if (this.p !== null) {
+      this.p.destroy()
+    }
   }
 
   // ////////////// WebRTC Communication TURN Fallback Initiator/Handler ///////////////////////////
