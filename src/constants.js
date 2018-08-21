@@ -1,9 +1,13 @@
 const version = '0.0.1'
+
 const versions = ['0.0.1']
+
 const connectionCodeSchemas = {
   '0.0.1': ['version', 'key', 'connId']
 }
+
 const connectionCodeSeparator = '_'
+
 const signal = {
   'attemptingTurn': 'attemptingTurn',
   'turnToken': 'turnToken',
@@ -23,6 +27,7 @@ const signal = {
   'confirmationFailedBusy': 'confirmationFailedBusy',
   'confirmationFailed': 'confirmationFailed'
 }
+
 const rtc = {
   'error': 'error',
   'connect': 'connect',
@@ -30,6 +35,7 @@ const rtc = {
   'data': 'data',
   'signal': 'signal'
 }
+
 const stages = {
   'initiator': 'initiator',
   'receiver': 'receiver'
