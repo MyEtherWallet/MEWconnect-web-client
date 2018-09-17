@@ -4,11 +4,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var version = '0.0.1';
+
 var versions = ['0.0.1'];
+
 var connectionCodeSchemas = {
   '0.0.1': ['version', 'key', 'connId']
 };
+
 var connectionCodeSeparator = '_';
+
 var signal = {
   'attemptingTurn': 'attemptingTurn',
   'turnToken': 'turnToken',
@@ -28,6 +32,7 @@ var signal = {
   'confirmationFailedBusy': 'confirmationFailedBusy',
   'confirmationFailed': 'confirmationFailed'
 };
+
 var rtc = {
   'error': 'error',
   'connect': 'connect',
@@ -35,6 +40,7 @@ var rtc = {
   'data': 'data',
   'signal': 'signal'
 };
+
 var stages = {
   'initiator': 'initiator',
   'receiver': 'receiver'
