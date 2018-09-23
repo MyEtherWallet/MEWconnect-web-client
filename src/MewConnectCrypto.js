@@ -1,11 +1,13 @@
-import createLogger from 'logging'
+import createLogger from 'logging';
+
 const eccrypto = require('eccrypto/browser');
 const ethUtils = require('ethereumjs-util');
 const crypto = require('crypto');
 const secp256k1 = require('secp256k1');
 const buffer = require('buffer').Buffer;
 
-const logger = createLogger('MewCrypto')
+const logger = createLogger('MewCrypto');
+
 /**
  *
  */
@@ -27,7 +29,7 @@ class MewConnectCrypto {
       secp256k1,
       ethUtils,
       buffer,
-      eccrypto,
+      eccrypto
     });
   }
 
@@ -89,11 +91,12 @@ class MewConnectCrypto {
   encrypt(dataToSend) {
     const publicKeyA = eccrypto.getPublic(this.prvt);
     return new Promise((resolve, reject) => {
-      this.eccrypto.encrypt(publicKeyA, this.Buffer.from(dataToSend))
-        .then((_initial) => {
+      this.eccrypto
+        .encrypt(publicKeyA, this.Buffer.from(dataToSend))
+        .then(_initial => {
           resolve(_initial);
         })
-        .catch((error) => {
+        .catch(error => {
           reject(error);
         });
     });
@@ -106,13 +109,14 @@ class MewConnectCrypto {
    */
   decrypt(dataToSee) {
     return new Promise((resolve, reject) => {
-      this.eccrypto.decrypt(this.prvt, {
-        ciphertext: Buffer.from(dataToSee.ciphertext),
-        ephemPublicKey: Buffer.from(dataToSee.ephemPublicKey),
-        iv: Buffer.from(dataToSee.iv),
-        mac: Buffer.from(dataToSee.mac),
-      })
-        .then((_initial) => {
+      this.eccrypto
+        .decrypt(this.prvt, {
+          ciphertext: Buffer.from(dataToSee.ciphertext),
+          ephemPublicKey: Buffer.from(dataToSee.ephemPublicKey),
+          iv: Buffer.from(dataToSee.iv),
+          mac: Buffer.from(dataToSee.mac)
+        })
+        .then(_initial => {
           let result;
           try {
             if (this.isJSON(_initial)) {
@@ -132,7 +136,7 @@ class MewConnectCrypto {
           // logger.debug('decrypt', result);
           resolve(JSON.stringify(result));
         })
-        .catch((error) => {
+        .catch(error => {
           reject(error);
         });
     });
@@ -146,10 +150,19 @@ class MewConnectCrypto {
   signMessage(msgToSign) {
     return new Promise((resolve, reject) => {
       try {
-        const msg = this.ethUtil.hashPersonalMessage(this.ethUtil.toBuffer(msgToSign));
-        const signed = this.ethUtil.ecsign(this.Buffer.from(msg), new this.Buffer(this.prvt, 'hex'));
+        const msg = this.ethUtil.hashPersonalMessage(
+          this.ethUtil.toBuffer(msgToSign)
+        );
+        const signed = this.ethUtil.ecsign(
+          this.Buffer.from(msg),
+          new this.Buffer(this.prvt, 'hex')
+        );
         // eslint-disable-next-line max-len
-        const combined = this.Buffer.concat([this.Buffer.from([signed.v]), this.Buffer.from(signed.r), this.Buffer.from(signed.s)]);
+        const combined = this.Buffer.concat([
+          this.Buffer.from([signed.v]),
+          this.Buffer.from(signed.r),
+          this.Buffer.from(signed.s)
+        ]);
         const combinedHex = combined.toString('hex');
         resolve(combinedHex);
       } catch (e) {
@@ -180,6 +193,7 @@ class MewConnectCrypto {
   bufferToConnId(buf) {
     return buf.toString('hex').slice(32);
   }
+
   // eslint-disable-next-line class-methods-use-this
   isJSON(arg) {
     try {
