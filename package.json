@@ -8,6 +8,7 @@
     "buildMew": "npm --prefix 'example/etherwallet' run build",
     "build": "rimraf dist/ && babel ./src --out-dir dist/ && npm run buildProd",
     "buildProd": "webpack --config webpack.config.js",
+    "buildDev": "rimraf dist/ && babel ./src --out-dir dist/ && npm run buildProd && cd /home/steve/mew/mew-signer-peer/example/etherwallet/ && npm run build",
     "buildProdBrowser": "webpack --config webpack.browser.config.js",
     "buildDevBrowser": "webpack --config webpack.browser.config.js --progress",
     "buildBrowserPack": "webpack --config webpack.pack.config.js --progress",
@@ -28,11 +29,14 @@
     ]
   },
   "dependencies": {
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
     "crypto-js": "^3.1.9-1",
     "debug": "^2.6.9",
+    "detect-browser": "^3.0.1",
     "dotenv": "^5.0.1",
     "eccrypto": "^1.0.3",
     "ethereumjs-util": "^5.1.5",
@@ -48,9 +52,7 @@
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4",
     "webpack": "^4.10.2",
-    "winston": "^2.4.2",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0"
+    "winston": "^2.4.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

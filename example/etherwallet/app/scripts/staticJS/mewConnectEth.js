@@ -1,8 +1,5 @@
-
-
-class MewConnectEth{
-  constructor (callback) {
-
+class MewConnectEth {
+  constructor(callback) {
     this.listeners = [];
 
     if (callback) {
@@ -11,7 +8,7 @@ class MewConnectEth{
       // this.callback = this.mewConnectCallback;
     }
     this.walletCallback = null;
-    this.signalerUrl =  "https://connect.mewapi.io" // nanobox hosted version
+    this.signalerUrl = 'https://connect.mewapi.io'; // nanobox hosted version
   }
 
   getCallback() {
@@ -38,21 +35,21 @@ class MewConnectEth{
     var address = data.address;
     // var pub = data.pub;
     var wallet = void 0;
-    if (address.substring(0, 2) != "0x") {
-      address = "0x" + address;
+    if (address.substring(0, 2) != '0x') {
+      address = '0x' + address;
     }
     if (Validator.isValidAddress(address)) {
       var tempWallet = new Wallet();
-      tempWallet.getAddressString = function () {
+      tempWallet.getAddressString = function() {
         return address;
       };
-      var balance = tempWallet.setBalance(function (data) {
+      var balance = tempWallet.setBalance(function(data) {
         return data;
       });
 
       wallet = {
         // type: "addressOnly",
-        type: "mewConnect",
+        type: 'mewConnect',
         address: address,
         // pubKey: pub,
         getAddressString: tempWallet.getAddressString,
@@ -64,12 +61,10 @@ class MewConnectEth{
         },
         setBalance: tempWallet.setBalance,
         setTokens: tempWallet.setTokens,
-        getPath: function getPath(stuff) {
-        },
-        getHWTransport: function getHWTransport(stuff) {
-        },
+        getPath: function getPath(stuff) {},
+        getHWTransport: function getHWTransport(stuff) {},
         getHWType: function getHWType() {
-          return "mewConnect";
+          return 'mewConnect';
         }
       };
       return wallet;
@@ -80,12 +75,11 @@ class MewConnectEth{
   }
 
   signMessageSend(msg) {
-    var hashToSign = ethUtil.hashPersonalMessage(msg)
-    this.comm.sendRtcMessage("signMessage", hashToSign);
+    var hashToSign = ethUtil.hashPersonalMessage(msg);
+    this.comm.sendRtcMessage('signMessage', hashToSign);
   }
 
   signTransaction(eTx, rawTx, txData) {
-    var self = this;
     const sendTxData = {
       nonce: rawTx.nonce,
       gasPrice: rawTx.gasPrice,
@@ -94,35 +88,114 @@ class MewConnectEth{
       data: rawTx.data,
       chainId: rawTx.chainId,
       gas: rawTx.gasLimit
-    }
-    self.comm.sendRtcMessage("signTx", JSON.stringify(sendTxData));
+    };
+    this.comm.sendRtcMessage('signTx', JSON.stringify(sendTxData));
   }
 
-  signMessage(messageHex) {
-    var self = this;
-    var hashToSign = ethUtil.hashPersonalMessage(ethUtil.toBuffer(messageHex))
-    self.comm.sendRtcMessage("signMessage", hashToSign.toString('hex'));
+  signMessage(message) {
+    this.comm.sendRtcMessage('signMessage', message);
   }
 
   static getBrowserRTC() {
     if (typeof window === 'undefined') return null;
     var wrtc = {
-      RTCPeerConnection: window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection,
-      RTCSessionDescription: window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription,
-      RTCIceCandidate: window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate
+      RTCPeerConnection:
+        window.RTCPeerConnection ||
+        window.mozRTCPeerConnection ||
+        window.webkitRTCPeerConnection,
+      RTCSessionDescription:
+        window.RTCSessionDescription ||
+        window.mozRTCSessionDescription ||
+        window.webkitRTCSessionDescription,
+      RTCIceCandidate:
+        window.RTCIceCandidate ||
+        window.mozRTCIceCandidate ||
+        window.webkitRTCIceCandidate
     };
     if (!wrtc.RTCPeerConnection) return null;
     return wrtc;
   }
 
   static checkWebRTCAvailable() {
-
     var doesNotHaveWebRTC = MewConnectEth.getBrowserRTC() == null;
     return !doesNotHaveWebRTC;
     // return false
   }
 
+  static checkBrowser() {
+    const browser = window.browser;
+    const version = browser.version.split(0, 1)[0];
+    /*
+    * Chrome > 23
+    * Firefox > 22
+    * Opera > 18
+    * Safari > 11 (caveats exist)
+    * Edge - none (RTCDataChannel not supported)
+    * IE - none
+    * */
+    if (typeof window !== 'undefined') {
+      if (browser.name === 'safari') {
+        return MewConnectEth.buildBrowserResult(
+          true,
+          'Safari',
+          'version: ' + browser.version
+        );
+      } else if (browser.name === 'ie') {
+        return MewConnectEth.buildBrowserResult(
+          true,
+          'Internet Explorer',
+          '',
+          true
+        );
+      } else if (browser.name === 'edge') {
+        return MewConnectEth.buildBrowserResult(
+          true,
+          'Edge',
+          'version: ' + browser.version,
+          true
+        );
+      } else {
+        let name = '';
+        let minVersion = 0;
 
+        if (browser.name === 'opera') {
+          name = 'Opera';
+          minVersion = 18;
+        } else if (browser.name === 'firefox') {
+          name = 'Firefox';
+          minVersion = 22;
+        } else if (browser.name === 'chrome') {
+          name = 'Chrome';
+          minVersion = 23;
+        } else {
+          return MewConnectEth.buildBrowserResult(false, '', '');
+        }
+
+        try {
+          if (minVersion >= +version) {
+            return MewConnectEth.buildBrowserResult(
+              true,
+              name,
+              'version: ' + version
+            );
+          } else {
+            return MewConnectEth.buildBrowserResult(false, '', '');
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }
+
+  static buildBrowserResult(status, browser, version, noSupport) {
+    return {
+      status: status,
+      browser: browser,
+      version: version,
+      noSupport: noSupport || false
+    };
+  }
 }
 
-module.exports = MewConnectEth
+module.exports = MewConnectEth;

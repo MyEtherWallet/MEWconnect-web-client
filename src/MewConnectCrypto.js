@@ -1,21 +1,18 @@
 import createLogger from 'logging';
+import ethUtils from 'ethereumjs-util';
+import crypto from 'crypto';
+import secp256k1 from 'secp256k1';
 
 const eccrypto = require('eccrypto/browser');
-const ethUtils = require('ethereumjs-util');
-const crypto = require('crypto');
-const secp256k1 = require('secp256k1');
+// const ethUtils = require('ethereumjs-util');
+// const crypto = require('crypto');
+// const secp256k1 = require('secp256k1');
 const buffer = require('buffer').Buffer;
 
 const logger = createLogger('MewCrypto');
 
-/**
- *
- */
-class MewConnectCrypto {
-  // constructor(crypto, secp256k1, ethUtilities, buffer) {
-  constructor(options) {
-    // eslint-disable-next-line no-param-reassign
-    options = options || {};
+export default class MewConnectCrypto {
+  constructor(options = {}) {
     this.crypto = options.crypto || crypto;
     this.secp256k1 = options.secp256k1 || secp256k1;
     this.ethUtil = options.ethUtils || ethUtils;
@@ -33,37 +30,21 @@ class MewConnectCrypto {
     });
   }
 
-  /**
-   *
-   * @param pvtKey
-   */
   setPrivate(pvtKey) {
     this.prvt = Buffer.from(pvtKey, 'hex');
   }
 
-  /**
-   *
-   * @returns {*}
-   */
   generateMessage() {
     return this.crypto.randomBytes(32).toString('hex');
   }
 
-  /**
-   *
-   * @returns {{pub, pvt}}
-   */
-  // Not the Address, but generate them for the connection check
+  // Not for the Address, but generate them for the connection check
   prepareKey() {
     this.prvt = this.generatePrivate(); // Uint8Array
     this.pub = this.generatePublic(this.prvt); // Uint8Array
-    return this.addKey(this.pub, this.prvt);
+    return { pub: this.pub, pvt: this.prvt }; // this.addKey(this.pub, this.prvt);
   }
 
-  /**
-   *
-   * @returns {*}
-   */
   generatePrivate() {
     let privKey;
     do {
@@ -72,22 +53,12 @@ class MewConnectCrypto {
     return privKey;
   }
 
-  /**
-   *
-   * @param privKey
-   * @returns {*}
-   */
   generatePublic(privKey) {
     const pvt = new this.Buffer(privKey, 'hex');
     this.prvt = pvt;
     return this.secp256k1.publicKeyCreate(pvt);
   }
 
-  /**
-   *
-   * @param dataToSend
-   * @returns {Promise<string>}
-   */
   encrypt(dataToSend) {
     const publicKeyA = eccrypto.getPublic(this.prvt);
     return new Promise((resolve, reject) => {
@@ -102,11 +73,6 @@ class MewConnectCrypto {
     });
   }
 
-  /**
-   *
-   * @param dataToSee
-   * @returns {Promise<string>}
-   */
   decrypt(dataToSee) {
     return new Promise((resolve, reject) => {
       this.eccrypto
@@ -122,7 +88,6 @@ class MewConnectCrypto {
             if (this.isJSON(_initial)) {
               const humanRadable = JSON.parse(_initial);
               if (Array.isArray(humanRadable)) {
-                // eslint-disable-next-line prefer-destructuring
                 result = humanRadable[0];
               } else {
                 result = humanRadable;
@@ -133,7 +98,6 @@ class MewConnectCrypto {
           } catch (e) {
             logger.error(e);
           }
-          // logger.debug('decrypt', result);
           resolve(JSON.stringify(result));
         })
         .catch(error => {
@@ -142,11 +106,6 @@ class MewConnectCrypto {
     });
   }
 
-  /**
-   *
-   * @param msgToSign
-   * @returns {Promise<string>}
-   */
   signMessage(msgToSign) {
     return new Promise((resolve, reject) => {
       try {
@@ -157,7 +116,6 @@ class MewConnectCrypto {
           this.Buffer.from(msg),
           new this.Buffer(this.prvt, 'hex')
         );
-        // eslint-disable-next-line max-len
         const combined = this.Buffer.concat([
           this.Buffer.from([signed.v]),
           this.Buffer.from(signed.r),
@@ -178,23 +136,21 @@ class MewConnectCrypto {
    * @returns {{pub: *, pvt: *}}
    */
   // eslint-disable-next-line class-methods-use-this
-  addKey(pub, pvt) {
-    // console.log({pub: pub, pvt: pvt});
-    // console.log('public as hex', pub.toString('hex'));
-    return { pub, pvt };
-  }
+  // addKey(pub, pvt) {
+  //   // console.log({pub: pub, pvt: pvt});
+  //   // console.log('public as hex', pub.toString('hex'));
+  //   return { pub, pvt };
+  // }
 
   /**
    *
    * @param buf
    * @returns {string}
    */
-  // eslint-disable-next-line class-methods-use-this
   bufferToConnId(buf) {
     return buf.toString('hex').slice(32);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   isJSON(arg) {
     try {
       JSON.parse(arg);
@@ -204,5 +160,3 @@ class MewConnectCrypto {
     }
   }
 }
-
-module.exports = MewConnectCrypto;

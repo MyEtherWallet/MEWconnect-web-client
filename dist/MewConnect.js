@@ -1,5 +1,22 @@
 'use strict';
 
+var _MewConnectInitiator = require('./MewConnectInitiator');
+
+var _MewConnectInitiator2 = _interopRequireDefault(_MewConnectInitiator);
+
+var _MewConnectCrypto = require('./MewConnectCrypto');
+
+var _MewConnectCrypto2 = _interopRequireDefault(_MewConnectCrypto);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+// const MewConnectInitiator = require('./MewConnectInitiator')
+// const MewConnectCrypto = require('./MewConnectCrypto')
+
+// const MewConnectInitiatorClient = require('./MewConnectInitiatorClient')
+
 // INITIATOR CLIENT
 // The initiator client is the integration end of the connection,
 // and sends the connection details to
@@ -15,12 +32,9 @@
 // the crypto constructor is a collection of methods used by both the initiator and receiver
 // in creating the direct connection
 
-var MewConnectInitiator = require('./MewConnectInitiator');
-var MewConnectCrypto = require('./MewConnectCrypto');
-var MewConnectInitiatorClient = require('./MewConnectInitiatorClient');
 var MewConnectReceiverClient = require('./MewConnectReceiverClient');
 
-module.exports.Crypto = MewConnectCrypto;
-module.exports.Initiator = MewConnectInitiator;
-module.exports.InitiatorClient = MewConnectInitiatorClient;
+module.exports.Crypto = _MewConnectCrypto2.default;
+module.exports.Initiator = _MewConnectInitiator2.default;
+// module.exports.InitiatorClient = MewConnectInitiatorClient
 module.exports.ReceiverClient = MewConnectReceiverClient;

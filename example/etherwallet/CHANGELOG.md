@@ -1,5 +1,131 @@
+### Release v3.22.3
+### New
+- fix sign msg mewconnect [#2074](https://github.com/kvhnuke/etherwallet/pull/2074)
+- Pop MEWconnect warning on safari, add CPOLLO token [#2073](https://github.com/kvhnuke/etherwallet/pull/2073)
+- Add ERT and PNK tokens [#2071](https://github.com/kvhnuke/etherwallet/pull/2071)
+- Hotfix firefox support for MEWconnect [Commit](https://github.com/kvhnuke/etherwallet/commit/d653481b756f425052c5bb20b0a1ff2f1c32b2ae)
+
+### Release v3.22.2
+### New
+- Hotfix firefox support for MEWconnect [Commit](https://github.com/kvhnuke/etherwallet/commit/644c63da54ded3e74c78a14b0e0dff1c419a0be0)
+
+### Release v3.22.1
+### New
+- Hotfix link and icon for MEWconnect, Add PAX token and contract, and dqr30 token [#2069](https://github.com/kvhnuke/etherwallet/pull/2069)
+
+### Release v3.22.0
+### New
+- MEW connect integration [#2068](https://github.com/kvhnuke/etherwallet/pull/2068)
+- Catch errors for when Cx is newly installed, update VET to VEN [#2067](https://github.com/kvhnuke/etherwallet/pull/2067)
+- Enable Ledger Hardware Wallet support for GoChain [#2063](https://github.com/kvhnuke/etherwallet/pull/2063)
+- Fix Callisto 'blockExplorerTX', 'blockExplorerAddr' and 'service' text [#2065](https://github.com/kvhnuke/etherwallet/pull/2065)
+
+### Release v3.21.24
+### New
+- Update NPM packages [#2054](https://github.com/kvhnuke/etherwallet/pull/2054)
+- Add ROCK2 Fake address in darklist, add PDATA token [#2062](https://github.com/kvhnuke/etherwallet/pull/2062)
+- update CARD token address [#2061](https://github.com/kvhnuke/etherwallet/pull/2061)
+- Add privacy policy [#2060](https://github.com/kvhnuke/etherwallet/pull/2060)
+- Add RUNE and Ecrypto tokens [#2059](https://github.com/kvhnuke/etherwallet/pull/2059)
+- [EOSC] Enable ledger wallet for EOS Classic [#2056](https://github.com/kvhnuke/etherwallet/pull/2056)
+- Add ROCK2(ICE ROCK MINING) token [#2053](https://github.com/kvhnuke/etherwallet/pull/2053)
+- update TOMO Testnet and TOMO Token [#2050](https://github.com/kvhnuke/etherwallet/pull/2050)
+- Fix Akroma logo [#2051](https://github.com/kvhnuke/etherwallet/pull/2051)
+- CSS fix for networks [#2049](https://github.com/kvhnuke/etherwallet/pull/2049)
+
+### Release v3.21.23
+### New
+- Add Metamask breaking change [#2048](https://github.com/kvhnuke/etherwallet/pull/2048)
+- Add 0xinfra nodes [#2045](https://github.com/kvhnuke/etherwallet/pull/2045)
+- nodes: add remote.akroma.io [#2046](https://github.com/kvhnuke/etherwallet/pull/2046)
+- Add STB token and Add electrominer scammer address [#2047](https://github.com/kvhnuke/etherwallet/pull/2047)
+- Add Ledger support for Musicoin, Add Trezor support for Pirl, Ether-1 and Atheios [#2040](https://github.com/kvhnuke/etherwallet/pull/2040)
+- Add IMT token [#2043](https://github.com/kvhnuke/etherwallet/pull/2043)
+- Update darklist from eth-list, update ledger affiliate links [#2042](https://github.com/kvhnuke/etherwallet/pull/2042)
+- Add USD//Coin (USDC) token [#2036](https://github.com/kvhnuke/etherwallet/pull/2036)
+- Add LCT token [#2035](https://github.com/kvhnuke/etherwallet/pull/2035)
+- BUG FIX: Fix missing break after bad merge conflict resolution [#2034](https://github.com/kvhnuke/etherwallet/pull/2034)
+- Enable Ledger Hardware Wallet support for Callisto (CLO) [#2032](https://github.com/kvhnuke/etherwallet/pull/2032)
+- Enable Ledger Hardware Wallet support for Atheios (ATH) [#2030](https://github.com/kvhnuke/etherwallet/pull/2030)
+- Remove confusing json_relay_node folder [#2025](https://github.com/kvhnuke/etherwallet/pull/2025)
+- Enable Ledger Hardware Wallet support for EtherGem (EGEM) [#2008](https://github.com/kvhnuke/etherwallet/pull/2008)
+- Add TLX, WATT, and URB token [#2028](https://github.com/kvhnuke/etherwallet/pull/2028)
+- Update Kyber Network address [#2017](https://github.com/kvhnuke/etherwallet/pull/2017)
+- Added Telex contract ABI [#2026](https://github.com/kvhnuke/etherwallet/pull/2026)
+- Add urbitdata.eth URB [#2027](https://github.com/kvhnuke/etherwallet/pull/2027)
+- support full 32bit chain_id for trezor [#2011](https://github.com/kvhnuke/etherwallet/pull/2011)
+- Fix transaction history link text [#2022](https://github.com/kvhnuke/etherwallet/pull/2022)
+- Add TCA token and UNV token [#2024](https://github.com/kvhnuke/etherwallet/pull/2024)
+- Add TangguoTaoToken Contract abi [#2023](https://github.com/kvhnuke/etherwallet/pull/2023)
+- Manual gas limits for upcoming TCA [#2021](https://github.com/kvhnuke/etherwallet/pull/2021)
+- Fix network tabs css, move chain logo to internal directory. [#2018](https://github.com/kvhnuke/etherwallet/pull/2018)
+
+### Release v3.21.22
+### New
+- Change `eth_call` to `latest` [Commit](https://github.com/kvhnuke/etherwallet/commit/60bc0295cf6296341bd805c5993f18da0d79b32c)
+- Update BQX to ETHOS, remove from darklist [#2016](https://github.com/kvhnuke/etherwallet/pull/2016)
+- Add HIBT and HAPPY tokens [#2015](https://github.com/kvhnuke/etherwallet/pull/2015)
+- Add gastracker; remove Commonwealth as their nodes are currently down [#2013](https://github.com/kvhnuke/etherwallet/pull/2013)
+- Update YEED token address [#2010](https://github.com/kvhnuke/etherwallet/pull/2010)
+- Add BTZ token[#1982](https://github.com/kvhnuke/etherwallet/pull/1982)
+- pirl, etho logos added [#2009](https://github.com/kvhnuke/etherwallet/pull/2009)
+- Network logos [#2003](https://github.com/kvhnuke/etherwallet/pull/2003)
+
+### Release v3.21.21
+### New
+- Enable Ledger Hardware Wallet support for Pirl [#2000](https://github.com/kvhnuke/etherwallet/pull/2000)
+- Fix darklist bypass [#2007](https://github.com/kvhnuke/etherwallet/pull/2007)
+- Add PEG token [#2002](https://github.com/kvhnuke/etherwallet/pull/2002)
+- Add Opiria PData custom gas [#2004](https://github.com/kvhnuke/etherwallet/pull/2004)
+- Add PASS, REDC, FTXT, 3LT, WMK, CRMT, ORCA and remove FXC [#2006](https://github.com/kvhnuke/etherwallet/pull/2006)
+
+### Release v3.21.20
+### New
+- Add AMLT, MTC and DGTX tokens, update TWNKL to MOVED [#2001](https://github.com/kvhnuke/etherwallet/pull/2001)
+- Add CYFM and MFTU tokens [#1998](https://github.com/kvhnuke/etherwallet/pull/1998)
+- Remove x888 for inactivity and invalidity [#1996](https://github.com/kvhnuke/etherwallet/pull/1996)
+- Update Havven contract address to point to underlying contract [#1995](https://github.com/kvhnuke/etherwallet/pull/1995)
+
+### Release v3.21.19
+### New
+- Enable Ledger HW support for Akroma [#1992](https://github.com/kvhnuke/etherwallet/pull/1992)
+- Add ORCA custom gass [#1993](https://github.com/kvhnuke/etherwallet/pull/1993)
+- Add BOX and GULD tokens, update VDG decimal, update FANX address, update Su Square contract abi and address [#1994](https://github.com/kvhnuke/etherwallet/pull/1994)
+- Add EXY contract abi [#1990](https://github.com/kvhnuke/etherwallet/pull/1990)
+- Add IQN token, update Havven abi, add Havven Mintr abi [#1991](https://github.com/kvhnuke/etherwallet/pull/1991)
+- Add contracts from ethereum-list [#1984](https://github.com/kvhnuke/etherwallet/pull/1984)
+- Add Akroma Support [#1976](https://github.com/kvhnuke/etherwallet/pull/1976)
+- Add ESN Support [#1879](https://github.com/kvhnuke/etherwallet/pull/1879)
+- support 32bits chainId with the latest Ledger app [#1979](https://github.com/kvhnuke/etherwallet/pull/1979)
+
+### Update
+- Add buzcoin ico scam sites to darklist [#1987](https://github.com/kvhnuke/etherwallet/pull/1987)
+- Fixed menu layout [#1988](https://github.com/kvhnuke/etherwallet/pull/1988)
+
+### Release v3.21.18
+### New  
+- Cleanup nodeTypes [#1983](https://github.com/kvhnuke/etherwallet/pull/1983)
+- Connect Beta [#1966](https://github.com/kvhnuke/etherwallet/pull/1966)
+- Add EXY token [#1981](https://github.com/kvhnuke/etherwallet/pull/1981)
+- Add EDR token [#1977](https://github.com/kvhnuke/etherwallet/pull/1977)
+- Add HUR and ODEM tokens, remove inactive tokens. [See list here](https://github.com/MyEtherWallet/ethereum-lists/pull/764) [#1974](https://github.com/kvhnuke/etherwallet/pull/1974)
+- Add IST34 and NUG tokens [#1973](https://github.com/kvhnuke/etherwallet/pull/1973)
+- Add CRGO and TICO token, add Havven ABI [#1972](https://github.com/kvhnuke/etherwallet/pull/1972)
+- Add Kyber and MEW token contracts [#1971](https://github.com/kvhnuke/etherwallet/pull/1971)
+- Add CAR, and TSW token, remove WPC token and update AXP to AXPR [#1970](https://github.com/kvhnuke/etherwallet/pull/1970)
+- Add WNK token [#1967](https://github.com/kvhnuke/etherwallet/pull/1967)
+- Add HODL token [#1969](https://github.com/kvhnuke/etherwallet/pull/1969)
+- Adds DEPO (Depository Network) and CRMT token [#1965](https://github.com/kvhnuke/etherwallet/pull/1965)
+- Add DEPO custom gas limit [#1964](https://github.com/kvhnuke/etherwallet/pull/1964)
+- Hide warning for POA network [#1953](https://github.com/kvhnuke/etherwallet/pull/1953)
+- Add VDG token, Update LookRev token [#1963](https://github.com/kvhnuke/etherwallet/pull/1963)
+- Remove obsolete networks [#1940](https://github.com/kvhnuke/etherwallet/pull/1940)
+
 ### Release v3.21.17
 ### New
+- Add Simplex Link [#1961](https://github.com/kvhnuke/etherwallet/pull/1961) [#1960](https://github.com/kvhnuke/etherwallet/pull/1960)
+- Add SLY token [#1958](https://github.com/kvhnuke/etherwallet/pull/1958)
+- Added CFC Token sale address and gas limit [#1956](https://github.com/kvhnuke/etherwallet/pull/1956)
 - Add ELY and DRVH tokens [#1955](https://github.com/kvhnuke/etherwallet/pull/1955)
 - Add Billfodl affiliate link and CFC token [#1954](https://github.com/kvhnuke/etherwallet/pull/1954)
 - Misc CSS fixes [#1935](https://github.com/kvhnuke/etherwallet/pull/1935)
@@ -7,6 +133,10 @@
 - Add Cubrix token [#1952](https://github.com/kvhnuke/etherwallet/pull/1952)
 - Update REP token address [#1951](https://github.com/kvhnuke/etherwallet/pull/1951)
 - Add Cubrix contract abi [#1950](https://github.com/kvhnuke/etherwallet/pull/1950)
+
+### Update
+- Update Ethorse rewards contract address [#1960](https://github.com/kvhnuke/etherwallet/pull/1960)
+- Update translation [#1957](https://github.com/kvhnuke/etherwallet/pull/1957)
 
 ### Release v3.21.16
 ### New

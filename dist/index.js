@@ -1,9 +1,5 @@
 'use strict';
 
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-undef */
-/* eslint-disable global-require */
-
 if (typeof window !== 'undefined') {
   if (!window._babelPolyfill) {
     // This is the primary difference between this and index.js

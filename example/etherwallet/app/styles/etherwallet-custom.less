@@ -593,7 +593,6 @@ label small {
 @brand-eth: @brand-primary;
 @brand-etc: #009241;
 @brand-test: #adc101;
-@brand-rsk: #ff794f;
 @brand-exp: #673ab7;
 @brand-ubq: #00ad85;
 @brand-poa: #4568bb;
@@ -602,10 +601,14 @@ label small {
 @brand-etsc: #4295d1;
 @brand-egem: #0e97c0;
 @brand-clo: #009241;
-@brand-x888: #ff9;
 @brand-music: #fece00;
 @brand-go: #27223d;
 @brand-eosc: #926565;
+@brand-akroma: #AA0087;
+@brand-esn: #a16bff;
+@brand-pirl: #a2d729;
+@brand-etho: #d63068;
+@brand-ath: #0099ff;
 @brand-cust: #b50085;
 
 .dropdown-node .dropdown-menu {
@@ -624,61 +627,74 @@ label small {
     border-left: 2px solid @brand-eth;
   }
   li:nth-child(5),
-  li:nth-child(6) {
-    border-left: 2px solid @brand-etc;
-  }
+  li:nth-child(6),
   li:nth-child(7),
   li:nth-child(8),
-  li:nth-child(9),
+  li:nth-child(9) {
+    border-left: 2px solid @brand-etc;
+  }
   li:nth-child(10),
   li:nth-child(11),
-  li:nth-child(12) {
+  li:nth-child(12),
+  li:nth-child(13),
+  li:nth-child(14),
+  li:nth-child(15) {
     border-left: 2px solid @brand-test;
   }
-  li:nth-child(13) {
+  li:nth-child(16) {
     border-left: 2px solid @brand-exp;
   }
-  li:nth-child(14) {
+  li:nth-child(17) {
     border-left: 2px solid @brand-ubq;
   }
-  li:nth-child(15) {
+  li:nth-child(18) {
     border-left: 2px solid @brand-poa;
   }
-  li:nth-child(16) {
+  li:nth-child(19) {
     border-left: 2px solid @brand-tomo;
   }
-  li:nth-child(17) {
+  li:nth-child(20) {
     border-left: 2px solid @brand-ella;
   }
-  li:nth-child(18) {
+  li:nth-child(21) {
     border-left: 2px solid @brand-etsc;
   }
-  li:nth-child(19) {
+  li:nth-child(22) {
     border-left: 2px solid @brand-egem;
   }
-  li:nth-child(20) {
+  li:nth-child(23) {
     border-left: 2px solid @brand-clo;
   }
-  li:nth-child(21) {
-    border-left: 2px solid @brand-x888;
-  }
-  li:nth-child(22) {
+  li:nth-child(24) {
     border-left: 2px solid @brand-music;
   }
-  li:nth-child(23) {
+  li:nth-child(25) {
     border-left: 2px solid @brand-go;
   }
-  li:nth-child(24) {
+  li:nth-child(26) {
     border-left: 2px solid @brand-eosc;
+  }
+  li:nth-child(27),
+  li:nth-child(28) {
+    border-left: 2px solid @brand-akroma;
+  }
+  li:nth-child(29) {
+    border-left: 2px solid @brand-esn;
+  }
+  li:nth-child(30) {
+    border-left: 2px solid @brand-pirl;
+  }
+  li:nth-child(31) {
+    border-left: 2px solid @brand-etho;
+  }
+  li:nth-child(32) {
+    border-left: 2px solid @brand-ath;
   }
   li:last-child {
     border-left: 2px solid @gray-light;
   }
   li:nth-child(4),
-  li:nth-child(6),
-  li:nth-child(12),
-  li:nth-child(13),
-  li:nth-child(14),
+  li:nth-child(9),
   li:nth-child(15),
   li:nth-child(16),
   li:nth-child(17),
@@ -688,7 +704,13 @@ label small {
   li:nth-child(21),
   li:nth-child(22),
   li:nth-child(23),
-  li:nth-child(24), {
+  li:nth-child(24),
+  li:nth-child(25),
+  li:nth-child(26),
+  li:nth-child(28),
+  li:nth-child(29),
+  li:nth-child(30),
+  li:nth-child(31) {
     border-bottom: 1px solid @gray-lighter;
   }
 }
@@ -701,6 +723,10 @@ header.ETH {
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-eth;     }
   & + .container .modal-content          { border: 0.25rem solid @brand-eth;         }
   & + .container .alert-info             { background-color:@brand-eth;              }
+  .dropdown-gas:before {
+    width: 24px;
+    background-image: url("../images/coins/ethereum.svg");
+  }
 }
 
 header.ETC {
@@ -708,6 +734,10 @@ header.ETC {
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-etc;     }
   & + .container .modal-content          { border: 0.25rem solid @brand-etc;         }
   & + .container .alert-info             { background-color:@brand-etc;              }
+  .dropdown-gas:before {
+    width: 24px;
+    background-image: url("../images/coins/ethereum-classic.svg");
+  }
 }
 
 header.Ropsten {
@@ -731,13 +761,6 @@ header.Rinkeby {
   & + .container .alert-info             { background-color:@brand-test;             }
 }
 
-header.RSK {
-  .header-branding                       { border-bottom: 0.25rem solid @brand-rsk;  }
-  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-rsk;     }
-  & + .container .modal-content          { border: 0.25rem solid @brand-rsk;         }
-  & + .container .alert-info             { background-color: @brand-rsk;             }
-}
-
 header.Custom {
   .header-branding                       { border-bottom: 0.25rem solid @brand-cust; }
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-cust;    }
@@ -750,6 +773,10 @@ header.EXP {
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-exp;     }
   & + .container .modal-content          { border: 0.25rem solid @brand-exp;         }
   & + .container .alert-info             { background-color:@brand-exp;              }
+  .dropdown-gas:before {
+    width: 32px;
+    background-image: url("../images/coins/exp.svg");
+  }
 }
 
 header.UBQ {
@@ -757,6 +784,10 @@ header.UBQ {
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-ubq;     }
   & + .container .modal-content          { border: 0.25rem solid @brand-ubq;         }
   & + .container .alert-info             { background-color:@brand-ubq;              }
+  .dropdown-gas:before {
+    width: 32px;
+    background-image: url("../images/coins/ubiq.svg");
+  }
 }
 
 header.POA {
@@ -764,6 +795,10 @@ header.POA {
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-poa;     }
   & + .container .modal-content          { border: 0.25rem solid @brand-poa;         }
   & + .container .alert-info             { background-color:@brand-poa;              }
+  .dropdown-gas:before {
+    width: 32px;
+    background-image: url("../images/coins/poa.svg");
+  }
 }
 
 header.TOMO {
@@ -771,6 +806,10 @@ header.TOMO {
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-tomo;    }
   & + .container .modal-content          { border: 0.25rem solid @brand-tomo;        }
   & + .container .alert-info             { background-color:@brand-tomo;             }
+  .dropdown-gas:before {
+    width: 34px;
+    background-image: url("../images/coins/tomo.svg");
+  }
 }
 
 header.ELLA {
@@ -778,6 +817,10 @@ header.ELLA {
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-ella;    }
   & + .container .modal-content          { border: 0.25rem solid @brand-ella;        }
   & + .container .alert-info             { background-color:@brand-ella;             }
+  .dropdown-gas:before {
+    width: 32px;
+    background-image: url("../images/coins/ella.svg");
+  }
 }
 
 header.ETSC {
@@ -785,6 +828,10 @@ header.ETSC {
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-etsc;    }
   & + .container .modal-content          { border: 0.25rem solid @brand-etsc;        }
   & + .container .alert-info             { background-color:@brand-etsc;             }
+  .dropdown-gas:before {
+    width: 32px;
+    background-image: url("../images/coins/etsc.svg");
+  }
 }
 
 header.EGEM {
@@ -792,6 +839,10 @@ header.EGEM {
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-egem;    }
   & + .container .modal-content          { border: 0.25rem solid @brand-egem;        }
   & + .container .alert-info             { background-color:@brand-egem;             }
+  .dropdown-gas:before {
+    width: 36px;
+    background-image: url("../images/coins/egem.svg");
+  }
 }
 
 header.CLO {
@@ -799,20 +850,22 @@ header.CLO {
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-clo;     }
   & + .container .modal-content          { border: 0.25rem solid @brand-clo;         }
   & + .container .alert-info             { background-color:@brand-clo;              }
+  .dropdown-gas:before {
+    width: 36px;
+    background-image: url("../images/coins/callisto.svg");
+  }
 }
 
-header.X888 {
-  .header-branding                       { border-bottom: 0.25rem solid @brand-x888; }
-  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-x888;    }
-  & + .container .modal-content          { border: 0.25rem solid @brand-x888;        }
-  & + .container .alert-info             { background-color:@brand-x888;             }
-}
 
 header.MUSIC {
   .header-branding                       { border-bottom: 0.25rem solid @brand-music;}
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-music;   }
   & + .container .modal-content          { border: 0.25rem solid @brand-music;       }
   & + .container .alert-info             { background-color:@brand-music;            }
+  .dropdown-gas:before {
+    width: 34px;
+    background-image: url("../images/coins/music.svg");
+  }
 }
 
 header.GO {
@@ -820,6 +873,10 @@ header.GO {
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-go;      }
   & + .container .modal-content          { border: 0.25rem solid @brand-go;          }
   & + .container .alert-info             { background-color:@brand-go;               }
+  .dropdown-gas:before {
+    width: 38px;
+    background-image: url("../images/coins/gochain.svg");
+  }
 }
 
 header.EOSC {
@@ -827,6 +884,65 @@ header.EOSC {
   & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-eosc;    }
   & + .container .modal-content          { border: 0.25rem solid @brand-eosc;        }
   & + .container .alert-info             { background-color:@brand-eosc;             }
+  .dropdown-gas:before {
+    width: 26px;
+    background-image: url("../images/coins/eosc.svg");
+  }
+}
+
+header.AKA {
+  .header-branding                       { border-bottom: 0.25rem solid @brand-akroma; }
+  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-akroma;    }
+  & + .container .modal-content          { border: 0.25rem solid @brand-akroma;        }
+  & + .container .alert-info             { background-color:@brand-akroma;             }
+  .dropdown-gas:before {
+    width: 34px;
+    background-image: url("../images/coins/akroma.svg");
+  }
+}
+
+header.ESN {
+  .header-branding                       { border-bottom: 0.25rem solid @brand-esn;  }
+  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-esn;     }
+  & + .container .modal-content          { border: 0.25rem solid @brand-esn;         }
+  & + .container .alert-info             { background-color:@brand-esn;              }
+  .dropdown-gas:before {
+    width: 32px;
+    background-image: url("../images/coins/ethersocial.svg");
+  }
+}
+
+header.PIRL {
+  .header-branding                       { border-bottom: 0.25rem solid @brand-pirl; }
+  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-pirl;    }
+  & + .container .modal-content          { border: 0.25rem solid @brand-pirl;        }
+  & + .container .alert-info             { background-color:@brand-pirl;             }
+  .dropdown-gas:before {
+    width: 32px;
+    background-image: url("../images/coins/pirl.svg");
+  }
+}
+
+header.ETHO {
+  .header-branding                       { border-bottom: 0.25rem solid @brand-etho; }
+  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-etho;    }
+  & + .container .modal-content          { border: 0.25rem solid @brand-etho;        }
+  & + .container .alert-info             { background-color:@brand-etho;             }
+  .dropdown-gas:before {
+    width: 24px;
+    background-image: url("../images/coins/etho.svg");
+  }
+}
+
+header.ATH {
+  .header-branding                       { border-bottom: 0.25rem solid @brand-ath; }
+  & + .container + .pre-footer + .footer { border-top: 0.25rem solid @brand-ath;    }
+  & + .container .modal-content          { border: 0.25rem solid @brand-ath;        }
+  & + .container .alert-info             { background-color:@brand-ath;             }
+  .dropdown-gas:before {
+    width: 36px;
+    background-image: url("../images/coins/atheios.svg");
+  }
 }
 
 .contest-container {
@@ -888,4 +1004,23 @@ header.EOSC {
       max-width: 115px;
     }
   }
+}
+
+.privacy-policy {
+  width: 90%;
+
+  h1,
+  h3 {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .privacy-policy-body {
+    margin-top: 30px;
+  }
+}
+
+.phishing {
+  height: 60%;
+  text-align: center;
 }

@@ -1,20 +1,22 @@
 import createLogger from 'logging';
-import EventEmitter from 'events';
+import MewConnectCommon from './MewConnectCommon';
+import MewConnectCrypto from './MewConnectCrypto';
+import io from 'socket.io-client';
+import SimplePeer from 'simple-peer';
 
 const debug = require('debug')('MEWconnect:initiator');
 
-const io = require('socket.io-client');
-const SimplePeer = require('simple-peer');
-
-const MewConnectCommon = require('./MewConnectCommon');
-const MewConnectCrypto = require('./MewConnectCrypto');
 const logger = createLogger('MewConnectInitiator');
 
-class MewConnectInitiator extends MewConnectCommon {
-  constructor(uiCommunicatorFunc = null, loggingFunc, userSuppliedLibs) {
+export default class MewConnectInitiator extends MewConnectCommon {
+  constructor(
+    uiCommunicatorFunc = null,
+    loggingFunc = null,
+    additionalLibs = {}
+  ) {
     super(uiCommunicatorFunc, loggingFunc);
 
-    const additionalLibs = userSuppliedLibs || {};
+    this.supportedBrowser = MewConnectCommon.checkBrowser();
 
     this.destroyOnUnload();
     this.p = null;
@@ -23,9 +25,6 @@ class MewConnectInitiator extends MewConnectCommon {
     this.connected = false;
     this.signalUrl = null;
     this.turnServers = [];
-
-    this.status = new EventEmitter();
-    this.uiCommunicationEmitter = new EventEmitter();
 
     this.io = additionalLibs.io || io;
     this.Peer = additionalLibs.wrtc || SimplePeer;
@@ -39,22 +38,16 @@ class MewConnectInitiator extends MewConnectCommon {
     this.stunServers = this.jsonDetails.stunSrvers;
   }
 
-  /**
-   * Factory function
-   */
-  static init(uiCommunicatorFunc, loggingFunc, additionalLibs) {
-    return new MewConnectInitiator(
-      uiCommunicatorFunc,
-      loggingFunc,
-      additionalLibs
-    );
+  // Factory function to create instance using default supplied libraries
+  static init() {
+    return new MewConnectInitiator();
   }
 
   // Check if a WebRTC connection exists before a window/tab is closed or refreshed
   // Destroy the connection if one exists
   destroyOnUnload() {
     if (this.isBrowser) {
-      window.onunload = window.onbeforeunload = function(e) {
+      window.onunload = window.onbeforeunload = function() {
         const _this = this;
         if (!!this.Peer && !this.Peer.destroyed) {
           _this.rtcDestroy();
@@ -63,33 +56,36 @@ class MewConnectInitiator extends MewConnectCommon {
     }
   }
 
-  /**
-   * Returns a boolean indicating whether the socket connection exists and is active
-   */
+  static checkBrowser() {
+    return MewConnectCommon.checkBrowser();
+  }
+
+  static checkWebRTCAvailable() {
+    return MewConnectCommon.checkWebRTCAvailable();
+  }
+
+  // Returns a boolean indicating whether the socket connection exists and is active
   getSocketConnectionState() {
     return this.socketConnected;
   }
 
-  /**
-   * Returns a boolean indicating whether the WebRTC connection exists and is active
-   */
+  // Returns a boolean indicating whether the WebRTC connection exists and is active
   getConnectonState() {
     return this.connected;
   }
 
+  // can be used to listen to specific events, especially those that pass data
   uiCommunicator(event, data) {
     this.emit(event, data);
     this.emitStatus(event);
   }
 
-  // special status emitter to allow simple catching of various statuses in one listener
+  // special status emitter to allow simple listening of various statuses in one listener
   emitStatus(event) {
-    this.status('status', event);
+    this.emit('status', event);
   }
 
-  /**
-   * Emit/Provide the details used in creating the QR Code
-   */
+  // Emit/Provide the details used in creating the QR Code
   displayCode(data) {
     debug('handshake', data);
     this.socketKey = data;
@@ -103,12 +99,9 @@ class MewConnectInitiator extends MewConnectCommon {
     this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
   }
 
-  // ////////////// Initialize Communication Process //////////////////////////////
+  // ===================== [Start] WebSocket Communication Methods and Handlers ========================
 
-  /**
-   * The initial method called to initiate the exchange that can create a WebRTC connection
-   */
-
+  // The initial method called to initiate the exchange that can create a WebRTC connection
   async regenerateCode() {
     if (this.signalUrl === null) {
       throw Error('regenerateCode called before initial code generation');
@@ -116,6 +109,7 @@ class MewConnectInitiator extends MewConnectCommon {
     this.initiatorStart(this.signalUrl);
   }
 
+  // Initalize a websocket connection with the signal server
   async initiatorStart(url) {
     if (this.signalUrl === null) {
       this.signalUrl = url;
@@ -127,7 +121,7 @@ class MewConnectInitiator extends MewConnectCommon {
     );
     this.connId = this.mewCrypto.bufferToConnId(this.keys.pub);
     this.displayCode(this.keys.pvt.toString('hex'));
-    this.emitStatus(this.lifeCycle.signatureCheck);
+    this.uiCommunicator(this.lifeCycle.signatureCheck);
     const options = {
       query: {
         stage: 'initiator',
@@ -143,21 +137,32 @@ class MewConnectInitiator extends MewConnectCommon {
     this.initiatorConnect(this.socket);
   }
 
-  // ////////////// WebSocket Communication Methods and Handlers //////////////////////////////
+  // ------------- WebSocket Communication Methods and Handlers ------------------------------
 
-  /**
-   * Setup message handlers for communication with the signal server
-   */
+  // ----- Wrapper around Socket.IO methods
+  // socket.emit wrapper
+  socketEmit(signal, data) {
+    this.socket.binary(false).emit(signal, data);
+  }
+
+  // socket.disconnect wrapper
+  socketDisconnect() {
+    this.socket.disconnect();
+  }
+
+  // socket.on listener registration wrapper
+  socketOn(signal, func) {
+    this.socket.on(signal, func);
+  }
+
+  // ----- Setup handlers for communication with the signal server
   initiatorConnect(socket) {
     debug('INITIATOR CONNECT');
-    this.emitStatus(this.lifeCycle.SocketConnectedEvent);
+    this.uiCommunicator(this.lifeCycle.SocketConnectedEvent);
 
     this.socket.on(this.signals.connect, () => {
       debug('SOCKET CONNECTED');
       this.socketConnected = true;
-      this.applyDatahandlers(
-        JSON.stringify({ type: 'socketConnected', data: null })
-      );
     });
 
     this.socketOn(this.signals.confirmation, this.sendOffer.bind(this)); // response
@@ -183,22 +188,7 @@ class MewConnectInitiator extends MewConnectCommon {
     return socket;
   }
 
-  // Wrapper around socket.emit method
-  socketEmit(signal, data) {
-    this.socket.binary(false).emit(signal, data);
-  }
-
-  // Wrapper around socket.disconnect method
-  socketDisconnect() {
-    this.socket.disconnect();
-  }
-
-  // Wrapper around socket.on listener registration method
-  socketOn(signal, func) {
-    this.socket.on(signal, func);
-  }
-
-  // Socket Event handlers
+  // ----- Socket Event handlers
 
   // Handle Socket Disconnect Event
   socketDisconnectHandler(reason) {
@@ -219,7 +209,7 @@ class MewConnectInitiator extends MewConnectCommon {
     this.retryViaTurn(data);
   }
 
-  // Failure Handlers
+  // ----- Failure Handlers
 
   // Handle Failure due to an attempt to join a connection with two existing endpoints
   busyFailure() {
@@ -229,6 +219,7 @@ class MewConnectInitiator extends MewConnectCommon {
     );
     debug('confirmation Failed: Busy');
   }
+
   // Handle Failure due to no opposing peer existing
   invalidFailure() {
     this.uiCommunicator(
@@ -237,6 +228,7 @@ class MewConnectInitiator extends MewConnectCommon {
     );
     debug('confirmation Failed: no opposite peer found');
   }
+
   // Handle Failure due to the handshake/ verify details being invalid for the connection ID
   confirmationFailure() {
     this.uiCommunicator(
@@ -246,11 +238,11 @@ class MewConnectInitiator extends MewConnectCommon {
     debug('confirmation Failed: invalid confirmation');
   }
 
-  // /////////////////////////////////////////////////////////////////////////////////////////////
+  // =============== [End] WebSocket Communication Methods and Handlers ========================
 
-  // //////////////////////// WebRTC Communication Related ///////////////////////////////////////
+  // ======================== [Start] WebRTC Communication Methods =============================
 
-  // ////////////// WebRTC Communication Setup Methods ///////////////////////////////////////////
+  // ----- WebRTC Setup Methods
 
   // A connection pair exists, create and send WebRTC OFFER
   async sendOffer(data) {
@@ -268,7 +260,6 @@ class MewConnectInitiator extends MewConnectCommon {
   }
 
   initiatorSignalListener(socket, options) {
-    // TODO encrypt the options object
     return async function offerEmmiter(data) {
       try {
         const _this = this;
@@ -314,7 +305,6 @@ class MewConnectInitiator extends MewConnectCommon {
     const defaultOptions = {
       initiator: true,
       trickle: false,
-      reconnectTimer: 100,
       iceTransportPolicy: 'relay',
       config: {
         iceServers: webRtcServers
@@ -326,7 +316,7 @@ class MewConnectInitiator extends MewConnectCommon {
       suppliedOptions
     };
 
-    this.emitStatus(this.lifeCycle.RtcInitiatedEvent);
+    this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
     this.p = new this.Peer(simpleOptions);
     this.p.on(this.rtcEvents.error, this.onError.bind(this));
     this.p.on(this.rtcEvents.connect, this.onConnect.bind(this));
@@ -336,23 +326,20 @@ class MewConnectInitiator extends MewConnectCommon {
     debug('simple peer', this.p);
   }
 
-  // ////////////// WebRTC Communication Event Handlers //////////////////////////////
+  // ----- WebRTC Communication Event Handlers
 
   onConnect() {
-    this.logger('CONNECT', 'ok');
+    debug('CONNECT', 'ok');
     this.connected = true;
     this.socketEmit(this.signals.rtcConnected, this.socketKey);
     this.socketDisconnect();
     setTimeout(() => {
-      this.emitStatus(this.lifeCycle.RtcConnectedEvent);
-      this.applyDatahandlers(
-        JSON.stringify({ type: 'rtcConnected', data: null })
-      );
+      this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
     }, 100);
   }
 
   async onData(data) {
-    this.logger('DATA RECEIVED', data.toString());
+    debug('DATA RECEIVED', data.toString());
     try {
       let decryptedData;
       if (this.isJSON(data)) {
@@ -366,64 +353,58 @@ class MewConnectInitiator extends MewConnectCommon {
       }
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
-        this.logger('DECRYPTED DATA RECEIVED', parsed);
+        debug('DECRYPTED DATA RECEIVED', parsed);
         this.emit(parsed.type, parsed.data);
       } else {
-        this.logger('DECRYPTED DATA RECEIVED', decryptedData);
+        debug('DECRYPTED DATA RECEIVED', decryptedData);
         this.emit(decryptedData.type, decryptedData.data);
       }
     } catch (e) {
       logger.error(e);
-      this.logger('peer2 ERROR: data=', data);
-      this.logger('peer2 ERROR: data.toString()=', data.toString());
+      debug('onData ERROR: data=', data);
+      debug('onData ERROR: data.toString()=', data.toString());
     }
   }
 
   onClose(data) {
-    this.logger('WRTC CLOSE', data);
+    debug('WRTC CLOSE', data);
     this.connected = false;
-    this.emitStatus(this.lifeCycle.RtcClosedEvent);
-    this.uiCommunicator(this.lifeCycle.RtcClosedEvent, err);
+    this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
   }
 
   onError(err) {
-    logger.error('WRTC ERROR');
-    this.logger('error', err);
-    this.emitStatus(this.lifeCycle.RtcErrorEvent);
-    this.uiCommunicator(this.lifeCycle.RtcErrorEvent, err);
+    debug('WRTC ERROR');
+    debug('error', err);
+    this.uiCommunicator(this.lifeCycle.RtcErrorEvent);
   }
 
-  // /////////////////////// WebRTC Communication Methods /////////////////////////////////////////
-  testRTC(msg) {
-    return function() {
-      const _this = this;
-      _this.rtcSend(JSON.stringify({ type: 2, text: msg }));
-    }.bind(this);
-  }
+  // ----- WebRTC Communication Methods
 
   sendRtcMessageClosure(type, msg) {
     return function() {
       const _this = this;
-      _this.logger('[SEND RTC MESSAGE] type: ', type, ' message: ', msg);
+      debug(`[SEND RTC MESSAGE Closure] type:  ${type},  message:  ${msg}`);
       _this.rtcSend(JSON.stringify({ type: type, data: msg }));
     }.bind(this);
   }
 
   sendRtcMessage(type, msg) {
-    this.logger('[SEND RTC MESSAGE] type: ', type, ' message: ', msg);
+    debug(`[SEND RTC MESSAGE] type:  ${type},  message:  ${msg}`);
     this.rtcSend(JSON.stringify({ type: type, data: msg }));
   }
 
   disconnectRTCClosure() {
     const _this = this;
     return function() {
+      debug('DISCONNECT RTC Closure');
       _this.uiCommunicator(_this.lifeCycle.RtcDisconnectEvent);
       _this.rtcDestroy();
       _this.instance = null;
-    }.bind(this);
+    };
   }
 
   disconnectRTC() {
+    debug('DISCONNECT RTC');
     this.rtcDestroy();
     this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
     this.rtcDestroy();
@@ -437,6 +418,8 @@ class MewConnectInitiator extends MewConnectCommon {
     } else {
       encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
     }
+    debug('SENDING RTC');
+    debug(this.p); // todo remove dev item
     this.p.send(JSON.stringify(encryptedSend));
   }
 
@@ -446,12 +429,11 @@ class MewConnectInitiator extends MewConnectCommon {
     }
   }
 
-  // ////////////// WebRTC Communication TURN Fallback Initiator/Handler ///////////////////////////
-  /**
-   * Fallback Step if initial webRTC connection attempt fails.
-   * Retries setting up the WebRTC connection using TURN
-   */
+  // ----- WebRTC Communication TURN Fallback Initiator/Handler
+  // Fallback Step if initial webRTC connection attempt fails.
+  // Retries setting up the WebRTC connection using TURN
   retryViaTurn(data) {
+    debug('Retrying via TURN');
     const options = {
       signalListener: this.initiatorSignalListener,
       webRtcConfig: {
@@ -460,6 +442,6 @@ class MewConnectInitiator extends MewConnectCommon {
     };
     this.initiatorStartRTC(this.socket, options);
   }
-}
 
-module.exports = MewConnectInitiator;
+  // ======================== [End] WebRTC Communication Methods =============================
+}

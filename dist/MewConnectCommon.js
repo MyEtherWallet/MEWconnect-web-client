@@ -1,225 +1,273 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _extends =
+  Object.assign ||
+  function(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
 
-var _logging = require('logging');
+var _createClass = (function() {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ('value' in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  return function(Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+})();
 
-var _logging2 = _interopRequireDefault(_logging);
+var _events = require('events');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _events2 = _interopRequireDefault(_events);
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _detectBrowser = require('detect-browser');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _constants = require('./constants');
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _config = require('./config');
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* eslint-disable no-console */
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
+function _toConsumableArray(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+}
 
-var events = require('events');
-var EventEmitter = events.EventEmitter;
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError('Cannot call a class as a function');
+  }
+}
 
-var _require = require('./constants'),
-    versions = _require.versions,
-    connectionCodeSchemas = _require.connectionCodeSchemas,
-    connectionCodeSeparator = _require.connectionCodeSeparator,
-    signal = _require.signal,
-    rtc = _require.rtc,
-    stages = _require.stages,
-    lifeCycle = _require.lifeCycle,
-    communicationTypes = _require.communicationTypes;
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError(
+      "this hasn't been initialised - super() hasn't been called"
+    );
+  }
+  return call && (typeof call === 'object' || typeof call === 'function')
+    ? call
+    : self;
+}
 
-var _require2 = require('./config'),
-    version = _require2.version,
-    stunServers = _require2.stunServers;
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== 'function' && superClass !== null) {
+    throw new TypeError(
+      'Super expression must either be null or a function, not ' +
+        typeof superClass
+    );
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass)
+    Object.setPrototypeOf
+      ? Object.setPrototypeOf(subClass, superClass)
+      : (subClass.__proto__ = superClass);
+}
 
-var logger = (0, _logging2.default)('MewConnect-Logger');
-
-var MewConnectCommon = function (_EventEmitter) {
+var MewConnectCommon = (function(_EventEmitter) {
   _inherits(MewConnectCommon, _EventEmitter);
 
-  /**
-   * @param uiCommunicatorFunc
-   * @param loggingFunc
-   */
-  function MewConnectCommon(uiCommunicatorFunc, loggingFunc) {
+  function MewConnectCommon() {
     _classCallCheck(this, MewConnectCommon);
 
-    // if null it calls the middleware registered to each specific lifecycle event
-    var _this2 = _possibleConstructorReturn(this, (MewConnectCommon.__proto__ || Object.getPrototypeOf(MewConnectCommon)).call(this));
+    var _this = _possibleConstructorReturn(
+      this,
+      (
+        MewConnectCommon.__proto__ || Object.getPrototypeOf(MewConnectCommon)
+      ).call(this)
+    );
 
-    _this2.uiCommunicatorFunc = uiCommunicatorFunc || _this2.applyLifeCycleListeners;
-    // Need to think of a little better way to do the above (to have built in and custom)
-    // eslint-disable-next-line func-names
-    _this2.logger = typeof loggingFunc === 'undefined' ? function () {} : typeof loggingFunc === 'boolean' ? logger.debug : loggingFunc;
+    _this.isBrowser =
+      typeof window !== 'undefined' &&
+      // eslint-disable-next-line no-undef
+      {}.toString.call(window) === '[object Window]';
+    _this.middleware = [];
+    _this.lifeCycleListeners = [];
 
-    _this2.isBrowser = typeof window !== 'undefined' &&
-    // eslint-disable-next-line no-undef
-    {}.toString.call(window) === '[object Window]';
-    _this2.middleware = [];
-    _this2.lifeCycleListeners = [];
-
-    _this2.jsonDetails = {
-      stunSrvers: [].concat(_toConsumableArray(stunServers)),
-      signals: _extends({}, signal),
-      stages: _extends({}, stages),
-      lifeCycle: _extends({}, lifeCycle),
-      rtc: _extends({}, rtc),
-      communicationTypes: _extends({}, communicationTypes),
-      connectionCodeSeparator: connectionCodeSeparator,
-      version: version,
-      versions: versions,
-      connectionCodeSchemas: connectionCodeSchemas
+    _this.jsonDetails = {
+      stunSrvers: [].concat(_toConsumableArray(_config.stunServers)),
+      signals: _extends({}, _constants.signal),
+      stages: _extends({}, _constants.stages),
+      lifeCycle: _extends({}, _constants.lifeCycle),
+      rtc: _extends({}, _constants.rtc),
+      communicationTypes: _extends({}, _constants.communicationTypes),
+      connectionCodeSeparator: _constants.connectionCodeSeparator,
+      version: _config.version,
+      versions: _constants.versions,
+      connectionCodeSchemas: _constants.connectionCodeSchemas
     };
-    return _this2;
+    return _this;
   }
 
-  /**
-   *
-   * @param uiCommunicationFunc
-   */
-
-
-  _createClass(MewConnectCommon, [{
-    key: 'setCommunicationFunction',
-    value: function setCommunicationFunction(uiCommunicationFunc) {
-      this.uiCommunicatorFunc = uiCommunicationFunc;
-    }
-
-    /**
-     *
-     * @param func
-     */
-
-  }, {
-    key: 'use',
-    value: function use(func) {
-      this.middleware.push(func);
-    }
-
-    // eslint-disable-next-line consistent-return
-
-  }, {
-    key: 'useDataHandlers',
-    value: function useDataHandlers(input, fn) {
-      var fns = this.middleware.slice(0);
-      if (!fns.length) return fn(null);
-
-      function run(i) {
-        // eslint-disable-next-line consistent-return
-        fns[i](input, function (err) {
-          // upon error, short-circuit
-          if (err) return fn(err);
-
-          // if no middleware left, summon callback
-          if (!fns[i + 1]) return fn(null);
-
-          // go on to next
-          run(i + 1);
-        });
-      }
-
-      run(0);
-    }
-  }, {
-    key: 'applyDatahandlers',
-    value: function applyDatahandlers(data) {
-      var _this = this;
-      // function that runs after all middleware
-      function next(args) {
-        if (args === null) {
-          if (_this.jsonDetails.communicationTypes[data.type]) {
-            throw new Error('No Handler Exists for ' + data.type);
+  _createClass(
+    MewConnectCommon,
+    [
+      {
+        key: 'isJSON',
+        value: function isJSON(arg) {
+          try {
+            JSON.parse(arg);
+            return true;
+          } catch (e) {
+            return false;
           }
         }
-        return args;
       }
-      this.useDataHandlers(data, next);
-    }
+    ],
+    [
+      {
+        key: 'getBrowserRTC',
+        value: function getBrowserRTC() {
+          if (typeof window === 'undefined') return null;
+          var wrtc = {
+            RTCPeerConnection:
+              window.RTCPeerConnection ||
+              window.mozRTCPeerConnection ||
+              window.webkitRTCPeerConnection,
+            RTCSessionDescription:
+              window.RTCSessionDescription ||
+              window.mozRTCSessionDescription ||
+              window.webkitRTCSessionDescription,
+            RTCIceCandidate:
+              window.RTCIceCandidate ||
+              window.mozRTCIceCandidate ||
+              window.webkitRTCIceCandidate
+          };
+          if (!wrtc.RTCPeerConnection) return null;
+          return wrtc;
+        }
+      },
+      {
+        key: 'checkWebRTCAvailable',
+        value: function checkWebRTCAvailable() {
+          var doesNotHaveWebRTC = MewConnectCommon.getBrowserRTC() == null;
+          return !doesNotHaveWebRTC;
+          // return false
+        }
+      },
+      {
+        key: 'checkBrowser',
+        value: function checkBrowser() {
+          var browser = (0, _detectBrowser.detect)();
+          var version = browser.version.split(0, 1)[0];
+          /*
+      * Chrome > 23
+      * Firefox > 22
+      * Opera > 18
+      * Safari > 11 (caveats exist)
+      * Edge - none (RTCDataChannel not supported)
+      * IE - none
+      * */
+          if (typeof window !== 'undefined') {
+            if (browser.name === 'safari') {
+              return MewConnectCommon.buildBrowserResult(
+                true,
+                'Safari',
+                'version: ' + browser.version
+              );
+            } else if (browser.name === 'ie') {
+              return MewConnectCommon.buildBrowserResult(
+                true,
+                'Internet Explorer',
+                '',
+                true
+              );
+            } else if (browser.name === 'edge') {
+              return MewConnectCommon.buildBrowserResult(
+                true,
+                'Edge',
+                'version: ' + browser.version,
+                true
+              );
+            } else {
+              var name = '';
+              var minVersion = 0;
 
-    /**
-     *
-     * @param _signal
-     * @param func
-     */
+              if (browser.name === 'opera') {
+                name = 'Opera';
+                minVersion = 18;
+              } else if (browser.name === 'firefox') {
+                name = 'Firefox';
+                minVersion = 22;
+              } else if (browser.name === 'chrome') {
+                name = 'Chrome';
+                minVersion = 23;
+              } else {
+                return MewConnectCommon.buildBrowserResult(false, '', '', true);
+              }
 
-  }, {
-    key: 'registerLifeCycleListener',
-    value: function registerLifeCycleListener(_signal, func) {
-      if (this.lifeCycleListeners[_signal]) {
-        this.lifeCycleListeners[_signal].push(func);
-      } else {
-        this.lifeCycleListeners[_signal] = [];
-        this.lifeCycleListeners[_signal].push(func);
+              try {
+                if (minVersion >= +version) {
+                  return MewConnectCommon.buildBrowserResult(
+                    true,
+                    name,
+                    'version: ' + version
+                  );
+                } else {
+                  return MewConnectCommon.buildBrowserResult(false, '', '');
+                }
+              } catch (e) {
+                console.error(e);
+              }
+            }
+          }
+        }
+      },
+      {
+        key: 'buildBrowserResult',
+        value: function buildBrowserResult(
+          status,
+          browser,
+          version,
+          noSupport
+        ) {
+          return {
+            status: status,
+            browser: browser,
+            version: version,
+            noSupport: noSupport || false
+          };
+        }
       }
-    }
-
-    // eslint-disable-next-line consistent-return
-
-  }, {
-    key: 'useLifeCycleListeners',
-    value: function useLifeCycleListeners(_signal, input, fn) {
-      var fns = void 0;
-      if (this.lifeCycleListeners[_signal]) {
-        fns = this.lifeCycleListeners[_signal].slice(0);
-        if (!fns.length) return fn(null);
-
-        // eslint-disable-next-line no-use-before-define
-        run(0);
-      }
-
-      function run(i) {
-        // eslint-disable-next-line no-undef,consistent-return
-        fns[i](input, function (err) {
-          // upon error, short-circuit
-          if (err) return fn(err);
-          // eslint-disable-next-line no-undef
-          if (!fns[i + 1]) return fn(null); // if no middleware left, summon callback
-
-          // go on to next
-          run(i + 1);
-        });
-      }
-    }
-  }, {
-    key: 'applyLifeCycleListeners',
-    value: function applyLifeCycleListeners(_signal, data) {
-      // function that runs after all middleware
-      function next(args) {
-        return args;
-      }
-      this.useLifeCycleListeners(_signal, data, next);
-    }
-
-    /*
-    * allows external function to listen for lifecycle events
-    */
-
-  }, {
-    key: 'uiCommunicator',
-    value: function uiCommunicator(event, data) {
-      console.log(event, data); // todo remove dev item
-      this.emit(event, data);
-      // return data ? this.uiCommunicatorFunc(event, data) : this.uiCommunicatorFunc(event, null)
-    }
-    // eslint-disable-next-line class-methods-use-this
-
-  }, {
-    key: 'isJSON',
-    value: function isJSON(arg) {
-      try {
-        JSON.parse(arg);
-        return true;
-      } catch (e) {
-        return false;
-      }
-    }
-  }]);
+    ]
+  );
 
   return MewConnectCommon;
-}(EventEmitter);
+})(_events2.default);
 
-module.exports = MewConnectCommon;
+exports.default = MewConnectCommon;
+module.exports = exports['default'];

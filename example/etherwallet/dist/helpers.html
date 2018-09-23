@@ -78,9 +78,8 @@
 
 
   <div class="small announcement annoucement-danger">
-    <div class="container hidden-xs" style="font-size: larger;">
-      <b>This site is for testing <a href="https://mewconnect.myetherwallet.com">MEWconnect BETA</a></b>
-<!--      DON'T GET PHISHED, please! 🎣 Thank you! 🤗
+    <div class="container">
+      DON'T GET PHISHED, please! 🎣 Thank you! 🤗
       <br />
       1. BOOKMARK <a href="https://www.myetherwallet.com"> MYETHERWALLET.COM </a>
       <span class="hidden-xs">
@@ -90,7 +89,7 @@
         <a href="https://myetherwallet.github.io/knowledge-base/migration/moving-from-private-key-to-metamask.html" target="_blank" rel="noopener noreferrer">MetaMask</a>
         or
         <a href="https://chrome.google.com/webstore/detail/cryptonite-by-metacert/keghdcpemohlojlglbiegihkljkgnige" target="_blank" rel="noopener noreferrer">Cryptonite</a>
-      </span>-->
+      </span>
     </div>
   </div>
 
@@ -100,13 +99,13 @@
     
       <a class="brand" href="/" aria-label="Go to homepage">
         <img src="images/logo-myetherwallet.svg"   height="64px" width="245px" alt="MyEtherWallet" />
-        <p class="small visible-xs">3.21.17</p>
+        <p class="small visible-xs">3.22.3</p>
       </a>
     
     
     <div class="tagline">
 
-    <span class="hidden-xs">3.21.17</span>
+    <span class="hidden-xs">3.22.3</span>
 
     <span class="dropdown dropdown-lang" ng-cloak>
       <a tabindex="0"  aria-haspopup="true" aria-expanded="false" aria-label="change language. current language {{curLang}}" class="dropdown-toggle" ng-click="dropdown = !dropdown">{{curLang}}<i class="caret"></i></a>
@@ -232,7 +231,7 @@
           </span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" ng-show="MEWconnectActive" ng-cloak>
         <div style="margin-left: 20px;">
           <div ng-show="MEWconnectState == 0" style="border-bottom: solid 2px #929292">
             <h4 ><img src="images/MEWconnectLogo.svg" width="120" height="26"> Not Connected</h4>
@@ -1040,6 +1039,11 @@
           Disclaimer
         </a>
       </p>
+      <p>
+        <a href="https://www.myetherwallet.com/privacy-policy.html" target="_blank">
+          Privacy policy
+        </a>
+      </p>
 
       <p ng-show="showBlocks">
         Latest Block#: {{currentBlockNumber}}
@@ -1060,7 +1064,7 @@
        </div>
         <p> Buy a... </p>
         <div class="footer__pill-wrap footer__pill-custom-wrap">
-          <a class="footer__pill" href="https://www.ledgerwallet.com/r/fa4b?path=/products/" target="_blank" rel="noopener">Ledger Wallet</a>
+          <a class="footer__pill" href="https://www.ledger.com/products/ledger-nano-s?r=fa4b" target="_blank" rel="noopener">Ledger Wallet</a>
           <a class="footer__pill" href="https://trezor.io/?a=myetherwallet.com" target="_blank" rel="noopener">TREZOR</a>
           <a class="footer__pill" href="http://shiftcrypto.ositracker.com/91316/7114" target="_blank" rel="noopener">Digital Bitbox</a>
           <a class="footer__pill" href="https://ether.cards/?utm_source=mew&utm_medium=cpm&utm_campaign=site" target="_blank" rel="noopener">ether.card</a>
@@ -1106,7 +1110,7 @@
     <section class="footer--righ">
       <p>
         <a aria-label="website via my ether wallet dot com" href="https://www.MyEtherWallet.com" target="_blank" rel="noopener noreferrer" role="link" tabindex="0">
-           Back to MyEtherWallet.com
+          MyEtherWallet.com
         </a>
       </p>
       <p>
@@ -1126,7 +1130,7 @@
       </p>
 
       <p>
-        <a href="https://mcbeta.myetherwallet.com/signmsg" target="_blank" rel="noopener noreferrer" role="link" tabindex="0">
+        <a href="https://www.myetherwallet.com/signmsg.html" target="_blank" rel="noopener noreferrer" role="link" tabindex="0">
           Sign Message
         </a>
       </p>

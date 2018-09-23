@@ -1,9 +1,7 @@
-/* eslint-disable no-console */
-import createLogger from 'logging';
+import EventEmitter from 'events';
+import { detect } from 'detect-browser';
 
-const events = require('events');
-const EventEmitter = events.EventEmitter;
-const {
+import {
   versions,
   connectionCodeSchemas,
   connectionCodeSeparator,
@@ -12,29 +10,12 @@ const {
   stages,
   lifeCycle,
   communicationTypes
-} = require('./constants');
-const { version, stunServers } = require('./config');
+} from './constants';
+import { version, stunServers } from './config';
 
-const logger = createLogger('MewConnect-Logger');
-
-class MewConnectCommon extends EventEmitter {
-  /**
-   * @param uiCommunicatorFunc
-   * @param loggingFunc
-   */
-  constructor(uiCommunicatorFunc, loggingFunc) {
+export default class MewConnectCommon extends EventEmitter {
+  constructor() {
     super();
-    // if null it calls the middleware registered to each specific lifecycle event
-    this.uiCommunicatorFunc =
-      uiCommunicatorFunc || this.applyLifeCycleListeners;
-    // Need to think of a little better way to do the above (to have built in and custom)
-    // eslint-disable-next-line func-names
-    this.logger =
-      typeof loggingFunc === 'undefined'
-        ? function() {}
-        : typeof loggingFunc === 'boolean'
-          ? logger.debug
-          : loggingFunc;
 
     this.isBrowser =
       typeof window !== 'undefined' &&
@@ -67,105 +48,6 @@ class MewConnectCommon extends EventEmitter {
     };
   }
 
-  setCommunicationFunction(uiCommunicationFunc) {
-    this.uiCommunicatorFunc = uiCommunicationFunc;
-  }
-
-  use(func) {
-    this.middleware.push(func);
-  }
-
-  // eslint-disable-next-line consistent-return
-  useDataHandlers(input, fn) {
-    const fns = this.middleware.slice(0);
-    if (!fns.length) return fn(null);
-
-    function run(i) {
-      // eslint-disable-next-line consistent-return
-      fns[i](input, err => {
-        // upon error, short-circuit
-        if (err) return fn(err);
-
-        // if no middleware left, summon callback
-        if (!fns[i + 1]) return fn(null);
-
-        // go on to next
-        run(i + 1);
-      });
-    }
-
-    run(0);
-  }
-
-  applyDatahandlers(data) {
-    const _this = this;
-
-    // function that runs after all middleware
-    function next(args) {
-      if (args === null) {
-        if (_this.jsonDetails.communicationTypes[data.type]) {
-          throw new Error(`No Handler Exists for ${data.type}`);
-        }
-      }
-      return args;
-    }
-
-    this.useDataHandlers(data, next);
-  }
-
-  registerLifeCycleListener(_signal, func) {
-    if (this.lifeCycleListeners[_signal]) {
-      this.lifeCycleListeners[_signal].push(func);
-    } else {
-      this.lifeCycleListeners[_signal] = [];
-      this.lifeCycleListeners[_signal].push(func);
-    }
-  }
-
-  // eslint-disable-next-line consistent-return
-  useLifeCycleListeners(_signal, input, fn) {
-    let fns;
-    if (this.lifeCycleListeners[_signal]) {
-      fns = this.lifeCycleListeners[_signal].slice(0);
-      if (!fns.length) return fn(null);
-
-      // eslint-disable-next-line no-use-before-define
-      run(0);
-    }
-
-    function run(i) {
-      // eslint-disable-next-line no-undef,consistent-return
-      fns[i](input, err => {
-        // upon error, short-circuit
-        if (err) return fn(err);
-        // eslint-disable-next-line no-undef
-        if (!fns[i + 1]) return fn(null); // if no middleware left, summon callback
-
-        // go on to next
-        run(i + 1);
-      });
-    }
-  }
-
-  applyLifeCycleListeners(_signal, data) {
-    // function that runs after all middleware
-    function next(args) {
-      return args;
-    }
-
-    this.useLifeCycleListeners(_signal, data, next);
-  }
-
-  /*
-  * allows external function to listen for lifecycle events
-  */
-  uiCommunicator(event, data) {
-    console.log(event, data); // todo remove dev item
-    this.emit(event, data);
-    // return data ? this.uiCommunicatorFunc(event, data) : this.uiCommunicatorFunc(event, null)
-  }
-
-  // eslint-disable-next-line class-methods-use-this
   isJSON(arg) {
     try {
       JSON.parse(arg);
@@ -174,6 +56,105 @@ class MewConnectCommon extends EventEmitter {
       return false;
     }
   }
-}
 
-module.exports = MewConnectCommon;
+  static getBrowserRTC() {
+    if (typeof window === 'undefined') return null;
+    var wrtc = {
+      RTCPeerConnection:
+        window.RTCPeerConnection ||
+        window.mozRTCPeerConnection ||
+        window.webkitRTCPeerConnection,
+      RTCSessionDescription:
+        window.RTCSessionDescription ||
+        window.mozRTCSessionDescription ||
+        window.webkitRTCSessionDescription,
+      RTCIceCandidate:
+        window.RTCIceCandidate ||
+        window.mozRTCIceCandidate ||
+        window.webkitRTCIceCandidate
+    };
+    if (!wrtc.RTCPeerConnection) return null;
+    return wrtc;
+  }
+
+  static checkWebRTCAvailable() {
+    var doesNotHaveWebRTC = MewConnectCommon.getBrowserRTC() == null;
+    return !doesNotHaveWebRTC;
+    // return false
+  }
+
+  static checkBrowser() {
+    const browser = detect();
+    const version = browser.version.split(0, 1)[0];
+    /*
+    * Chrome > 23
+    * Firefox > 22
+    * Opera > 18
+    * Safari > 11 (caveats exist)
+    * Edge - none (RTCDataChannel not supported)
+    * IE - none
+    * */
+    if (typeof window !== 'undefined') {
+      if (browser.name === 'safari') {
+        return MewConnectCommon.buildBrowserResult(
+          true,
+          'Safari',
+          'version: ' + browser.version
+        );
+      } else if (browser.name === 'ie') {
+        return MewConnectCommon.buildBrowserResult(
+          true,
+          'Internet Explorer',
+          '',
+          true
+        );
+      } else if (browser.name === 'edge') {
+        return MewConnectCommon.buildBrowserResult(
+          true,
+          'Edge',
+          'version: ' + browser.version,
+          true
+        );
+      } else {
+        let name = '';
+        let minVersion = 0;
+
+        if (browser.name === 'opera') {
+          name = 'Opera';
+          minVersion = 18;
+        } else if (browser.name === 'firefox') {
+          name = 'Firefox';
+          minVersion = 22;
+        } else if (browser.name === 'chrome') {
+          name = 'Chrome';
+          minVersion = 23;
+        } else {
+          return MewConnectCommon.buildBrowserResult(false, '', '', true);
+        }
+
+        try {
+          if (minVersion >= +version) {
+            return MewConnectCommon.buildBrowserResult(
+              true,
+              name,
+              'version: ' + version
+            );
+          } else {
+            return MewConnectCommon.buildBrowserResult(false, '', '');
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }
+
+  static buildBrowserResult(status, browser, version, noSupport) {
+    return {
+      status: status,
+      browser: browser,
+      version: version,
+      noSupport: noSupport || false
+    };
+  }
+}
