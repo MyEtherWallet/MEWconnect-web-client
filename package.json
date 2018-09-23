@@ -16,6 +16,17 @@
     "watchBrowserPack": "webpack --config webpack.pack.config.js --progress -w",
     "nanobox": "nanobox deploy"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "body-parser": "~1.18.2",
@@ -53,6 +64,9 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
+    "husky": "^1.0.0-rc.15",
+    "lint-staged": "^7.3.0",
+    "prettier": "1.14.3",
     "tape": "^4.9.0",
     "twilio": "^3.17.1",
     "webpack-cli": "^2.1.5",
