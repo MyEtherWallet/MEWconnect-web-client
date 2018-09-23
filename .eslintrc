@@ -2,6 +2,8 @@
   "rules":{
     "class-methods-use-this": "off",
     "no-underscore-dangle": "off",
+    "semi": ["error", "always"],
+    "space-before-function-paren": ["error", "never"],
     "prefer-destructuring": ["error", {"object": false, "array": false}]
   },
   "extends": "standard",
