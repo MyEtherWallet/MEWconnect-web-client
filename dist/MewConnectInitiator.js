@@ -39,6 +39,10 @@ var _logging = require('logging');
 
 var _logging2 = _interopRequireDefault(_logging);
 
+var _debug = require('debug');
+
+var _debug2 = _interopRequireDefault(_debug);
+
 var _MewConnectCommon2 = require('./MewConnectCommon');
 
 var _MewConnectCommon3 = _interopRequireDefault(_MewConnectCommon2);
@@ -127,7 +131,7 @@ function _inherits(subClass, superClass) {
       : (subClass.__proto__ = superClass);
 }
 
-var debug = require('debug')('MEWconnect:initiator');
+var debug = (0, _debug2.default)('MEWconnect:initiator');
 
 var logger = (0, _logging2.default)('MewConnectInitiator');
 
@@ -139,7 +143,7 @@ var MewConnectInitiator = (function(_MewConnectCommon) {
       arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
     var loggingFunc =
       arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-    var userSuppliedLibs =
+    var additionalLibs =
       arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
     _classCallCheck(this, MewConnectInitiator);
@@ -151,8 +155,6 @@ var MewConnectInitiator = (function(_MewConnectCommon) {
         Object.getPrototypeOf(MewConnectInitiator)
       ).call(this, uiCommunicatorFunc, loggingFunc)
     );
-
-    var additionalLibs = userSuppliedLibs || {};
 
     _this2.supportedBrowser = _MewConnectCommon3.default.checkBrowser();
 
@@ -190,7 +192,7 @@ var MewConnectInitiator = (function(_MewConnectCommon) {
         // Destroy the connection if one exists
         value: function destroyOnUnload() {
           if (this.isBrowser) {
-            window.onunload = window.onbeforeunload = function(e) {
+            window.onunload = window.onbeforeunload = function() {
               var _this = this;
               if (!!this.Peer && !this.Peer.destroyed) {
                 _this.rtcDestroy();
@@ -444,8 +446,8 @@ var MewConnectInitiator = (function(_MewConnectCommon) {
       {
         key: 'willAttemptTurn',
         value: function willAttemptTurn() {
-          this.uiCommunicator(this.lifeCycle.UsingFallback);
           debug('TRY TURN CONNECTION');
+          this.uiCommunicator(this.lifeCycle.UsingFallback);
         }
 
         // Handle Socket event to initiate turn connection
@@ -692,7 +694,7 @@ var MewConnectInitiator = (function(_MewConnectCommon) {
           var simpleOptions = _extends({}, defaultOptions, {
             suppliedOptions: suppliedOptions
           });
-
+          debug('initiatorStartRTC - options: ' + simpleOptions);
           this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
           this.p = new this.Peer(simpleOptions);
           this.p.on(this.rtcEvents.error, this.onError.bind(this));
@@ -813,6 +815,7 @@ var MewConnectInitiator = (function(_MewConnectCommon) {
       {
         key: 'onError',
         value: function onError(err) {
+          debug(err.code);
           debug('WRTC ERROR');
           debug('error', err);
           this.uiCommunicator(this.lifeCycle.RtcErrorEvent);
@@ -858,7 +861,6 @@ var MewConnectInitiator = (function(_MewConnectCommon) {
         key: 'disconnectRTC',
         value: function disconnectRTC() {
           debug('DISCONNECT RTC');
-          this.rtcDestroy();
           this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
           this.rtcDestroy();
           this.instance = null;
@@ -899,10 +901,9 @@ var MewConnectInitiator = (function(_MewConnectCommon) {
 
                       case 10:
                         debug('SENDING RTC');
-                        debug(this.p); // todo remove dev item
                         this.p.send(JSON.stringify(encryptedSend));
 
-                      case 13:
+                      case 12:
                       case 'end':
                         return _context7.stop();
                     }

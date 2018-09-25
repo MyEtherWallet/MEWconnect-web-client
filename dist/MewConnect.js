@@ -16,7 +16,6 @@ function _interopRequireDefault(obj) {
 // const MewConnectCrypto = require('./MewConnectCrypto')
 
 // const MewConnectInitiatorClient = require('./MewConnectInitiatorClient')
-
 // INITIATOR CLIENT
 // The initiator client is the integration end of the connection,
 // and sends the connection details to

@@ -35,10 +35,18 @@ class MewConnectReceiverClient extends MewConnectReceiver {
   static init(uiCommunicatorFunc, loggingFunc, additionalLibs) {
     if (typeof MewConnect !== 'undefined') {
       // eslint-disable-next-line no-undef
-      this.instance = new MewConnect(uiCommunicatorFunc, loggingFunc, additionalLibs);
+      this.instance = new MewConnect(
+        uiCommunicatorFunc,
+        loggingFunc,
+        additionalLibs
+      );
     } else {
       // eslint-disable-next-line max-len
-      this.instance = new MewConnectReceiverClient(uiCommunicatorFunc, loggingFunc, additionalLibs);
+      this.instance = new MewConnectReceiverClient(
+        uiCommunicatorFunc,
+        loggingFunc,
+        additionalLibs
+      );
     }
     // this.instance = new MewConnect(uiCommunicatorFunc, loggingFunc, additionalLibs);
     return this.instance;
@@ -233,6 +241,5 @@ class MewConnectReceiverClient extends MewConnectReceiver {
     }
   }
 }
-
 
 module.exports = MewConnectReceiverClient;

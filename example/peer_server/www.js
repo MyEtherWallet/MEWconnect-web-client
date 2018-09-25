@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-require('dotenv').config()
-const path = require('path')
-console.log(path.resolve(__dirname, '.env')) // todo remove dev item
+require('dotenv').config();
+const path = require('path');
+console.log(path.resolve(__dirname, '.env')); // todo remove dev item
 
-const app = require('./SimpleExpressServer')
+const app = require('./SimpleExpressServer');
 // const https = require('https')
-const http = require('http')
+const http = require('http');
 // const fs = require('fs')
 
 //
@@ -15,67 +15,63 @@ const http = require('http')
 //   requestCert: false,
 //   rejectUnauthorized: false
 // }
-console.log(process.env.BIND_SERVER) // todo remove dev item
+console.log(process.env.BIND_SERVER); // todo remove dev item
 // eslint-disable-next-line no-use-before-define
-const port = normalizePort(process.env.APP_PORT || '8080')
-const host = process.env.APP_SERVER || '0.0.0.0'
-app.set('port', port)
+const port = normalizePort(process.env.APP_PORT || '8080');
+const host = process.env.APP_SERVER || '0.0.0.0';
+app.set('port', port);
 
-const server = http.createServer(app)
+const server = http.createServer(app);
 // const server = https.createServer(options, app)
 
-function normalizePort (val) {
-  const portInner = parseInt(val, 10)
+function normalizePort(val) {
+  const portInner = parseInt(val, 10);
 
   if (Number.isNaN(portInner)) {
     // named pipe
-    return val
+    return val;
   }
 
   if (portInner >= 0) {
     // port number
-    return portInner
+    return portInner;
   }
 
-  return false
+  return false;
 }
 
-function onError (error) {
+function onError(error) {
   if (error.syscall !== 'listen') {
-    throw error
+    throw error;
   }
 
-  const bind = typeof port === 'string'
-    ? `Pipe ${port}`
-    : `Port ${port}`
+  const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
       // eslint-disable-next-line no-console
-      console.error(`${bind} requires elevated privileges`)
-      process.exit(1)
-      break
+      console.error(`${bind} requires elevated privileges`);
+      process.exit(1);
+      break;
     case 'EADDRINUSE':
       // eslint-disable-next-line no-console
-      console.error(`${bind} is already in use`)
-      process.exit(1)
-      break
+      console.error(`${bind} is already in use`);
+      process.exit(1);
+      break;
     default:
-      throw error
+      throw error;
   }
 }
 
-function onListening () {
-  const addr = server.address()
-  const bind = typeof addr === 'string'
-    ? `pipe ${addr}`
-    : `port ${addr.port}`
+function onListening() {
+  const addr = server.address();
+  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
   // eslint-disable-next-line no-console
-  console.log(`Listening on ${bind}`)
-  console.log('server details:', addr) // todo remove dev item
+  console.log(`Listening on ${bind}`);
+  console.log('server details:', addr); // todo remove dev item
 }
 
-server.listen({host: host, port: port})
-server.on('error', onError)
-server.on('listening', onListening)
+server.listen({ host: host, port: port });
+server.on('error', onError);
+server.on('listening', onListening);

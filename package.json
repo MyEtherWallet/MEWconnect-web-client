@@ -8,14 +8,12 @@
     "buildMew": "npm --prefix 'example/etherwallet' run build",
     "build": "rimraf dist/ && babel ./src --out-dir dist/ && npm run buildProd",
     "buildProd": "webpack --config webpack.config.js",
-    "buildDev": "rimraf dist/ && babel ./src --out-dir dist/ && npm run buildProd && cd /home/steve/mew/mew-signer-peer/example/etherwallet/ && npm run build",
     "buildProdBrowser": "webpack --config webpack.browser.config.js",
     "buildDevBrowser": "webpack --config webpack.browser.config.js --progress",
     "buildBrowserPack": "webpack --config webpack.pack.config.js --progress",
     "watch": "webpack --config webpack.config.js --progress -w",
     "watchBrowser": "webpack --config webpack.browser.config.js --progress -w",
-    "watchBrowserPack": "webpack --config webpack.pack.config.js --progress -w",
-    "nanobox": "nanobox deploy"
+    "watchBrowserPack": "webpack --config webpack.pack.config.js --progress -w"
   },
   "husky": {
     "hooks": {

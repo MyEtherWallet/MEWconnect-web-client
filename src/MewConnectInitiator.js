@@ -1,10 +1,11 @@
 import createLogger from 'logging';
+import debugLogger from 'debug';
 import MewConnectCommon from './MewConnectCommon';
 import MewConnectCrypto from './MewConnectCrypto';
 import io from 'socket.io-client';
 import SimplePeer from 'simple-peer';
 
-const debug = require('debug')('MEWconnect:initiator');
+const debug = debugLogger('MEWconnect:initiator');
 
 const logger = createLogger('MewConnectInitiator');
 
@@ -199,8 +200,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
   // Handle Socket Attempting Turn informative signal
   // Provide Notice that initial WebRTC connection failed and the fallback method will be used
   willAttemptTurn() {
-    this.uiCommunicator(this.lifeCycle.UsingFallback);
     debug('TRY TURN CONNECTION');
+    this.uiCommunicator(this.lifeCycle.UsingFallback);
   }
 
   // Handle Socket event to initiate turn connection
@@ -315,7 +316,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       ...defaultOptions,
       suppliedOptions
     };
-
+    debug(`initiatorStartRTC - options: ${simpleOptions}`);
     this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
     this.p = new this.Peer(simpleOptions);
     this.p.on(this.rtcEvents.error, this.onError.bind(this));
@@ -373,6 +374,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   onError(err) {
+    debug(err.code);
     debug('WRTC ERROR');
     debug('error', err);
     this.uiCommunicator(this.lifeCycle.RtcErrorEvent);
@@ -405,7 +407,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
   disconnectRTC() {
     debug('DISCONNECT RTC');
-    this.rtcDestroy();
     this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
     this.rtcDestroy();
     this.instance = null;
@@ -419,7 +420,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
       encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
     }
     debug('SENDING RTC');
-    debug(this.p); // todo remove dev item
     this.p.send(JSON.stringify(encryptedSend));
   }
 
