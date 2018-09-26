@@ -3,144 +3,153 @@
 ### Getting Started
 
 
-### Running the Example:
+### Get the code
 The example requires both MEWconnect-Client (this repo) and MEWconnect-Signal-Server (mew-signer-hs)
->Clone the repo:
+```
+git clone https://github.com/MyEtherWallet/MEWconnect-web-client.git
+```
+Install the dependencies:
 
-`git clone <repo address>`
+```
+npm install
+```
 
->Install the dependencies:
-
-`npm install`
-
->Start the server serving the example initiator and receiver:
-
-`npm start`
+Start the server serving the example initiator and receiver:
+```
+npm start
+```
 
 ###### Get the signaling server
->Clone the repo:
+Clone the repo:
 
-`git clone <repo address>`
+```
+git clone https://github.com/MyEtherWallet/MEWconnect-hanshake-server.git
+```
+Install the dependencies:
 
->Install the dependencies:
+```
+npm install
+```
 
-`npm install`
-
->Start the signaling server:
-
-`npm start`
-
-<!--### Launching demo-->
-
-<!-->Open two browser tabs/windows:-->
-
-<!--navigate one to https://localhost:3100/initiator-->
-
-<!--navigate the other to https://localhost:3100/receiver-->
-
-<!--_**Note:** You may need to navigate to https://localhost:3200 to accept the self-signed certificate used in the example_-->
+Start the signaling server:
+```
+npm start
+```
 
 ### Usage
-> In the browser via the file /browser/MewConnect.min.js
-
 Two Peers are needed with one designated as the Initiator and the other as the Receiver.
 
-
+Require the MEWconnect client
 ```javascript
-let mewConnectClient = new MewConnect.Client(communicatorFunc, loggingFunc, depends);
-```
-_(MewConnect.Client takes the same parameters)_
-
-The MewConnect takes:
-- communicatorFunc (Optional):
-    - A function or null
-    - If a function it is called on each lifeCycle event.
-    - with two arguments:
-      - a String denoting the specific signal
-      - null or an object containing data related to the signal;
-  ```javascript
-        let signalStateChange = function(signal, data){
-          if(signal === "codeDisplay"){
-              console.log(data); // this is the code that gets entered into the receiver
-            };
-          };
-   ```
-    - If null listeners can be attached for specific lifecycle events via ``` registerLifeCycleListener```
-
-
-- loggingFunc (Optional):
-    - a optional function to provide logging or null (to use the default)
-- additionalLibs (Optional):
-    - a dictionary (object) containing dependencies as they are declared in the scope.
-      - the dependencies are:
-        - node.js crypto or polyfill
-        - secp256k1
-        - ethereumjs-util
-        - node.js buffer.Buffer  (e.g. require("buffer").Buffer) or polyfill
-        - simple-peer or MewRTC (an ES6 port of simple-peer)
-    - ```javascript
-          let cryptoFuncs = new MewConnect.Crypto(crypto, secp256k1, ethereumjs-util, buffer.Buffer);
-
-          let depends = {wrtc: MewRTC,
-               cryptoImpl: cryptoFuncs,
-                io: io,
-                ethUtils: ""
-          };
-      ```
-
-The url of the signaling server is passed to the _initiatorStart_ method on MewConnectInitiator which begins the sequence by connecting to the signaling server and waiting for the signal indicating a receiver peer is ready.
-```javascript
-let url = "https://localhost:3001";  //Url to the signaling server
-mewConnectInitiator.initiatorStart(url);
+let mewConnect = require('@myetherwallet/mewconnect-web-client').Client;
 ```
 
-#### Initiator
-
+Initiate the client
 ```javascript
-let mewConnectInitiator = new MewConnect.Initiator(communicatorFunc, loggingFunc, depends);
+let mewConnectClient = mewConnect.Client();
+```
+
+MEWconnect Client functions as an event emitter.
+The connection details are passed along with the 'codeDisplay' event
+```javascript
+mewConnectClient.on('codeDisplay', code => {
+// do something with the code.
+// to work with the MEWconnect Mobile applications display it as a qrcode
+}
 ```
 
 
-
-
-#### Receiver
-
+Now call the initiatorStart method to create the connection details:
 ```javascript
-let mewConnectReceiver = new MewConnect.Receiver(communicatorFunc, loggingFunc, depends);
+mewConnectClient.initiatorStart('https://signal-server-url')
 ```
 
-The url of the signaling server and an object containing the key and connection Id from the initiator is passed to the _receiverStart_ method on MewConnect.  This begins the sequence of connecting to the signaling server and then creating the WebRTC connection between the Initiator and Receiver.
-- if no initiator peer exists for the Receiver then the connection will fail.
-
+Once a p2p connection is established the client will emit a 'rtcConnected' event
 ```javascript
-let parameters = {
-    key: "part of the connection code before the dash",
-    connId: "part of the connection code after the dash"
-};
-```
-_or using the helper on MewConnect_
-
-```javascript
-let parameters = mewConnectReceiver.parseConnectionDetailString(connectionCode);
+mewConnectClient.on('rtcConnected', () =>{
+    alert('congrats you are connected to mew connect!')
+})
 ```
 
+Once a connection is extablished call the 'sendRtcMessage' method to interact with the app
 ```javascript
-let url = "https://localhost:3001"; //Url to the signaling server
-mewConnectReceiver.receiverStart(url, parameters);
+mewConnectClient.sendRtcMessage('address', {})
 ```
 
+The 'sendRtcMessage' method takes two parameters (message type, message data)
 
-##### Webpack
+To get the response listen for an event matching the sent message type
+```javascript
+mewConnectClient.on('address', address => {
+    alert('got address: ' + address)
+})
+```
 
-The dist folder version contains only the Web Client for use in a bundle via a require call.
+Currently the app supports two other message types: 'signMessage', and 'signTx'
+
+exists you can get the address or send a transaction or message to the mobile app for signing.
+
+The data portion of those two message types are:
+
+**signMessage**
+```json
+{
+    hash: 'hash of the message to be signed',
+    text: 'text of the message to be signed'
+}
+```
+
+**signTx**
+```json
+{
+        nonce:"0x00",
+        gasPrice:"0x098bca5a00",
+        gas:"0x5208",
+        to:"0xc3982F1DbAB6DA9d95F579B9A5f9c5CAb13F8cfC",
+        value:"0xb1a2bc2ec50000",
+        data:"",
+        chainId:3
+
+}
+```
+
+If the p2p connection fails to be established the client can attempt to use an intermediate TURN server to facilitate the connection.
+To signal a failed p2p attempt the client can call the 'useFallback' method on the client
+```javascript
+mewConnectClient.useFallback()
+```
+
+Additional events are emitted at various points to signal various stages of the connection
+
+**SocketConnectedEvent**
+- successfully connected to the signal server
+
+**RtcInitiatedEvent**
+- Peer identified via the signal server, and a p2p connection will be attempted
+
+**UsingFallback**
+- One of the peers failed to establish a p2p connection and will attempt to use an intermediate TURN server to facilitate the connection
+
+**RtcConnectedEvent**
+- p2p connection established
+
+**RtcClosedEvent**
+- p2p connection closed via opposite peer
+
+**RtcDisconnectEvent**
+- p2p disconnect initiated
+
+**RtcErrorEvent**
+- p2p connection error occured
+
+
+
+
+
+
 
 ##### Browser
-The contents of the browser directory expose all the components for setting up the Web Core, and a Client on window.
-
-It can be added via a script tag:
-```
-<script src="./browser/MewConnect.min.js"></script>
-```
+mew-connect-client can be included for use in the browser via webpack or browerfy
 
 
 <!-- ##### API -->

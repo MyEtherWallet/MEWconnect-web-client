@@ -1,4 +1,4 @@
-const version = '0.0.1';
+import { version } from './config';
 
 const versions = ['0.0.1'];
 

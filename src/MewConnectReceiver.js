@@ -4,17 +4,16 @@ import MewConnectCommon from './MewConnectCommon';
 import MewConnectCrypto from './MewConnectCrypto';
 import io from 'socket.io-client';
 import SimplePeer from 'simple-peer';
+import { isBrowser } from 'browser-or-node';
 
 const logger = createLogger('MewConnectReceiver');
 const debug = debugLogger('MEWconnect:receiver');
 
 export default class MewConnectReceiver extends MewConnectCommon {
   constructor(
-    uiCommunicatorFunc = null,
-    loggingFunc = null,
     additionalLibs = {}
   ) {
-    super(uiCommunicatorFunc, loggingFunc);
+    super();
 
     this.supportedBrowser = MewConnectCommon.checkBrowser();
 
@@ -42,11 +41,10 @@ export default class MewConnectReceiver extends MewConnectCommon {
   // Check if a WebRTC connection exists before a window/tab is closed or refreshed
   // Destroy the connection if one exists
   destroyOnUnload() {
-    if (this.isBrowser) {
-      window.onunload = window.onbeforeunload = function() {
-        const _this = this;
+    if (isBrowser) {
+      window.onunload = window.onbeforeunload = () => {
         if (!!this.Peer && !this.Peer.destroyed) {
-          _this.rtcDestroy();
+          this.rtcDestroy();
         }
       };
     }
@@ -56,16 +54,10 @@ export default class MewConnectReceiver extends MewConnectCommon {
   parseConnectionCodeString(str) {
     try {
       const connParts = str.split(this.jsonDetails.connectionCodeSeparator);
-      if (this.versions.indexOf(connParts[0].trim()) > -1) {
-        return {
-          connId: connParts[2].trim(),
-          key: connParts[1].trim(),
-          version: connParts[0].trim()
-        };
-      }
       return {
-        connId: connParts[1].trim(),
-        key: connParts[0].trim()
+        connId: connParts[2].trim(),
+        key: connParts[1].trim(),
+        version: connParts[0].trim()
       };
     } catch (e) {
       logger.error(e);
@@ -306,16 +298,16 @@ export default class MewConnectReceiver extends MewConnectCommon {
   }
 
   onError(err) {
+    debug(err.code);
     debug('WRTC ERROR');
     logger.error(err);
   }
 
   // ----- WebRTC Communication Methods
   sendRtcMessage(type, msg) {
-    return function() {
-      const _this = this;
-      _this.rtcSend(JSON.stringify({ type: type, data: msg }));
-    }.bind(this);
+    return () => {
+      this.rtcSend(JSON.stringify({ type: type, data: msg }));
+    };
   }
 
   sendRtcMessageResponse(type, msg) {
@@ -323,11 +315,10 @@ export default class MewConnectReceiver extends MewConnectCommon {
   }
 
   disconnectRTC() {
-    return function() {
-      const _this = this;
+    return () => {
       this.uiCommunicator('RtcDisconnectEvent');
-      _this.rtcDestroy();
-    }.bind(this);
+      this.rtcDestroy();
+    };
   }
 
   async rtcSend(arg) {
@@ -351,5 +342,6 @@ export default class MewConnectReceiver extends MewConnectCommon {
     this.triedTurn = true;
     this.socketEmit(this.signals.tryTurn, { connId: this.connId, cont: true });
   }
+
   // ======================== [End] WebRTC Communication Methods =============================
 }

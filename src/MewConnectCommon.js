@@ -1,4 +1,5 @@
 import EventEmitter from 'events';
+import { isBrowser } from 'browser-or-node'
 import { detect } from 'detect-browser';
 
 import {
@@ -17,12 +18,7 @@ export default class MewConnectCommon extends EventEmitter {
   constructor() {
     super();
 
-    this.isBrowser =
-      typeof window !== 'undefined' &&
-      // eslint-disable-next-line no-undef
-      {}.toString.call(window) === '[object Window]';
-    this.middleware = [];
-    this.lifeCycleListeners = [];
+    this.isBrowser = isBrowser
 
     this.jsonDetails = {
       stunSrvers: [...stunServers],

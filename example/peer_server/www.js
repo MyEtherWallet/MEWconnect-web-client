@@ -1,42 +1,26 @@
-#!/usr/bin/env node
-require('dotenv').config();
-const path = require('path');
-console.log(path.resolve(__dirname, '.env')); // todo remove dev item
-
-const app = require('./SimpleExpressServer');
-// const https = require('https')
 const http = require('http');
-// const fs = require('fs')
+const config = require('./config');
+const app = require('./SimpleExpressServer');
 
-//
-// const options = {
-//   key: fs.readFileSync(path.resolve(__dirname, '../../example/sampleCerts/devCert.key')),
-//   cert: fs.readFileSync(path.resolve(__dirname, '../../example/sampleCerts/devCert.cert')),
-//   requestCert: false,
-//   rejectUnauthorized: false
-// }
-console.log(process.env.BIND_SERVER); // todo remove dev item
-// eslint-disable-next-line no-use-before-define
-const port = normalizePort(process.env.APP_PORT || '8080');
-const host = process.env.APP_SERVER || '0.0.0.0';
+process.env.NOD_ENV = 'development';
+
+const createLogger = require('logging').default;
+const logger = createLogger('ExampleServer');
+
+const port = normalizePort(config.port);
+const host = config.host;
 app.set('port', port);
 
 const server = http.createServer(app);
-// const server = https.createServer(options, app)
 
 function normalizePort(val) {
   const portInner = parseInt(val, 10);
-
   if (Number.isNaN(portInner)) {
-    // named pipe
     return val;
   }
-
   if (portInner >= 0) {
-    // port number
     return portInner;
   }
-
   return false;
 }
 
@@ -44,19 +28,15 @@ function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
-
   const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
-
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      // eslint-disable-next-line no-console
-      console.error(`${bind} requires elevated privileges`);
+      logger.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      // eslint-disable-next-line no-console
-      console.error(`${bind} is already in use`);
+      logger.error(`${bind} is already in use`);
       process.exit(1);
       break;
     default:
@@ -67,9 +47,8 @@ function onError(error) {
 function onListening() {
   const addr = server.address();
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-  // eslint-disable-next-line no-console
-  console.log(`Listening on ${bind}`);
-  console.log('server details:', addr); // todo remove dev item
+  logger.info(`Listening on ${bind}`);
+  logger.info('server details:', addr); // todo remove dev item
 }
 
 server.listen({ host: host, port: port });

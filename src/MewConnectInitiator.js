@@ -1,9 +1,10 @@
 import createLogger from 'logging';
 import debugLogger from 'debug';
-import MewConnectCommon from './MewConnectCommon';
-import MewConnectCrypto from './MewConnectCrypto';
+import { isBrowser } from 'browser-or-node';
 import io from 'socket.io-client';
 import SimplePeer from 'simple-peer';
+import MewConnectCommon from './MewConnectCommon';
+import MewConnectCrypto from './MewConnectCrypto';
 
 const debug = debugLogger('MEWconnect:initiator');
 
@@ -11,11 +12,9 @@ const logger = createLogger('MewConnectInitiator');
 
 export default class MewConnectInitiator extends MewConnectCommon {
   constructor(
-    uiCommunicatorFunc = null,
-    loggingFunc = null,
     additionalLibs = {}
   ) {
-    super(uiCommunicatorFunc, loggingFunc);
+    super();
 
     this.supportedBrowser = MewConnectCommon.checkBrowser();
 
@@ -47,9 +46,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
   // Check if a WebRTC connection exists before a window/tab is closed or refreshed
   // Destroy the connection if one exists
   destroyOnUnload() {
-    if (this.isBrowser) {
-      window.onunload = window.onbeforeunload = function() {
-        const _this = this;
+    if (isBrowser) {
+      window.onunload = window.onbeforeunload = () => {
         if (!!this.Peer && !this.Peer.destroyed) {
           _this.rtcDestroy();
         }
@@ -108,6 +106,10 @@ export default class MewConnectInitiator extends MewConnectCommon {
       throw Error('regenerateCode called before initial code generation');
     }
     this.initiatorStart(this.signalUrl);
+  }
+
+  async useFallback(){
+    this.socketEmit(this.signals.tryTurn, {connId: this.connId})
   }
 
   // Initalize a websocket connection with the signal server
@@ -261,7 +263,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   initiatorSignalListener(socket, options) {
-    return async function offerEmmiter(data) {
+    return async data => {
       try {
         const _this = this;
         debug('SIGNAL', JSON.stringify(data));
@@ -383,11 +385,10 @@ export default class MewConnectInitiator extends MewConnectCommon {
   // ----- WebRTC Communication Methods
 
   sendRtcMessageClosure(type, msg) {
-    return function() {
-      const _this = this;
+    return () => {
       debug(`[SEND RTC MESSAGE Closure] type:  ${type},  message:  ${msg}`);
       _this.rtcSend(JSON.stringify({ type: type, data: msg }));
-    }.bind(this);
+    };
   }
 
   sendRtcMessage(type, msg) {
@@ -396,8 +397,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   disconnectRTCClosure() {
-    const _this = this;
-    return function() {
+    return () => {
       debug('DISCONNECT RTC Closure');
       _this.uiCommunicator(_this.lifeCycle.RtcDisconnectEvent);
       _this.rtcDestroy();

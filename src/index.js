@@ -1,13 +1,3 @@
-if (typeof window !== 'undefined') {
-  if (!window._babelPolyfill) {
-    // This is the primary difference between this and index.js
-    require('babel-polyfill');
-  }
-} else if (typeof global !== 'undefined') {
-  if (!global._babelPolyfill) {
-    require('babel-polyfill');
-  }
-}
 // INITIATOR CLIENT
 // The initiator client is the integration end of the connection,
 // and sends the connection details to
@@ -23,9 +13,12 @@ if (typeof window !== 'undefined') {
 // the crypto constructor is a collection of methods used by both the initiator and receiver
 // in creating the direct connection
 
-const MewConnect = require('./MewConnect');
+import MewConnectInitiator from './MewConnectInitiator';
+import MewConnectCrypto from './MewConnectCrypto';
+import MewConnectReceiver from './MewConnectReceiver';
 
-module.exports.Client = MewConnect.Initiator; // core endpoint client to begin connection
-module.exports.Crypto = MewConnect.Crypto; // crypto related functionality specific to mew connect
-module.exports.Initiator = MewConnect.InitiatorClient; // wrapper around initiator exposing callback hooks
-module.exports.Receiver = MewConnect.ReceiverClient; // (dev) wrapper around 'mobile'/remote endpoint client
+export default {
+  Crypto: MewConnectCrypto,
+  Initiator: MewConnectInitiator,
+  ReceiverClient: MewConnectReceiver,
+};
