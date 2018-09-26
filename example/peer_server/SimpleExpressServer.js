@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 // ============= Routes =============
 const router = express.Router();
-const srcDir = path.resolve('.', './etherwallet/dist');
+const srcDir = path.resolve('.', './example/etherwallet/dist');
 
 router.get('/', (req, res, next) => {
   try {

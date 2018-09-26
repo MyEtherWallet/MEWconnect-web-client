@@ -173,7 +173,7 @@ function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance");
 }
 
-var version = "1.0.2-beta.4";
+var version = "1.0.4";
 
 var version$1 = version;
 var stunServers = [{

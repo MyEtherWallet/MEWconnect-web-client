@@ -4,7 +4,7 @@
 
 
 ### Get the code
-The example requires both MEWconnect-Client (this repo) and MEWconnect-Signal-Server (mew-signer-hs)
+The example requires both MEWconnect-web-client (this repo) and MEWconnect-Signal-Server (MEWconnect-hanshake-server)
 ```
 git clone https://github.com/MyEtherWallet/MEWconnect-web-client.git
 ```
