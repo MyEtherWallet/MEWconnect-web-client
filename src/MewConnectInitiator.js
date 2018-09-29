@@ -36,6 +36,13 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.versions = this.jsonDetails.versions;
     this.lifeCycle = this.jsonDetails.lifeCycle;
     this.stunServers = this.jsonDetails.stunSrvers;
+
+    // Socket is abandoned.  disconnect.
+    setTimeout(() => {
+      if(this.socket){
+        this.socketDisconnect();
+      }
+    }, 120000);
   }
 
   // Factory function to create instance using default supplied libraries
@@ -108,8 +115,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.initiatorStart(this.signalUrl);
   }
 
-  async useFallback(){
-    this.socketEmit(this.signals.tryTurn, {connId: this.connId})
+  async useFallback() {
+    this.socketEmit(this.signals.tryTurn, { connId: this.connId });
   }
 
   // Initalize a websocket connection with the signal server
@@ -151,6 +158,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   // socket.disconnect wrapper
   socketDisconnect() {
     this.socket.disconnect();
+    this.socketConnected = false;
   }
 
   // socket.on listener registration wrapper
