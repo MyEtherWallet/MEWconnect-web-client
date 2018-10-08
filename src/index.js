@@ -15,10 +15,8 @@
 
 import MewConnectInitiator from './MewConnectInitiator';
 import MewConnectCrypto from './MewConnectCrypto';
-import MewConnectReceiver from './MewConnectReceiver';
 
 export default {
   Crypto: MewConnectCrypto,
-  Initiator: MewConnectInitiator,
-  ReceiverClient: MewConnectReceiver,
+  Initiator: MewConnectInitiator
 };

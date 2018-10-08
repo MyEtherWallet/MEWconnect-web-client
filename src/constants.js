@@ -36,6 +36,29 @@ const rtc = {
   signal: 'signal'
 };
 
+const iceConnectionState = {
+  new: 'new',
+  connecting: 'connecting',
+  connected: 'connected',
+  disconnected: 'disconnected',
+  failed: 'failed',
+  closed: 'closed'
+};
+
+const RTCSignalingState = {
+  stable: 'stable',
+  'have-local-offer': 'have-local-offer',
+  'have-remote-offer': 'have-remote-offer',
+  'have-local-pranswer': 'have-local-pranswer',
+  'have-remote-pranswer': 'have-remote-pranswer'
+};
+
+const RTCIceGatheringState = {
+  new: 'new',
+  gathering: 'gathering',
+  complete: 'complete'
+};
+
 const stages = {
   initiator: 'initiator',
   receiver: 'receiver'
@@ -55,9 +78,11 @@ const lifeCycle = {
   RtcConnectedEvent: 'RtcConnectedEvent',
   RtcClosedEvent: 'RtcClosedEvent',
   RtcDisconnectEvent: 'RtcDisconnectEvent',
+  RtcFailedEvent: 'RtcFailedEvent',
   RtcErrorEvent: 'RtcErrorEvent',
   UsingFallback: 'UsingFallback',
-  Failed: 'failed'
+  Failed: 'failed',
+  attemptedDisconnectedSend: 'attemptedDisconnectedSend'
 };
 
 const communicationTypes = {
@@ -83,6 +108,9 @@ export {
   signal,
   stages,
   rtc,
+  iceConnectionState,
+  RTCSignalingState,
+  RTCIceGatheringState,
   lifeCycle,
   communicationTypes,
   loggerLevels

@@ -1,3 +1,4 @@
+import createLogger from 'logging';
 import EventEmitter from 'events';
 import { isBrowser } from 'browser-or-node'
 import { detect } from 'detect-browser';
@@ -8,11 +9,14 @@ import {
   connectionCodeSeparator,
   signal,
   rtc,
+  iceConnectionState,
   stages,
   lifeCycle,
   communicationTypes
 } from './constants';
 import { version, stunServers } from './config';
+
+const logger = createLogger('MewConnectCommon');
 
 export default class MewConnectCommon extends EventEmitter {
   constructor() {
@@ -37,6 +41,9 @@ export default class MewConnectCommon extends EventEmitter {
       communicationTypes: {
         ...communicationTypes
       },
+      iceConnectionState: {
+        ...iceConnectionState
+      },
       connectionCodeSeparator,
       version,
       versions,
@@ -55,33 +62,27 @@ export default class MewConnectCommon extends EventEmitter {
 
   static getBrowserRTC() {
     if (typeof window === 'undefined') return null;
-    var wrtc = {
-      RTCPeerConnection:
-        window.RTCPeerConnection ||
-        window.mozRTCPeerConnection ||
-        window.webkitRTCPeerConnection,
-      RTCSessionDescription:
-        window.RTCSessionDescription ||
-        window.mozRTCSessionDescription ||
-        window.webkitRTCSessionDescription,
-      RTCIceCandidate:
-        window.RTCIceCandidate ||
-        window.mozRTCIceCandidate ||
-        window.webkitRTCIceCandidate
+    const wrtc = {
+      // eslint-disable-next-line no-undef
+      RTCPeerConnection: window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection,
+      // eslint-disable-next-line no-undef
+      RTCSessionDescription: window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription,
+      // eslint-disable-next-line no-undef
+      RTCIceCandidate: window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate
     };
     if (!wrtc.RTCPeerConnection) return null;
     return wrtc;
   }
 
   static checkWebRTCAvailable() {
-    var doesNotHaveWebRTC = MewConnectCommon.getBrowserRTC() == null;
+    const doesNotHaveWebRTC = MewConnectCommon.getBrowserRTC() == null;
     return !doesNotHaveWebRTC;
     // return false
   }
 
   static checkBrowser() {
     const browser = detect();
-    const version = browser.version.split(0, 1)[0];
+    const browserVersion = browser.version.split(0, 1)[0];
     /*
     * Chrome > 23
     * Firefox > 22
@@ -95,23 +96,23 @@ export default class MewConnectCommon extends EventEmitter {
         return MewConnectCommon.buildBrowserResult(
           true,
           'Safari',
-          'version: ' + browser.version
+          `version: ${  browser.version}`
         );
-      } else if (browser.name === 'ie') {
+      } if (browser.name === 'ie') {
         return MewConnectCommon.buildBrowserResult(
           true,
           'Internet Explorer',
           '',
           true
         );
-      } else if (browser.name === 'edge') {
+      } if (browser.name === 'edge') {
         return MewConnectCommon.buildBrowserResult(
           true,
           'Edge',
-          'version: ' + browser.version,
+          `version: ${  browser.version}`,
           true
         );
-      } else {
+      }
         let name = '';
         let minVersion = 0;
 
@@ -129,27 +130,27 @@ export default class MewConnectCommon extends EventEmitter {
         }
 
         try {
-          if (minVersion >= +version) {
+          if (minVersion >= +browserVersion) {
             return MewConnectCommon.buildBrowserResult(
               true,
               name,
-              'version: ' + version
+              `version: ${  browserVersion}`
             );
-          } else {
-            return MewConnectCommon.buildBrowserResult(false, '', '');
           }
+            return MewConnectCommon.buildBrowserResult(false, '', '');
+
         } catch (e) {
-          console.error(e);
+          logger.error(e);
         }
-      }
+
     }
   }
 
-  static buildBrowserResult(status, browser, version, noSupport) {
+  static buildBrowserResult(status, browser, browserVersion, noSupport) {
     return {
-      status: status,
-      browser: browser,
-      version: version,
+      status,
+      browser,
+      browserVersion,
       noSupport: noSupport || false
     };
   }

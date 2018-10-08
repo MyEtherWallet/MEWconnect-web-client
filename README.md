@@ -134,10 +134,10 @@ Additional events are emitted at various points to signal various stages of the 
 - p2p connection established
 
 **RtcClosedEvent**
-- p2p connection closed via opposite peer
+- p2p connection closed
 
 **RtcDisconnectEvent**
-- p2p disconnect initiated
+- p2p disconnected
 
 **RtcErrorEvent**
 - p2p connection error occured
