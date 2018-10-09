@@ -287,7 +287,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
         const encryptedSend = await this.mewCrypto.encrypt(
           JSON.stringify(data)
         );
-
+        this.uiCommunicator(this.lifeCycle.sendOffer);
         this.socketEmit(this.signals.offerSignal, {
           data: encryptedSend,
           connId: this.connId,
@@ -310,6 +310,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   rtcRecieveAnswer(data) {
+    this.uiCommunicator(this.lifeCycle.answerReceived);
     this.p.signal(JSON.parse(data.data));
   }
 
@@ -344,14 +345,17 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.p.on(this.rtcEvents.data, this.onData.bind(this));
     this.p.on(this.rtcEvents.signal, signalListener.bind(this));
     this.p._pc.addEventListener('iceconnectionstatechange', evt => {
-      debug(`iceConnectionState: ${evt.target.iceConnectionState}`);
-      if (
-        evt.target.iceConnectionState === 'connected' ||
-        evt.target.iceConnectionState === 'completed'
-      ) {
-        if (!this.connected) {
-          this.connected = true;
-          this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+      // eslint-disable-next-line no-undef
+      if(typeof jest === 'undefined'){ // included because target is not defined in jest
+        debug(`iceConnectionState: ${evt.target.iceConnectionState}`);
+        if (
+          evt.target.iceConnectionState === 'connected' ||
+          evt.target.iceConnectionState === 'completed'
+        ) {
+          if (!this.connected) {
+            this.connected = true;
+            this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+          }
         }
       }
     });
@@ -365,6 +369,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.turnDisabled = true;
     this.socketEmit(this.signals.rtcConnected, this.socketKey);
     this.socketDisconnect();
+    this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
     this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
   }
 

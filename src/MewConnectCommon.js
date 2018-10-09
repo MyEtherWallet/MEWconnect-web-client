@@ -89,7 +89,10 @@ export default class MewConnectCommon extends EventEmitter {
   }
 
   static checkBrowser() {
-    const browser = detect();
+    let browser = detect();
+    if(browser === null){
+      browser = {version: {split: () => [1]}}
+    }
     const browserVersion = browser.version.split(0, 1)[0];
     /*
     * Chrome > 23

@@ -1,6 +1,6 @@
 import createLogger from 'logging';
 
-import eccrypto from 'eccrypto/browser';
+import eccrypto from 'eccrypto';
 import ethUtils from 'ethereumjs-util';
 import crypto from 'crypto';
 import secp256k1 from 'secp256k1';

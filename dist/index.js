@@ -6,7 +6,7 @@ var createLogger = _interopDefault(require('logging'));
 var EventEmitter = _interopDefault(require('events'));
 var browserOrNode = require('browser-or-node');
 var detectBrowser = require('detect-browser');
-var eccrypto = _interopDefault(require('eccrypto/browser'));
+var eccrypto = _interopDefault(require('eccrypto'));
 var ethUtils = _interopDefault(require('ethereumjs-util'));
 var crypto = _interopDefault(require('crypto'));
 var secp256k1 = _interopDefault(require('secp256k1'));
@@ -18,7 +18,9 @@ var version = "1.0.7";
 
 var version$1 = version;
 
-var stunServers = [{ url: 'stun:global.stun.twilio.com:3478?transport=udp' }];
+var stunServers = [
+// { urls: 'stun:stun.l.google.com:19302' },
+{ urls: 'stun:global.stun.twilio.com:3478?transport=udp' }];
 
 var versions = ['0.0.1'];
 
@@ -81,7 +83,11 @@ var lifeCycle = {
   checkNumber: 'checkNumber',
   ConnectionId: 'ConnectionId',
   receiverVersion: 'receiverVersion',
+  offerCreated: 'offerCreated',
+  sendOffer: 'sendOffer',
+  answerReceived: 'answerReceived',
   RtcConnectedEvent: 'RtcConnectedEvent',
+  RtcConnectedEmitted: "RtcConnectedEmitted",
   RtcClosedEvent: 'RtcClosedEvent',
   RtcDisconnectEvent: 'RtcDisconnectEvent',
   RtcFailedEvent: 'RtcFailedEvent',
@@ -198,6 +204,8 @@ var toConsumableArray = function (arr) {
   }
 };
 
+/* eslint-disable no-undef */
+
 var logger = createLogger('MewConnectCommon');
 
 var MewConnectCommon = function (_EventEmitter) {
@@ -241,11 +249,8 @@ var MewConnectCommon = function (_EventEmitter) {
     value: function getBrowserRTC() {
       if (typeof window === 'undefined') return null;
       var wrtc = {
-        // eslint-disable-next-line no-undef
         RTCPeerConnection: window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection,
-        // eslint-disable-next-line no-undef
         RTCSessionDescription: window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription,
-        // eslint-disable-next-line no-undef
         RTCIceCandidate: window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate
       };
       if (!wrtc.RTCPeerConnection) return null;
@@ -262,6 +267,11 @@ var MewConnectCommon = function (_EventEmitter) {
     key: 'checkBrowser',
     value: function checkBrowser() {
       var browser = detectBrowser.detect();
+      if (browser === null) {
+        browser = { version: { split: function split() {
+              return [1];
+            } } };
+      }
       var browserVersion = browser.version.split(0, 1)[0];
       /*
       * Chrome > 23
@@ -274,9 +284,11 @@ var MewConnectCommon = function (_EventEmitter) {
       if (typeof window !== 'undefined') {
         if (browser.name === 'safari') {
           return MewConnectCommon.buildBrowserResult(true, 'Safari', 'version: ' + browser.version);
-        }if (browser.name === 'ie') {
+        }
+        if (browser.name === 'ie') {
           return MewConnectCommon.buildBrowserResult(true, 'Internet Explorer', '', true);
-        }if (browser.name === 'edge') {
+        }
+        if (browser.name === 'edge') {
           return MewConnectCommon.buildBrowserResult(true, 'Edge', 'version: ' + browser.version, true);
         }
         var name = '';
@@ -867,27 +879,27 @@ var MewConnectInitiator = function (_MewConnectCommon) {
                 case 4:
                   encryptedSend = _context5.sent;
 
-
+                  _this4.uiCommunicator(_this4.lifeCycle.sendOffer);
                   _this4.socketEmit(_this4.signals.offerSignal, {
                     data: encryptedSend,
                     connId: _this4.connId,
                     options: options.servers
                   });
-                  _context5.next = 11;
+                  _context5.next = 12;
                   break;
 
-                case 8:
-                  _context5.prev = 8;
+                case 9:
+                  _context5.prev = 9;
                   _context5.t0 = _context5['catch'](0);
 
                   logger$2.error(_context5.t0);
 
-                case 11:
+                case 12:
                 case 'end':
                   return _context5.stop();
               }
             }
-          }, _callee5, _this4, [[0, 8]]);
+          }, _callee5, _this4, [[0, 9]]);
         }));
 
         return function (_x4) {
@@ -941,6 +953,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'rtcRecieveAnswer',
     value: function rtcRecieveAnswer(data) {
+      this.uiCommunicator(this.lifeCycle.answerReceived);
       this.p.signal(JSON.parse(data.data));
     }
   }, {
@@ -974,11 +987,15 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       this.p.on(this.rtcEvents.data, this.onData.bind(this));
       this.p.on(this.rtcEvents.signal, signalListener.bind(this));
       this.p._pc.addEventListener('iceconnectionstatechange', function (evt) {
-        debug('iceConnectionState: ' + evt.target.iceConnectionState);
-        if (evt.target.iceConnectionState === 'connected' || evt.target.iceConnectionState === 'completed') {
-          if (!_this5.connected) {
-            _this5.connected = true;
-            _this5.uiCommunicator(_this5.lifeCycle.RtcConnectedEvent);
+        // eslint-disable-next-line no-undef
+        if (typeof jest === 'undefined') {
+          // included because target is not defined in jest
+          debug('iceConnectionState: ' + evt.target.iceConnectionState);
+          if (evt.target.iceConnectionState === 'connected' || evt.target.iceConnectionState === 'completed') {
+            if (!_this5.connected) {
+              _this5.connected = true;
+              _this5.uiCommunicator(_this5.lifeCycle.RtcConnectedEvent);
+            }
           }
         }
       });
@@ -994,6 +1011,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       this.turnDisabled = true;
       this.socketEmit(this.signals.rtcConnected, this.socketKey);
       this.socketDisconnect();
+      this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
       this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
     }
   }, {
