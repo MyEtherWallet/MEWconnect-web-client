@@ -177,8 +177,8 @@ describe('Check Fallback Operation', () => {
       // this.skip();
       this.timeout(8000);
     } else {
-      console.log('SKIIPING TEST IN SERVER SIDE CONTEXT'); // todo remove dev item
-      console.log('should call fallback fails on node.js'); // todo remove dev item
+      console.log('SKIIPING TEST IN SERVER SIDE CONTEXT');
+      console.log('should call fallback fails on node.js');
       done();
     }
     const recSignals = [];
@@ -219,7 +219,7 @@ describe('Check Fallback Operation', () => {
 
       });
       recieverPeer.on('UsingFallback', () => {
-        console.log('UsingFallback - event'); // todo remove dev item
+        console.log('UsingFallback - event');
         recSignals.push('UsingFallback');
       });
 

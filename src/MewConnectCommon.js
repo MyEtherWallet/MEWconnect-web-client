@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-// was calling each reference to window an error
 import createLogger from 'logging';
 import EventEmitter from 'events';
 import { isBrowser } from 'browser-or-node';
@@ -104,6 +103,8 @@ export default class MewConnectCommon extends EventEmitter {
     * */
     if (typeof window !== 'undefined') {
       if (browser.name === 'safari') {
+        // eslint-disable-next-line global-require
+        require('webrtc-adapter');
         return MewConnectCommon.buildBrowserResult(
           true,
           'Safari',
