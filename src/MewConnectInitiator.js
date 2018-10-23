@@ -11,16 +11,13 @@ const debug = debugLogger('MEWconnect:initiator');
 const logger = createLogger('MewConnectInitiator');
 
 export default class MewConnectInitiator extends MewConnectCommon {
-  constructor(
-    additionalLibs = {}
-  ) {
+  constructor(options = {}) {
     super();
 
     this.supportedBrowser = MewConnectCommon.checkBrowser();
 
     this.destroyOnUnload();
     this.p = null;
-    this.qrCodeString = null;
     this.socketConnected = false;
     this.connected = false;
     this.tryingTurn = false;
@@ -29,9 +26,9 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.iceState = '';
     this.turnServers = [];
 
-    this.io = additionalLibs.io || io;
-    this.Peer = additionalLibs.wrtc || SimplePeer;
-    this.mewCrypto = additionalLibs.cryptoImpl || MewConnectCrypto.create();
+    this.io = options.io || io;
+    this.Peer = options.wrtc || SimplePeer;
+    this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
 
     this.signals = this.jsonDetails.signals;
     this.rtcEvents = this.jsonDetails.rtc;
@@ -50,8 +47,9 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   // Factory function to create instance using default supplied libraries
-  static init() {
-    return new MewConnectInitiator();
+  static init(opts) {
+    const options = opts !== null ? opts : {};
+    return new MewConnectInitiator(options);
   }
 
   // Check if a WebRTC connection exists before a window/tab is closed or refreshed
@@ -60,7 +58,11 @@ export default class MewConnectInitiator extends MewConnectCommon {
     if (isBrowser) {
       // eslint-disable-next-line no-undef
       window.onunload = window.onbeforeunload = () => {
-        const iceStates = [this.iceStates.new, this.iceStates.connecting, this.iceStates.connected];
+        const iceStates = [
+          this.iceStates.new,
+          this.iceStates.connecting,
+          this.iceStates.connected
+        ];
         if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
           this.rtcDestroy();
         }
@@ -104,7 +106,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
     const separator = this.jsonDetails.connectionCodeSeparator;
     const qrCodeString =
       this.version + separator + data + separator + this.connId;
-    this.qrCodeString = qrCodeString;
 
     this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
     this.uiCommunicator(this.lifeCycle.checkNumber, data);
@@ -286,13 +287,12 @@ export default class MewConnectInitiator extends MewConnectCommon {
         const encryptedSend = await this.mewCrypto.encrypt(
           JSON.stringify(data)
         );
-        setTimeout(() => {
-          this.socketEmit(this.signals.offerSignal, {
-            data: encryptedSend,
-            connId: this.connId,
-            options: options.servers
-          });
-        }, 100);
+        this.uiCommunicator(this.lifeCycle.sendOffer);
+        this.socketEmit(this.signals.offerSignal, {
+          data: encryptedSend,
+          connId: this.connId,
+          options: options.servers
+        });
       } catch (e) {
         logger.error(e);
       }
@@ -310,6 +310,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   rtcRecieveAnswer(data) {
+    this.uiCommunicator(this.lifeCycle.answerReceived);
     this.p.signal(JSON.parse(data.data));
   }
 
@@ -343,12 +344,18 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.p.on(this.rtcEvents.close, this.onClose.bind(this));
     this.p.on(this.rtcEvents.data, this.onData.bind(this));
     this.p.on(this.rtcEvents.signal, signalListener.bind(this));
-    this.p._pc.addEventListener('iceconnectionstatechange', (evt) => {
-      debug(`iceConnectionState: ${evt.target.iceConnectionState}`);
-      if (evt.target.iceConnectionState === 'connected' || evt.target.iceConnectionState === 'completed') {
-        if(!this.connected){
-          this.connected = true;
-          this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+    this.p._pc.addEventListener('iceconnectionstatechange', evt => {
+      // eslint-disable-next-line no-undef
+      if(typeof jest === 'undefined'){ // included because target is not defined in jest
+        debug(`iceConnectionState: ${evt.target.iceConnectionState}`);
+        if (
+          evt.target.iceConnectionState === 'connected' ||
+          evt.target.iceConnectionState === 'completed'
+        ) {
+          if (!this.connected) {
+            this.connected = true;
+            this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+          }
         }
       }
     });

@@ -46,7 +46,7 @@ let mewConnect = require('@myetherwallet/mewconnect-web-client').Client;
 
 Initiate the client
 ```javascript
-let mewConnectClient = mewConnect.Client();
+let mewConnectClient = mewConnect.init();
 ```
 
 MEWconnect Client functions as an event emitter.

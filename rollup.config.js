@@ -10,6 +10,7 @@ export default {
   plugins: [
     json(),
     babel({
+      plugins: ['external-helpers'],
       exclude: 'node_modules/**',
     })
   ]

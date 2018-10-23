@@ -1,6 +1,6 @@
 import createLogger from 'logging';
 
-import eccrypto from 'eccrypto/browser';
+import eccrypto from 'eccrypto';
 import ethUtils from 'ethereumjs-util';
 import crypto from 'crypto';
 import secp256k1 from 'secp256k1';
@@ -8,7 +8,6 @@ import secp256k1 from 'secp256k1';
 const logger = createLogger('MewCrypto');
 
 export default class MewConnectCrypto {
-
   static create() {
     return new MewConnectCrypto();
   }
@@ -92,9 +91,7 @@ export default class MewConnectCrypto {
   signMessage(msgToSign) {
     return new Promise((resolve, reject) => {
       try {
-        const msg = ethUtils.hashPersonalMessage(
-          ethUtils.toBuffer(msgToSign)
-        );
+        const msg = ethUtils.hashPersonalMessage(ethUtils.toBuffer(msgToSign));
         const signed = ethUtils.ecsign(
           Buffer.from(msg),
           Buffer.from(this.prvt, 'hex')

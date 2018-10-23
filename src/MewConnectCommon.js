@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
 import createLogger from 'logging';
 import EventEmitter from 'events';
-import { isBrowser } from 'browser-or-node'
+import { isBrowser } from 'browser-or-node';
 import { detect } from 'detect-browser';
 
 import {
@@ -22,7 +23,7 @@ export default class MewConnectCommon extends EventEmitter {
   constructor() {
     super();
 
-    this.isBrowser = isBrowser
+    this.isBrowser = isBrowser;
 
     this.jsonDetails = {
       stunSrvers: [...stunServers],
@@ -63,12 +64,18 @@ export default class MewConnectCommon extends EventEmitter {
   static getBrowserRTC() {
     if (typeof window === 'undefined') return null;
     const wrtc = {
-      // eslint-disable-next-line no-undef
-      RTCPeerConnection: window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection,
-      // eslint-disable-next-line no-undef
-      RTCSessionDescription: window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription,
-      // eslint-disable-next-line no-undef
-      RTCIceCandidate: window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate
+      RTCPeerConnection:
+        window.RTCPeerConnection ||
+        window.mozRTCPeerConnection ||
+        window.webkitRTCPeerConnection,
+      RTCSessionDescription:
+        window.RTCSessionDescription ||
+        window.mozRTCSessionDescription ||
+        window.webkitRTCSessionDescription,
+      RTCIceCandidate:
+        window.RTCIceCandidate ||
+        window.mozRTCIceCandidate ||
+        window.webkitRTCIceCandidate
     };
     if (!wrtc.RTCPeerConnection) return null;
     return wrtc;
@@ -81,7 +88,10 @@ export default class MewConnectCommon extends EventEmitter {
   }
 
   static checkBrowser() {
-    const browser = detect();
+    let browser = detect();
+    if(browser === null){
+      browser = {version: {split: () => [1]}}
+    }
     const browserVersion = browser.version.split(0, 1)[0];
     /*
     * Chrome > 23
@@ -93,56 +103,58 @@ export default class MewConnectCommon extends EventEmitter {
     * */
     if (typeof window !== 'undefined') {
       if (browser.name === 'safari') {
+        // eslint-disable-next-line global-require
+        require('webrtc-adapter');
         return MewConnectCommon.buildBrowserResult(
           true,
           'Safari',
-          `version: ${  browser.version}`
+          `version: ${browser.version}`
         );
-      } if (browser.name === 'ie') {
+      }
+      if (browser.name === 'ie') {
         return MewConnectCommon.buildBrowserResult(
           true,
           'Internet Explorer',
           '',
           true
         );
-      } if (browser.name === 'edge') {
+      }
+      if (browser.name === 'edge') {
         return MewConnectCommon.buildBrowserResult(
           true,
           'Edge',
-          `version: ${  browser.version}`,
+          `version: ${browser.version}`,
           true
         );
       }
-        let name = '';
-        let minVersion = 0;
+      let name = '';
+      let minVersion = 0;
 
-        if (browser.name === 'opera') {
-          name = 'Opera';
-          minVersion = 18;
-        } else if (browser.name === 'firefox') {
-          name = 'Firefox';
-          minVersion = 22;
-        } else if (browser.name === 'chrome') {
-          name = 'Chrome';
-          minVersion = 23;
-        } else {
-          return MewConnectCommon.buildBrowserResult(false, '', '', true);
+      if (browser.name === 'opera') {
+        name = 'Opera';
+        minVersion = 18;
+      } else if (browser.name === 'firefox') {
+        name = 'Firefox';
+        minVersion = 22;
+      } else if (browser.name === 'chrome') {
+        name = 'Chrome';
+        minVersion = 23;
+      } else {
+        return MewConnectCommon.buildBrowserResult(false, '', '', true);
+      }
+
+      try {
+        if (minVersion >= +browserVersion) {
+          return MewConnectCommon.buildBrowserResult(
+            true,
+            name,
+            `version: ${browserVersion}`
+          );
         }
-
-        try {
-          if (minVersion >= +browserVersion) {
-            return MewConnectCommon.buildBrowserResult(
-              true,
-              name,
-              `version: ${  browserVersion}`
-            );
-          }
-            return MewConnectCommon.buildBrowserResult(false, '', '');
-
-        } catch (e) {
-          logger.error(e);
-        }
-
+        return MewConnectCommon.buildBrowserResult(false, '', '');
+      } catch (e) {
+        logger.error(e);
+      }
     }
   }
 
