@@ -14,13 +14,11 @@ var debugLogger = _interopDefault(require('debug'));
 var io = _interopDefault(require('socket.io-client'));
 var SimplePeer = _interopDefault(require('simple-peer'));
 
-var version = "1.0.7";
+var version = "1.0.8";
 
 var version$1 = version;
 
-var stunServers = [
-// { urls: 'stun:stun.l.google.com:19302' },
-{ urls: 'stun:global.stun.twilio.com:3478?transport=udp' }];
+var stunServers = [{ urls: 'stun:global.stun.twilio.com:3478?transport=udp' }];
 
 var versions = ['0.0.1'];
 
@@ -283,6 +281,9 @@ var MewConnectCommon = function (_EventEmitter) {
       * */
       if (typeof window !== 'undefined') {
         if (browser.name === 'safari') {
+          // eslint-disable-next-line global-require
+          require('webrtc-adapter');
+          // console.log(adapter); // todo remove dev item
           return MewConnectCommon.buildBrowserResult(true, 'Safari', 'version: ' + browser.version);
         }
         if (browser.name === 'ie') {
