@@ -14,7 +14,7 @@ var debugLogger = _interopDefault(require('debug'));
 var io = _interopDefault(require('socket.io-client'));
 var SimplePeer = _interopDefault(require('simple-peer'));
 
-var version = "1.0.8";
+var version = "1.0.9";
 
 var version$1 = version;
 
@@ -202,8 +202,6 @@ var toConsumableArray = function (arr) {
   }
 };
 
-/* eslint-disable no-undef */
-
 var logger = createLogger('MewConnectCommon');
 
 var MewConnectCommon = function (_EventEmitter) {
@@ -247,9 +245,27 @@ var MewConnectCommon = function (_EventEmitter) {
     value: function getBrowserRTC() {
       if (typeof window === 'undefined') return null;
       var wrtc = {
-        RTCPeerConnection: window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection,
-        RTCSessionDescription: window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription,
-        RTCIceCandidate: window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate
+        RTCPeerConnection:
+        // eslint-disable-next-line no-undef
+        window.RTCPeerConnection ||
+        // eslint-disable-next-line no-undef
+        window.mozRTCPeerConnection ||
+        // eslint-disable-next-line no-undef
+        window.webkitRTCPeerConnection,
+        RTCSessionDescription:
+        // eslint-disable-next-line no-undef
+        window.RTCSessionDescription ||
+        // eslint-disable-next-line no-undef
+        window.mozRTCSessionDescription ||
+        // eslint-disable-next-line no-undef
+        window.webkitRTCSessionDescription,
+        RTCIceCandidate:
+        // eslint-disable-next-line no-undef
+        window.RTCIceCandidate ||
+        // eslint-disable-next-line no-undef
+        window.mozRTCIceCandidate ||
+        // eslint-disable-next-line no-undef
+        window.webkitRTCIceCandidate
       };
       if (!wrtc.RTCPeerConnection) return null;
       return wrtc;
@@ -283,7 +299,6 @@ var MewConnectCommon = function (_EventEmitter) {
         if (browser.name === 'safari') {
           // eslint-disable-next-line global-require
           require('webrtc-adapter');
-          // console.log(adapter); // todo remove dev item
           return MewConnectCommon.buildBrowserResult(true, 'Safari', 'version: ' + browser.version);
         }
         if (browser.name === 'ie') {
@@ -967,6 +982,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       var webRtcServers = webRtcConfig.servers || this.stunServers;
 
       var suppliedOptions = options.webRtcOptions || {};
+
       var defaultOptions = {
         initiator: true,
         trickle: false,
@@ -1222,6 +1238,12 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     key: 'retryViaTurn',
     value: function retryViaTurn(data) {
       debug('Retrying via TURN');
+      console.log(data.data); // todo remove dev item
+      // eslint-disable-next-line no-plusplus
+      for (var i = 0; i < data.data.length; i++) {
+        // eslint-disable-next-line no-param-reassign
+        data.data[i].urls = data.data[i].url;
+      }
       var options = {
         signalListener: this.initiatorSignalListener,
         webRtcConfig: {

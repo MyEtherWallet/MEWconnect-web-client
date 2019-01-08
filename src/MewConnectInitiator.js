@@ -35,7 +35,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.version = this.jsonDetails.version;
     this.versions = this.jsonDetails.versions;
     this.lifeCycle = this.jsonDetails.lifeCycle;
-    this.stunServers = this.jsonDetails.stunSrvers;
+    this.stunServers = options.stunServers || this.jsonDetails.stunSrvers;
     this.iceStates = this.jsonDetails.iceConnectionState;
 
     // Socket is abandoned.  disconnect.
@@ -124,7 +124,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   async useFallback() {
-    this.socketEmit(this.signals.tryTurn, { connId: this.connId });
+    this.socketEmit(this.signals.tryTurn, {connId: this.connId});
   }
 
   // Initalize a websocket connection with the signal server
@@ -303,7 +303,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   async recieveAnswer(data) {
     try {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
-      this.rtcRecieveAnswer({ data: plainTextOffer });
+      this.rtcRecieveAnswer({data: plainTextOffer});
     } catch (e) {
       logger.error(e);
     }
@@ -323,6 +323,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
     const webRtcServers = webRtcConfig.servers || this.stunServers;
 
     const suppliedOptions = options.webRtcOptions || {};
+
     const defaultOptions = {
       initiator: true,
       trickle: false,
@@ -346,7 +347,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.p.on(this.rtcEvents.signal, signalListener.bind(this));
     this.p._pc.addEventListener('iceconnectionstatechange', evt => {
       // eslint-disable-next-line no-undef
-      if(typeof jest === 'undefined'){ // included because target is not defined in jest
+      if (typeof jest === 'undefined') { // included because target is not defined in jest
         debug(`iceConnectionState: ${evt.target.iceConnectionState}`);
         if (
           evt.target.iceConnectionState === 'connected' ||
@@ -427,13 +428,13 @@ export default class MewConnectInitiator extends MewConnectCommon {
   sendRtcMessageClosure(type, msg) {
     return () => {
       debug(`[SEND RTC MESSAGE Closure] type:  ${type},  message:  ${msg}`);
-      this.rtcSend(JSON.stringify({ type, data: msg }));
+      this.rtcSend(JSON.stringify({type, data: msg}));
     };
   }
 
   sendRtcMessage(type, msg) {
     debug(`[SEND RTC MESSAGE] type:  ${type},  message:  ${msg}`);
-    this.rtcSend(JSON.stringify({ type, data: msg }));
+    this.rtcSend(JSON.stringify({type, data: msg}));
   }
 
   disconnectRTCClosure() {
