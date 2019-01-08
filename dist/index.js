@@ -510,7 +510,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     _this.version = _this.jsonDetails.version;
     _this.versions = _this.jsonDetails.versions;
     _this.lifeCycle = _this.jsonDetails.lifeCycle;
-    _this.stunServers = _this.jsonDetails.stunSrvers;
+    _this.stunServers = options.stunServers || _this.jsonDetails.stunSrvers;
     _this.iceStates = _this.jsonDetails.iceConnectionState;
 
     // Socket is abandoned.  disconnect.
@@ -1238,12 +1238,6 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     key: 'retryViaTurn',
     value: function retryViaTurn(data) {
       debug('Retrying via TURN');
-      console.log(data.data); // todo remove dev item
-      // eslint-disable-next-line no-plusplus
-      for (var i = 0; i < data.data.length; i++) {
-        // eslint-disable-next-line no-param-reassign
-        data.data[i].urls = data.data[i].url;
-      }
       var options = {
         signalListener: this.initiatorSignalListener,
         webRtcConfig: {
