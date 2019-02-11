@@ -2,7 +2,8 @@
   "name": "@myetherwallet/mewconnect-web-client",
   "homepage": "https://github.com/myetherwallet/MEWconnect-web-client",
   "version": "1.0.9",
-  "main": "./dist/index.js",
+  "main": "./src",
+  "distMain": "./dist/index.js",
   "scripts": {
     "start": "node ./example/peer_server/www.js",
     "test:jest": "jest --detectOpenHandles --forceExit --runInBand",
@@ -26,7 +27,7 @@
     "logging": "^3.2.0",
     "mocha": "^5.2.0",
     "secp256k1": "^3.5.2",
-    "simple-peer": "^9.1.2",
+    "simple-peer": "^9.2.0",
     "socket.io-client": "^2.1.1",
     "webrtc-adapter": "^6.4.3"
   },

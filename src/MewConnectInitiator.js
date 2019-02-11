@@ -370,7 +370,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.socketEmit(this.signals.rtcConnected, this.socketKey);
     this.socketDisconnect();
     this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
-    this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
   }
 
   async onData(data) {

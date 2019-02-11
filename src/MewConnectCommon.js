@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import createLogger from 'logging';
 import EventEmitter from 'events';
 import { isBrowser } from 'browser-or-node';
