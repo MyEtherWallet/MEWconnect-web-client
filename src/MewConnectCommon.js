@@ -89,18 +89,18 @@ export default class MewConnectCommon extends EventEmitter {
 
   static checkBrowser() {
     let browser = detect();
-    if(browser === null){
-      browser = {version: {split: () => [1]}}
+    if (browser === null) {
+      browser = { version: { split: () => [1] } };
     }
     const browserVersion = browser.version.split(0, 1)[0];
     /*
-    * Chrome > 23
-    * Firefox > 22
-    * Opera > 18
-    * Safari > 11 (caveats exist)
-    * Edge - none (RTCDataChannel not supported)
-    * IE - none
-    * */
+     * Chrome > 23
+     * Firefox > 22
+     * Opera > 18
+     * Safari > 11 (caveats exist)
+     * Edge - none (RTCDataChannel not supported)
+     * IE - none
+     * */
     if (typeof window !== 'undefined') {
       if (browser.name === 'safari') {
         // eslint-disable-next-line global-require

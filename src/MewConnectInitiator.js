@@ -346,7 +346,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.p.on(this.rtcEvents.signal, signalListener.bind(this));
     this.p._pc.addEventListener('iceconnectionstatechange', evt => {
       // eslint-disable-next-line no-undef
-      if(typeof jest === 'undefined'){ // included because target is not defined in jest
+      if (typeof jest === 'undefined') {
+        // included because target is not defined in jest
         debug(`iceConnectionState: ${evt.target.iceConnectionState}`);
         if (
           evt.target.iceConnectionState === 'connected' ||

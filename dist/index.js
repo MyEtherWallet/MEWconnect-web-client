@@ -14,7 +14,7 @@ var debugLogger = _interopDefault(require('debug'));
 var io = _interopDefault(require('socket.io-client'));
 var SimplePeer = _interopDefault(require('simple-peer'));
 
-var version = "1.0.8";
+var version = "1.0.9";
 
 var version$1 = version;
 
@@ -85,7 +85,7 @@ var lifeCycle = {
   sendOffer: 'sendOffer',
   answerReceived: 'answerReceived',
   RtcConnectedEvent: 'RtcConnectedEvent',
-  RtcConnectedEmitted: "RtcConnectedEmitted",
+  RtcConnectedEmitted: 'RtcConnectedEmitted',
   RtcClosedEvent: 'RtcClosedEvent',
   RtcDisconnectEvent: 'RtcDisconnectEvent',
   RtcFailedEvent: 'RtcFailedEvent',
@@ -272,18 +272,17 @@ var MewConnectCommon = function (_EventEmitter) {
       }
       var browserVersion = browser.version.split(0, 1)[0];
       /*
-      * Chrome > 23
-      * Firefox > 22
-      * Opera > 18
-      * Safari > 11 (caveats exist)
-      * Edge - none (RTCDataChannel not supported)
-      * IE - none
-      * */
+       * Chrome > 23
+       * Firefox > 22
+       * Opera > 18
+       * Safari > 11 (caveats exist)
+       * Edge - none (RTCDataChannel not supported)
+       * IE - none
+       * */
       if (typeof window !== 'undefined') {
         if (browser.name === 'safari') {
           // eslint-disable-next-line global-require
           require('webrtc-adapter');
-          // console.log(adapter); // todo remove dev item
           return MewConnectCommon.buildBrowserResult(true, 'Safari', 'version: ' + browser.version);
         }
         if (browser.name === 'ie') {
@@ -1012,7 +1011,6 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       this.turnDisabled = true;
       this.socketEmit(this.signals.rtcConnected, this.socketKey);
       this.socketDisconnect();
-      this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
       this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
     }
   }, {

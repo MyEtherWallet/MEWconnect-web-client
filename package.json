@@ -2,8 +2,7 @@
   "name": "@myetherwallet/mewconnect-web-client",
   "homepage": "https://github.com/myetherwallet/MEWconnect-web-client",
   "version": "1.0.9",
-  "main": "./src",
-  "distMain": "./dist/index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "start": "node ./example/peer_server/www.js",
     "test:jest": "jest --detectOpenHandles --forceExit --runInBand",
@@ -32,7 +31,11 @@
     "webrtc-adapter": "^6.4.3"
   },
   "devDependencies": {
+    "@vue/cli-plugin-babel": "3.4.0",
+    "@vue/cli-plugin-eslint": "3.4.0",
+    "@vue/eslint-config-prettier": "^4.0.1",
     "babel-core": "^6.26.3",
+    "babel-eslint": "^10.0.1",
     "babel-jest": "*",
     "babel-loader": "^7.1.5",
     "babel-plugin-external-helpers": "^6.22.0",
@@ -48,6 +51,7 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.0.1",
     "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-security": "^1.4.0",
     "jest": "^23.6.0",
     "nyc": "^13.0.1",
     "opn": "^5.4.0",

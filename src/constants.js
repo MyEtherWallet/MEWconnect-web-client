@@ -79,7 +79,7 @@ const lifeCycle = {
   sendOffer: 'sendOffer',
   answerReceived: 'answerReceived',
   RtcConnectedEvent: 'RtcConnectedEvent',
-  RtcConnectedEmitted: "RtcConnectedEmitted",
+  RtcConnectedEmitted: 'RtcConnectedEmitted',
   RtcClosedEvent: 'RtcClosedEvent',
   RtcDisconnectEvent: 'RtcDisconnectEvent',
   RtcFailedEvent: 'RtcFailedEvent',
