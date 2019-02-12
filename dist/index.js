@@ -14,7 +14,7 @@ var debugLogger = _interopDefault(require('debug'));
 var io = _interopDefault(require('socket.io-client'));
 var SimplePeer = _interopDefault(require('simple-peer'));
 
-var version = "1.0.9";
+var version = "1.0.10";
 
 var version$1 = version;
 

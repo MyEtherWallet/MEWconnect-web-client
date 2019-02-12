@@ -11,7 +11,7 @@ const signalUrl = typeof signalServer !== 'undefined' ? signalServer : 'https://
 
 
 
-describe('Check Base Connection Operation', () => {
+xdescribe('Check Base Connection Operation', () => {
   if (typeof mocha === 'undefined') {
     const wrtc = require('wrtc');
 
