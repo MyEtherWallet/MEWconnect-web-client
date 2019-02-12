@@ -202,8 +202,6 @@ var toConsumableArray = function (arr) {
   }
 };
 
-/* eslint-disable no-undef */
-
 var logger = createLogger('MewConnectCommon');
 
 var MewConnectCommon = function (_EventEmitter) {
@@ -247,9 +245,27 @@ var MewConnectCommon = function (_EventEmitter) {
     value: function getBrowserRTC() {
       if (typeof window === 'undefined') return null;
       var wrtc = {
-        RTCPeerConnection: window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection,
-        RTCSessionDescription: window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription,
-        RTCIceCandidate: window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate
+        RTCPeerConnection:
+        // eslint-disable-next-line no-undef
+        window.RTCPeerConnection ||
+        // eslint-disable-next-line no-undef
+        window.mozRTCPeerConnection ||
+        // eslint-disable-next-line no-undef
+        window.webkitRTCPeerConnection,
+        RTCSessionDescription:
+        // eslint-disable-next-line no-undef
+        window.RTCSessionDescription ||
+        // eslint-disable-next-line no-undef
+        window.mozRTCSessionDescription ||
+        // eslint-disable-next-line no-undef
+        window.webkitRTCSessionDescription,
+        RTCIceCandidate:
+        // eslint-disable-next-line no-undef
+        window.RTCIceCandidate ||
+        // eslint-disable-next-line no-undef
+        window.mozRTCIceCandidate ||
+        // eslint-disable-next-line no-undef
+        window.webkitRTCIceCandidate
       };
       if (!wrtc.RTCPeerConnection) return null;
       return wrtc;
@@ -494,7 +510,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     _this.version = _this.jsonDetails.version;
     _this.versions = _this.jsonDetails.versions;
     _this.lifeCycle = _this.jsonDetails.lifeCycle;
-    _this.stunServers = _this.jsonDetails.stunSrvers;
+    _this.stunServers = options.stunServers || _this.jsonDetails.stunSrvers;
     _this.iceStates = _this.jsonDetails.iceConnectionState;
 
     // Socket is abandoned.  disconnect.
@@ -966,6 +982,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       var webRtcServers = webRtcConfig.servers || this.stunServers;
 
       var suppliedOptions = options.webRtcOptions || {};
+
       var defaultOptions = {
         initiator: true,
         trickle: false,
