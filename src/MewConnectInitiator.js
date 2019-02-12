@@ -124,7 +124,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   async useFallback() {
-    this.socketEmit(this.signals.tryTurn, {connId: this.connId});
+    this.socketEmit(this.signals.tryTurn, { connId: this.connId });
   }
 
   // Initalize a websocket connection with the signal server
@@ -303,7 +303,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   async recieveAnswer(data) {
     try {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
-      this.rtcRecieveAnswer({data: plainTextOffer});
+      this.rtcRecieveAnswer({ data: plainTextOffer });
     } catch (e) {
       logger.error(e);
     }
@@ -428,13 +428,13 @@ export default class MewConnectInitiator extends MewConnectCommon {
   sendRtcMessageClosure(type, msg) {
     return () => {
       debug(`[SEND RTC MESSAGE Closure] type:  ${type},  message:  ${msg}`);
-      this.rtcSend(JSON.stringify({type, data: msg}));
+      this.rtcSend(JSON.stringify({ type, data: msg }));
     };
   }
 
   sendRtcMessage(type, msg) {
     debug(`[SEND RTC MESSAGE] type:  ${type},  message:  ${msg}`);
-    this.rtcSend(JSON.stringify({type, data: msg}));
+    this.rtcSend(JSON.stringify({ type, data: msg }));
   }
 
   disconnectRTCClosure() {
