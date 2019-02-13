@@ -46,6 +46,24 @@ export default class MewConnectInitiator extends MewConnectCommon {
     }, 120000);
   }
 
+  isAlive() {
+    // console.log('isAlive'); // todo remove dev item
+    // console.log(this.p.connected); // todo remove dev item
+    // console.log(this.p); // todo remove dev item
+    if (this.p !== null) {
+      console.log('isAlive', this.p.connected); // todo remove dev item
+
+      return this.p.connected;
+    }
+    console.log('isAlive', false); // todo remove dev item
+
+    return false;
+    // if(this.p){
+    //   return this.p.destroyed;
+    // }
+    // return false;
+  }
+
   // Factory function to create instance using default supplied libraries
   static init(opts) {
     const options = opts !== null ? opts : {};
@@ -389,10 +407,10 @@ export default class MewConnectInitiator extends MewConnectCommon {
       }
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
-        debug('DECRYPTED DATA RECEIVED', parsed);
+        debug('DECRYPTED DATA RECEIVED 1', parsed);
         this.emit(parsed.type, parsed.data);
       } else {
-        debug('DECRYPTED DATA RECEIVED', decryptedData);
+        debug('DECRYPTED DATA RECEIVED 2', decryptedData);
         this.emit(decryptedData.type, decryptedData.data);
       }
     } catch (e) {
@@ -417,7 +435,11 @@ export default class MewConnectInitiator extends MewConnectCommon {
     debug('WRTC ERROR');
     debug('error', err);
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
-      this.useFallback();
+      try {
+        this.useFallback();
+      } catch (e) {
+        console.log('error',e);
+      }
     } else {
       this.uiCommunicator(this.lifeCycle.RtcErrorEvent);
     }
@@ -428,13 +450,19 @@ export default class MewConnectInitiator extends MewConnectCommon {
   sendRtcMessageClosure(type, msg) {
     return () => {
       debug(`[SEND RTC MESSAGE Closure] type:  ${type},  message:  ${msg}`);
-      this.rtcSend(JSON.stringify({ type, data: msg }));
+      try { this.rtcSend(JSON.stringify({ type, data: msg }));
+      } catch (e) {
+        console.log('error',e); // todo replace with proper error
+      }
     };
   }
 
   sendRtcMessage(type, msg) {
     debug(`[SEND RTC MESSAGE] type:  ${type},  message:  ${msg}`);
-    this.rtcSend(JSON.stringify({ type, data: msg }));
+    try { this.rtcSend(JSON.stringify({ type, data: msg }));
+    } catch (e) {
+      console.log('error',e); // todo replace with proper error
+    }
   }
 
   disconnectRTCClosure() {
@@ -454,7 +482,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   async rtcSend(arg) {
-    if (this.p !== null) {
+    if (this.isAlive()) {
       let encryptedSend;
       if (typeof arg === 'string') {
         encryptedSend = await this.mewCrypto.encrypt(arg);
@@ -465,7 +493,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.p.send(JSON.stringify(encryptedSend));
     } else {
       // eslint-disable-next-line
-      console.error('Attempted to send when no peer connection is connected');
+      // console.error('Attempted to send when no peer connection is connected');
       this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
     }
   }
