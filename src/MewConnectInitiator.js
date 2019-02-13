@@ -47,21 +47,13 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   isAlive() {
-    // console.log('isAlive'); // todo remove dev item
-    // console.log(this.p.connected); // todo remove dev item
-    // console.log(this.p); // todo remove dev item
     if (this.p !== null) {
       console.log('isAlive', this.p.connected); // todo remove dev item
 
       return this.p.connected;
     }
     console.log('isAlive', false); // todo remove dev item
-
     return false;
-    // if(this.p){
-    //   return this.p.destroyed;
-    // }
-    // return false;
   }
 
   // Factory function to create instance using default supplied libraries
