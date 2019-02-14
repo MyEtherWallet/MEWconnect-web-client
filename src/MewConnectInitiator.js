@@ -7,7 +7,7 @@ import MewConnectCommon from './MewConnectCommon';
 import MewConnectCrypto from './MewConnectCrypto';
 
 const debug = debugLogger('MEWconnect:initiator');
-
+const debugStages = debugLogger('MEWconnect:initiator-stages');
 const logger = createLogger('MewConnectInitiator');
 
 export default class MewConnectInitiator extends MewConnectCommon {
@@ -48,11 +48,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
   isAlive() {
     if (this.p !== null) {
-      console.log('isAlive', this.p.connected); // todo remove dev item
-
       return this.p.connected;
     }
-    console.log('isAlive', false); // todo remove dev item
     return false;
   }
 
@@ -186,11 +183,11 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
   // ----- Setup handlers for communication with the signal server
   initiatorConnect(socket) {
-    debug('INITIATOR CONNECT');
+    debugStages('INITIATOR CONNECT');
     this.uiCommunicator(this.lifeCycle.SocketConnectedEvent);
 
     this.socket.on(this.signals.connect, () => {
-      debug('SOCKET CONNECTED');
+      debugStages('SOCKET CONNECTED');
       this.socketConnected = true;
     });
 
@@ -229,7 +226,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   // Provide Notice that initial WebRTC connection failed and the fallback method will be used
   willAttemptTurn() {
     this.tryingTurn = true;
-    debug('TRY TURN CONNECTION');
+    debugStages('TRY TURN CONNECTION');
     this.uiCommunicator(this.lifeCycle.UsingFallback);
   }
 
@@ -376,7 +373,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   // ----- WebRTC Communication Event Handlers
 
   onConnect() {
-    debug('CONNECT', 'ok');
+    debugStages('RTC CONNECT', 'ok');
     this.connected = true;
     this.turnDisabled = true;
     this.socketEmit(this.signals.rtcConnected, this.socketKey);
@@ -413,10 +410,10 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   onClose(data) {
-    debug('WRTC CLOSE', data);
+    debugStages('WRTC CLOSE', data);
     if (this.connected) {
-      this.connected = false;
       this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
+      this.connected = false;
     } else {
       this.connected = false;
     }
@@ -424,14 +421,10 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
   onError(err) {
     debug(err.code);
-    debug('WRTC ERROR');
+    debugStages('WRTC ERROR');
     debug('error', err);
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
-      try {
-        this.useFallback();
-      } catch (e) {
-        console.log('error',e);
-      }
+      this.useFallback();
     } else {
       this.uiCommunicator(this.lifeCycle.RtcErrorEvent);
     }
@@ -442,24 +435,19 @@ export default class MewConnectInitiator extends MewConnectCommon {
   sendRtcMessageClosure(type, msg) {
     return () => {
       debug(`[SEND RTC MESSAGE Closure] type:  ${type},  message:  ${msg}`);
-      try { this.rtcSend(JSON.stringify({ type, data: msg }));
-      } catch (e) {
-        console.log('error',e); // todo replace with proper error
-      }
+      this.rtcSend(JSON.stringify({ type, data: msg }));
     };
   }
 
   sendRtcMessage(type, msg) {
     debug(`[SEND RTC MESSAGE] type:  ${type},  message:  ${msg}`);
-    try { this.rtcSend(JSON.stringify({ type, data: msg }));
-    } catch (e) {
-      console.log('error',e); // todo replace with proper error
-    }
+    this.rtcSend(JSON.stringify({ type, data: msg }));
   }
 
   disconnectRTCClosure() {
     return () => {
-      debug('DISCONNECT RTC Closure');
+      debugStages('DISCONNECT RTC Closure');
+      this.connected = false;
       this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
       this.rtcDestroy();
       this.instance = null;
@@ -467,7 +455,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   disconnectRTC() {
-    debug('DISCONNECT RTC');
+    debugStages('DISCONNECT RTC');
+    this.connected = false;
     this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
     this.rtcDestroy();
     this.instance = null;
@@ -493,6 +482,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
   rtcDestroy() {
     if (this.p !== null) {
       this.p.destroy();
+      this.connected = false;
+      this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
     }
   }
 
@@ -500,7 +491,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   // Fallback Step if initial webRTC connection attempt fails.
   // Retries setting up the WebRTC connection using TURN
   retryViaTurn(data) {
-    debug('Retrying via TURN');
+    debugStages('Retrying via TURN');
     const options = {
       signalListener: this.initiatorSignalListener,
       webRtcConfig: {

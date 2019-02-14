@@ -82,6 +82,7 @@ const lifeCycle = {
   RtcConnectedEmitted: 'RtcConnectedEmitted',
   RtcClosedEvent: 'RtcClosedEvent',
   RtcDisconnectEvent: 'RtcDisconnectEvent',
+  RtcDestroyedEvent: 'RtcDestroyedEvent',
   RtcFailedEvent: 'RtcFailedEvent',
   RtcErrorEvent: 'RtcErrorEvent',
   UsingFallback: 'UsingFallback',
