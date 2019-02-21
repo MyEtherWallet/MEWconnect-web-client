@@ -16,6 +16,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
     this.supportedBrowser = MewConnectCommon.checkBrowser();
 
+    this.disconnecting = false;
+
     this.destroyOnUnload();
     this.p = null;
     this.socketConnected = false;
@@ -44,6 +46,11 @@ export default class MewConnectInitiator extends MewConnectCommon {
         this.socketDisconnect();
       }
     }, 120000);
+  }
+
+
+  interceptEvents(){
+    console.log(this);
   }
 
   isAlive() {
@@ -410,12 +417,15 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   onClose(data) {
-    debugStages('WRTC CLOSE', data);
-    if (this.connected) {
-      this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
-      this.connected = false;
-    } else {
-      this.connected = false;
+    debugStages('WRTC MAYBE CLOSE', data);
+    if(!this.isAlive()){
+      debugStages('WRTC CLOSE', data);
+      if (this.connected) {
+        this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
+        this.connected = false;
+      } else {
+        this.connected = false;
+      }
     }
   }
 
