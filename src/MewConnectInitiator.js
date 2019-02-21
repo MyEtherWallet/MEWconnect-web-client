@@ -48,11 +48,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
     }, 120000);
   }
 
-
-  interceptEvents(){
-    console.log(this);
-  }
-
   isAlive() {
     if (this.p !== null) {
       return this.p.connected;
@@ -418,7 +413,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
   onClose(data) {
     debugStages('WRTC MAYBE CLOSE', data);
-    if(!this.isAlive()){
+    if (!this.isAlive()) {
       debugStages('WRTC CLOSE', data);
       if (this.connected) {
         this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
