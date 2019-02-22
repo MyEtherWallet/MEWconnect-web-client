@@ -1,12 +1,14 @@
 import createLogger from 'logging';
 import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
+import uuid from 'uuid/v4';
 import io from 'socket.io-client';
 import SimplePeer from 'simple-peer';
 import MewConnectCommon from './MewConnectCommon';
 import MewConnectCrypto from './MewConnectCrypto';
 
 const debug = debugLogger('MEWconnect:initiator');
+const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
 const logger = createLogger('MewConnectInitiator');
 
@@ -15,6 +17,10 @@ export default class MewConnectInitiator extends MewConnectCommon {
     super();
 
     this.supportedBrowser = MewConnectCommon.checkBrowser();
+
+    this.activePeerId = '';
+    this.allPeerIds = [];
+    this.peersCreated = [];
 
     this.destroyOnUnload();
     this.p = null;
@@ -48,7 +54,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
   isAlive() {
     if (this.p !== null) {
-      return this.p.connected;
+      return this.p.connected && !this.p.destroyed;
     }
     return false;
   }
@@ -321,7 +327,18 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.p.signal(JSON.parse(data.data));
   }
 
+  setActivePeerId() {
+    this.activePeerId = uuid();
+    this.allPeerIds.push(this.activePeerId);
+  }
+
+  getActivePeerId() {
+    const split = this.activePeerId.split('-');
+    return split.join('-');
+  }
+
   initiatorStartRTC(socket, options) {
+    this.setActivePeerId();
     const webRtcConfig = options.webRtcConfig || {};
     const signalListener = this.initiatorSignalListener(
       socket,
@@ -347,33 +364,43 @@ export default class MewConnectInitiator extends MewConnectCommon {
     debug(`initiatorStartRTC - options: ${simpleOptions}`);
     this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
     this.p = new this.Peer(simpleOptions);
-    this.p.on(this.rtcEvents.error, this.onError.bind(this));
-    this.p.on(this.rtcEvents.connect, this.onConnect.bind(this));
-    this.p.on(this.rtcEvents.close, this.onClose.bind(this));
-    this.p.on(this.rtcEvents.data, this.onData.bind(this));
+    const peerID = this.getActivePeerId();
+    this.p.peerInstanceId = peerID;
+    this.peersCreated.push(this.p);
+    this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
+    this.p.on(this.rtcEvents.connect, this.onConnect.bind(this, peerID));
+    this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
+    this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
     this.p.on(this.rtcEvents.signal, signalListener.bind(this));
-    this.p._pc.addEventListener('iceconnectionstatechange', evt => {
-      // eslint-disable-next-line no-undef
-      if (typeof jest === 'undefined') {
-        // included because target is not defined in jest
-        debug(`iceConnectionState: ${evt.target.iceConnectionState}`);
-        if (
-          evt.target.iceConnectionState === 'connected' ||
-          evt.target.iceConnectionState === 'completed'
-        ) {
-          if (!this.connected) {
-            this.connected = true;
-            this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
-          }
-        }
-      }
-    });
+    this.p._pc.addEventListener(
+      'iceconnectionstatechange',
+      this.stateChangeListener.bind(this, peerID)
+    );
   }
 
   // ----- WebRTC Communication Event Handlers
 
-  onConnect() {
+  stateChangeListener(peerID, evt) {
+    // eslint-disable-next-line no-undef
+    if (typeof jest === 'undefined') {
+      // included because target is not defined in jest
+      debug(`iceConnectionState: ${evt.target.iceConnectionState}`);
+      debugPeer('this.allPeerIds', this.allPeerIds);
+      debugPeer('peerID', peerID);
+      if (
+        evt.target.iceConnectionState === 'connected' ||
+        evt.target.iceConnectionState === 'completed'
+      ) {
+        if (!this.connected) {
+          this.connected = true;
+          this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+        }
+      }
+    }
+  }
+  onConnect(peerID) {
     debugStages('RTC CONNECT', 'ok');
+    debugPeer('peerID', peerID);
     this.connected = true;
     this.turnDisabled = true;
     this.socketEmit(this.signals.rtcConnected, this.socketKey);
@@ -381,8 +408,9 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
   }
 
-  async onData(data) {
+  async onData(peerID, data) {
     debug('DATA RECEIVED', data.toString());
+    debugPeer('peerID', peerID);
     try {
       let decryptedData;
       if (this.isJSON(data)) {
@@ -409,24 +437,31 @@ export default class MewConnectInitiator extends MewConnectCommon {
     }
   }
 
-  onClose(data) {
-    debugStages('WRTC CLOSE', data);
-    if (this.connected) {
-      this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
-      this.connected = false;
-    } else {
-      this.connected = false;
+  onClose(peerID, data) {
+    debugStages('WRTC MAYBE CLOSE');
+    debugPeer('peerID', peerID);
+    if (!this.isAlive()) {
+      debugStages('WRTC CLOSE', data);
+      if (this.connected) {
+        this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
+        this.connected = false;
+      } else {
+        this.connected = false;
+      }
     }
   }
 
-  onError(err) {
-    debug(err.code);
+  onError(peerID, err) {
     debugStages('WRTC ERROR');
+    debugPeer('peerID', peerID);
+    debug(err.code);
     debug('error', err);
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
       this.useFallback();
     } else {
-      this.uiCommunicator(this.lifeCycle.RtcErrorEvent);
+      if (!this.isAlive()) {
+        this.uiCommunicator(this.lifeCycle.RtcErrorEvent);
+      }
     }
   }
 
@@ -474,13 +509,12 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.p.send(JSON.stringify(encryptedSend));
     } else {
       // eslint-disable-next-line
-      // console.error('Attempted to send when no peer connection is connected');
       this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
     }
   }
 
   rtcDestroy() {
-    if (this.p !== null) {
+    if (this.isAlive()) {
       this.p.destroy();
       this.connected = false;
       this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);

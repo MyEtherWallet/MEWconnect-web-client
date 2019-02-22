@@ -1,7 +1,7 @@
 {
   "name": "@myetherwallet/mewconnect-web-client",
   "homepage": "https://github.com/myetherwallet/MEWconnect-web-client",
-  "version": "1.0.12",
+  "version": "1.0.14",
   "main": "./dist/index.js",
   "scripts": {
     "start": "node ./example/peer_server/www.js",
@@ -64,6 +64,7 @@
     "rollup-plugin-json": "^3.1.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^3.4.0",
+    "uuid": "^3.3.2",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1",
     "wrtc": "^0.2.0",
