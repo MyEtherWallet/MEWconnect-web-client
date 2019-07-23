@@ -2,6 +2,9 @@ import createLogger from 'logging';
 import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
 import uuid from 'uuid/v4';
+import CryptoUtils from './utils/crypto-utils'
+import WebsocketConnection from './utils/websocket-connection'
+import WebRTCConnection from './utils/webrtc-connection'
 import io from 'socket.io-client';
 import SimplePeer from 'simple-peer';
 import MewConnectCommon from './MewConnectCommon';
@@ -17,7 +20,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
     super();
 
     this.supportedBrowser = MewConnectCommon.checkBrowser();
-
+    this.socket = new WebsocketConnection()
+    this.peer = new WebRTCConnection()
     this.activePeerId = '';
     this.allPeerIds = [];
     this.peersCreated = [];

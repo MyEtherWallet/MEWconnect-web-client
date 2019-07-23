@@ -1,7 +1,7 @@
 {
   "name": "@myetherwallet/mewconnect-web-client",
   "homepage": "https://github.com/myetherwallet/MEWconnect-web-client",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "main": "./dist/index.js",
   "scripts": {
     "start": "node ./example/peer_server/www.js",
@@ -56,6 +56,8 @@
     "nyc": "^13.0.1",
     "opn": "^5.4.0",
     "opn-cli": "^3.1.0",
+    "promise-ws": "^1.0.0-1",
+    "query-string": "^6.8.1",
     "regenerator-runtime": "^0.12.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.66.0",
