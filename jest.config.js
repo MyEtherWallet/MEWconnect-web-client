@@ -2,7 +2,18 @@ module.exports = {
   clearMocks: true,
   collectCoverage: true,
   coverageDirectory: 'coverage',
-  testEnvironment: 'jsdom',
-  testMatch: ['**/__tests__/**/*.js?(x)', '**/tests/**/?(*.)+(spec|test).js?(x)'],
-  testPathIgnorePatterns: ['/node_modules/']
+  // testEnvironment: 'jsdom',
+  testMatch: ['**/__tests__/**/*.js?(x)', '**/test/**/?(*.)+(spec|test).js?(x)'],
+  testPathIgnorePatterns: ['/node_modules/'],
+  "testEnvironment": "node",
+  "setupFiles": [
+    "<rootDir>/test/jest.setup.js"
+  ],
+  "moduleNameMapper": {
+    "@signals(.*)$": "<rootDir>/test/signals$1",
+    "@clients(.*)$": "<rootDir>/test/clients$1",
+    "@config(.*)$": "<rootDir>/test/config$1",
+    "@utils(.*)$": "<rootDir>/test/utils$1",
+    "@/(.*)$": "<rootDir>dist$1"
+  }
 };

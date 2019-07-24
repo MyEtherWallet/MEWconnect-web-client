@@ -2,20 +2,441 @@
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var crypto = _interopDefault(require('crypto'));
+var eccrypto = _interopDefault(require('eccrypto'));
+var ethUtils = _interopDefault(require('ethereumjs-util'));
+var secp256k1 = _interopDefault(require('secp256k1'));
+var queryString = _interopDefault(require('query-string'));
+require('isomorphic-ws');
+var Peer = _interopDefault(require('simple-peer'));
+var wrtc = _interopDefault(require('wrtc'));
 var createLogger = _interopDefault(require('logging'));
 var EventEmitter = _interopDefault(require('events'));
 var browserOrNode = require('browser-or-node');
 var detectBrowser = require('detect-browser');
-var eccrypto = _interopDefault(require('eccrypto'));
-var ethUtils = _interopDefault(require('ethereumjs-util'));
-var crypto = _interopDefault(require('crypto'));
-var secp256k1 = _interopDefault(require('secp256k1'));
 var debugLogger = _interopDefault(require('debug'));
 var uuid = _interopDefault(require('uuid/v4'));
-var io = _interopDefault(require('socket.io-client'));
-var SimplePeer = _interopDefault(require('simple-peer'));
 
-var version = "1.0.14";
+var asyncToGenerator = function (fn) {
+  return function () {
+    var gen = fn.apply(this, arguments);
+    return new Promise(function (resolve, reject) {
+      function step(key, arg) {
+        try {
+          var info = gen[key](arg);
+          var value = info.value;
+        } catch (error) {
+          reject(error);
+          return;
+        }
+
+        if (info.done) {
+          resolve(value);
+        } else {
+          return Promise.resolve(value).then(function (value) {
+            step("next", value);
+          }, function (err) {
+            step("throw", err);
+          });
+        }
+      }
+
+      return step("next");
+    });
+  };
+};
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+var defineProperty = function (obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+var inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+var possibleConstructorReturn = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+};
+
+var toConsumableArray = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+};
+
+var _this = undefined;
+
+/**
+ * Generate a public/private keypair using secp256k1
+ *
+ * @return {Object} - publicKey/privateKey object
+ */
+var generateKeys = function generateKeys() {
+  var privateKey = Buffer.from(crypto.randomBytes(32), 'hex');
+  var publicKey = secp256k1.publicKeyCreate(privateKey);
+  return {
+    publicKey: publicKey,
+    privateKey: privateKey
+  };
+};
+
+/**
+ * Generate a connId using given a public key
+ *
+ * @param  {String} publicKey - publicKey string (usually generated with generateKeys())
+ * @return {String} - connId string
+ */
+var generateConnId = function generateConnId(publicKey) {
+  return publicKey.toString('hex').slice(-32);
+};
+
+/**
+ * Generate a random message of 32 bytes
+ *
+ * @return {String} - The randomly generated string
+ */
+var generateRandomMessage = function generateRandomMessage() {
+  return crypto.randomBytes(32).toString('hex');
+};
+
+/**
+ * Sign a message using a privateKey
+ *
+ * @param  {String} msg - Message to sign/hash
+ * @param  {[type]} privateKey - Private key (usually generated with generateKeys())
+ * @return {String} - Signed message
+ */
+var signMessage = function signMessage(msg, privateKey) {
+  var hashedMsg = ethUtils.hashPersonalMessage(ethUtils.toBuffer(msg));
+  var signed = ethUtils.ecsign(Buffer.from(hashedMsg), Buffer.from(privateKey, 'hex'));
+  var combined = Buffer.concat([Buffer.from([signed.v]), Buffer.from(signed.r), Buffer.from(signed.s)]);
+  var combinedHex = combined.toString('hex');
+  return combinedHex;
+};
+
+/**
+ * Encrypt a set of data given a private key using eccrypto
+ *
+ * @param  {Object/String} data - Data to encrypt
+ * @param  {String} privateKey - Private key (usually generated with generateKeys())
+ * @return {Object} - Encrypted data object with the following properties:
+ *                    'ciphertext', 'ephemPublicKey', 'iv', 'mac'
+ */
+var encrypt = function () {
+  var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(data, privateKey) {
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            return _context.abrupt('return', new Promise(function (resolve, reject) {
+              var publicKey = eccrypto.getPublic(privateKey);
+              eccrypto.encrypt(publicKey, Buffer.from(data)).then(function (encryptedData) {
+                resolve(encryptedData);
+              }).catch(function (error) {
+                reject(error);
+              });
+            }));
+
+          case 1:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, _this);
+  }));
+
+  return function encrypt(_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+/**
+ * Decrypt an encrypted data object given a private key using eccrypto
+ *
+ * @param  {Object} data - An encrypted data object (usually using the encrypt() function)
+ * @param  {String} privateKey - Private key (usually generated with generateKeys())
+ * @return {Object} - Decrypted data
+ */
+var decrypt = function () {
+  var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(data, privateKey) {
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            return _context2.abrupt('return', new Promise(function (resolve, reject) {
+              eccrypto.decrypt(privateKey, {
+                ciphertext: Buffer.from(data.ciphertext),
+                ephemPublicKey: Buffer.from(data.ephemPublicKey),
+                iv: Buffer.from(data.iv),
+                mac: Buffer.from(data.mac)
+              }).then(function (decrypted) {
+                var result = void 0;
+                try {
+                  if (isJSON(decrypted)) {
+                    var humanRadable = JSON.parse(decrypted);
+                    if (Array.isArray(humanRadable)) {
+                      result = humanRadable[0];
+                    } else {
+                      result = humanRadable;
+                    }
+                  } else {
+                    result = decrypted.toString();
+                  }
+                } catch (e) {
+                  reject(e);
+                }
+                resolve(JSON.stringify(result));
+              }).catch(function (error) {
+                reject(error);
+              });
+            }));
+
+          case 1:
+          case 'end':
+            return _context2.stop();
+        }
+      }
+    }, _callee2, _this);
+  }));
+
+  return function decrypt(_x3, _x4) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+var isJSON = function isJSON(arg) {
+  try {
+    JSON.parse(arg);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+var CryptoUtils = {
+  generateKeys: generateKeys,
+  generateConnId: generateConnId,
+  generateRandomMessage: generateRandomMessage,
+  signMessage: signMessage,
+  encrypt: encrypt,
+  decrypt: decrypt
+};
+
+var WebsocketConnection = function () {
+  function WebsocketConnection() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    classCallCheck(this, WebsocketConnection);
+
+    this.options = options;
+    this.socket = {};
+    this.listeners = {};
+  }
+
+  /**
+   * Connect to a given @websocketURL with given @options query params.
+   * The client will connect and bind every on "message" event to the
+   * onMessage() function.
+   *
+   * In order to handle a message, the on() member function must be used to add
+   * an listener. This gives functionality similar to socket.io, in which
+   * it is possible to so something like:
+   *
+   * socket.on('error', err => {})
+   * as opposed to:
+   * socket.on('message', message => { if (message.signal === 'error')... })
+   *
+   * @param  {String} websocketURL - WSS address of websocket API
+   * @param  {Object} options - JSON-formatted connection query params
+   * @param  {String} options.role - Either "initiator" or "receiver" accordingly
+   * @param  {String} options.connId - Last 32 characters of the public key portion of the key-pair
+   *                                  created for the particular paired connection
+   * @param  {String} options.signed - Private key signed with the private key created for the connection
+   */
+
+
+  createClass(WebsocketConnection, [{
+    key: 'connect',
+    value: function () {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(websocketUrl) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+        var url;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!websocketUrl) websocketUrl = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
+                url = websocketUrl + '?' + queryString.stringify(options);
+
+                console.log(url); // todo remove dev item
+                this.socket = new WebSocket(url);
+                // this.socket.on('message', this.onMessage.bind(this));
+                this.socket.onmessage = this.onMessage.bind(this);
+
+              case 5:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function connect(_x3) {
+        return _ref.apply(this, arguments);
+      }
+
+      return connect;
+    }()
+
+    /**
+     * On 'message' event, parse the message and if possible,
+     * call the event listener with the message's particular signal.
+     *
+     * Messages are received as stringified JSON objects, that when parsed,
+     * take the following format:
+     *
+     * {
+     *   signal, // This is the signal that the member function on() can bind to
+     *   data, // The actual data payload
+     *   message // Accompanying server message
+     * }
+     *
+     * @param  {String} message - Stringified JSON payload sent by the server
+     * @return {[type]}         [description]
+     */
+
+  }, {
+    key: 'onMessage',
+    value: function onMessage(message) {
+      var parsedMessage = JSON.parse(message);
+      var signal = parsedMessage.signal;
+      var data = parsedMessage.data;
+
+      try {
+        this.listeners[signal].call(this, data);
+      } catch (e) {
+        // Unhandled message signal
+      }
+    }
+
+    /**
+     * Bind an function to a particular message signal event.
+     * E.G.
+     * socket.on('error', err => {})
+     *
+     * @param  {String} signal - The signal to listen for
+     * @param  {Function} fn - Function to perform on message signal
+     */
+
+  }, {
+    key: 'on',
+    value: function on(signal, fn) {
+      this.listeners[signal] = fn;
+    }
+
+    /**
+     * Unbind a particular message signal event listener.
+     *
+     * @param  {String} signal - The signal to unbind
+     */
+
+  }, {
+    key: 'off',
+    value: function off(signal) {
+      delete this.listeners[signal];
+    }
+
+    /**
+     * Send a data payload to a particular signal.
+     *
+     * @param  {String} signal - Particular action/signal such as "offersignal"
+     * @param  {[type]} data - Data payload
+     */
+
+  }, {
+    key: 'send',
+    value: function send(signal) {
+      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+      var message = JSON.stringify({
+        action: signal,
+        data: data
+      });
+      this.socket.send(message);
+    }
+  }]);
+  return WebsocketConnection;
+}();
+
+var version = "1.0.15";
 
 var version$1 = version;
 
@@ -30,6 +451,7 @@ var connectionCodeSchemas = {
 var connectionCodeSeparator = '_';
 
 var signal = {
+  //V1
   attemptingTurn: 'attemptingTurn',
   turnToken: 'turnToken',
   tryTurn: 'tryTurn',
@@ -46,7 +468,12 @@ var signal = {
   confirmation: 'confirmation',
   invalidConnection: 'InvalidConnection',
   confirmationFailedBusy: 'confirmationFailedBusy',
-  confirmationFailed: 'confirmationFailed'
+  confirmationFailed: 'confirmationFailed',
+  // V2
+  initiated: 'initiated',
+  socketTimeout: 'socketTimeout',
+  receivedSignal: 'receivedSignal',
+  error: 'error'
 };
 
 var rtc = {
@@ -103,106 +530,161 @@ var communicationTypes = {
   signTx: 'signTx'
 };
 
-var asyncToGenerator = function (fn) {
-  return function () {
-    var gen = fn.apply(this, arguments);
-    return new Promise(function (resolve, reject) {
-      function step(key, arg) {
-        try {
-          var info = gen[key](arg);
-          var value = info.value;
-        } catch (error) {
-          reject(error);
-          return;
-        }
+var WebRTCConnection = function () {
+  function WebRTCConnection() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    classCallCheck(this, WebRTCConnection);
 
-        if (info.done) {
-          resolve(value);
-        } else {
-          return Promise.resolve(value).then(function (value) {
-            step("next", value);
-          }, function (err) {
-            step("throw", err);
-          });
-        }
+    this.options = options;
+    this.peer = {};
+    this.listeners = {};
+  }
+
+  /**
+   * Attempt to initiate an "offer" WebRTC connection between two peers.
+   * This will return an offer object that can be used by the receiver to create a
+   * p2p connection.
+   *
+   * If ICE servers are given, then use those instead. The object format returned
+   * by twilio is incorrect. The 'url' properties must be renamed 'urls'
+   *
+   * @return {Object} - WebRTC connection offer
+   */
+
+
+  createClass(WebRTCConnection, [{
+    key: 'offer',
+    value: function () {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        var _this = this;
+
+        var iceServers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                return _context.abrupt('return', new Promise(function (resolve, reject) {
+                  var options = {
+                    initiator: true,
+                    trickle: false,
+                    iceTransportPolicy: 'relay',
+                    config: {
+                      iceServers: iceServers ? iceServers.map(function (obj) {
+                        var newObject = {};
+                        delete Object.assign(newObject, obj, defineProperty({}, 'urls', obj['url']))['url'];
+                        return newObject;
+                      }) : stunServers
+                    },
+                    wrtc: wrtc
+                  };
+
+                  _this.peer = new Peer(options);
+                  _this.peer.on(rtc.signal, function (data) {
+                    resolve(data);
+                  });
+                }));
+
+              case 1:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function offer() {
+        return _ref.apply(this, arguments);
       }
 
-      return step("next");
-    });
-  };
-};
+      return offer;
+    }()
 
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
+    /**
+     * Given a WebRTC offer object (created with the offer() function),
+     * a receiver can create a WebRTC response in order to create a p2p
+     * connection between the initiator and receiver.
+     *
+     * @param  {Object} offer - WebRTC offer object create with offer()
+     * @return {Object} - WebRTC answer object, to be used by the initiator
+     */
 
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
+  }, {
+    key: 'answer',
+    value: function () {
+      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(offer) {
+        var _this2 = this;
+
+        var iceServers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                return _context2.abrupt('return', new Promise(function (resolve, reject) {
+                  var options = {
+                    trickle: false,
+                    iceTransportPolicy: 'relay',
+                    config: {
+                      iceServers: iceServers ? iceServers : stunServers
+                    },
+                    wrtc: wrtc
+                  };
+                  _this2.peer = new Peer(options);
+                  _this2.peer.signal(offer);
+                  _this2.peer.on(rtc.signal, function (data) {
+                    resolve(data);
+                  });
+                }));
+
+              case 1:
+              case 'end':
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function answer(_x4) {
+        return _ref2.apply(this, arguments);
+      }
+
+      return answer;
+    }()
+
+    /**
+     * Given a WebRTC answer object, complete WebRTC connection.
+     * @param  {Object} answer - WebRTC answer object created by answer()
+     */
+
+  }, {
+    key: 'connect',
+    value: function connect(answer) {
+      this.peer.signal(answer);
     }
-  }
 
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
+    /**
+     * Disconnect from current WebRTC connection
+     */
+
+  }, {
+    key: 'disconnect',
+    value: function disconnect() {
+      this.peer.destroy();
+    }
+
+    /**
+     * On @sigal event sent via WebRTC, perform given fn
+     * @param  {String} signal - WebRTC signal/event. E.g. 'data'
+     * @param  {Function} fn - Callback function to perform on signal event
+     */
+
+  }, {
+    key: 'on',
+    value: function on(signal$$1, fn) {
+      this.peer.on(signal$$1, fn);
+    }
+  }]);
+  return WebRTCConnection;
 }();
-
-var _extends = Object.assign || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];
-
-    for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }
-
-  return target;
-};
-
-var inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-};
-
-var possibleConstructorReturn = function (self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return call && (typeof call === "object" || typeof call === "function") ? call : self;
-};
-
-var toConsumableArray = function (arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-    return arr2;
-  } else {
-    return Array.from(arr);
-  }
-};
 
 /* eslint-disable no-undef */
 
@@ -248,7 +730,7 @@ var MewConnectCommon = function (_EventEmitter) {
     key: 'getBrowserRTC',
     value: function getBrowserRTC() {
       if (typeof window === 'undefined') return null;
-      var wrtc = {
+      var wrtc$$1 = {
         RTCPeerConnection:
         // eslint-disable-next-line no-undef
         window.RTCPeerConnection ||
@@ -271,8 +753,8 @@ var MewConnectCommon = function (_EventEmitter) {
         // eslint-disable-next-line no-undef
         window.webkitRTCIceCandidate
       };
-      if (!wrtc.RTCPeerConnection) return null;
-      return wrtc;
+      if (!wrtc$$1.RTCPeerConnection) return null;
+      return wrtc$$1;
     }
   }, {
     key: 'checkWebRTCAvailable',
@@ -480,6 +962,8 @@ var MewConnectCrypto = function () {
   return MewConnectCrypto;
 }();
 
+/* eslint-disable */
+
 var debug = debugLogger('MEWconnect:initiator');
 var debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 var debugStages = debugLogger('MEWconnect:initiator-stages');
@@ -495,7 +979,9 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     var _this = possibleConstructorReturn(this, (MewConnectInitiator.__proto__ || Object.getPrototypeOf(MewConnectInitiator)).call(this));
 
     _this.supportedBrowser = MewConnectCommon.checkBrowser();
-
+    _this.generateKeys();
+    _this.socket = new WebsocketConnection();
+    _this.peer = new WebRTCConnection();
     _this.activePeerId = '';
     _this.allPeerIds = [];
     _this.peersCreated = [];
@@ -510,8 +996,8 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     _this.iceState = '';
     _this.turnServers = [];
 
-    _this.io = options.io || io;
-    _this.Peer = options.wrtc || SimplePeer;
+    // this.io = options.io || io;
+    // this.Peer = options.wrtc || SimplePeer;
     _this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
 
     _this.signals = _this.jsonDetails.signals;
@@ -531,7 +1017,328 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     return _this;
   }
 
+  /*
+  ===================================================================================
+  Keys
+  ===================================================================================
+  */
+
+  /* Set the public and private keys, connId, and signed that will be used
+   * for the duration of the pairing process. The receiver will need to have access
+   * to this information as well, however, the initiator creates the credentials to be
+   * shared with the receiver.
+   */
+
+
   createClass(MewConnectInitiator, [{
+    key: 'generateKeys',
+    value: function generateKeys() {
+      var keys = CryptoUtils.generateKeys();
+      this.publicKey = keys.publicKey;
+      this.privateKey = keys.privateKey;
+      this.connId = CryptoUtils.generateConnId(this.publicKey);
+      this.signed = CryptoUtils.signMessage(this.privateKey, this.privateKey);
+    }
+
+    /*
+    ===================================================================================
+    Encryption
+    ===================================================================================
+    */
+
+    /**
+     * Using the generated privateKey, encrypt a message.
+     * The message must be a String, however, if an object is given,
+     * it will become stringified for proper encryption.
+     *
+     * @param  {Object} message - String or Object to be encrypted
+     * @return {Object} - Encrypted message
+     */
+
+  }, {
+    key: 'encrypt',
+    value: function () {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(message) {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                message = typeof message === 'String' ? message : JSON.stringify(message);
+                _context.next = 3;
+                return CryptoUtils.encrypt(message, this.privateKey);
+
+              case 3:
+                return _context.abrupt('return', _context.sent);
+
+              case 4:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function encrypt(_x2) {
+        return _ref.apply(this, arguments);
+      }
+
+      return encrypt;
+    }()
+
+    /**
+     * Decrypt an encrypted message using the generated privateKey.
+     *
+     * @param  {Object} message - Message to be decrypted.
+     * @return {Object} - Decrypted message object
+     */
+
+  }, {
+    key: 'decrypt',
+    value: function () {
+      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(message) {
+        var decryptedMessageString;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return CryptoUtils.decrypt(message, this.privateKey);
+
+              case 2:
+                decryptedMessageString = _context2.sent;
+                return _context2.abrupt('return', JSON.parse(decryptedMessageString));
+
+              case 4:
+              case 'end':
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function decrypt(_x3) {
+        return _ref2.apply(this, arguments);
+      }
+
+      return decrypt;
+    }()
+
+    /*
+    ===================================================================================
+    Websocket
+    ===================================================================================
+    */
+
+    /**
+     * Given a @websocketURL, attempt to connect with given query param @options.
+     * If no options are given, default to -what should- be the correct parameters.
+     *
+     * @param  {String} websocketURL - WS/WSS websocket URL
+     * @param  {Object} options - (Optional) Connection query parameters
+     */
+
+  }, {
+    key: 'connect',
+    value: function () {
+      var _ref3 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(websocketURL) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+        var queryOptions;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (!websocketURL) websocketURL = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
+                queryOptions = options ? options : {
+                  role: this.jsonDetails.stages.initiator,
+                  connId: this.connId,
+                  signed: this.signed
+                };
+                _context3.next = 4;
+                return this.socket.connect(websocketURL, queryOptions);
+
+              case 4:
+              case 'end':
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function connect(_x5) {
+        return _ref3.apply(this, arguments);
+      }
+
+      return connect;
+    }()
+
+    /**
+     * Bind a particular websocket signal/event to a given callback function.
+     *
+     * @param  {String} signal - Signal to listen to. E.g. 'onoffer'
+     * @param  {Function} fn - Callback function to perform on given signal
+     */
+
+  }, {
+    key: 'socketOn',
+    value: function socketOn(signal, fn) {
+      this.socket.on(signal, fn);
+    }
+
+    /**
+     * Unbind listening to a particular signal that was bound in on()
+     * @param  {String} signal - Signal to stop listening to. E.g. 'onoffer'
+     */
+
+  }, {
+    key: 'socketOff',
+    value: function socketOff(signal) {
+      this.socket.off(signal);
+    }
+
+    /**
+     * Emit a @signal event with a given @data payload.
+     *
+     * @param  {String} signal - Signal to emit. E.g. 'offersignal'
+     * @param  {Object} data - Data/message payload to send
+     */
+
+  }, {
+    key: 'socketEmit',
+    value: function socketEmit(signal, data) {
+      this.socket.send(signal, data);
+    }
+
+    /*
+    ===================================================================================
+      WebRTC
+    ===================================================================================
+    */
+
+    /**
+     * Attempt to create a WebRTC Offer.
+     * Return the encrypted offer for transmission to the receiver.
+     *
+     * @return {Object} - Encrypted WebRTC offer
+     */
+
+  }, {
+    key: 'offer',
+    value: function () {
+      var _ref4 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+        var offer;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return this.peer.offer(options);
+
+              case 2:
+                offer = _context4.sent;
+                _context4.next = 5;
+                return this.encrypt(offer);
+
+              case 5:
+                return _context4.abrupt('return', _context4.sent);
+
+              case 6:
+              case 'end':
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      function offer() {
+        return _ref4.apply(this, arguments);
+      }
+
+      return offer;
+    }()
+
+    /**
+     * Given a WebRTC response from the receiver, complete p2p connection.
+     *
+     * @param  {Object} answer - WebRTC answer created by receiver
+     */
+
+  }, {
+    key: 'signal',
+    value: function () {
+      var _ref5 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(answer) {
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return this.peer.connect(answer);
+
+              case 2:
+                return _context5.abrupt('return', _context5.sent);
+
+              case 3:
+              case 'end':
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      function signal(_x7) {
+        return _ref5.apply(this, arguments);
+      }
+
+      return signal;
+    }()
+
+    /**
+     * Disconnect from current WebRTC connection
+     */
+
+  }, {
+    key: 'disconnectRTC',
+    value: function () {
+      var _ref6 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                this.peer = new WebRTCConnection();
+
+              case 1:
+              case 'end':
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this);
+      }));
+
+      function disconnectRTC() {
+        return _ref6.apply(this, arguments);
+      }
+
+      return disconnectRTC;
+    }()
+
+    /**
+     * On a given @signal event from the WebRTC connection, perform callback function.
+     *
+     * @param  {String} signal - Signal to listen to. E.g. 'data'
+     * @param  {Function} fn - Callback function to perform
+     */
+
+  }, {
+    key: 'onRTC',
+    value: function onRTC(signal, fn) {
+      this.peer.on(signal, fn);
+    }
+
+    //==========================================================================================
+    //==========================================================================================
+    //==========================================================================================
+
+  }, {
     key: 'isAlive',
     value: function isAlive() {
       if (this.p !== null) {
@@ -617,13 +1424,13 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'regenerateCode',
     value: function () {
-      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+      var _ref7 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
+        return regeneratorRuntime.wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
                 if (!(this.signalUrl === null)) {
-                  _context.next = 2;
+                  _context7.next = 2;
                   break;
                 }
 
@@ -635,14 +1442,14 @@ var MewConnectInitiator = function (_MewConnectCommon) {
 
               case 4:
               case 'end':
-                return _context.stop();
+                return _context7.stop();
             }
           }
-        }, _callee, this);
+        }, _callee7, this);
       }));
 
       function regenerateCode() {
-        return _ref.apply(this, arguments);
+        return _ref7.apply(this, arguments);
       }
 
       return regenerateCode;
@@ -650,23 +1457,23 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'useFallback',
     value: function () {
-      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      var _ref8 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+        return regeneratorRuntime.wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
                 this.socketEmit(this.signals.tryTurn, { connId: this.connId });
 
               case 1:
               case 'end':
-                return _context2.stop();
+                return _context8.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee8, this);
       }));
 
       function useFallback() {
-        return _ref2.apply(this, arguments);
+        return _ref8.apply(this, arguments);
       }
 
       return useFallback;
@@ -677,51 +1484,29 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'initiatorStart',
     value: function () {
-      var _ref3 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(url) {
-        var toSign, options;
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      var _ref9 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(url) {
+        return regeneratorRuntime.wrap(function _callee9$(_context9) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context9.prev = _context9.next) {
               case 0:
                 if (this.signalUrl === null) {
                   this.signalUrl = url;
                 }
-                this.keys = this.mewCrypto.prepareKey();
-                toSign = this.mewCrypto.generateMessage();
-                _context3.next = 5;
-                return this.mewCrypto.signMessage(this.keys.pvt.toString('hex'));
+                this.generateKeys();
 
-              case 5:
-                this.signed = _context3.sent;
+                _context9.next = 4;
+                return this.initiatorConnect(this.socket);
 
-                this.connId = this.mewCrypto.bufferToConnId(this.keys.pub);
-                this.displayCode(this.keys.pvt.toString('hex'));
-                this.uiCommunicator(this.lifeCycle.signatureCheck);
-                options = {
-                  query: {
-                    stage: 'initiator',
-                    signed: this.signed,
-                    message: toSign,
-                    connId: this.connId
-                  },
-                  transports: ['websocket', 'polling', 'flashsocket'],
-                  secure: true
-                };
-
-                this.socketManager = this.io(url, options);
-                this.socket = this.socketManager.connect();
-                this.initiatorConnect(this.socket);
-
-              case 13:
+              case 4:
               case 'end':
-                return _context3.stop();
+                return _context9.stop();
             }
           }
-        }, _callee3, this);
+        }, _callee9, this);
       }));
 
-      function initiatorStart(_x2) {
-        return _ref3.apply(this, arguments);
+      function initiatorStart(_x8) {
+        return _ref9.apply(this, arguments);
       }
 
       return initiatorStart;
@@ -731,12 +1516,9 @@ var MewConnectInitiator = function (_MewConnectCommon) {
 
     // ----- Wrapper around Socket.IO methods
     // socket.emit wrapper
-
-  }, {
-    key: 'socketEmit',
-    value: function socketEmit(signal, data) {
-      this.socket.binary(false).emit(signal, data);
-    }
+    // socketEmit(signal, data) {
+    //   this.socket.binary(false).emit(signal, data);
+    // }
 
     // socket.disconnect wrapper
 
@@ -748,38 +1530,93 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     }
 
     // socket.on listener registration wrapper
-
-  }, {
-    key: 'socketOn',
-    value: function socketOn(signal, func) {
-      this.socket.on(signal, func);
-    }
+    /**
+     * Bind a particular websocket signal/event to a given callback function.
+     *
+     * @param  {String} signal - Signal to listen to. E.g. 'onoffer'
+     * @param  {Function} fn - Callback function to perform on given signal
+     */
+    // on(signal, fn) {
+    //   this.socket.on(signal, fn)
+    // }
+    // socketOn(signal, func) {
+    //   this.socket.on(signal, func);
+    // }
 
     // ----- Setup handlers for communication with the signal server
 
   }, {
     key: 'initiatorConnect',
-    value: function initiatorConnect(socket) {
-      var _this3 = this;
+    value: function () {
+      var _ref10 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(socket) {
+        return regeneratorRuntime.wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
+              case 0:
+                debugStages('INITIATOR CONNECT');
+                this.uiCommunicator(this.lifeCycle.SocketConnectedEvent);
+                this.signalUrl = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
+                _context10.next = 5;
+                return this.connect(this.signalUrl);
 
-      debugStages('INITIATOR CONNECT');
-      this.uiCommunicator(this.lifeCycle.SocketConnectedEvent);
+              case 5:
 
-      this.socket.on(this.signals.connect, function () {
-        debugStages('SOCKET CONNECTED');
-        _this3.socketConnected = true;
-      });
+                // const initiatorInitiated = new Promise((resolve, reject) => {
+                //   this.initiator.on(this.jsonDetails.signals.initiated, resolve)
+                // });
+                /*
+                    const initiatorConfimation = new Promise((resolve, reject) => {
+                      this.initiator.on(this.jsonDetails.signals.confirmation, resolve);
+                    });
+                
+                    const initiatorConnect = new Promise((resolve, reject) => {
+                      this.initiator.onRTC(this.jsonDetails.rtc.connect, resolve);
+                    });
+                
+                    const offer = await this.initiator.offer();
+                    const message = { data: offer };
+                    this.initiator.send(this.jsonDetails.signals.offerSignal, message);
+                
+                    const initiatorReceiveAnswer = new Promise((resolve, reject) => {
+                      this.initiator.on(this.jsonDetails.signals.answer, async data => {
+                        const webRTCAnswer = await this.initiator.decrypt(data.data);
+                        resolve(webRTCAnswer);
+                      });
+                    });*/
 
-      this.socketOn(this.signals.confirmation, this.sendOffer.bind(this)); // response
-      this.socketOn(this.signals.answer, this.recieveAnswer.bind(this));
-      this.socketOn(this.signals.confirmationFailedBusy, this.busyFailure.bind(this));
-      this.socketOn(this.signals.confirmationFailed, this.confirmationFailure.bind(this));
-      this.socketOn(this.signals.invalidConnection, this.invalidFailure.bind(this));
-      this.socketOn(this.signals.disconnect, this.socketDisconnectHandler.bind(this));
-      this.socketOn(this.signals.attemptingTurn, this.willAttemptTurn.bind(this));
-      this.socketOn(this.signals.turnToken, this.beginTurn.bind(this));
-      return socket;
-    }
+                // this.socket.on(this.signals.connect, () => {
+                //   debugStages('SOCKET CONNECTED');
+                //   this.socketConnected = true;
+                // });
+                this.socketOn(this.signals.initiated, this.initiated.bind(this)); // response
+
+                this.socketOn(this.signals.confirmation, this.sendOffer.bind(this)); // response
+                this.socketOn(this.signals.answer, this.recieveAnswer.bind(this));
+                this.socketOn(this.signals.confirmationFailedBusy, this.busyFailure.bind(this));
+                this.socketOn(this.signals.confirmationFailed, this.confirmationFailure.bind(this));
+                this.socketOn(this.signals.invalidConnection, this.invalidFailure.bind(this));
+                this.socketOn(this.signals.disconnect, this.socketDisconnectHandler.bind(this));
+                // this.socketOn(this.signals.attemptingTurn, this.willAttemptTurn.bind(this));
+                // this.socketOn(this.signals.turnToken, this.beginTurn.bind(this));
+                return _context10.abrupt('return', socket);
+
+              case 13:
+              case 'end':
+                return _context10.stop();
+            }
+          }
+        }, _callee10, this);
+      }));
+
+      function initiatorConnect(_x9) {
+        return _ref10.apply(this, arguments);
+      }
+
+      return initiatorConnect;
+    }()
+  }, {
+    key: 'initiated',
+    value: function initiated(data) {}
 
     // ----- Socket Event handlers
 
@@ -853,40 +1690,31 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'sendOffer',
     value: function () {
-      var _ref4 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(data) {
-        var plainTextVersion, options;
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+      var _ref11 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(data) {
+        var offer, message;
+        return regeneratorRuntime.wrap(function _callee11$(_context11) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context11.prev = _context11.next) {
               case 0:
-                _context4.next = 2;
-                return this.mewCrypto.decrypt(data.version);
+                _context11.next = 2;
+                return this.offer();
 
               case 2:
-                plainTextVersion = _context4.sent;
+                offer = _context11.sent;
+                message = { data: offer };
 
-                this.peerVersion = plainTextVersion;
-                this.uiCommunicator(this.lifeCycle.receiverVersion, plainTextVersion);
-                debug('sendOffer', data);
-                options = {
-                  signalListener: this.initiatorSignalListener,
-                  webRtcConfig: {
-                    servers: this.stunServers
-                  }
-                };
+                this.socketEmit(this.signals.offerSignal, message);
 
-                this.initiatorStartRTC(this.socket, options);
-
-              case 8:
+              case 5:
               case 'end':
-                return _context4.stop();
+                return _context11.stop();
             }
           }
-        }, _callee4, this);
+        }, _callee11, this);
       }));
 
-      function sendOffer(_x3) {
-        return _ref4.apply(this, arguments);
+      function sendOffer(_x10) {
+        return _ref11.apply(this, arguments);
       }
 
       return sendOffer;
@@ -894,51 +1722,8 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'initiatorSignalListener',
     value: function initiatorSignalListener(socket, options) {
-      var _this4 = this;
-
-      return function () {
-        var _ref5 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(data) {
-          var encryptedSend;
-          return regeneratorRuntime.wrap(function _callee5$(_context5) {
-            while (1) {
-              switch (_context5.prev = _context5.next) {
-                case 0:
-                  _context5.prev = 0;
-
-                  debug('SIGNAL', JSON.stringify(data));
-                  _context5.next = 4;
-                  return _this4.mewCrypto.encrypt(JSON.stringify(data));
-
-                case 4:
-                  encryptedSend = _context5.sent;
-
-                  _this4.uiCommunicator(_this4.lifeCycle.sendOffer);
-                  _this4.socketEmit(_this4.signals.offerSignal, {
-                    data: encryptedSend,
-                    connId: _this4.connId,
-                    options: options.servers
-                  });
-                  _context5.next = 12;
-                  break;
-
-                case 9:
-                  _context5.prev = 9;
-                  _context5.t0 = _context5['catch'](0);
-
-                  logger$2.error(_context5.t0);
-
-                case 12:
-                case 'end':
-                  return _context5.stop();
-              }
-            }
-          }, _callee5, _this4, [[0, 9]]);
-        }));
-
-        return function (_x4) {
-          return _ref5.apply(this, arguments);
-        };
-      }();
+      this.uiCommunicator(this.lifeCycle.sendOffer);
+      debug('SIGNAL', JSON.stringify(data));
     }
 
     // Handle the WebRTC ANSWER from the opposite (mobile) peer
@@ -946,39 +1731,31 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'recieveAnswer',
     value: function () {
-      var _ref6 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(data) {
-        var plainTextOffer;
-        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+      var _ref12 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12(data) {
+        var webRTCAnswer;
+        return regeneratorRuntime.wrap(function _callee12$(_context12) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context12.prev = _context12.next) {
               case 0:
-                _context6.prev = 0;
-                _context6.next = 3;
-                return this.mewCrypto.decrypt(data.data);
+                this.uiCommunicator(this.lifeCycle.answerReceived);
+                _context12.next = 3;
+                return this.decrypt(data.data);
 
               case 3:
-                plainTextOffer = _context6.sent;
+                webRTCAnswer = _context12.sent;
 
-                this.rtcRecieveAnswer({ data: plainTextOffer });
-                _context6.next = 10;
-                break;
+                this.p.signal(webRTCAnswer);
 
-              case 7:
-                _context6.prev = 7;
-                _context6.t0 = _context6['catch'](0);
-
-                logger$2.error(_context6.t0);
-
-              case 10:
+              case 5:
               case 'end':
-                return _context6.stop();
+                return _context12.stop();
             }
           }
-        }, _callee6, this, [[0, 7]]);
+        }, _callee12, this);
       }));
 
-      function recieveAnswer(_x5) {
-        return _ref6.apply(this, arguments);
+      function recieveAnswer(_x11) {
+        return _ref12.apply(this, arguments);
       }
 
       return recieveAnswer;
@@ -986,7 +1763,6 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'rtcRecieveAnswer',
     value: function rtcRecieveAnswer(data) {
-      this.uiCommunicator(this.lifeCycle.answerReceived);
       this.p.signal(JSON.parse(data.data));
     }
   }, {
@@ -1070,36 +1846,36 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'onData',
     value: function () {
-      var _ref7 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(peerID, data) {
+      var _ref13 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(peerID, data) {
         var decryptedData, parsed;
-        return regeneratorRuntime.wrap(function _callee7$(_context7) {
+        return regeneratorRuntime.wrap(function _callee13$(_context13) {
           while (1) {
-            switch (_context7.prev = _context7.next) {
+            switch (_context13.prev = _context13.next) {
               case 0:
                 debug('DATA RECEIVED', data.toString());
                 debugPeer('peerID', peerID);
-                _context7.prev = 2;
+                _context13.prev = 2;
                 decryptedData = void 0;
 
                 if (!this.isJSON(data)) {
-                  _context7.next = 10;
+                  _context13.next = 10;
                   break;
                 }
 
-                _context7.next = 7;
+                _context13.next = 7;
                 return this.mewCrypto.decrypt(JSON.parse(data.toString()));
 
               case 7:
-                decryptedData = _context7.sent;
-                _context7.next = 13;
+                decryptedData = _context13.sent;
+                _context13.next = 13;
                 break;
 
               case 10:
-                _context7.next = 12;
+                _context13.next = 12;
                 return this.mewCrypto.decrypt(JSON.parse(data.toString()));
 
               case 12:
-                decryptedData = _context7.sent;
+                decryptedData = _context13.sent;
 
               case 13:
                 if (this.isJSON(decryptedData)) {
@@ -1111,27 +1887,27 @@ var MewConnectInitiator = function (_MewConnectCommon) {
                   debug('DECRYPTED DATA RECEIVED 2', decryptedData);
                   this.emit(decryptedData.type, decryptedData.data);
                 }
-                _context7.next = 21;
+                _context13.next = 21;
                 break;
 
               case 16:
-                _context7.prev = 16;
-                _context7.t0 = _context7['catch'](2);
+                _context13.prev = 16;
+                _context13.t0 = _context13['catch'](2);
 
-                logger$2.error(_context7.t0);
+                logger$2.error(_context13.t0);
                 debug('onData ERROR: data=', data);
                 debug('onData ERROR: data.toString()=', data.toString());
 
               case 21:
               case 'end':
-                return _context7.stop();
+                return _context13.stop();
             }
           }
-        }, _callee7, this, [[2, 16]]);
+        }, _callee13, this, [[2, 16]]);
       }));
 
-      function onData(_x6, _x7) {
-        return _ref7.apply(this, arguments);
+      function onData(_x12, _x13) {
+        return _ref13.apply(this, arguments);
       }
 
       return onData;
@@ -1172,11 +1948,11 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'sendRtcMessageClosure',
     value: function sendRtcMessageClosure(type, msg) {
-      var _this5 = this;
+      var _this3 = this;
 
       return function () {
         debug('[SEND RTC MESSAGE Closure] type:  ' + type + ',  message:  ' + msg);
-        _this5.rtcSend(JSON.stringify({ type: type, data: msg }));
+        _this3.rtcSend(JSON.stringify({ type: type, data: msg }));
       };
     }
   }, {
@@ -1188,65 +1964,65 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'disconnectRTCClosure',
     value: function disconnectRTCClosure() {
-      var _this6 = this;
+      var _this4 = this;
 
       return function () {
         debugStages('DISCONNECT RTC Closure');
-        _this6.connected = false;
-        _this6.uiCommunicator(_this6.lifeCycle.RtcDisconnectEvent);
-        _this6.rtcDestroy();
-        _this6.instance = null;
+        _this4.connected = false;
+        _this4.uiCommunicator(_this4.lifeCycle.RtcDisconnectEvent);
+        _this4.rtcDestroy();
+        _this4.instance = null;
       };
     }
-  }, {
-    key: 'disconnectRTC',
-    value: function disconnectRTC() {
-      debugStages('DISCONNECT RTC');
-      this.connected = false;
-      this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
-      this.rtcDestroy();
-      this.instance = null;
-    }
+
+    // disconnectRTC() {
+    //   debugStages('DISCONNECT RTC');
+    //   this.connected = false;
+    //   this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+    //   this.rtcDestroy();
+    //   this.instance = null;
+    // }
+
   }, {
     key: 'rtcSend',
     value: function () {
-      var _ref8 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(arg) {
+      var _ref14 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14(arg) {
         var encryptedSend;
-        return regeneratorRuntime.wrap(function _callee8$(_context8) {
+        return regeneratorRuntime.wrap(function _callee14$(_context14) {
           while (1) {
-            switch (_context8.prev = _context8.next) {
+            switch (_context14.prev = _context14.next) {
               case 0:
                 if (!this.isAlive()) {
-                  _context8.next = 15;
+                  _context14.next = 15;
                   break;
                 }
 
                 encryptedSend = void 0;
 
                 if (!(typeof arg === 'string')) {
-                  _context8.next = 8;
+                  _context14.next = 8;
                   break;
                 }
 
-                _context8.next = 5;
+                _context14.next = 5;
                 return this.mewCrypto.encrypt(arg);
 
               case 5:
-                encryptedSend = _context8.sent;
-                _context8.next = 11;
+                encryptedSend = _context14.sent;
+                _context14.next = 11;
                 break;
 
               case 8:
-                _context8.next = 10;
+                _context14.next = 10;
                 return this.mewCrypto.encrypt(JSON.stringify(arg));
 
               case 10:
-                encryptedSend = _context8.sent;
+                encryptedSend = _context14.sent;
 
               case 11:
                 debug('SENDING RTC');
                 this.p.send(JSON.stringify(encryptedSend));
-                _context8.next = 16;
+                _context14.next = 16;
                 break;
 
               case 15:
@@ -1255,14 +2031,14 @@ var MewConnectInitiator = function (_MewConnectCommon) {
 
               case 16:
               case 'end':
-                return _context8.stop();
+                return _context14.stop();
             }
           }
-        }, _callee8, this);
+        }, _callee14, this);
       }));
 
-      function rtcSend(_x8) {
-        return _ref8.apply(this, arguments);
+      function rtcSend(_x14) {
+        return _ref14.apply(this, arguments);
       }
 
       return rtcSend;

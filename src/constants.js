@@ -9,6 +9,7 @@ const connectionCodeSchemas = {
 const connectionCodeSeparator = '_';
 
 const signal = {
+  //V1
   attemptingTurn: 'attemptingTurn',
   turnToken: 'turnToken',
   tryTurn: 'tryTurn',
@@ -25,7 +26,12 @@ const signal = {
   confirmation: 'confirmation',
   invalidConnection: 'InvalidConnection',
   confirmationFailedBusy: 'confirmationFailedBusy',
-  confirmationFailed: 'confirmationFailed'
+  confirmationFailed: 'confirmationFailed',
+  // V2
+  initiated: 'initiated',
+  socketTimeout: 'socketTimeout',
+  receivedSignal: 'receivedSignal',
+  error: 'error'
 };
 
 const rtc = {

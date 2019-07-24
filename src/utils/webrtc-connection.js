@@ -2,8 +2,8 @@
 
 import Peer from 'simple-peer'
 import wrtc from 'wrtc'
-import { stunServers, turnServers } from '@config'
-import { rtcSignals } from '@signals'
+import { stunServers } from '../config'
+import { rtc as rtcSignals } from '../constants'
 
 export default class WebRTCConnection {
   constructor(options = {}) {
