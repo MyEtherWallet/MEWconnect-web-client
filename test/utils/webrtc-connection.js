@@ -2,8 +2,8 @@
 
 import Peer from 'simple-peer'
 import wrtc from 'wrtc'
-import { stunServers } from '../config'
-import { rtc as rtcSignals } from '../constants'
+import { stunServers, turnServers } from '@config'
+import { rtcSignals } from '@signals'
 
 export default class WebRTCConnection {
   constructor(options = {}) {
@@ -11,7 +11,6 @@ export default class WebRTCConnection {
     this.peer = {}
     this.listeners = {}
   }
-
 
   /**
    * Attempt to initiate an "offer" WebRTC connection between two peers.
@@ -69,6 +68,7 @@ export default class WebRTCConnection {
         wrtc: wrtc
       }
       this.peer = new Peer(options)
+      console.log(offer); // todo remove dev item
       this.peer.signal(offer)
       this.peer.on(rtcSignals.signal, data => {
         resolve(data)

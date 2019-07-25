@@ -1,15 +1,13 @@
-'use strict';
+'use strict'
 
-import queryString from 'query-string';
-// import WebSocket from 'ws'
-import WebSocket from 'promise-ws'
-// import 'isomorphic-ws';
+import queryString from 'query-string'
+import webSocketClient from 'promise-ws'
 
 export default class WebsocketConnection {
   constructor(options = {}) {
-    this.options = options;
-    this.socket = {};
-    this.listeners = {};
+    this.options = options
+    this.socket = {}
+    this.listeners = {}
   }
 
   /**
@@ -33,22 +31,9 @@ export default class WebsocketConnection {
    * @param  {String} options.signed - Private key signed with the private key created for the connection
    */
   async connect(websocketUrl, options = {}) {
-    if (!websocketUrl) websocketUrl = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
-    let url = `${websocketUrl}?${queryString.stringify(options)}`;
-    console.log(url); // todo remove dev item
-    this.socket = await WebSocket.create(url);
-    this.socket.on('message', this.onMessage.bind(this));
-    // if(typeof jest !== 'undefined'){
-    //   this.socket = await WebSocket.create(url);
-    //   this.socket.on('message', this.onMessage.bind(this));
-    // } else {
-    //   // this.socket = new WebSocket(url);
-    //   // this.socket.onmessage = this.onMessage.bind(this);
-    // }
-  }
-
-  async disconnect() {
-    console.log("ADD DISCONNECT FUNCTIONALITY"); // todo remove dev item
+    let url = `${websocketUrl}?${queryString.stringify(options)}`
+    this.socket = await webSocketClient.create(url)
+    this.socket.on('message', this.onMessage.bind(this))
   }
 
   /**
@@ -68,13 +53,12 @@ export default class WebsocketConnection {
    * @return {[type]}         [description]
    */
   onMessage(message) {
-    console.log('message', message); // todo remove dev item
-    const parsedMessage = typeof message === 'string' ? JSON.parse(message) : message;
-    const signal = parsedMessage.signal;
-    const data = parsedMessage.data;
+    const parsedMessage = JSON.parse(message)
+    const signal = parsedMessage.signal
+    const data = parsedMessage.data
 
     try {
-      this.listeners[signal].call(this, data);
+      this.listeners[signal].call(this, data)
     } catch (e) {
       // Unhandled message signal
     }
@@ -89,7 +73,7 @@ export default class WebsocketConnection {
    * @param  {Function} fn - Function to perform on message signal
    */
   on(signal, fn) {
-    this.listeners[signal] = fn;
+    this.listeners[signal] = fn
   }
 
   /**
@@ -98,7 +82,7 @@ export default class WebsocketConnection {
    * @param  {String} signal - The signal to unbind
    */
   off(signal) {
-    delete this.listeners[signal];
+    delete this.listeners[signal]
   }
 
   /**
@@ -111,8 +95,7 @@ export default class WebsocketConnection {
     const message = JSON.stringify({
       action: signal,
       data: data
-    });
-    console.log('sending', message); // todo remove dev item
-    this.socket.send(message);
+    })
+    this.socket.send(message)
   }
 }

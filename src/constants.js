@@ -9,18 +9,18 @@ const connectionCodeSchemas = {
 const connectionCodeSeparator = '_';
 
 const signal = {
-  //V1
-  attemptingTurn: 'attemptingTurn',
-  turnToken: 'turnToken',
-  tryTurn: 'tryTurn',
-  connection: 'connection',
+  //V1 (ish)
+  attemptingTurn: 'attemptingturn',
+  turnToken: 'turntoken',
+  tryTurn: 'tryturn',
   connect: 'connect',
+  connection: 'connection',
   signature: 'signature',
-  offerSignal: 'offerSignal',
+  offerSignal: 'offersignal',
   offer: 'offer',
-  answerSignal: 'answerSignal',
+  answerSignal: 'answersignal',
   answer: 'answer',
-  rtcConnected: 'rtcConnected',
+  rtcConnected: 'rtcconnected',
   disconnect: 'disconnect',
   handshake: 'handshake',
   confirmation: 'confirmation',

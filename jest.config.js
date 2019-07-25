@@ -1,6 +1,7 @@
 module.exports = {
   clearMocks: true,
   collectCoverage: true,
+  setTimeout: 10000,
   coverageDirectory: 'coverage',
   // testEnvironment: 'jsdom',
   testMatch: ['**/__tests__/**/*.js?(x)', '**/test/**/?(*.)+(spec|test).js?(x)'],
