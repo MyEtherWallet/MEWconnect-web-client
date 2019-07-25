@@ -153,6 +153,15 @@ export default class Receiver {
     this.peer = new WebRTCConnection()
   }
 
+  async sendRTC(signal, data = {}){
+    const message = JSON.stringify({
+      type: signal,
+      data: data
+    })
+    const encrypted = await this.encrypt(message);
+    this.peer.peer.send(JSON.stringify(encrypted));
+  }
+
   /**
    * On a given @signal event from the WebRTC connection, perform callback function.
    *

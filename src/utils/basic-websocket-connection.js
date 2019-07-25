@@ -112,7 +112,7 @@ export default class WebsocketConnection {
       action: signal,
       data: data
     });
-    console.log('sending', message); // todo remove dev item
+    // console.log('sending', message); // todo remove dev item
     this.socket.send(message);
   }
 }

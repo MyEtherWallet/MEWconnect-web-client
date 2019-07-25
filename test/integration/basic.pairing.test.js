@@ -70,7 +70,7 @@ const pass = async done => {
 ===================================================================================
 */
 describe('Pairing', () => {
-  it('Should not connect with missing @role property', async done => {
+  xit('Should connect', async done => {
     try {
       initiator = new Initiator();
       receiver = new Receiver();
@@ -88,7 +88,6 @@ describe('Pairing', () => {
       );
       await receiver.connect(websocketURL);
 
-
       receiver.on(signals.confirmation, stuff => {
         console.log('receiver', signals.confirmation, stuff); // todo remove dev item
       });
@@ -103,10 +102,20 @@ describe('Pairing', () => {
         const answer = await receiver.answer(webRTCOffer);
         const message = { data: answer };
         receiver.onRTC(rtcSignals.connect, stuff => {
+          receiver.sendRTC('address');
           console.log('receiver', rtcSignals.connect, stuff); // todo remove dev item
+        });
+
+        receiver.onRTC(rtcSignals.data, stuff => {
+          console.log('receiver', rtcSignals.data, stuff); // todo remove dev item
           done();
         });
         receiver.send(signals.answerSignal, message);
+      });
+
+      initiator.on('RtcConnectedEvent', () => {
+        console.log('Initiator rtc connected event'); // todo remove dev item
+        initiator.rtcSend({ type: 'address', data: '' });
       });
 
       // initiator.on(signals.initiated, data => {
@@ -131,23 +140,103 @@ describe('Pairing', () => {
       //   });
       // });
 
+    } catch (e) {
+      // console.log(e); // todo remove dev item
+      done.fail(e);
+    }
+  }, 25000);
 
+  it('Should use Ice Servers', async done => {
+    try {
+      initiator = new Initiator();
+      receiver = new Receiver();
+
+      const websocketURL = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
+      // initiator.generateKeys();
+      await initiator.initiatorStart(websocketURL);
+
+      // Receiver //
+
+      await receiver.setKeys(
+        initiator.publicKey,
+        initiator.privateKey,
+        initiator.connId
+      );
+      await receiver.connect(websocketURL);
+
+      let firstView = true;
+      receiver.on(signals.confirmation, stuff => {
+        console.log('receiver', signals.confirmation, stuff); // todo remove dev item
+      });
+
+      // receiver.on(signals.offerSignal, async data => {
+      //   console.log('receiver', signals.offerSignal, data); // todo remove dev item
+      // });
+
+      receiver.on(signals.offer, async data => {
+        if (firstView) {
+          initiator.socketEmit(signals.tryTurn);
+          firstView = false;
+          return;
+        }
+        console.log('receiver', signals.offer, data); // todo remove dev item
+        webRTCOffer = await receiver.decrypt(data.data);
+        const answer = await receiver.answer(webRTCOffer);
+        const message = { data: answer };
+        receiver.onRTC(rtcSignals.connect, stuff => {
+          receiver.sendRTC('address');
+          console.log('receiver', rtcSignals.connect, stuff); // todo remove dev item
+        });
+
+        receiver.onRTC(rtcSignals.data, stuff => {
+          console.log('receiver', rtcSignals.data, stuff); // todo remove dev item
+          done();
+        });
+        receiver.send(signals.answerSignal, message);
+      });
+
+      initiator.on('RtcConnectedEvent', () => {
+        console.log('Initiator rtc connected event'); // todo remove dev item
+        initiator.rtcSend({ type: 'address', data: '' });
+      });
+
+      // initiator.on(signals.initiated, data => {
+      //   console.log(signals.initiated); // todo remove dev item
+      // });
+      // await receiver.connect(websocketURL);
+      //
+      // initiator.on(signals.confirmation, async stuff => {
+      //   console.log('initiator', signals.confirmation, stuff); // todo remove dev item
+      //   const offer = await initiator.offer()
+      //   const message = { data: offer }
+      //   initiator.send(signals.offerSignal, message)
+      // });
+      // initiator.on(signals.answer, async data => {
+      //   console.log('initiator', signals.answer, data); // todo remove dev item
+      //   const webRTCAnswer = await initiator.decrypt(data.data);
+      //   await initiator.signal(webRTCAnswer)
+      //   initiator.onRTC(rtcSignals.connect, stuff => {
+      //     console.log('initiator', rtcSignals.connect, stuff); // todo remove dev item
+      //     if(oneRecieved) done();
+      //     oneRecieved = true;
+      //   });
+      // });
 
     } catch (e) {
       // console.log(e); // todo remove dev item
       done.fail(e);
     }
-  }, 20000);
+  }, 35000);
 
-  it('Should send a message via webRTC', async done => {
+  xit('Should send a message via webRTC', async done => {
 
     receiver.onRTC(rtcSignals.data, stuff => {
       console.log('receiver', rtcSignals.data, stuff); // todo remove dev item
       done();
     });
 
-    initiator.rtcSend('something');
-  })
+    initiator.rtcSend({ type: 'address', data: '' });
+  });
 
   xit('Should not connect with missing @role property', async done => {
     try {
@@ -161,7 +250,6 @@ describe('Pairing', () => {
         initiator.privateKey,
         initiator.connId
       );
-
 
       await receiver.connect(websocketURL);
 
@@ -183,8 +271,6 @@ describe('Pairing', () => {
         });
         receiver.send(signals.answerSignal, message);
       });
-
-
 
     } catch (e) {
       // console.log(e); // todo remove dev item

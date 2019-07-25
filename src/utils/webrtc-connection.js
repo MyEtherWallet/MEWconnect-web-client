@@ -70,6 +70,10 @@ export default class WebRTCConnection {
       }
       this.peer = new Peer(options)
       this.peer.signal(offer)
+      this.peer._pc.addEventListener(
+        'iceconnectionstatechange',
+        console.log
+      );
       this.peer.on(rtcSignals.signal, data => {
         resolve(data)
       })

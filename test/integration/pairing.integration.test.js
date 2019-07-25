@@ -387,7 +387,7 @@ describe('Pairing', () => {
             );
             done();
           });
-        });
+        }, 10000);
       });
     });
   });
@@ -456,7 +456,7 @@ describe('Pairing', () => {
             done();
           });
         });
-      });
+      }, 10000);
     });
   });
 
@@ -482,7 +482,7 @@ describe('Pairing', () => {
           initiator.signal(webRTCAnswer);
           console.log(initiator.signal); // todo remove dev item
           const initiatorPromise = new Promise((resolve, reject) => {
-            initiator.onRTC(rtcSignals.connect, resolve);
+            initiator.on('RtcConnectedEvent', resolve);
           });
           const receiverPromise = new Promise((resolve, reject) => {
             receiver.onRTC(rtcSignals.connect, resolve);
@@ -493,7 +493,7 @@ describe('Pairing', () => {
           receiver.disconnectRTC();
 
           done();
-        });
+        }, 10000);
       });
       /*
       ===================================================================================
@@ -525,7 +525,7 @@ describe('Pairing', () => {
             await Promise.all([initiatorPromise, receiverPromise]);
 
             done();
-          });
+          }, 10000);
           it('Should connect peers via received ICE servers', async done => {
             const offer = await initiator.offer(iceServers);
             const decryptedOffer = await receiver.decrypt(offer);
@@ -542,7 +542,7 @@ describe('Pairing', () => {
             await Promise.all([initiatorPromise, receiverPromise]);
 
             done();
-          });
+          }, 10000);
         });
       });
       /*
