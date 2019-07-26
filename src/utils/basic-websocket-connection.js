@@ -2,8 +2,8 @@
 
 import queryString from 'query-string';
 // import WebSocket from 'ws'
-import WebSocket from 'promise-ws'
-// import 'isomorphic-ws';
+// import WebSocket from 'promise-ws'
+import 'isomorphic-ws';
 
 export default class WebsocketConnection {
   constructor(options = {}) {
@@ -33,18 +33,15 @@ export default class WebsocketConnection {
    * @param  {String} options.signed - Private key signed with the private key created for the connection
    */
   async connect(websocketUrl, options = {}) {
-    if (!websocketUrl) websocketUrl = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
     let url = `${websocketUrl}?${queryString.stringify(options)}`;
     console.log(url); // todo remove dev item
-    this.socket = await WebSocket.create(url);
-    this.socket.on('message', this.onMessage.bind(this));
-    // if(typeof jest !== 'undefined'){
-    //   this.socket = await WebSocket.create(url);
-    //   this.socket.on('message', this.onMessage.bind(this));
-    // } else {
-    //   // this.socket = new WebSocket(url);
-    //   // this.socket.onmessage = this.onMessage.bind(this);
-    // }
+    if(typeof jest !== 'undefined'){
+      this.socket = await WebSocket.create(url);
+      this.socket.on('message', this.onMessage.bind(this));
+    } else {
+      this.socket = new WebSocket(url);
+      this.socket.onmessage = this.onMessage.bind(this);
+    }
   }
 
   async disconnect() {

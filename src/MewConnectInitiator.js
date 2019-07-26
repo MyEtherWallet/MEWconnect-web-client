@@ -15,7 +15,6 @@ const debug = debugLogger('MEWconnect:initiator');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
 const logger = createLogger('MewConnectInitiator');
-// wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev?connId=33e7b913f46109a428c2cf03065c9047&role=initiator&signed=1ba9d582b8723561ab36fa6b072cd0ca10ec2ec38133b2c1f113d4bd5442834f65007966be9b56df443c53b4c295fa91d61b43496daec3bead34c03b5c4e1cab91
 export default class MewConnectInitiator extends MewConnectCommon {
   constructor(options = {}) {
     super();
@@ -196,7 +195,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
   /**
    * Disconnect from current WebRTC connection
    */
-  async disconnectRTC() {
+  async disconnectCurrentRTC() {
+    this.wrtc.disconnect();
     this.wrtc = new WebRTCConnection();
   }
 
@@ -444,9 +444,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   rtcRecieveAnswer(data) {
-    if (typeof jest !== 'undefined') {
-      // console.log('initiator: answer RTC', this.signals.answer, data); // todo remove dev item
-    }
     this.wrtc.peer._pc.addEventListener(
       'iceconnectionstatechange',
       this.stateChangeListener.bind(this)
@@ -635,13 +632,13 @@ export default class MewConnectInitiator extends MewConnectCommon {
     };
   }
 
-  // disconnectRTC() {
-  //   debugStages('DISCONNECT RTC');
-  //   this.connected = false;
-  //   this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
-  //   this.rtcDestroy();
-  //   this.instance = null;
-  // }
+  disconnectRTC() {
+    debugStages('DISCONNECT RTC');
+    this.connected = false;
+    this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+    this.rtcDestroy();
+    this.instance = null;
+  }
 
   async rtcSend(arg) {
     if (this.isAlive()) {
@@ -662,7 +659,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
   rtcDestroy() {
     if (this.isAlive()) {
-      this.p.destroy();
+      this.wrtc.peer.destroy();
+      this.disconnectCurrentRTC();
       this.connected = false;
       this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
     }
@@ -672,12 +670,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
     console.log('retryViaTurn', data.iceServers); // todo remove dev item
     this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
     debugStages('Retrying via TURN');
-    // const options = {
-    //   // signalListener: this.initiatorSignalListener,
-    //   webRtcConfig: {
-    //     servers: data.iceServers
-    //   }
-    // };
+    this.disconnectRTC();
     this.initiatorStartRTC(data.iceServers);
   }
 
