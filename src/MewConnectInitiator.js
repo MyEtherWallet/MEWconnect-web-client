@@ -276,6 +276,10 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
   // Emit/Provide the details used in creating the QR Code
   displayCode(data) {
+    console.log(data instanceof Buffer); // todo remove dev item
+    if(data instanceof Buffer){
+      data = data.toString('hex')
+    }
     debug('handshake', data);
     this.socketKey = data;
     const separator = this.jsonDetails.connectionCodeSeparator;

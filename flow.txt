@@ -1,4 +1,0 @@
-
-
-Pairing -> Initial Connection -> Connect [Initiator → Server]
-Pairing -> Offer Creation -> OfferSignal [Initiator → Server]

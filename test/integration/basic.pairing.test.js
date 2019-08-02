@@ -70,7 +70,7 @@ const pass = async done => {
 ===================================================================================
 */
 describe('Pairing', () => {
-  xit('Should connect', async done => {
+  it('Should connect', async done => {
     try {
       initiator = new Initiator();
       receiver = new Receiver();
@@ -146,7 +146,7 @@ describe('Pairing', () => {
     }
   }, 25000);
 
-  it('Should use Ice Servers', async done => {
+  xit('Should use Ice Servers', async done => {
     try {
       initiator = new Initiator();
       receiver = new Receiver();

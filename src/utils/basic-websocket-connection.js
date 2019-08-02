@@ -2,8 +2,8 @@
 
 import queryString from 'query-string';
 // import WebSocket from 'ws'
-// import WebSocket from 'promise-ws'
-import 'isomorphic-ws';
+import WebSocket from 'promise-ws'
+// import 'isomorphic-ws';
 
 export default class WebsocketConnection {
   constructor(options = {}) {
