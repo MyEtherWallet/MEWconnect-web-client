@@ -146,7 +146,7 @@ describe('Pairing', () => {
     }
   }, 25000);
 
-  xit('Should use Ice Servers', async done => {
+  it('Should use Ice Servers', async done => {
     try {
       initiator = new Initiator();
       receiver = new Receiver();

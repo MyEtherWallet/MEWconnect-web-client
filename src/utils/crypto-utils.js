@@ -24,7 +24,9 @@ const generateKeys = () => {
  * @return {String} - connId string
  */
 const generateConnId = publicKey => {
-  return publicKey.toString('hex').slice(32);
+  const pubKey = publicKey.toString('hex').slice(0, 32);
+  console.log(pubKey.length); // todo remove dev item
+  return pubKey
 };
 
 /**
