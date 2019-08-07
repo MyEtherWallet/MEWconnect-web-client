@@ -102,6 +102,7 @@ export default class Receiver {
           connId: this.connId,
           signed: this.signed
         }
+    console.log(websocketURL, queryOptions); // todo remove dev item
     await this.socket.connect(websocketURL, queryOptions)
   }
 

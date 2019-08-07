@@ -70,7 +70,7 @@ const pass = async done => {
 ===================================================================================
 */
 describe('Pairing', () => {
-  it('Should connect', async done => {
+  xit('Should connect', async done => {
     try {
       initiator = new Initiator();
       receiver = new Receiver();
@@ -118,35 +118,13 @@ describe('Pairing', () => {
         initiator.rtcSend({ type: 'address', data: '' });
       });
 
-      // initiator.on(signals.initiated, data => {
-      //   console.log(signals.initiated); // todo remove dev item
-      // });
-      // await receiver.connect(websocketURL);
-      //
-      // initiator.on(signals.confirmation, async stuff => {
-      //   console.log('initiator', signals.confirmation, stuff); // todo remove dev item
-      //   const offer = await initiator.offer()
-      //   const message = { data: offer }
-      //   initiator.send(signals.offerSignal, message)
-      // });
-      // initiator.on(signals.answer, async data => {
-      //   console.log('initiator', signals.answer, data); // todo remove dev item
-      //   const webRTCAnswer = await initiator.decrypt(data.data);
-      //   await initiator.signal(webRTCAnswer)
-      //   initiator.onRTC(rtcSignals.connect, stuff => {
-      //     console.log('initiator', rtcSignals.connect, stuff); // todo remove dev item
-      //     if(oneRecieved) done();
-      //     oneRecieved = true;
-      //   });
-      // });
-
     } catch (e) {
       // console.log(e); // todo remove dev item
       done.fail(e);
     }
   }, 25000);
 
-  xit('Should use Ice Servers', async done => {
+  it('Should use Ice Servers', async done => {
     try {
       initiator = new Initiator();
       receiver = new Receiver();
