@@ -27,6 +27,12 @@ export default class MewConnectCrypto {
     return { pub: this.pub, pvt: this.prvt };
   }
 
+  generateKeys() {
+    this.prvt = this.generatePrivate();
+    this.pub = this.generatePublic(this.prvt);
+    return { publicKey: this.pub, privateKey: this.prvt };
+  }
+
   generatePrivate() {
     let privKey;
     do {
@@ -109,8 +115,35 @@ export default class MewConnectCrypto {
     });
   }
 
+  signMessageSync(msgToSign) {
+    try {
+      const msg = ethUtils.hashPersonalMessage(ethUtils.toBuffer(msgToSign));
+      const signed = ethUtils.ecsign(
+        Buffer.from(msg),
+        Buffer.from(this.prvt, 'hex')
+      );
+      const combined = Buffer.concat([
+        Buffer.from([signed.v]),
+        Buffer.from(signed.r),
+        Buffer.from(signed.s)
+      ]);
+      return combined.toString('hex');
+    } catch (e) {
+      throw e;
+    }
+  }
+
   bufferToConnId(buf) {
     return buf.toString('hex').slice(32);
+  }
+
+  generateConnId(buf) {
+    if (buf instanceof Buffer) {
+      // console.log('is buffer'); // todo remove dev item
+      return buf.toString('hex').slice(0, 32);
+    }
+    return Buffer.from(buf).toString('hex').slice(0, 32);
+
   }
 
   isJSON(arg) {

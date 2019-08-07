@@ -59,6 +59,8 @@ export default class Receiver {
    * @return {Object} - Encrypted message
    */
   async encrypt(message) {
+    console.log('Receiver encrypt'); // todo remove dev item
+
     message = typeof message === 'String' ? message : JSON.stringify(message)
     return await CryptoUtils.encrypt(message, this.privateKey)
   }
@@ -70,6 +72,8 @@ export default class Receiver {
    * @return {Object} - Decrypted message object
    */
   async decrypt(message) {
+    console.log('Receiver decrypt'); // todo remove dev item
+
     const decryptedMessageString = await CryptoUtils.decrypt(
       message,
       this.privateKey

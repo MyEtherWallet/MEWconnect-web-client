@@ -3,7 +3,7 @@ import createLogger from 'logging';
 import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
 import uuid from 'uuid/v4';
-import CryptoUtils from './utils/crypto-utils';
+// import CryptoUtils from './utils/crypto-utils';
 import WebsocketConnection from './utils/basic-websocket-connection';
 import WebRTCConnection from './utils/webrtc-connection';
 // import io from 'socket.io-client';
@@ -15,6 +15,10 @@ const debug = debugLogger('MEWconnect:initiator');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
 const logger = createLogger('MewConnectInitiator');
+
+
+const signalUrl = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev'
+
 export default class MewConnectInitiator extends MewConnectCommon {
   constructor(options = {}) {
     super();
@@ -70,11 +74,12 @@ export default class MewConnectInitiator extends MewConnectCommon {
    * shared with the receiver.
    */
   generateKeys() {
-    const keys = CryptoUtils.generateKeys();
+    if (!this.mewCrypto) this.mewCrypto = MewConnectCrypto.create();
+    const keys = this.mewCrypto.generateKeys();
     this.publicKey = keys.publicKey;
     this.privateKey = keys.privateKey;
-    this.connId = CryptoUtils.generateConnId(this.publicKey);
-    this.signed = CryptoUtils.signMessage(this.privateKey, this.privateKey);
+    this.connId = this.mewCrypto.generateConnId(this.publicKey);
+    this.signed = this.mewCrypto.signMessageSync(this.privateKey, this.privateKey);
   }
 
   /*
@@ -93,7 +98,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
    */
   async encrypt(message) {
     message = typeof message === 'String' ? message : JSON.stringify(message);
-    return await CryptoUtils.encrypt(message, this.privateKey);
+    return await this.mewCrypto.encrypt(message, this.privateKey);
   }
 
   /**
@@ -103,7 +108,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
    * @return {Object} - Decrypted message object
    */
   async decrypt(message) {
-    const decryptedMessageString = await CryptoUtils.decrypt(
+    const decryptedMessageString = await this.mewCrypto.decrypt(
       message,
       this.privateKey
     );
@@ -277,8 +282,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
   // Emit/Provide the details used in creating the QR Code
   displayCode(data) {
     console.log(data instanceof Buffer); // todo remove dev item
-    if(data instanceof Buffer){
-      data = data.toString('hex')
+    if (data instanceof Buffer) {
+      data = data.toString('hex');
     }
     debug('handshake', data);
     this.socketKey = data;
@@ -313,16 +318,15 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.socketConnected = false;
   }
 
-  testEmitter(event, data){
+  testEmitter(event, data) {
     if (typeof jest !== 'undefined') {
       this.emit(event, data);
     }
   }
 
-
   async initiatorStart(url) {
     if (this.signalUrl === null) {
-      this.signalUrl = url;
+      this.signalUrl = signalUrl; // url;
     }
     this.generateKeys();
 
@@ -332,9 +336,9 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   async initiatorConnect(url) {
+    console.log('INITIATOR CONNECT'); // todo remove dev item
     debugStages('INITIATOR CONNECT');
     this.uiCommunicator(this.lifeCycle.SocketConnectedEvent);
-    this.signalUrl = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
 
     this.socketOn(this.signals.initiated, this.initiated.bind(this)); // response
 
@@ -444,7 +448,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
     this.uiCommunicator(this.lifeCycle.answerReceived);
     const webRTCAnswer = await this.decrypt(data.data);
-    await this.signal(webRTCAnswer)
+    await this.signal(webRTCAnswer);
   }
 
   rtcRecieveAnswer(data) {
@@ -452,7 +456,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       'iceconnectionstatechange',
       this.stateChangeListener.bind(this)
     );
-     this.wrtc.signal(JSON.parse(data.data));
+    this.wrtc.signal(JSON.parse(data.data));
   }
 
   setActivePeerId() {
