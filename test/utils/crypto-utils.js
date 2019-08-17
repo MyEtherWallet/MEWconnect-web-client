@@ -39,6 +39,13 @@ export default (() => {
     return crypto.randomBytes(32).toString('hex')
   }
 
+  const   bufferToString = (buf) => {
+    if (buf instanceof Buffer) {
+      return buf.toString('hex');
+    }
+    return buf;
+  }
+
   /**
    * Sign a message using a privateKey
    *
@@ -47,7 +54,8 @@ export default (() => {
    * @return {String} - Signed message
    */
   const signMessage = (msg, privateKey) => {
-    let hashedMsg = ethUtils.hashPersonalMessage(ethUtils.toBuffer(msg))
+    console.log(msg, privateKey); // todo remove dev item
+    let hashedMsg = ethUtils.hashPersonalMessage(ethUtils.toBuffer(bufferToString(msg)))
     let signed = ethUtils.ecsign(
       Buffer.from(hashedMsg),
       Buffer.from(privateKey, 'hex')

@@ -14,6 +14,8 @@ export default class MewConnectCrypto {
 
   setPrivate(pvtKey) {
     this.prvt = Buffer.from(pvtKey, 'hex');
+    this.pub = this.generatePublic(this.prvt);
+    return { publicKey: this.pub, privateKey: this.prvt };
   }
 
   generateMessage() {
@@ -117,6 +119,10 @@ export default class MewConnectCrypto {
 
   signMessageSync(msgToSign) {
     try {
+      console.log('msgToSign 1', msgToSign); // todo remove dev item
+      msgToSign = this.bufferToString(msgToSign)
+      console.log('msgToSign 2', msgToSign); // todo remove dev item
+
       const msg = ethUtils.hashPersonalMessage(ethUtils.toBuffer(msgToSign));
       const signed = ethUtils.ecsign(
         Buffer.from(msg),
@@ -134,16 +140,16 @@ export default class MewConnectCrypto {
   }
 
   bufferToConnId(buf) {
-    return buf.toString('hex').slice(32);
+    return buf.toString('hex').slice(0, 32);
   }
 
   generateConnId(buf) {
     if (buf instanceof Buffer) {
-      // console.log('is buffer'); // todo remove dev item
       return buf.toString('hex').slice(0, 32);
     }
-    return Buffer.from(buf).toString('hex').slice(0, 32);
-
+    return Buffer.from(buf)
+      .toString('hex')
+      .slice(0, 32);
   }
 
   isJSON(arg) {
@@ -153,5 +159,19 @@ export default class MewConnectCrypto {
     } catch (e) {
       return false;
     }
+  }
+
+  toBuffer(buf) {
+    if (buf instanceof Buffer) {
+      return buf;
+    }
+    return Buffer.from(buf, 'hex');
+  }
+
+  bufferToString(buf) {
+    if (buf instanceof Buffer) {
+      return buf.toString('hex');
+    }
+    return buf;
   }
 }
