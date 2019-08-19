@@ -2,12 +2,15 @@
 
 import queryString from 'query-string';
 // import WebSocket from 'ws'
-import WebSocket from 'promise-ws';
+// import WebSocket from 'promise-ws';
 import 'isomorphic-ws';
 import debugLogger from 'debug';
 
 const debug = debugLogger('MEWconnect:websocketWrapper');
 
+// import('promise-ws').then(value =>{
+//   console.log(value); // todo remove dev item
+// })
 export default class WebsocketConnection {
   constructor(options = {}) {
     this.options = options;

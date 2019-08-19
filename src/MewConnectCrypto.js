@@ -119,9 +119,7 @@ export default class MewConnectCrypto {
 
   signMessageSync(msgToSign) {
     try {
-      console.log('msgToSign 1', msgToSign); // todo remove dev item
-      msgToSign = this.bufferToString(msgToSign)
-      console.log('msgToSign 2', msgToSign); // todo remove dev item
+      msgToSign = this.bufferToString(msgToSign);
 
       const msg = ethUtils.hashPersonalMessage(ethUtils.toBuffer(msgToSign));
       const signed = ethUtils.ecsign(

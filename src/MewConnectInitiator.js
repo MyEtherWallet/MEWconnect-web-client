@@ -3,12 +3,11 @@ import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
 import uuid from 'uuid/v4';
 import WebSocket from './websocketWrapper';
-import WebSocketNode from './websocketWrapper';
+import WebSocketNode from './websocketWrapperForNodeJS';
 import SimplePeer from 'simple-peer';
 import wrtc from 'wrtc';
 import MewConnectCommon from './MewConnectCommon';
 import MewConnectCrypto from './MewConnectCrypto';
-import WebRTCConnection from './utils/webrtc-connection';
 
 const debug = debugLogger('MEWconnect:initiator');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
@@ -35,7 +34,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.iceState = '';
     this.turnServers = [];
 
-    this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
+    // this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
+    this.Peer = SimplePeer;
     this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
     if (typeof jest !== 'undefined') {
       debug('for node'); // todo remove dev item
@@ -111,9 +111,9 @@ Keys
    */
   generateKeys(testPrivate) {
     if (!this.mewCrypto) this.mewCrypto = MewConnectCrypto.create();
-    let keys = {}
-    if(testPrivate){
-      keys = this.mewCrypto.setPrivate(testPrivate)
+    let keys = {};
+    if (testPrivate) {
+      keys = this.mewCrypto.setPrivate(testPrivate);
     } else {
       keys = this.mewCrypto.generateKeys();
     }
@@ -179,8 +179,6 @@ Keys
     this.emit('status', event);
   }
 
-
-
   // ===================== [Start] WebSocket Communication Methods and Handlers ========================
 
   // The initial method called to initiate the exchange that can create a WebRTC connection
@@ -211,7 +209,6 @@ Keys
 
   // Emit/Provide the details used in creating the QR Code
   displayCode(privateKey) {
-
     if (privateKey instanceof Buffer) {
       privateKey = privateKey.toString('hex');
     }
@@ -346,7 +343,7 @@ Keys
 
   // A connection pair exists, create and send WebRTC OFFER
   beginRtcSequence(data) {
-    debug('beginRtcSequence')
+    debug('beginRtcSequence');
     debug('sendOffer', data);
     this.iceServers = null;
     const options = {
@@ -366,7 +363,7 @@ Keys
   }
 
   async sendOffer(data) {
-    debug('sendOffer')
+    debug('sendOffer');
     try {
       debug('SIGNAL', JSON.stringify(data));
       const encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(data));
@@ -403,7 +400,7 @@ Keys
   }
 
   initiatorStartRTC(options) {
-    debug('initiatorStartRTC')
+    debug('initiatorStartRTC');
     this.setActivePeerId();
     const webRtcConfig = options.webRtcConfig || {};
     const webRtcServers = webRtcConfig.servers || this.stunServers;

@@ -73,14 +73,28 @@ export default class WebsocketConnection {
    */
   onMessage(message) {
     debug('message', message); // todo remove dev item
-    const parsedMessage =
-      typeof message === 'string' ? JSON.parse(message) : message;
+    debug('message data', message.data);
+    let parsedMessage;
+    if (typeof jest === 'undefined') {
+      const parsedMessageRaw =
+        typeof message === 'string' ? JSON.parse(message) : message;
+      parsedMessage =
+        typeof parsedMessageRaw.data === 'string'
+          ? JSON.parse(parsedMessageRaw.data)
+          : parsedMessageRaw.data;
+      debug('parsedMessage', parsedMessage);
+    } else {
+      parsedMessage =
+        typeof message === 'string' ? JSON.parse(message) : message;
+    }
+
     const signal = parsedMessage.signal;
     const data = parsedMessage.data;
-
+    debug(`onMessage Signal: ${signal}`); // todo remove dev item
     try {
       this.listeners[signal].call(this, data);
     } catch (e) {
+      debug(e);
       // Unhandled message signal
     }
   }
@@ -113,7 +127,8 @@ export default class WebsocketConnection {
    * @param  {[type]} data - Data payload
    */
   send(signal, data = {}) {
-    debug('signal', signal)
+    debug(`send signal: ${signal}`);
+    debug('send data:', data);
     const message = JSON.stringify({
       action: signal,
       data: data

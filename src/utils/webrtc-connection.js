@@ -50,6 +50,8 @@ export default class WebRTCConnection {
     })
   }
 
+
+
   /**
    * Given a WebRTC offer object (created with the offer() function),
    * a receiver can create a WebRTC response in order to create a p2p
