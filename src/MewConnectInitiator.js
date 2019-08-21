@@ -3,7 +3,6 @@ import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
 import uuid from 'uuid/v4';
 import WebSocket from './websocketWrapper';
-import WebSocketNode from './websocketWrapperForNodeJS';
 import SimplePeer from 'simple-peer';
 import wrtc from 'wrtc';
 import MewConnectCommon from './MewConnectCommon';
@@ -37,12 +36,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
     // this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
     this.Peer = SimplePeer;
     this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
-    if (typeof jest !== 'undefined') {
-      debug('for node'); // todo remove dev item
-      this.socket = new WebSocketNode();
-    } else {
-      this.socket = new WebSocket();
-    }
+
+    this.socket = new WebSocket();
 
     this.signals = this.jsonDetails.signals;
     this.rtcEvents = this.jsonDetails.rtc;

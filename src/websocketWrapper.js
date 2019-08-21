@@ -1,8 +1,6 @@
 'use strict';
 
 import queryString from 'query-string';
-// import WebSocket from 'ws'
-// import WebSocket from 'promise-ws'
 import 'isomorphic-ws';
 import debugLogger from 'debug';
 
@@ -39,7 +37,8 @@ export default class WebsocketConnection {
     try {
       const url = `${websocketUrl}?${queryString.stringify(options)}`;
       debug(url); // todo remove dev item
-      if (typeof jest !== 'undefined') {
+      if (typeof jest !== 'undefined' && typeof window === 'undefined') {
+        const WebSocket = require('promise-ws').default;
         this.socket = await WebSocket.create(url);
         this.socket.on('message', this.onMessage.bind(this));
       } else {
