@@ -157,3 +157,6 @@ mew-connect-client can be included for use in the browser via webpack or browerf
 
 
 
+## Run Tests
+*first the ```import WebSocket from 'promise-ws'``` line needs to be uncommented in websocketWrapper.js*
+```npm run test```
