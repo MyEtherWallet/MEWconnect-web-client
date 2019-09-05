@@ -346,7 +346,7 @@ var WebsocketConnection = function () {
   return WebsocketConnection;
 }();
 
-var version = "2.0.0-beta.12";
+var version = "2.0.0-beta.13";
 
 var version$1 = version;
 
