@@ -1,6 +1,7 @@
 'use strict';
 
 import queryString from 'query-string';
+// uncomment below to run tests
 // import WebSocket from 'promise-ws'
 import 'isomorphic-ws';
 import debugLogger from 'debug';

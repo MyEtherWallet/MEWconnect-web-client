@@ -1,8 +1,8 @@
 'use strict'
 
-import CryptoUtils from '@utils/crypto-utils'
-import WebsocketConnection from '@utils/websocket-connection'
-import WebRTCConnection from '@utils/webrtc-connection'
+import CryptoUtils from '../utils/crypto-utils'
+import WebsocketConnection from '../utils/websocket-connection'
+import WebRTCConnection from '../utils/webrtc-connection'
 import { stunServers, websocketURL } from '@config'
 import { signals, rtcSignals, roles } from '@signals'
 

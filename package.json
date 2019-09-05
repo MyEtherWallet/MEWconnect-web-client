@@ -7,7 +7,7 @@
     "start": "node ./example/peer_server/www.js",
     "test:jest": "jest --detectOpenHandles --forceExit --runInBand",
     "test:browser": "npx opn ./tests/browser/browser_test.html",
-    "test": "npm run buildBrowserTest && npm run test:jest && npm run test:browser",
+    "test:old": "npm run buildBrowserTest && npm run test:jest && npm run test:browser",
     "buildBrowserTest": "webpack --config tests/browser/webpack.config.js",
     "buildBrowserTest:watch": "webpack --config tests/browser/webpack.config.js -w",
     "build": "npm run lint && rimraf dist/ && rollup -c",
@@ -15,7 +15,7 @@
     "prepublishOnly": "npm run build"
   },
   "gitHooks": {
-    "pre-commit": "npm run lint && npm run test:jest"
+    "pre-commit": "npm run lint"
   },
   "dependencies": {
     "browser-or-node": "^1.1.0",
