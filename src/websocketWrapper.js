@@ -2,7 +2,7 @@
 
 import queryString from 'query-string';
 // uncomment below to run tests
-// import WebSocket from 'promise-ws'
+// import WebSocket from 'promise-ws';
 import 'isomorphic-ws';
 import debugLogger from 'debug';
 
@@ -13,6 +13,13 @@ export default class WebsocketConnection {
     this.options = options;
     this.socket = {};
     this.listeners = {};
+
+    this.SOCKET_STATES = {
+      0: 'CONNECTING',
+      1: 'OPEN',
+      2: 'CLOSING',
+      3: 'CLOSED'
+    };
   }
 
   /**
@@ -46,14 +53,38 @@ export default class WebsocketConnection {
       } else {
         this.socket = new WebSocket(url);
         this.socket.onmessage = this.onMessage.bind(this);
+        this.socket.onerror = this.onError.bind(this);
+        this.socket.onopen = this.onOpen.bind(this);
+        this.socket.onclose = this.onClose.bind(this);
+
+        debug(`extensions used: ${this.socket.extensions} or none`);
+        debug(`protocol used: ${this.socket.protocol} or default`);
+        debug(
+          `binary type used: ${
+            this.socket.binaryType
+          } [either blob or arraybuffer]`
+        );
       }
     } catch (e) {
-      debug(e);
+      debug('connect error:', e);
     }
   }
 
   async disconnect() {
-    debug('ADD DISCONNECT FUNCTIONALITY'); // todo remove dev item
+    try {
+      debug('ADD DISCONNECT FUNCTIONALITY'); // todo remove dev item
+      this.socket.close();
+    } catch (e) {
+      debug('disconnect error:', e);
+    }
+  }
+
+  getSocketState() {
+    return this.SOCKET_STATES[this.socket.readyState];
+  }
+
+  onOpen() {
+    debug(`websocket onopen = ${this.getSocketState()}`);
   }
 
   /**
@@ -73,31 +104,44 @@ export default class WebsocketConnection {
    * @return {[type]}         [description]
    */
   onMessage(message) {
-    debug('message', message); // todo remove dev item
-    debug('message data', message.data);
-    let parsedMessage;
-    if (typeof jest === 'undefined') {
-      const parsedMessageRaw =
-        typeof message === 'string' ? JSON.parse(message) : message;
-      parsedMessage =
-        typeof parsedMessageRaw.data === 'string'
-          ? JSON.parse(parsedMessageRaw.data)
-          : parsedMessageRaw.data;
-      debug('parsedMessage', parsedMessage);
-    } else {
-      parsedMessage =
-        typeof message === 'string' ? JSON.parse(message) : message;
-    }
-
-    const signal = parsedMessage.signal;
-    const data = parsedMessage.data;
-    debug(`onMessage Signal: ${signal}`); // todo remove dev item
     try {
-      this.listeners[signal].call(this, data);
+      debug('message', message); // todo remove dev item
+      debug('message data', message.data);
+      let parsedMessage;
+      if (typeof jest === 'undefined') {
+        const parsedMessageRaw =
+          typeof message === 'string' ? JSON.parse(message) : message;
+        parsedMessage =
+          typeof parsedMessageRaw.data === 'string'
+            ? JSON.parse(parsedMessageRaw.data)
+            : parsedMessageRaw.data;
+        debug('parsedMessage', parsedMessage);
+      } else {
+        parsedMessage =
+          typeof message === 'string' ? JSON.parse(message) : message;
+      }
+
+      const signal = parsedMessage.signal;
+      const data = parsedMessage.data;
+      debug(`onMessage Signal: ${signal}`); // todo remove dev item
+      try {
+        this.listeners[signal].call(this, data);
+      } catch (e) {
+        debug(e);
+        // Unhandled message signal
+      }
     } catch (e) {
-      debug(e);
-      // Unhandled message signal
+      debug('ERROR in onMessage', e);
     }
+  }
+
+  onError(errorEvent) {
+    debug('Websocket ERROR');
+    debug('websocket error event', errorEvent);
+  }
+
+  onClose() {
+    debug(`websocket onClose = ${this.getSocketState()}`);
   }
 
   /**
@@ -128,12 +172,17 @@ export default class WebsocketConnection {
    * @param  {[type]} data - Data payload
    */
   send(signal, data = {}) {
-    debug(`send signal: ${signal}`);
-    debug('send data:', data);
-    const message = JSON.stringify({
-      action: signal,
-      data: data
-    });
-    this.socket.send(message);
+    try {
+      debug(`socket connection state: ${this.getSocketState()}`);
+      debug(`send signal: ${signal}`);
+      debug('send data:', data);
+      const message = JSON.stringify({
+        action: signal,
+        data: data
+      });
+      this.socket.send(message);
+    } catch (e) {
+      debug('ERROR in send', e);
+    }
   }
 }

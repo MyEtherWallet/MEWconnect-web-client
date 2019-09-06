@@ -143,6 +143,13 @@ var WebsocketConnection = function () {
     this.options = options;
     this.socket = {};
     this.listeners = {};
+
+    this.SOCKET_STATES = {
+      0: 'CONNECTING',
+      1: 'OPEN',
+      2: 'CLOSING',
+      3: 'CLOSED'
+    };
   }
 
   /**
@@ -197,29 +204,36 @@ var WebsocketConnection = function () {
                 this.socket = _context.sent;
 
                 this.socket.on('message', this.onMessage.bind(this));
-                _context.next = 13;
+                _context.next = 19;
                 break;
 
               case 11:
                 this.socket = new WebSocket(url);
                 this.socket.onmessage = this.onMessage.bind(this);
+                this.socket.onerror = this.onError.bind(this);
+                this.socket.onopen = this.onOpen.bind(this);
+                this.socket.onclose = this.onClose.bind(this);
 
-              case 13:
-                _context.next = 18;
+                debug('extensions used: ' + this.socket.extensions + ' or none');
+                debug('protocol used: ' + this.socket.protocol + ' or default');
+                debug('binary type used: ' + this.socket.binaryType + ' [either blob or arraybuffer]');
+
+              case 19:
+                _context.next = 24;
                 break;
 
-              case 15:
-                _context.prev = 15;
+              case 21:
+                _context.prev = 21;
                 _context.t0 = _context['catch'](0);
 
-                debug(_context.t0);
+                debug('connect error:', _context.t0);
 
-              case 18:
+              case 24:
               case 'end':
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 15]]);
+        }, _callee, this, [[0, 21]]);
       }));
 
       function connect(_x3) {
@@ -236,7 +250,12 @@ var WebsocketConnection = function () {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                debug('ADD DISCONNECT FUNCTIONALITY'); // todo remove dev item
+                try {
+                  debug('ADD DISCONNECT FUNCTIONALITY'); // todo remove dev item
+                  this.socket.close();
+                } catch (e) {
+                  debug('disconnect error:', e);
+                }
 
               case 1:
               case 'end':
@@ -252,6 +271,16 @@ var WebsocketConnection = function () {
 
       return disconnect;
     }()
+  }, {
+    key: 'getSocketState',
+    value: function getSocketState() {
+      return this.SOCKET_STATES[this.socket.readyState];
+    }
+  }, {
+    key: 'onOpen',
+    value: function onOpen() {
+      debug('websocket onopen = ' + this.getSocketState());
+    }
 
     /**
      * On 'message' event, parse the message and if possible,
@@ -273,26 +302,41 @@ var WebsocketConnection = function () {
   }, {
     key: 'onMessage',
     value: function onMessage(message) {
-      debug('message', message); // todo remove dev item
-      debug('message data', message.data);
-      var parsedMessage = void 0;
-      if (typeof jest === 'undefined') {
-        var parsedMessageRaw = typeof message === 'string' ? JSON.parse(message) : message;
-        parsedMessage = typeof parsedMessageRaw.data === 'string' ? JSON.parse(parsedMessageRaw.data) : parsedMessageRaw.data;
-        debug('parsedMessage', parsedMessage);
-      } else {
-        parsedMessage = typeof message === 'string' ? JSON.parse(message) : message;
-      }
-
-      var signal = parsedMessage.signal;
-      var data = parsedMessage.data;
-      debug('onMessage Signal: ' + signal); // todo remove dev item
       try {
-        this.listeners[signal].call(this, data);
+        debug('message', message); // todo remove dev item
+        debug('message data', message.data);
+        var parsedMessage = void 0;
+        if (typeof jest === 'undefined') {
+          var parsedMessageRaw = typeof message === 'string' ? JSON.parse(message) : message;
+          parsedMessage = typeof parsedMessageRaw.data === 'string' ? JSON.parse(parsedMessageRaw.data) : parsedMessageRaw.data;
+          debug('parsedMessage', parsedMessage);
+        } else {
+          parsedMessage = typeof message === 'string' ? JSON.parse(message) : message;
+        }
+
+        var signal = parsedMessage.signal;
+        var data = parsedMessage.data;
+        debug('onMessage Signal: ' + signal); // todo remove dev item
+        try {
+          this.listeners[signal].call(this, data);
+        } catch (e) {
+          debug(e);
+          // Unhandled message signal
+        }
       } catch (e) {
-        debug(e);
-        // Unhandled message signal
+        debug('ERROR in onMessage', e);
       }
+    }
+  }, {
+    key: 'onError',
+    value: function onError(errorEvent) {
+      debug('Websocket ERROR');
+      debug('websocket error event', errorEvent);
+    }
+  }, {
+    key: 'onClose',
+    value: function onClose() {
+      debug('websocket onClose = ' + this.getSocketState());
     }
 
     /**
@@ -334,19 +378,24 @@ var WebsocketConnection = function () {
     value: function send(signal) {
       var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-      debug('send signal: ' + signal);
-      debug('send data:', data);
-      var message = JSON.stringify({
-        action: signal,
-        data: data
-      });
-      this.socket.send(message);
+      try {
+        debug('socket connection state: ' + this.getSocketState());
+        debug('send signal: ' + signal);
+        debug('send data:', data);
+        var message = JSON.stringify({
+          action: signal,
+          data: data
+        });
+        this.socket.send(message);
+      } catch (e) {
+        debug('ERROR in send', e);
+      }
     }
   }]);
   return WebsocketConnection;
 }();
 
-var version = "2.0.0-beta.13";
+var version = "2.0.0-beta.17";
 
 var version$1 = version;
 
@@ -777,41 +826,45 @@ var MewConnectInitiator = function (_MewConnectCommon) {
 
     var _this = possibleConstructorReturn(this, (MewConnectInitiator.__proto__ || Object.getPrototypeOf(MewConnectInitiator)).call(this));
 
-    _this.supportedBrowser = MewConnectCommon.checkBrowser();
+    try {
+      _this.supportedBrowser = MewConnectCommon.checkBrowser();
 
-    _this.activePeerId = '';
-    _this.allPeerIds = [];
-    _this.peersCreated = [];
+      _this.activePeerId = '';
+      _this.allPeerIds = [];
+      _this.peersCreated = [];
 
-    _this.destroyOnUnload();
-    _this.p = null;
-    _this.socketConnected = false;
-    _this.connected = false;
-    _this.tryingTurn = false;
-    _this.turnDisabled = false;
-    _this.signalUrl = null;
-    _this.iceState = '';
-    _this.turnServers = [];
+      _this.destroyOnUnload();
+      _this.p = null;
+      _this.socketConnected = false;
+      _this.connected = false;
+      _this.tryingTurn = false;
+      _this.turnDisabled = false;
+      _this.signalUrl = null;
+      _this.iceState = '';
+      _this.turnServers = [];
 
-    // this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
-    _this.Peer = SimplePeer;
-    _this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
+      // this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
+      _this.Peer = SimplePeer;
+      _this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
 
-    _this.socket = new WebsocketConnection();
+      _this.socket = new WebsocketConnection();
 
-    _this.signals = _this.jsonDetails.signals;
-    _this.rtcEvents = _this.jsonDetails.rtc;
-    _this.version = _this.jsonDetails.version;
-    _this.versions = _this.jsonDetails.versions;
-    _this.lifeCycle = _this.jsonDetails.lifeCycle;
-    _this.stunServers = options.stunServers || _this.jsonDetails.stunSrvers;
-    _this.iceStates = _this.jsonDetails.iceConnectionState;
-    // Socket is abandoned.  disconnect.
-    setTimeout(function () {
-      if (_this.socket) {
-        _this.socketDisconnect();
-      }
-    }, 120000);
+      _this.signals = _this.jsonDetails.signals;
+      _this.rtcEvents = _this.jsonDetails.rtc;
+      _this.version = _this.jsonDetails.version;
+      _this.versions = _this.jsonDetails.versions;
+      _this.lifeCycle = _this.jsonDetails.lifeCycle;
+      _this.stunServers = options.stunServers || _this.jsonDetails.stunSrvers;
+      _this.iceStates = _this.jsonDetails.iceConnectionState;
+      // Socket is abandoned.  disconnect.
+      setTimeout(function () {
+        if (_this.socket) {
+          _this.socketDisconnect();
+        }
+      }, 120000);
+    } catch (e) {
+      debug$1('constructor error:', e);
+    }
     return _this;
   }
 
@@ -835,14 +888,18 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     value: function destroyOnUnload() {
       var _this2 = this;
 
-      if (browserOrNode.isBrowser) {
-        // eslint-disable-next-line no-undef
-        window.onunload = window.onbeforeunload = function () {
-          var iceStates = [_this2.iceStates.new, _this2.iceStates.connecting, _this2.iceStates.connected];
-          if (!_this2.Peer.destroyed || iceStates.includes(_this2.iceState)) {
-            _this2.rtcDestroy();
-          }
-        };
+      try {
+        if (browserOrNode.isBrowser) {
+          // eslint-disable-next-line no-undef
+          window.onunload = window.onbeforeunload = function () {
+            var iceStates = [_this2.iceStates.new, _this2.iceStates.connecting, _this2.iceStates.connected];
+            if (!_this2.Peer.destroyed || iceStates.includes(_this2.iceState)) {
+              _this2.rtcDestroy();
+            }
+          };
+        }
+      } catch (e) {
+        debug$1('destroyOnUnload error:', e);
       }
     }
   }, {
@@ -899,6 +956,8 @@ var MewConnectInitiator = function (_MewConnectCommon) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                _context.prev = 0;
+
                 if (!websocketURL) websocketURL = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
                 if (typeof jest !== 'undefined' && this.connId === null) ;
                 queryOptions = options ? options : {
@@ -908,15 +967,25 @@ var MewConnectInitiator = function (_MewConnectCommon) {
                 };
 
                 debug$1(websocketURL, queryOptions); // todo remove dev item
-                _context.next = 6;
+                _context.next = 7;
                 return this.socket.connect(websocketURL, queryOptions);
 
-              case 6:
+              case 7:
+                _context.next = 12;
+                break;
+
+              case 9:
+                _context.prev = 9;
+                _context.t0 = _context['catch'](0);
+
+                debug$1('connect error:', _context.t0);
+
+              case 12:
               case 'end':
                 return _context.stop();
             }
           }
-        }, _callee, this);
+        }, _callee, this, [[0, 9]]);
       }));
 
       function connect(_x3) {
@@ -1031,25 +1100,35 @@ var MewConnectInitiator = function (_MewConnectCommon) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
+                _context4.prev = 0;
+
                 if (this.signalUrl === null) {
                   this.signalUrl = url;
                 }
                 this.generateKeys(testPrivate);
                 this.displayCode(this.privateKey);
                 this.uiCommunicator(this.lifeCycle.signatureCheck);
-                _context4.next = 6;
+                _context4.next = 7;
                 return this.connect(this.signalUrl);
 
-              case 6:
+              case 7:
                 // this.socket = this.socketManager.connect();
                 this.initiatorConnect();
+                _context4.next = 13;
+                break;
 
-              case 7:
+              case 10:
+                _context4.prev = 10;
+                _context4.t0 = _context4['catch'](0);
+
+                debug$1('initiatorStart error:', _context4.t0);
+
+              case 13:
               case 'end':
                 return _context4.stop();
             }
           }
-        }, _callee4, this);
+        }, _callee4, this, [[0, 10]]);
       }));
 
       function initiatorStart(_x4, _x5) {
@@ -1064,19 +1143,23 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'displayCode',
     value: function displayCode(privateKey) {
-      if (privateKey instanceof Buffer) {
-        privateKey = privateKey.toString('hex');
+      try {
+        if (privateKey instanceof Buffer) {
+          privateKey = privateKey.toString('hex');
+        }
+        debug$1('handshake', privateKey);
+        this.socketKey = privateKey;
+        var separator = this.jsonDetails.connectionCodeSeparator;
+        var qrCodeString = this.version + separator + privateKey + separator + this.connId;
+
+        debug$1(qrCodeString); // todo remove dev item
+
+        this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
+        this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
+        this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
+      } catch (e) {
+        debug$1('displayCode error:', e);
       }
-      debug$1('handshake', privateKey);
-      this.socketKey = privateKey;
-      var separator = this.jsonDetails.connectionCodeSeparator;
-      var qrCodeString = this.version + separator + privateKey + separator + this.connId;
-
-      debug$1(qrCodeString); // todo remove dev item
-
-      this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
-      this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
-      this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
     }
 
     // ------------- WebSocket Communication Methods and Handlers ------------------------------
@@ -1087,7 +1170,11 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'socketEmit',
     value: function socketEmit(signal, data) {
-      this.socket.send(signal, data);
+      try {
+        this.socket.send(signal, data);
+      } catch (e) {
+        debug$1('socketEmit error:', e);
+      }
     }
 
     // socket.disconnect wrapper
@@ -1095,7 +1182,9 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'socketDisconnect',
     value: function socketDisconnect() {
-      this.socket.disconnect();
+      this.socket.disconnect().catch(function (err) {
+        debug$1('socketDisconnect', err);
+      });
       this.socketConnected = false;
     }
 
@@ -1104,7 +1193,11 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'socketOn',
     value: function socketOn(signal, func) {
-      this.socket.on(signal, func);
+      try {
+        this.socket.on(signal, func);
+      } catch (e) {
+        debug$1('socketOn error:', e);
+      }
     }
 
     // ----- Setup handlers for communication with the signal server
@@ -1114,24 +1207,28 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     value: function initiatorConnect() {
       var _this3 = this;
 
-      debugStages('INITIATOR CONNECT');
-      this.uiCommunicator(this.lifeCycle.SocketConnectedEvent);
+      try {
+        debugStages('INITIATOR CONNECT');
+        this.uiCommunicator(this.lifeCycle.SocketConnectedEvent);
 
-      this.socket.on(this.signals.connect, function () {
-        debugStages('SOCKET CONNECTED');
-        _this3.socketConnected = true;
-      });
+        this.socket.on(this.signals.connect, function () {
+          debugStages('SOCKET CONNECTED');
+          _this3.socketConnected = true;
+        });
 
-      this.socketOn(this.signals.initiated, this.initiated.bind(this)); // response
-      this.socketOn(this.signals.confirmation, this.beginRtcSequence.bind(this)); // response
+        this.socketOn(this.signals.initiated, this.initiated.bind(this)); // response
+        this.socketOn(this.signals.confirmation, this.beginRtcSequence.bind(this)); // response
 
-      this.socketOn(this.signals.answer, this.recieveAnswer.bind(this));
-      this.socketOn(this.signals.confirmationFailedBusy, this.busyFailure.bind(this));
-      this.socketOn(this.signals.confirmationFailed, this.confirmationFailure.bind(this));
-      this.socketOn(this.signals.invalidConnection, this.invalidFailure.bind(this));
-      this.socketOn(this.signals.disconnect, this.socketDisconnectHandler.bind(this));
-      this.socketOn(this.signals.attemptingTurn, this.willAttemptTurn.bind(this));
-      this.socketOn(this.signals.turnToken, this.beginTurn.bind(this));
+        this.socketOn(this.signals.answer, this.recieveAnswer.bind(this));
+        this.socketOn(this.signals.confirmationFailedBusy, this.busyFailure.bind(this));
+        this.socketOn(this.signals.confirmationFailed, this.confirmationFailure.bind(this));
+        this.socketOn(this.signals.invalidConnection, this.invalidFailure.bind(this));
+        this.socketOn(this.signals.disconnect, this.socketDisconnectHandler.bind(this));
+        this.socketOn(this.signals.attemptingTurn, this.willAttemptTurn.bind(this));
+        this.socketOn(this.signals.turnToken, this.beginTurn.bind(this));
+      } catch (e) {
+        debug$1('initiatorConnect error:', e);
+      }
     }
 
     // ----- Socket Event handlers
@@ -1213,23 +1310,27 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'beginRtcSequence',
     value: function beginRtcSequence(data) {
-      debug$1('beginRtcSequence');
-      debug$1('sendOffer', data);
-      this.iceServers = null;
-      var options = {
-        servers: this.stunServers,
-        webRtcConfig: {
-          initiator: true,
-          trickle: false,
-          iceTransportPolicy: 'relay',
-          config: {
-            iceServers: this.stunServers
-          },
-          wrtc: wrtc
-        }
-      };
+      try {
+        debug$1('beginRtcSequence');
+        debug$1('sendOffer', data);
+        this.iceServers = null;
+        var options = {
+          servers: this.stunServers,
+          webRtcConfig: {
+            initiator: true,
+            trickle: false,
+            iceTransportPolicy: 'relay',
+            config: {
+              iceServers: this.stunServers
+            },
+            wrtc: wrtc
+          }
+        };
 
-      this.initiatorStartRTC(options);
+        this.initiatorStartRTC(options);
+      } catch (e) {
+        debug$1('beginRtcSequence error:', e);
+      }
     }
   }, {
     key: 'sendOffer',
@@ -1255,7 +1356,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
                   data: encryptedSend,
                   connId: this.connId
                 });
-                _context5.next = 13;
+                _context5.next = 14;
                 break;
 
               case 10:
@@ -1263,8 +1364,9 @@ var MewConnectInitiator = function (_MewConnectCommon) {
                 _context5.t0 = _context5['catch'](1);
 
                 logger$2.error(_context5.t0);
+                debug$1('sendOffer error:', _context5.t0);
 
-              case 13:
+              case 14:
               case 'end':
                 return _context5.stop();
             }
@@ -1300,7 +1402,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
 
                 this.uiCommunicator(this.lifeCycle.answerReceived);
                 this.p.signal(JSON.parse(plainTextOffer));
-                _context6.next = 12;
+                _context6.next = 13;
                 break;
 
               case 9:
@@ -1308,8 +1410,9 @@ var MewConnectInitiator = function (_MewConnectCommon) {
                 _context6.t0 = _context6['catch'](1);
 
                 logger$2.error(_context6.t0);
+                debug$1('recieveAnswer error:', _context6.t0);
 
-              case 12:
+              case 13:
               case 'end':
                 return _context6.stop();
             }
@@ -1338,37 +1441,41 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'initiatorStartRTC',
     value: function initiatorStartRTC(options) {
-      debug$1('initiatorStartRTC');
-      this.setActivePeerId();
-      var webRtcConfig = options.webRtcConfig || {};
-      var webRtcServers = webRtcConfig.servers || this.stunServers;
+      try {
+        debug$1('initiatorStartRTC');
+        this.setActivePeerId();
+        var webRtcConfig = options.webRtcConfig || {};
+        var webRtcServers = webRtcConfig.servers || this.stunServers;
 
-      this.iceServers = null;
-      var defaultOptions = {
-        initiator: true,
-        trickle: false,
-        iceTransportPolicy: 'relay',
-        config: {
-          iceServers: webRtcServers
-        },
-        wrtc: wrtc
-      };
+        this.iceServers = null;
+        var defaultOptions = {
+          initiator: true,
+          trickle: false,
+          iceTransportPolicy: 'relay',
+          config: {
+            iceServers: webRtcServers
+          },
+          wrtc: wrtc
+        };
 
-      //
-      var simpleOptions = _extends({}, defaultOptions, webRtcConfig);
+        //
+        var simpleOptions = _extends({}, defaultOptions, webRtcConfig);
 
-      debug$1('initiatorStartRTC - options: ' + simpleOptions);
-      this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
-      this.p = new this.Peer(simpleOptions);
-      var peerID = this.getActivePeerId();
-      this.p.peerInstanceId = peerID;
-      this.peersCreated.push(this.p);
-      this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
-      this.p.on(this.rtcEvents.connect, this.onConnect.bind(this, peerID));
-      this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
-      this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
-      this.p.on(this.rtcEvents.signal, this.sendOffer.bind(this));
-      this.p._pc.addEventListener('iceconnectionstatechange', this.stateChangeListener.bind(this, peerID));
+        debug$1('initiatorStartRTC - options: ' + simpleOptions);
+        this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
+        this.p = new this.Peer(simpleOptions);
+        var peerID = this.getActivePeerId();
+        this.p.peerInstanceId = peerID;
+        this.peersCreated.push(this.p);
+        this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
+        this.p.on(this.rtcEvents.connect, this.onConnect.bind(this, peerID));
+        this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
+        this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
+        this.p.on(this.rtcEvents.signal, this.sendOffer.bind(this));
+        this.p._pc.addEventListener('iceconnectionstatechange', this.stateChangeListener.bind(this, peerID));
+      } catch (e) {
+        debug$1('initiatorStartRTC error:', e);
+      }
     }
 
     // ----- WebRTC Communication Event Handlers
@@ -1376,30 +1483,38 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'stateChangeListener',
     value: function stateChangeListener(peerID, evt) {
-      // eslint-disable-next-line no-undef
-      if (typeof jest === 'undefined') {
-        // included because target is not defined in jest
-        debug$1('iceConnectionState: ' + evt.target.iceConnectionState);
-        debugPeer('this.allPeerIds', this.allPeerIds);
-        debugPeer('peerID', peerID);
-        if (evt.target.iceConnectionState === 'connected' || evt.target.iceConnectionState === 'completed') {
-          if (!this.connected) {
-            this.connected = true;
-            this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+      try {
+        // eslint-disable-next-line no-undef
+        if (typeof jest === 'undefined') {
+          // included because target is not defined in jest
+          debug$1('iceConnectionState: ' + evt.target.iceConnectionState);
+          debugPeer('this.allPeerIds', this.allPeerIds);
+          debugPeer('peerID', peerID);
+          if (evt.target.iceConnectionState === 'connected' || evt.target.iceConnectionState === 'completed') {
+            if (!this.connected) {
+              this.connected = true;
+              this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+            }
           }
         }
+      } catch (e) {
+        debug$1('stateChangeListener error:', e);
       }
     }
   }, {
     key: 'onConnect',
     value: function onConnect(peerID) {
-      debugStages('RTC CONNECT', 'ok');
-      debugPeer('peerID', peerID);
-      this.connected = true;
-      this.turnDisabled = true;
-      this.socketEmit(this.signals.rtcConnected, this.socketKey);
-      this.socketDisconnect();
-      this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+      try {
+        debugStages('RTC CONNECT', 'ok');
+        debugPeer('peerID', peerID);
+        this.connected = true;
+        this.turnDisabled = true;
+        this.socketEmit(this.signals.rtcConnected, this.socketKey);
+        this.socketDisconnect();
+        this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+      } catch (e) {
+        debug$1('onConnect error:', e);
+      }
     }
   }, {
     key: 'onData',
@@ -1473,16 +1588,20 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'onClose',
     value: function onClose(peerID, data) {
-      debugStages('WRTC MAYBE CLOSE');
-      debugPeer('peerID', peerID);
-      if (!this.isAlive()) {
-        debugStages('WRTC CLOSE', data);
-        if (this.connected) {
-          this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
-          this.connected = false;
-        } else {
-          this.connected = false;
+      try {
+        debugStages('WRTC MAYBE CLOSE');
+        debugPeer('peerID', peerID);
+        if (!this.isAlive()) {
+          debugStages('WRTC CLOSE', data);
+          if (this.connected) {
+            this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
+            this.connected = false;
+          } else {
+            this.connected = false;
+          }
         }
+      } catch (e) {
+        debug$1('onClose error:', e);
       }
     }
   }, {
@@ -1493,7 +1612,9 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       debug$1(err.code);
       debug$1('error', err);
       if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
-        this.useFallback();
+        this.useFallback().catch(function (err) {
+          debug$1('onError', err);
+        });
       } else {
         if (!this.isAlive()) {
           this.uiCommunicator(this.lifeCycle.RtcErrorEvent);
@@ -1510,14 +1631,18 @@ var MewConnectInitiator = function (_MewConnectCommon) {
 
       return function () {
         debug$1('[SEND RTC MESSAGE Closure] type:  ' + type + ',  message:  ' + msg);
-        _this4.rtcSend(JSON.stringify({ type: type, data: msg }));
+        _this4.rtcSend(JSON.stringify({ type: type, data: msg })).catch(function (err) {
+          debug$1('sendRtcMessageClosure', err);
+        });
       };
     }
   }, {
     key: 'sendRtcMessage',
     value: function sendRtcMessage(type, msg) {
       debug$1('[SEND RTC MESSAGE] type:  ' + type + ',  message:  ' + msg);
-      this.rtcSend(JSON.stringify({ type: type, data: msg }));
+      this.rtcSend(JSON.stringify({ type: type, data: msg })).catch(function (err) {
+        debug$1('sendRtcMessage', err);
+      });
     }
   }, {
     key: 'disconnectRTCClosure',
@@ -1535,11 +1660,15 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'disconnectRTC',
     value: function disconnectRTC() {
-      debugStages('DISCONNECT RTC');
-      this.connected = false;
-      this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
-      this.rtcDestroy();
-      this.instance = null;
+      try {
+        debugStages('DISCONNECT RTC');
+        this.connected = false;
+        this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+        this.rtcDestroy();
+        this.instance = null;
+      } catch (e) {
+        debug$1('disconnectRTC error:', e);
+      }
     }
   }, {
     key: 'rtcSend',
@@ -1550,49 +1679,57 @@ var MewConnectInitiator = function (_MewConnectCommon) {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
+                _context8.prev = 0;
+
                 if (!this.isAlive()) {
-                  _context8.next = 14;
+                  _context8.next = 15;
                   break;
                 }
 
                 encryptedSend = void 0;
 
                 if (!(typeof arg === 'string')) {
-                  _context8.next = 8;
+                  _context8.next = 9;
                   break;
                 }
 
-                _context8.next = 5;
+                _context8.next = 6;
                 return this.mewCrypto.encrypt(arg);
 
-              case 5:
+              case 6:
                 encryptedSend = _context8.sent;
-                _context8.next = 11;
+                _context8.next = 12;
                 break;
 
-              case 8:
-                _context8.next = 10;
+              case 9:
+                _context8.next = 11;
                 return this.mewCrypto.encrypt(JSON.stringify(arg));
 
-              case 10:
+              case 11:
                 encryptedSend = _context8.sent;
 
-              case 11:
+              case 12:
                 debug$1('SENDING RTC');
                 this.p.send(JSON.stringify(encryptedSend));
                 return _context8.abrupt('return', true);
 
-              case 14:
+              case 15:
                 // eslint-disable-next-line
                 this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
                 return _context8.abrupt('return', false);
 
-              case 16:
+              case 19:
+                _context8.prev = 19;
+                _context8.t0 = _context8['catch'](0);
+
+                debug$1('rtcSend error:', _context8.t0);
+
+              case 22:
               case 'end':
                 return _context8.stop();
             }
           }
-        }, _callee8, this);
+        }, _callee8, this, [[0, 19]]);
       }));
 
       function rtcSend(_x10) {
@@ -1604,10 +1741,14 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'rtcDestroy',
     value: function rtcDestroy() {
-      if (this.isAlive()) {
-        this.p.destroy();
-        this.connected = false;
-        this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
+      try {
+        if (this.isAlive()) {
+          this.p.destroy();
+          this.connected = false;
+          this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
+        }
+      } catch (e) {
+        debug$1('rtcDestroy', e);
       }
     }
 
@@ -1618,16 +1759,20 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'retryViaTurn',
     value: function retryViaTurn(data) {
-      debugStages('Retrying via TURN');
-      var options = {
-        signalListener: this.initiatorSignalListener,
-        servers: data.iceServers.map(function (obj) {
-          var newObject = {};
-          delete Object.assign(newObject, obj, defineProperty({}, 'urls', obj['url']))['url'];
-          return newObject;
-        })
-      };
-      this.initiatorStartRTC(this.socket, options);
+      try {
+        debugStages('Retrying via TURN');
+        var options = {
+          signalListener: this.initiatorSignalListener,
+          servers: data.iceServers.map(function (obj) {
+            var newObject = {};
+            delete Object.assign(newObject, obj, defineProperty({}, 'urls', obj['url']))['url'];
+            return newObject;
+          })
+        };
+        this.initiatorStartRTC(this.socket, options);
+      } catch (e) {
+        debug$1('retryViaTurn error:', e);
+      }
     }
 
     // ======================== [End] WebRTC Communication Methods =============================
