@@ -43,7 +43,7 @@ export default class Receiver {
     this.privateKey = privateKey
     this.connId = connId
     this.signed = CryptoUtils.signMessage(this.privateKey, this.privateKey)
-    console.log(this.signed); // todo remove dev item
+    console.log('receiver: ',this.signed); // todo remove dev item
   }
 
   /*
@@ -104,7 +104,7 @@ export default class Receiver {
           connId: this.connId,
           signed: this.signed
         }
-    console.log(websocketURL, queryOptions); // todo remove dev item
+    console.log('receiver: ', websocketURL, queryOptions); // todo remove dev item
     await this.socket.connect(websocketURL, queryOptions)
   }
 

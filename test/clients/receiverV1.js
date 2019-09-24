@@ -1,8 +1,11 @@
+import CryptoUtils from '../utils/crypto-utils';
+
 const debugLogger = require('debug');
 const io = require('socket.io-client');
 const EventEmitter = require('events').EventEmitter;
 const MewConnectCrypto = require('../../dist/index.js').Crypto;
 const SimplePeer = require('simple-peer');
+const wrtc = require('wrtc');
 
 const {
   versions,
@@ -13,8 +16,28 @@ const {
   stages,
   lifeCycle,
   communicationTypes
-} = require('../../src/constants/constants');
+} = require('../../src/constants');
 const { version, stunServers } = require('../../src/config');
+
+const signalV1 = {
+  attemptingTurn: 'attemptingTurn',
+  turnToken: 'turnToken',
+  tryTurn: 'tryTurn',
+  connection: 'connection',
+  connect: 'connect',
+  signature: 'signature',
+  offerSignal: 'offerSignal',
+  offer: 'offer',
+  answerSignal: 'answerSignal',
+  answer: 'answer',
+  rtcConnected: 'rtcConnected',
+  disconnect: 'disconnect',
+  handshake: 'handshake',
+  confirmation: 'confirmation',
+  invalidConnection: 'InvalidConnection',
+  confirmationFailedBusy: 'confirmationFailedBusy',
+  confirmationFailed: 'confirmationFailed'
+};
 
 const debug = debugLogger('MEWconnect:receiver');
 const debugState = debugLogger('MEWconnect:receiver-state');
@@ -32,7 +55,7 @@ export default class MewConnectReceiver extends EventEmitter {
     this.jsonDetails = {
       stunSrvers: [...stunServers],
       signals: {
-        ...signal
+        ...signalV1
       },
       stages: {
         ...stages
@@ -82,6 +105,15 @@ export default class MewConnectReceiver extends EventEmitter {
       }
     }, 120000);
 
+  }
+
+  async setKeys(publicKey, privateKey, connId) {
+    console.log(privateKey); // todo remove dev item
+    this.publicKey = publicKey
+    this.privateKey = privateKey
+    this.connId = connId
+    this.signed = CryptoUtils.signMessage(this.privateKey, this.privateKey)
+    console.log(this.signed); // todo remove dev item
   }
 
   isJSON(arg) {
@@ -135,12 +167,12 @@ export default class MewConnectReceiver extends EventEmitter {
   }
 
   // ----- Setup handlers for communication with the signal server
-  async receiverStart(url, params) {
+  async connect(url, params = {}) {
     try {
       // Set the private key sent via a QR code scan
-      this.mewCrypto.setPrivate(params.key);
-      const signed = await this.mewCrypto.signMessage(params.key);
-      this.connId = params.connId;
+      this.mewCrypto.setPrivate(this.privateKey);
+      const signed = await this.mewCrypto.signMessage(this.privateKey);
+      this.connId = params.connId || this.connId;
       const options = {
         query: {
           signed,
@@ -151,6 +183,15 @@ export default class MewConnectReceiver extends EventEmitter {
       };
       this.socketManager = this.io(url, options);
       this.socket = this.socketManager.connect();
+
+      this.socket.on(this.signals.connect, () => {
+        console.log('SOCKET CONNECTED');
+        this.socketConnected = true;
+      });
+
+      this.socketOn(this.signals.confirmation, (stuff) =>{
+        console.log('confimation', stuff)
+      }); // response
 
       // identity and locate an opposing peer
       this.socketOn(this.signals.handshake, this.socketHandshake.bind(this));
@@ -179,12 +220,12 @@ export default class MewConnectReceiver extends EventEmitter {
       // Handle Receipt of TURN server details, and begin a WebRTC connection attempt using TURN
       this.socketOn(this.signals.turnToken, this.attemptingTurn.bind(this));
     } catch (e) {
-      debug(e);
+      console.log(e);
     }
   }
 
   async socketHandshake() {
-    debug('socketHandshake');
+    console.log('socketHandshake');
     this.signed = await this.mewCrypto.signMessage(
       this.mewCrypto.prvt.toString('hex')
     );
@@ -248,7 +289,7 @@ export default class MewConnectReceiver extends EventEmitter {
       this.lifeCycle.Failed,
       this.lifeCycle.confirmationFailedEvent
     );
-    debug('confirmation Failed: invalid confirmation');
+    console.log('confirmation Failed: invalid confirmation');
   }
 
   // =============== [End] WebSocket Communication Methods and Handlers ========================
@@ -266,53 +307,55 @@ export default class MewConnectReceiver extends EventEmitter {
       };
       this.receiveOffer(decryptedData);
     } catch (e) {
-      debug(e);
+      console.log(e);
     }
   }
 
   receiveOffer(data) {
-    if (this.onlyTurn && this.tryingTurn) {
-      debug('Receive Offer');
-      let simpleOptions;
-
-      if (this.simplePeerOptions && typeof this.simplePeerOptions === 'object') {
-        this.simplePeerOptions.config = {
-          iceServers: this.turnServers.length > 0 ? this.jsonDetails.stunSrvers.concat(this.turnServers) : this.jsonDetails.stunSrvers
-        };
-        simpleOptions = this.simplePeerOptions;
-      } else {
-
-        simpleOptions = {
-          initiator: false,
-          trickle: false,
-          iceTransportPolicy: 'relay',
-          config: {
-            iceServers: this.turnServers.length > 0 ? this.turnServers : this.jsonDetails.stunSrvers
-          }
-        };
-      }
-
-      // if(servers) simpleOptions.config = {iceServers: servers};
-      this.uiCommunicator('RtcInitiatedEvent');
-      if (this.p && data) {
-        if (this.p.destroyed) {
-          debug('PEER Destroyed: ', this.p);
-          this.p = null;
-          this.createPeer(simpleOptions, JSON.parse(data.data));
-        } else {
-          debug(`recieveOffer data: ${JSON.stringify(data)}`);
-          this.p.signal(JSON.parse(data.data));
-        }
-      } else if (data) {
-        debug('receiveOffer', data);
-        this.createPeer(simpleOptions, JSON.parse(data.data));
-      } else {
-        debug('receiveOffer', data);
-        this.createPeer(simpleOptions);
-      }
-
-    } else if (!this.onlyTurn) {
-      debug('Receive Offer');
+    // if (this.onlyTurn && this.tryingTurn) {
+    //   console.log('Receive Offer');
+    //   let simpleOptions;
+    //
+    //   if (this.simplePeerOptions && typeof this.simplePeerOptions === 'object') {
+    //     this.simplePeerOptions.config = {
+    //       iceServers: this.turnServers.length > 0 ? this.jsonDetails.stunSrvers.concat(this.turnServers) : this.jsonDetails.stunSrvers
+    //     };
+    //     simpleOptions = this.simplePeerOptions;
+    //   } else {
+    //
+    //     simpleOptions = {
+    //       initiator: false,
+    //       trickle: false,
+    //       iceTransportPolicy: 'relay',
+    //       config: {
+    //         iceServers: this.turnServers.length > 0 ? this.turnServers : this.jsonDetails.stunSrvers
+    //       },
+    //       wrtc: wrtc
+    //     };
+    //   }
+    //
+    //   // if(servers) simpleOptions.config = {iceServers: servers};
+    //   this.uiCommunicator('RtcInitiatedEvent');
+    //   if (this.p && data) {
+    //     if (this.p.destroyed) {
+    //       debug('PEER Destroyed: ', this.p);
+    //       this.p = null;
+    //       this.createPeer(simpleOptions, JSON.parse(data.data));
+    //     } else {
+    //       debug(`recieveOffer data: ${JSON.stringify(data)}`);
+    //       this.p.signal(JSON.parse(data.data));
+    //     }
+    //   } else if (data) {
+    //     debug('receiveOffer', data);
+    //     this.createPeer(simpleOptions, JSON.parse(data.data));
+    //   } else {
+    //     debug('receiveOffer', data);
+    //     this.createPeer(simpleOptions);
+    //   }
+    //
+    // } else
+    if (!this.onlyTurn) {
+      debug('Receive Offer ---------------------');
       let simpleOptions;
 
       if (this.simplePeerOptions && typeof this.simplePeerOptions === 'object') {
@@ -328,7 +371,8 @@ export default class MewConnectReceiver extends EventEmitter {
           iceTransportPolicy: 'all',
           config: {
             iceServers: this.turnServers.length > 0 ? this.turnServers : this.jsonDetails.stunSrvers
-          }
+          },
+          wrtc: wrtc
         };
       }
 
@@ -351,11 +395,19 @@ export default class MewConnectReceiver extends EventEmitter {
         this.createPeer(simpleOptions);
       }
 
+    } else {
+      this.onlyTurn = false;
+      this.attemptTurnConnect();
     }
+  }
+
+  onRTC(signal, fn) {
+    this.p.on(signal, fn)
   }
 
   createPeer(options, forSignal) {
     if (this.p === null || this.tryingTurn) {
+      options.wrtc = wrtc;
       this.p = new this.Peer(options);
       if (forSignal) this.p.signal(forSignal);
       this.p.on(this.rtcEvents.error, this.onError.bind(this));
@@ -404,10 +456,9 @@ export default class MewConnectReceiver extends EventEmitter {
   }
 
   async onData(data) {
-    this.uiCommunicator('data');
-    debug('DATA RECEIVED', data.toString());
+    console.log('DATA RECEIVED', data.toString());
     try {
-      let decryptedData;
+      let decryptedData, parsed;
       if (this.isJSON(data)) {
         decryptedData = await this.mewCrypto.decrypt(
           JSON.parse(data.toString())
@@ -418,14 +469,21 @@ export default class MewConnectReceiver extends EventEmitter {
         );
       }
       if (this.isJSON(decryptedData)) {
-        this.applyDatahandlers(JSON.parse(decryptedData));
+        parsed = JSON.parse(decryptedData);
+        console.log('DECRYPTED DATA RECEIVED 1', parsed);
+        this.emit(parsed.type, parsed.data);
       } else {
-        this.applyDatahandlers(decryptedData);
+        console.log('DECRYPTED DATA RECEIVED 2', decryptedData);
+        this.emit(decryptedData.type, decryptedData.data);
+      }
+      if(parsed.type === 'address' || decryptedData.type === 'address'){
+        console.log(parsed, decryptedData); // todo remove dev item
+        this.rtcSend({ type: 'address', data: '0x000000000000000' });
       }
     } catch (e) {
-      debug(e);
-      logger('onData ERROR: data=', data);
-      logger('onData ERROR: data.toString()=', data.toString());
+      console.log(e);
+      debug('onData ERROR: data=', data);
+      debug('onData ERROR: data.toString()=', data.toString());
     }
   }
 

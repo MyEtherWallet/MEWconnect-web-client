@@ -105,6 +105,7 @@ export default class WebsocketConnection {
    */
   onMessage(message) {
     try {
+      console.log('message', message); // todo remove dev item
       debug('message', message); // todo remove dev item
       debug('message data', message.data);
       let parsedMessage;

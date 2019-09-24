@@ -1,4 +1,4 @@
-import { version } from './config';
+import { version } from '../config';
 
 const versions = ['0.0.1'];
 
@@ -8,31 +8,6 @@ const connectionCodeSchemas = {
 
 const connectionCodeSeparator = '_';
 
-const signal = {
-  //V1 (ish)
-  attemptingTurn: 'attemptingturn',
-  turnToken: 'turntoken',
-  tryTurn: 'tryturn',
-  connect: 'connect',
-  connection: 'connection',
-  signature: 'signature',
-  offerSignal: 'offersignal',
-  offer: 'offer',
-  answerSignal: 'answersignal',
-  answer: 'answer',
-  rtcConnected: 'rtcconnected',
-  disconnect: 'disconnect',
-  handshake: 'handshake',
-  confirmation: 'confirmation',
-  invalidConnection: 'InvalidConnection',
-  confirmationFailedBusy: 'confirmationFailedBusy',
-  confirmationFailed: 'confirmationFailed',
-  // V2
-  initiated: 'initiated',
-  socketTimeout: 'socketTimeout',
-  receivedSignal: 'receivedSignal',
-  error: 'error'
-};
 
 const rtc = {
   error: 'error',
@@ -116,7 +91,6 @@ export {
   versions,
   connectionCodeSchemas,
   connectionCodeSeparator,
-  signal,
   stages,
   rtc,
   iceConnectionState,

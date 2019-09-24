@@ -8,6 +8,8 @@ import {
   versions,
   connectionCodeSchemas,
   connectionCodeSeparator,
+  signalServer,
+  signals,
   signal,
   rtc,
   iceConnectionState,
@@ -20,15 +22,22 @@ import { version, stunServers } from './config';
 const logger = createLogger('MewConnectCommon');
 
 export default class MewConnectCommon extends EventEmitter {
-  constructor() {
+  constructor(version = -1) {
     super();
 
     this.isBrowser = isBrowser;
 
     this.jsonDetails = {
       stunSrvers: [...stunServers],
+      signalServer : signalServer(version),
       signals: {
-        ...signal
+        ...signal(version)
+      },
+      signalsV1: {
+        ...signals.V1
+      },
+      signalsV2: {
+        ...signals.V2
       },
       stages: {
         ...stages
