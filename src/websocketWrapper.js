@@ -45,7 +45,7 @@ export default class WebsocketConnection {
   async connect(websocketUrl, options = {}) {
     try {
       const url = `${websocketUrl}?${queryString.stringify(options)}`;
-      debug(url); // todo remove dev item
+      debug(url);
       if (typeof jest !== 'undefined' && typeof window === 'undefined') {
         const WebSocket = require('promise-ws').default;
         this.socket = await WebSocket.create(url);
@@ -72,7 +72,7 @@ export default class WebsocketConnection {
 
   async disconnect() {
     try {
-      debug('ADD DISCONNECT FUNCTIONALITY'); // todo remove dev item
+      debug('ADD DISCONNECT FUNCTIONALITY');
       this.socket.close();
     } catch (e) {
       debug('disconnect error:', e);
@@ -105,8 +105,7 @@ export default class WebsocketConnection {
    */
   onMessage(message) {
     try {
-      console.log('message', message); // todo remove dev item
-      debug('message', message); // todo remove dev item
+      debug('message', message);
       debug('message data', message.data);
       let parsedMessage;
       if (typeof jest === 'undefined') {
@@ -124,7 +123,7 @@ export default class WebsocketConnection {
 
       const signal = parsedMessage.signal;
       const data = parsedMessage.data;
-      debug(`onMessage Signal: ${signal}`); // todo remove dev item
+      debug(`onMessage Signal: ${signal}`);
       try {
         this.listeners[signal].call(this, data);
       } catch (e) {

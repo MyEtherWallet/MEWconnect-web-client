@@ -16,8 +16,8 @@ import {
   stages,
   lifeCycle,
   communicationTypes
-} from './constants';
-import { version, stunServers } from './config';
+} from './constants/index';
+import { stunServers } from './config';
 
 const logger = createLogger('MewConnectCommon');
 
@@ -29,7 +29,7 @@ export default class MewConnectCommon extends EventEmitter {
 
     this.jsonDetails = {
       stunSrvers: [...stunServers],
-      signalServer : signalServer(version),
+      signalServer: signalServer(version),
       signals: {
         ...signal(version)
       },

@@ -118,23 +118,19 @@ export default class MewConnectCrypto {
   }
 
   signMessageSync(msgToSign) {
-    try {
-      msgToSign = this.bufferToString(msgToSign);
+    msgToSign = this.bufferToString(msgToSign);
 
-      const msg = ethUtils.hashPersonalMessage(ethUtils.toBuffer(msgToSign));
-      const signed = ethUtils.ecsign(
-        Buffer.from(msg),
-        Buffer.from(this.prvt, 'hex')
-      );
-      const combined = Buffer.concat([
-        Buffer.from([signed.v]),
-        Buffer.from(signed.r),
-        Buffer.from(signed.s)
-      ]);
-      return combined.toString('hex');
-    } catch (e) {
-      throw e;
-    }
+    const msg = ethUtils.hashPersonalMessage(ethUtils.toBuffer(msgToSign));
+    const signed = ethUtils.ecsign(
+      Buffer.from(msg),
+      Buffer.from(this.prvt, 'hex')
+    );
+    const combined = Buffer.concat([
+      Buffer.from([signed.v]),
+      Buffer.from(signed.r),
+      Buffer.from(signed.s)
+    ]);
+    return combined.toString('hex');
   }
 
   bufferToConnId(buf) {

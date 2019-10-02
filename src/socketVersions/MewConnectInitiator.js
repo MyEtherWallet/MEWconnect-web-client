@@ -7,8 +7,6 @@ import SimplePeer from 'simple-peer';
 import wrtc from 'wrtc';
 import MewConnectCommon from '../MewConnectCommon';
 import MewConnectCrypto from '../MewConnectCrypto';
-// import version1 from './MewConnectInitiatorV1';
-// import version2 from './MewConnectInitiatorV2';
 import io from 'socket.io-client';
 
 const debug = debugLogger('MEWconnect:initiator');
@@ -114,7 +112,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
   // can be used to listen to specific events, especially those that pass data
   uiCommunicator(event, data) {
-    console.log('uiCommunicator:', event); // todo remove dev item
     this.emit(event, data);
     this.emitStatus(event);
   }
@@ -136,7 +133,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       const qrCodeString =
         this.version + separator + privateKey + separator + this.connId;
 
-      debug(qrCodeString); // todo remove dev item
+      debug(qrCodeString);
 
       this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
       this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
@@ -172,7 +169,7 @@ Keys
       this.privateKey,
       this.privateKey
     );
-    debug('this.signed', this.signed); // todo remove dev item
+    debug('this.signed', this.signed);
   }
 
   async initiatorStart(url, testPrivate) {
@@ -186,7 +183,6 @@ Keys
   }
 
   beginRtcSequence(source, data) {
-    console.log('source: ', source); // todo remove dev item
     if (source === 'V2') {
       this.connPath = 'V2';
       this.socketV1Disconnect();
@@ -194,7 +190,6 @@ Keys
     } else if (source === 'V1') {
       this.connPath = 'V1';
       this.socketV2Disconnect();
-      console.log(data); // todo remove dev item
       this.beginRtcSequenceV2(data);
     }
   }
@@ -341,7 +336,6 @@ Keys
   async sendOfferV1(source, data) {
     this.connPath = source;
     this.socketV2Disconnect();
-    console.log('sendOfferV1(data)'); // todo remove dev item
     const plainTextVersion = await this.mewCrypto.decrypt(data.version);
     this.peerVersion = plainTextVersion;
     this.uiCommunicator(this.lifeCycle.receiverVersion, plainTextVersion);
@@ -457,7 +451,6 @@ Keys
   }
 
   onConnectV1(peerID) {
-    console.log('RTC CONNECT'); // todo remove dev item
     debugStages('RTC CONNECT', 'ok');
     debugPeer('peerID', peerID);
     this.connected = true;
@@ -487,9 +480,8 @@ Keys
           connId: this.connId,
           signed: this.signed
         };
-      console.log(websocketURL, queryOptions); // todo remove dev item
 
-      debug(websocketURL, queryOptions); // todo remove dev item
+      debug(websocketURL, queryOptions);
       await this.socketV2.connect(websocketURL, queryOptions);
     } catch (e) {
       debug('connect error:', e);
@@ -588,12 +580,11 @@ Keys
 
   initiated(data) {
     this.uiCommunicator(this.signalsV2.initiated, data);
-    debug('initiator', this.signalsV2.initiated, data); // todo remove dev item
+    debug('initiator', this.signalsV2.initiated, data);
   }
 
   beginRtcSequenceV2(data) {
     try {
-      console.log('============================================================================='); // todo remove dev item
       debug('beginRtcSequence V2');
       debug('sendOffer', data);
       this.iceServers = null;
@@ -634,7 +625,7 @@ Keys
 
   // Handle the WebRTC ANSWER from the opposite (mobile) peer
   async recieveAnswerV2(data) {
-    debug('recieved answer'); // todo remove dev item
+    debug('recieved answer');
     try {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
       this.uiCommunicator(this.lifeCycle.answerReceived);

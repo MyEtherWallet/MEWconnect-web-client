@@ -128,7 +128,7 @@ Keys
       this.privateKey,
       this.privateKey
     );
-    debug('this.signed', this.signed); // todo remove dev item
+    debug('this.signed', this.signed);
   }
 
   /*
@@ -161,7 +161,7 @@ Keys
             signed: this.signed
           };
 
-      debug(websocketURL, queryOptions); // todo remove dev item
+      debug(websocketURL, queryOptions);
       await this.socket.connect(websocketURL, queryOptions);
     } catch (e) {
       debug('connect error:', e);
@@ -232,8 +232,7 @@ Keys
       const separator = this.jsonDetails.connectionCodeSeparator;
       const qrCodeString =
         this.version + separator + privateKey + separator + this.connId;
-      console.log(qrCodeString); // todo remove dev item
-      debug(qrCodeString); // todo remove dev item
+      debug(qrCodeString);
 
       this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
       this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
@@ -320,7 +319,7 @@ Keys
 
   initiated(data) {
     this.uiCommunicator(this.signals.initiated, data);
-    debug('initiator', this.signals.initiated, data); // todo remove dev item
+    debug('initiator', this.signals.initiated, data);
   }
 
   // Handle Socket Disconnect Event
@@ -422,7 +421,7 @@ Keys
 
   // Handle the WebRTC ANSWER from the opposite (mobile) peer
   async recieveAnswer(data) {
-    debug('recieved answer'); // todo remove dev item
+    debug('recieved answer');
     try {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
       this.uiCommunicator(this.lifeCycle.answerReceived);

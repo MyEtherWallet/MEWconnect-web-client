@@ -1,8 +1,8 @@
 {
   "name": "@myetherwallet/mewconnect-web-client",
   "homepage": "https://github.com/myetherwallet/MEWconnect-web-client",
-  "version": "2.0.0-beta.17",
-  "main": "./src/index.js",
+  "version": "2.0.0-beta.19",
+  "main": "./dist/index.js",
   "scripts": {
     "start": "node ./example/peer_server/www.js",
     "test:jest": "jest --detectOpenHandles --forceExit --runInBand",
@@ -11,8 +11,8 @@
     "test": "npm run test:jest",
     "buildBrowserTest": "webpack --config tests/browser/webpack.config.js",
     "buildBrowserTest:watch": "webpack --config tests/browser/webpack.config.js -w",
-    "build": "npm run lint && rimraf dist/ && rollup -c",
-    "lint": "eslint --fix 'src/**.js'",
+    "build": "npm run lint && rimraf dist/ && npx rollup -c",
+    "lint": "npx eslint --fix 'src/**.js'",
     "prepublishOnly": "npm run build"
   },
   "gitHooks": {
