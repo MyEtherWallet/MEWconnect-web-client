@@ -24,6 +24,9 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.activePeerId = '';
       this.allPeerIds = [];
       this.peersCreated = [];
+      this.v1Url = options.v1Url || 'wss://connect.mewapi.io';
+      this.v2Url = options.v2Url || 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
+
       this.turnTest = options.turnTest;
 
       this.destroyOnUnload();
@@ -172,14 +175,12 @@ Keys
     debug('this.signed', this.signed);
   }
 
+  // TODO change this to handle supplying urls at time point
   async initiatorStart(url, testPrivate) {
     this.generateKeys(testPrivate);
     this.displayCode(this.privateKey);
-    const v1Url = 'wss://connect.mewapi.io';
-    this.initiatorStartV1(v1Url);
-    const v2Url =
-      'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
-    await this.initiatorStartV2(v2Url);
+    this.initiatorStartV1(this.v1Url);
+    await this.initiatorStartV2(this.v2Url);
   }
 
   beginRtcSequence(source, data) {

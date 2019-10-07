@@ -190,7 +190,7 @@ var WebsocketConnection = function () {
                 _context.prev = 0;
                 url = websocketUrl + '?' + queryString.stringify(options);
 
-                debug(url); // todo remove dev item
+                debug(url);
 
                 if (!(typeof jest !== 'undefined' && typeof window === 'undefined')) {
                   _context.next = 11;
@@ -252,7 +252,7 @@ var WebsocketConnection = function () {
             switch (_context2.prev = _context2.next) {
               case 0:
                 try {
-                  debug('ADD DISCONNECT FUNCTIONALITY'); // todo remove dev item
+                  debug('ADD DISCONNECT FUNCTIONALITY');
                   this.socket.close();
                 } catch (e) {
                   debug('disconnect error:', e);
@@ -304,7 +304,7 @@ var WebsocketConnection = function () {
     key: 'onMessage',
     value: function onMessage(message) {
       try {
-        debug('message', message); // todo remove dev item
+        debug('message', message);
         debug('message data', message.data);
         var parsedMessage = void 0;
         if (typeof jest === 'undefined') {
@@ -317,7 +317,7 @@ var WebsocketConnection = function () {
 
         var signal = parsedMessage.signal;
         var data = parsedMessage.data;
-        debug('onMessage Signal: ' + signal); // todo remove dev item
+        debug('onMessage Signal: ' + signal);
         try {
           this.listeners[signal].call(this, data);
         } catch (e) {
@@ -979,7 +979,6 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'uiCommunicator',
     value: function uiCommunicator(event, data) {
-      console.log('uiCommunicator:', event); // todo remove dev item
       this.emit(event, data);
       this.emitStatus(event);
     }
@@ -1006,7 +1005,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
         var separator = this.jsonDetails.connectionCodeSeparator;
         var qrCodeString = this.version + separator + privateKey + separator + this.connId;
 
-        debug$1(qrCodeString); // todo remove dev item
+        debug$1(qrCodeString);
 
         this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
         this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
@@ -1042,7 +1041,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       this.privateKey = keys.privateKey;
       this.connId = this.mewCrypto.generateConnId(this.publicKey);
       this.signed = this.mewCrypto.signMessageSync(this.privateKey, this.privateKey);
-      debug$1('this.signed', this.signed); // todo remove dev item
+      debug$1('this.signed', this.signed);
     }
   }, {
     key: 'initiatorStart',
@@ -1079,7 +1078,6 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'beginRtcSequence',
     value: function beginRtcSequence(source, data) {
-      console.log('source: ', source); // todo remove dev item
       if (source === 'V2') {
         this.connPath = 'V2';
         this.socketV1Disconnect();
@@ -1087,7 +1085,6 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       } else if (source === 'V1') {
         this.connPath = 'V1';
         this.socketV2Disconnect();
-        console.log(data); // todo remove dev item
         this.beginRtcSequenceV2(data);
       }
     }
@@ -1279,11 +1276,10 @@ var MewConnectInitiator = function (_MewConnectCommon) {
               case 0:
                 this.connPath = source;
                 this.socketV2Disconnect();
-                console.log('sendOfferV1(data)'); // todo remove dev item
-                _context3.next = 5;
+                _context3.next = 4;
                 return this.mewCrypto.decrypt(data.version);
 
-              case 5:
+              case 4:
                 plainTextVersion = _context3.sent;
 
                 this.peerVersion = plainTextVersion;
@@ -1298,7 +1294,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
 
                 this.initiatorStartRTCV1(this.socketV1, options);
 
-              case 11:
+              case 10:
               case 'end':
                 return _context3.stop();
             }
@@ -1493,7 +1489,6 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'onConnectV1',
     value: function onConnectV1(peerID) {
-      console.log('RTC CONNECT'); // todo remove dev item
       debugStages('RTC CONNECT', 'ok');
       debugPeer('peerID', peerID);
       this.connected = true;
@@ -1527,28 +1522,27 @@ var MewConnectInitiator = function (_MewConnectCommon) {
                   signed: this.signed
                 };
 
-                console.log(websocketURL, queryOptions); // todo remove dev item
 
-                debug$1(websocketURL, queryOptions); // todo remove dev item
-                _context7.next = 8;
+                debug$1(websocketURL, queryOptions);
+                _context7.next = 7;
                 return this.socketV2.connect(websocketURL, queryOptions);
 
-              case 8:
-                _context7.next = 13;
+              case 7:
+                _context7.next = 12;
                 break;
 
-              case 10:
-                _context7.prev = 10;
+              case 9:
+                _context7.prev = 9;
                 _context7.t0 = _context7['catch'](0);
 
                 debug$1('connect error:', _context7.t0);
 
-              case 13:
+              case 12:
               case 'end':
                 return _context7.stop();
             }
           }
-        }, _callee7, this, [[0, 10]]);
+        }, _callee7, this, [[0, 9]]);
       }));
 
       function connect(_x10) {
@@ -1713,13 +1707,12 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     key: 'initiated',
     value: function initiated(data) {
       this.uiCommunicator(this.signalsV2.initiated, data);
-      debug$1('initiator', this.signalsV2.initiated, data); // todo remove dev item
+      debug$1('initiator', this.signalsV2.initiated, data);
     }
   }, {
     key: 'beginRtcSequenceV2',
     value: function beginRtcSequenceV2(data) {
       try {
-        console.log('============================================================================='); // todo remove dev item
         debug$1('beginRtcSequence V2');
         debug$1('sendOffer', data);
         this.iceServers = null;
@@ -1801,7 +1794,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
           while (1) {
             switch (_context12.prev = _context12.next) {
               case 0:
-                debug$1('recieved answer'); // todo remove dev item
+                debug$1('recieved answer');
                 _context12.prev = 1;
                 _context12.next = 4;
                 return this.mewCrypto.decrypt(data.data);
@@ -2181,57 +2174,6 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }]);
   return MewConnectInitiator;
 }(MewConnectCommon);
-
-// import version2 from './socketVersions/MewConnectInitiatorV2';
-// export default version2;
-
-/*
-import createLogger from 'logging';
-import debugLogger from 'debug';
-// import { isBrowser } from 'browser-or-node';
-// import uuid from 'uuid/v4';
-// import WebSocket from './websocketWrapper';
-// import SimplePeer from 'simple-peer';
-// import wrtc from 'wrtc';
-import MewConnectCommon from './MewConnectCommon';
-// import MewConnectCrypto from './MewConnectCrypto';
-// import version1 from './MewConnectInitiatorV1';
-// import version2 from './MewConnectInitiatorV2';
-import demo from './socketVersions/MewConnectInitiator.js'
-
-const debug = debugLogger('MEWconnect:initiator');
-const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
-const debugStages = debugLogger('MEWconnect:initiator-stages');
-const logger = createLogger('MewConnectInitiator');
-
-export default class MewConnectInitiator extends MewConnectCommon {
-  constructor(options = {}) {
-    super();
-
-    return new demo(options);
-    // if (options.version) {
-    //   const parts = options.version.split('.');
-    //   if (parts[0] < 2) {
-    //     debug('VERSION 1');
-    //     console.log('version 1'); // todo remove dev item
-    //     return new version1(options);
-    //     // Reflect.setPrototypeOf(this, version1);
-    //   } else {
-    //     debug('VERSION 2');
-    //     console.log('version 2'); // todo remove dev item
-    //     return new version2(options);
-    //     // Reflect.setPrototypeOf(this, version2);
-    //   }
-    // } else {
-    //   debug('VERSION 2');
-    //   return new version2(options);
-    //   // Reflect.setPrototypeOf(this, version2);
-    // }
-
-  }
-
-}
-*/
 
 // INITIATOR CLIENT
 
