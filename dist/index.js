@@ -887,7 +887,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       _this.allPeerIds = [];
       _this.peersCreated = [];
       _this.v1Url = options.v1Url || 'wss://connect.mewapi.io';
-      _this.v2Url = options.v2Url || 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
+      _this.v2Url = options.v2Url || 'wss://connect2.mewapi.io/staging';
 
       _this.turnTest = options.turnTest;
 
@@ -2089,14 +2089,15 @@ var MewConnectInitiator = function (_MewConnectCommon) {
               case 11:
                 debug$1('SENDING RTC');
                 this.p.send(JSON.stringify(encryptedSend));
-                _context14.next = 16;
+                _context14.next = 17;
                 break;
 
               case 15:
                 // eslint-disable-next-line
                 this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
+                return _context14.abrupt('return', false);
 
-              case 16:
+              case 17:
               case 'end':
                 return _context14.stop();
             }
@@ -2136,7 +2137,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
   }, {
     key: 'retryViaTurnV1',
     value: function retryViaTurnV1(data) {
-      debugStages('Retrying via TURN');
+      debugStages('Retrying via TURN v1');
       var options = {
         signalListener: this.initiatorSignalListener,
         webRtcConfig: {
@@ -2149,16 +2150,29 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     key: 'retryViaTurnV2',
     value: function retryViaTurnV2(data) {
       try {
-        debugStages('Retrying via TURN');
+        debugStages('Retrying via TURN v2');
+        this.iceServers = null;
         var options = {
-          signalListener: this.initiatorSignalListener,
           servers: data.iceServers.map(function (obj) {
             var newObject = {};
             delete Object.assign(newObject, obj, defineProperty({}, 'urls', obj['url']))['url'];
             return newObject;
-          })
+          }),
+          webRtcConfig: {
+            initiator: true,
+            trickle: false,
+            iceTransportPolicy: 'relay',
+            config: {
+              iceServers: data.iceServers.map(function (obj) {
+                var newObject = {};
+                delete Object.assign(newObject, obj, defineProperty({}, 'urls', obj['url']))['url'];
+                return newObject;
+              })
+            },
+            wrtc: wrtc
+          }
         };
-        this.initiatorStartRTC(this.socket, options);
+        this.initiatorStartRTCV2(options);
       } catch (e) {
         debug$1('retryViaTurn error:', e);
       }
