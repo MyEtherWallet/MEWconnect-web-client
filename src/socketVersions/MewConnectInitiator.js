@@ -17,7 +17,7 @@ const logger = createLogger('MewConnectInitiator');
 export default class MewConnectInitiator extends MewConnectCommon {
   constructor(options = {}) {
     super(options.version);
-
+    console.log('ok'); // todo remove dev item
     try {
       this.supportedBrowser = MewConnectCommon.checkBrowser();
 
@@ -58,8 +58,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.stunServers = options.stunServers || this.jsonDetails.stunSrvers;
       this.iceStates = this.jsonDetails.iceConnectionState;
       // Socket is abandoned.  disconnect.
-
-      setTimeout(() => {
+      this.timer = null;
+        setTimeout(() => {
         if (this.socket) {
           this.socketDisconnect();
         }
@@ -443,11 +443,22 @@ Keys
         evt.target.iceConnectionState === 'connected' ||
         evt.target.iceConnectionState === 'completed'
       ) {
+        if(this.timer){
+          clearTimeout(this.timer);
+        }
         if (!this.connected) {
           this.connected = true;
           this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
         }
       }
+      // if(evt.target.iceConnectionState === 'checking' && !this.turnDisabled){
+      //   this.turnDisabled = true;
+      //   this.useFallback();
+      //   // this.timer = setTimeout(this.useFallback, 5000)
+      // }
+      // if(evt.target.iceConnectionState === 'disconnected' && !this.turnDisabled){
+      //   this.useFallback();
+      // }
     }
   }
 
@@ -551,8 +562,8 @@ Keys
         this.signalsV2.confirmation,
         this.beginRtcSequence.bind(this, 'V2')
       ); // response
-
-      this.socketV2On(this.signalsV2.answer, this.recieveAnswerV2.bind(this));
+// this.signalsV2.answer
+      this.socketV2On('answer', this.recieveAnswerV2.bind(this));
       this.socketV2On(
         this.signalsV2.confirmationFailedBusy,
         this.busyFailure.bind(this)
@@ -630,6 +641,7 @@ Keys
     try {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
       this.uiCommunicator(this.lifeCycle.answerReceived);
+      debug(plainTextOffer);
       this.p.signal(JSON.parse(plainTextOffer));
     } catch (e) {
       logger.error(e);
@@ -677,7 +689,8 @@ Keys
       const peerID = this.getActivePeerId();
       this.p.peerInstanceId = peerID;
       this.peersCreated.push(this.p);
-      this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
+      // this.rtcEvents.error
+      this.p.on('error', this.onError.bind(this, peerID));
       this.p.on(this.rtcEvents.connect, this.onConnectV2.bind(this, peerID));
       this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
       this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
