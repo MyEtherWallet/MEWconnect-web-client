@@ -25,7 +25,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.allPeerIds = [];
       this.peersCreated = [];
       this.v1Url = options.v1Url || 'wss://connect.mewapi.io';
-      this.v2Url = options.v2Url || 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
+      this.v2Url = options.v2Url || 'wss://connect2.mewapi.io/staging';
 
       this.turnTest = options.turnTest;
 

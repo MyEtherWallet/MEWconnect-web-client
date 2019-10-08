@@ -886,6 +886,9 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       _this.activePeerId = '';
       _this.allPeerIds = [];
       _this.peersCreated = [];
+      _this.v1Url = options.v1Url || 'wss://connect.mewapi.io';
+      _this.v2Url = options.v2Url || 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
+
       _this.turnTest = options.turnTest;
 
       _this.destroyOnUnload();
@@ -1043,25 +1046,24 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       this.signed = this.mewCrypto.signMessageSync(this.privateKey, this.privateKey);
       debug$1('this.signed', this.signed);
     }
+
+    // TODO change this to handle supplying urls at time point
+
   }, {
     key: 'initiatorStart',
     value: function () {
       var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(url, testPrivate) {
-        var v1Url, v2Url;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 this.generateKeys(testPrivate);
                 this.displayCode(this.privateKey);
-                v1Url = 'wss://connect.mewapi.io';
+                this.initiatorStartV1(this.v1Url);
+                _context.next = 5;
+                return this.initiatorStartV2(this.v2Url);
 
-                this.initiatorStartV1(v1Url);
-                v2Url = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
-                _context.next = 7;
-                return this.initiatorStartV2(v2Url);
-
-              case 7:
+              case 5:
               case 'end':
                 return _context.stop();
             }
