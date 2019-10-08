@@ -87,7 +87,7 @@ describe('Pairing', () => {
     cryptoUtils.privateKey = 'b9b13578ba4f9f01add2714a5fa277e389259fc809906441dfe2122727f2e779';
     cryptoUtils.prvt = 'b9b13578ba4f9f01add2714a5fa277e389259fc809906441dfe2122727f2e779';
     const msg = cryptoUtils.signMessageSync('b9b13578ba4f9f01add2714a5fa277e389259fc809906441dfe2122727f2e779')
-    console.log(msg); // todo remove dev item
+    if(!silent) console.log(msg); // todo remove dev item
     // const connId = this.mewCrypto.generateConnId(pk);
     const match = '1c74b6f2cc4cb540cb7b17a0bf82b38a100109c6f150f23ddff23ad8f831f3dd9719abf1a249f7a9c7b9f03e36945880105e395dde555f5e67a8c6ba26acd6b3ed';
     expect(msg).toEqual(match)
@@ -99,7 +99,7 @@ describe('Pairing', () => {
 
 
     initiator.on('codeDisplay', (val) =>{
-      console.log('code', val); // todo remove dev item
+      if(!silent) console.log('code', val); // todo remove dev item
       const msg = initiator.signed;
       const privateKey = initiator.privateKey.toString('hex');
       expect(privateKey).toEqual('93c986b10c61619e8d0fca134f7708067371c18800a1bc096cbc879167b40e94')
@@ -108,7 +108,6 @@ describe('Pairing', () => {
       done();
     })
 
-    const websocketURL = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
     // initiator.generateKeys();
     await initiator.initiatorStart(websocketURL, '93c986b10c61619e8d0fca134f7708067371c18800a1bc096cbc879167b40e94');
 
@@ -118,7 +117,6 @@ describe('Pairing', () => {
       initiator = new Initiator();
       receiver = new Receiver();
 
-      const websocketURL = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
       // initiator.generateKeys();
       await initiator.initiatorStart(websocketURL);
 
@@ -172,7 +170,6 @@ describe('Pairing', () => {
       initiator = new Initiator();
       receiver = new Receiver();
 
-      const websocketURL = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
       // initiator.generateKeys();
       await initiator.initiatorStart(websocketURL);
 
@@ -195,23 +192,27 @@ describe('Pairing', () => {
       // });
 
       receiver.on(signals.attemptingTurn, async data => {
-        if(!silent) console.log('receiver attempting turn', data); // todo remove dev item
+        if(!silent) console.log(signals.attemptingTurn, 'receiver attempting turn', data); // todo remove dev item
       });
 
-      receiver.on('turntoken', async data => {
-        if(!silent) console.log('receiver attempting turn'); // todo remove dev item
+      receiver.on(signals.turnToken, async data => {
+        if(!silent) console.log(`receiver ${signals.turnToken}`); // todo remove dev item
+      });
+
+      receiver.on(signals.tryTurn, async data => {
+        if(!silent) console.log(`receiver ${signals.tryTurn}`); // todo remove dev item
       });
 
       receiver.on(signals.offer, async data => {
         if(!silent) console.log('receiver', signals.offer, data); // todo remove dev item
         if (firstView) {
           initiator.disconnectRTC();
-          console.log(signals.tryTurn); // todo remove dev item
-          initiator.socketEmit(signals.tryTurn);
+          if(!silent) console.log('initiator', signals.tryTurn); // todo remove dev item
+          initiator.socketV2Emit(signals.tryTurn);
           firstView = false;
           return;
         }
-        console.log('receiver', signals.offer, data); // todo remove dev item
+        if(!silent) console.log('receiver', signals.offer, data); // todo remove dev item
         webRTCOffer = await receiver.decrypt(data.data);
         const answer = await receiver.answer(webRTCOffer);
         const message = { data: answer };
@@ -243,7 +244,6 @@ describe('Pairing', () => {
       initiator = new Initiator();
       receiver = new Receiver();
 
-      const websocketURL = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
       // initiator.generateKeys();
       await initiator.initiatorStart(websocketURL);
 
@@ -292,7 +292,6 @@ describe('Pairing', () => {
       initiator = new Initiator();
       receiver = new Receiver();
 
-      const websocketURL = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
       // initiator.generateKeys();
       await initiator.initiatorStart(websocketURL);
 

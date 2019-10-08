@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "start": "node ./example/peer_server/www.js",
-    "test:jest": "jest --detectOpenHandles --forceExit --runInBand",
+    "test:jest": "npx jest --detectOpenHandles --forceExit --runInBand",
     "test:browser": "npx opn ./tests/browser/browser_test.html",
     "test:old": "npm run buildBrowserTest && npm run test:jest && npm run test:browser",
     "test": "npm run test:jest",

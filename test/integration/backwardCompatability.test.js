@@ -51,7 +51,7 @@ const signals = {
 |
 */
 
-const silent = false;
+const silent = true;
 /*
 ===================================================================================
   Test "Member Variables"

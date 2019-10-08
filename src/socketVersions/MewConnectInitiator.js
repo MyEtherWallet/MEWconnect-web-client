@@ -818,6 +818,7 @@ Keys
     } else {
       // eslint-disable-next-line
       this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
+      return false;
     }
   }
 
@@ -841,7 +842,7 @@ Keys
   }
 
   retryViaTurnV1(data) {
-    debugStages('Retrying via TURN');
+    debugStages('Retrying via TURN v1');
     const options = {
       signalListener: this.initiatorSignalListener,
       webRtcConfig: {
@@ -853,16 +854,29 @@ Keys
 
   retryViaTurnV2(data) {
     try {
-      debugStages('Retrying via TURN');
+      debugStages('Retrying via TURN v2');
+      this.iceServers = null;
       const options = {
-        signalListener: this.initiatorSignalListener,
         servers: data.iceServers.map(obj => {
           const newObject = {};
           delete Object.assign(newObject, obj, { ['urls']: obj['url'] })['url'];
           return newObject;
-        })
+        }),
+        webRtcConfig: {
+          initiator: true,
+          trickle: false,
+          iceTransportPolicy: 'relay',
+          config: {
+            iceServers: data.iceServers.map(obj => {
+              const newObject = {};
+              delete Object.assign(newObject, obj, { ['urls']: obj['url'] })['url'];
+              return newObject;
+            })
+          },
+          wrtc: wrtc
+        }
       };
-      this.initiatorStartRTC(this.socket, options);
+      this.initiatorStartRTCV2(options);
     } catch (e) {
       debug('retryViaTurn error:', e);
     }
