@@ -920,7 +920,7 @@ var MewConnectInitiator = function (_MewConnectCommon) {
       _this.stunServers = options.stunServers || _this.jsonDetails.stunSrvers;
       _this.iceStates = _this.jsonDetails.iceConnectionState;
       // Socket is abandoned.  disconnect.
-
+      _this.timer = null;
       setTimeout(function () {
         if (_this.socket) {
           _this.socketDisconnect();
@@ -1106,10 +1106,6 @@ var MewConnectInitiator = function (_MewConnectCommon) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                // if (this.signalUrl === null) {
-                //   this.signalUrl = url;
-                // }
-                // this.keys = this.mewCrypto.prepareKey();
                 toSign = this.mewCrypto.generateMessage();
 
 
@@ -1472,23 +1468,6 @@ var MewConnectInitiator = function (_MewConnectCommon) {
     // ----- WebRTC Communication Event Handlers
 
   }, {
-    key: 'stateChangeListener',
-    value: function stateChangeListener(peerID, evt) {
-      // eslint-disable-next-line no-undef
-      if (typeof jest === 'undefined') {
-        // included because target is not defined in jest
-        debug$1('iceConnectionState: ' + evt.target.iceConnectionState);
-        debugPeer('this.allPeerIds', this.allPeerIds);
-        debugPeer('peerID', peerID);
-        if (evt.target.iceConnectionState === 'connected' || evt.target.iceConnectionState === 'completed') {
-          if (!this.connected) {
-            this.connected = true;
-            this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
-          }
-        }
-      }
-    }
-  }, {
     key: 'onConnectV1',
     value: function onConnectV1(peerID) {
       debugStages('RTC CONNECT', 'ok');
@@ -1516,7 +1495,9 @@ var MewConnectInitiator = function (_MewConnectCommon) {
               case 0:
                 _context7.prev = 0;
 
-                if (!websocketURL) websocketURL = 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
+                // if (!websocketURL)
+                //   websocketURL =
+                //     'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
                 if (typeof jest !== 'undefined' && this.connId === null) ;
                 queryOptions = options ? options : {
                   role: this.jsonDetails.stages.initiator,
@@ -1526,25 +1507,25 @@ var MewConnectInitiator = function (_MewConnectCommon) {
 
 
                 debug$1(websocketURL, queryOptions);
-                _context7.next = 7;
-                return this.socketV2.connect(websocketURL, queryOptions);
+                _context7.next = 6;
+                return this.socketV2.connect(this.v2Url, queryOptions);
 
-              case 7:
-                _context7.next = 12;
+              case 6:
+                _context7.next = 11;
                 break;
 
-              case 9:
-                _context7.prev = 9;
+              case 8:
+                _context7.prev = 8;
                 _context7.t0 = _context7['catch'](0);
 
                 debug$1('connect error:', _context7.t0);
 
-              case 12:
+              case 11:
               case 'end':
                 return _context7.stop();
             }
           }
-        }, _callee7, this, [[0, 9]]);
+        }, _callee7, this, [[0, 8]]);
       }));
 
       function connect(_x10) {
@@ -1693,8 +1674,8 @@ var MewConnectInitiator = function (_MewConnectCommon) {
 
         this.socketV2On(this.signalsV2.initiated, this.initiated.bind(this)); // response
         this.socketV2On(this.signalsV2.confirmation, this.beginRtcSequence.bind(this, 'V2')); // response
-
-        this.socketV2On(this.signalsV2.answer, this.recieveAnswerV2.bind(this));
+        // this.signalsV2.answer
+        this.socketV2On('answer', this.recieveAnswerV2.bind(this));
         this.socketV2On(this.signalsV2.confirmationFailedBusy, this.busyFailure.bind(this));
         this.socketV2On(this.signalsV2.confirmationFailed, this.confirmationFailure.bind(this));
         this.socketV2On(this.signalsV2.invalidConnection, this.invalidFailure.bind(this));
@@ -1805,23 +1786,24 @@ var MewConnectInitiator = function (_MewConnectCommon) {
                 plainTextOffer = _context12.sent;
 
                 this.uiCommunicator(this.lifeCycle.answerReceived);
+                debug$1(plainTextOffer);
                 this.p.signal(JSON.parse(plainTextOffer));
-                _context12.next = 13;
+                _context12.next = 14;
                 break;
 
-              case 9:
-                _context12.prev = 9;
+              case 10:
+                _context12.prev = 10;
                 _context12.t0 = _context12['catch'](1);
 
                 logger$2.error(_context12.t0);
                 debug$1('recieveAnswer error:', _context12.t0);
 
-              case 13:
+              case 14:
               case 'end':
                 return _context12.stop();
             }
           }
-        }, _callee12, this, [[1, 9]]);
+        }, _callee12, this, [[1, 10]]);
       }));
 
       function recieveAnswerV2(_x14) {
@@ -1871,7 +1853,8 @@ var MewConnectInitiator = function (_MewConnectCommon) {
         var peerID = this.getActivePeerId();
         this.p.peerInstanceId = peerID;
         this.peersCreated.push(this.p);
-        this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
+        // this.rtcEvents.error
+        this.p.on('error', this.onError.bind(this, peerID));
         this.p.on(this.rtcEvents.connect, this.onConnectV2.bind(this, peerID));
         this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
         this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
@@ -1879,6 +1862,39 @@ var MewConnectInitiator = function (_MewConnectCommon) {
         this.p._pc.addEventListener('iceconnectionstatechange', this.stateChangeListener.bind(this, peerID));
       } catch (e) {
         debug$1('initiatorStartRTC error:', e);
+      }
+    }
+  }, {
+    key: 'stateChangeListener',
+    value: function stateChangeListener(peerID, evt) {
+      // eslint-disable-next-line no-undef
+      if (typeof jest === 'undefined') {
+        // included because target is not defined in jest
+        debug$1('iceConnectionState: ' + evt.target.iceConnectionState);
+        debugPeer('this.allPeerIds', this.allPeerIds);
+        debugPeer('peerID', peerID);
+        if (evt.target.iceConnectionState === 'connected' || evt.target.iceConnectionState === 'completed') {
+          if (this.timer) {
+            clearTimeout(this.timer);
+          }
+          if (!this.connected) {
+            this.connected = true;
+            this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+          }
+        }
+        if ((evt.target.iceConnectionState === 'failed' || evt.target.iceConnectionState === 'disconnected') && !this.turnDisabled) {
+          this.turnDisabled = true;
+          this.useFallback();
+          // this.timer = setTimeout(this.useFallback, 5000)
+        }
+        // if(evt.target.iceConnectionState === 'checking' && !this.turnDisabled){
+        //   this.turnDisabled = true;
+        //   this.useFallback();
+        //   // this.timer = setTimeout(this.useFallback, 5000)
+        // }
+        // if(evt.target.iceConnectionState === 'disconnected' && !this.turnDisabled){
+        //   this.useFallback();
+        // }
       }
     }
   }, {

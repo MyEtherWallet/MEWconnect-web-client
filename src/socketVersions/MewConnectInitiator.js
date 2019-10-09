@@ -17,7 +17,6 @@ const logger = createLogger('MewConnectInitiator');
 export default class MewConnectInitiator extends MewConnectCommon {
   constructor(options = {}) {
     super(options.version);
-    console.log('ok'); // todo remove dev item
     try {
       this.supportedBrowser = MewConnectCommon.checkBrowser();
 
@@ -59,7 +58,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.iceStates = this.jsonDetails.iceConnectionState;
       // Socket is abandoned.  disconnect.
       this.timer = null;
-        setTimeout(() => {
+      setTimeout(() => {
         if (this.socket) {
           this.socketDisconnect();
         }
@@ -201,10 +200,6 @@ Keys
 
   // Initalize a websocket connection with the signal server
   async initiatorStartV1(url) {
-    // if (this.signalUrl === null) {
-    //   this.signalUrl = url;
-    // }
-    // this.keys = this.mewCrypto.prepareKey();
     const toSign = this.mewCrypto.generateMessage();
 
     this.uiCommunicator(this.lifeCycle.signatureCheck);
@@ -432,36 +427,6 @@ Keys
 
   // ----- WebRTC Communication Event Handlers
 
-  stateChangeListener(peerID, evt) {
-    // eslint-disable-next-line no-undef
-    if (typeof jest === 'undefined') {
-      // included because target is not defined in jest
-      debug(`iceConnectionState: ${evt.target.iceConnectionState}`);
-      debugPeer('this.allPeerIds', this.allPeerIds);
-      debugPeer('peerID', peerID);
-      if (
-        evt.target.iceConnectionState === 'connected' ||
-        evt.target.iceConnectionState === 'completed'
-      ) {
-        if(this.timer){
-          clearTimeout(this.timer);
-        }
-        if (!this.connected) {
-          this.connected = true;
-          this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
-        }
-      }
-      // if(evt.target.iceConnectionState === 'checking' && !this.turnDisabled){
-      //   this.turnDisabled = true;
-      //   this.useFallback();
-      //   // this.timer = setTimeout(this.useFallback, 5000)
-      // }
-      // if(evt.target.iceConnectionState === 'disconnected' && !this.turnDisabled){
-      //   this.useFallback();
-      // }
-    }
-  }
-
   onConnectV1(peerID) {
     debugStages('RTC CONNECT', 'ok');
     debugPeer('peerID', peerID);
@@ -478,9 +443,9 @@ Keys
 
   async connect(websocketURL, options = null) {
     try {
-      if (!websocketURL)
-        websocketURL =
-          'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
+      // if (!websocketURL)
+      //   websocketURL =
+      //     'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
       if (typeof jest !== 'undefined' && this.connId === null) {
         // for tests only
         // this.generateKeys();
@@ -494,7 +459,7 @@ Keys
         };
 
       debug(websocketURL, queryOptions);
-      await this.socketV2.connect(websocketURL, queryOptions);
+      await this.socketV2.connect(this.v2Url, queryOptions);
     } catch (e) {
       debug('connect error:', e);
     }
@@ -704,6 +669,43 @@ Keys
     }
   }
 
+  stateChangeListener(peerID, evt) {
+    // eslint-disable-next-line no-undef
+    if (typeof jest === 'undefined') {
+      // included because target is not defined in jest
+      debug(`iceConnectionState: ${evt.target.iceConnectionState}`);
+      debugPeer('this.allPeerIds', this.allPeerIds);
+      debugPeer('peerID', peerID);
+      if (
+        evt.target.iceConnectionState === 'connected' ||
+        evt.target.iceConnectionState === 'completed'
+      ) {
+        if (this.timer) {
+          clearTimeout(this.timer);
+        }
+        if (!this.connected) {
+          this.connected = true;
+          this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+        }
+      }
+      if ((evt.target.iceConnectionState === 'failed' ||
+        evt.target.iceConnectionState === 'disconnected') &&
+        !this.turnDisabled) {
+        this.turnDisabled = true;
+        this.useFallback();
+        // this.timer = setTimeout(this.useFallback, 5000)
+      }
+      // if(evt.target.iceConnectionState === 'checking' && !this.turnDisabled){
+      //   this.turnDisabled = true;
+      //   this.useFallback();
+      //   // this.timer = setTimeout(this.useFallback, 5000)
+      // }
+      // if(evt.target.iceConnectionState === 'disconnected' && !this.turnDisabled){
+      //   this.useFallback();
+      // }
+    }
+  }
+
   onConnectV2(peerID) {
     try {
       debugStages('RTC CONNECT', 'ok');
@@ -778,11 +780,11 @@ Keys
     }
   }
 
-  useFallback(){
-    if ( this.connPath === 'V2') {
+  useFallback() {
+    if (this.connPath === 'V2') {
       this.useFallbackV2();
-    } else if ( this.connPath === 'V1') {
-      this.useFallbackV1()
+    } else if (this.connPath === 'V1') {
+      this.useFallbackV1();
     }
   }
 
