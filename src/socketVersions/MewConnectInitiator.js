@@ -871,6 +871,7 @@ Keys
     try {
       debugStages('Retrying via TURN v2');
       this.iceServers = null;
+      // this.disconnectRTC();
       const options = {
         servers: data.iceServers.map(obj => {
           const newObject = {};

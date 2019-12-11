@@ -119,6 +119,8 @@ export default class WebsocketConnection {
       } else {
         parsedMessage =
           typeof message === 'string' ? JSON.parse(message) : message;
+        debug('parsedMessage: message', parsedMessage);
+        debug('parsedMessage: message data', parsedMessage.data);
       }
 
       const signal = parsedMessage.signal;
