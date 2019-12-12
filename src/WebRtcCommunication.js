@@ -3,6 +3,7 @@ import debugLogger from 'debug';
 
 import SimplePeer from 'simple-peer';
 import EventEmitter from 'events';
+import { isBrowser } from 'browser-or-node';
 
 const debug = debugLogger('MEWconnect:initiator');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
@@ -15,6 +16,32 @@ export default class WebRtcCommunication extends EventEmitter{
     this.Peer = SimplePeer;
     this.mewCrypto = mewCrypto;
     this.peersCreated = [];
+    this.iceState = '';
+  }
+
+  isAlive() {
+    if (this.p !== null) {
+      return this.p.connected && !this.p.destroyed;
+    }
+    return false;
+  }
+
+  // Check if a WebRTC connection exists before a window/tab is closed or refreshed
+  // Destroy the connection if one exists
+  destroyOnUnload() {
+    if (isBrowser) {
+      // eslint-disable-next-line no-undef
+      window.onunload = window.onbeforeunload = () => {
+        const iceStates = [
+          this.iceStates.new,
+          this.iceStates.connecting,
+          this.iceStates.connected
+        ];
+        if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
+          this.rtcDestroy();
+        }
+      };
+    }
   }
 
   start(simpleOptions){

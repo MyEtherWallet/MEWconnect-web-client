@@ -16,19 +16,19 @@ const logger = createLogger('MewConnectInitiator');
 
 export default class MewConnectInitiatorV2 extends MewConnectCommon {
   constructor(options = {}) {
-    super(options.version);
+    super('V2');
     try {
+
+      this.uiCommunicator = options.uiCommunicator;
       this.supportedBrowser = MewConnectCommon.checkBrowser();
 
       this.activePeerId = '';
       this.allPeerIds = [];
       this.peersCreated = [];
-      this.v1Url = options.v1Url || 'wss://connect.mewapi.io';
-      this.Url = options.Url || 'wss://connect2.mewapi.io/staging';
+      this.Url = options.url || 'wss://connect2.mewapi.io/staging';
 
       this.turnTest = options.turnTest;
 
-      this.destroyOnUnload();
       this.p = null;
       this.socketConnected = false;
       this.socketV1Connected = false;
@@ -158,8 +158,11 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   //   await this.initiatorStart(this.Url);
   // }
 
-  async initiatorStart(url, cryptoInstance) {
+  async initiatorStart(url = this.Url, cryptoInstance, details = {}) {
+    this.connId = details.connId;
+    this.signed = details.signed;
     try {
+      console.log('initiatorStart V2'); // todo remove dev item
       this.mewCrypto = cryptoInstance;
       this.uiCommunicator(this.lifeCycle.signatureCheck);
       await this.connect(url);
@@ -291,6 +294,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   beginRtcSequence(data) {
+    this.emit('beginRtcSequence', 'V2')
     try {
       debug('beginRtcSequence ');
       debug('sendOffer', data);

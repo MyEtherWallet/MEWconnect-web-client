@@ -15,21 +15,21 @@ const logger = createLogger('MewConnectInitiator');
 
 export default class MewConnectInitiatorV1 extends MewConnectCommon {
   constructor(options = {}) {
-    super(options.version);
+    super('V1');
+
     try {
       this.supportedBrowser = MewConnectCommon.checkBrowser();
+      this.uiCommunicator = options.uiCommunicator;
 
       this.activePeerId = '';
       this.allPeerIds = [];
       this.peersCreated = [];
-      this.Url = options.Url || 'wss://connect.mewapi.io';
+      this.Url = options.url || 'wss://connect.mewapi.io';
       this.v2Url = options.v2Url || 'wss://connect2.mewapi.io/staging';
 
       this.turnTest = options.turnTest;
 
-      this.destroyOnUnload();
       this.p = null;
-      this.socketV2Connected = false;
       this.socketConnected = false;
       this.connected = false;
       this.tryingTurn = false;
@@ -63,13 +63,13 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
         }
       }, 120000);
     } catch (e) {
+      console.log(e); // todo remove dev item
       debug('constructor error:', e);
     }
-
   }
 
   // Initalize a websocket connection with the signal server
-  async initiatorStart(url, cryptoInstance) {
+  async initiatorStart(url = this.Url, cryptoInstance, details) {
     this.mewCrypto = cryptoInstance;
     const toSign = this.mewCrypto.generateMessage();
 
@@ -77,9 +77,9 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     const options = {
       query: {
         stage: 'initiator',
-        signed: this.signed,
+        signed: details.signed,
         message: toSign,
-        connId: this.connId
+        connId: details.connId
       },
       transports: ['websocket', 'polling', 'flashsocket'],
       secure: true
@@ -201,8 +201,9 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
 
   // A connection pair exists, create and send WebRTC OFFER
   async sendOffer(source, data) {
+    console.log(': SOCKET CONFIRMATION');
+    this.emit('beginRtcSequence', 'V1');
     this.connPath = source;
-    this.socketV2Disconnect();
     const plainTextVersion = await this.mewCrypto.decrypt(data.version);
     this.peerVersion = plainTextVersion;
     this.uiCommunicator(this.lifeCycle.receiverVersion, plainTextVersion);
