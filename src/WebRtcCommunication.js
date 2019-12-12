@@ -2,21 +2,32 @@ import createLogger from 'logging';
 import debugLogger from 'debug';
 
 import SimplePeer from 'simple-peer';
-import EventEmitter from 'events';
 import { isBrowser } from 'browser-or-node';
+
+import uuid from 'uuid/v4';
+import MewConnectCommon from './MewConnectCommon';
+
 
 const debug = debugLogger('MEWconnect:initiator');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
 const logger = createLogger('MewConnectInitiator');
 
-export default class WebRtcCommunication extends EventEmitter{
+export default class WebRtcCommunication extends MewConnectCommon {
   constructor(mewCrypto) {
     super();
     this.Peer = SimplePeer;
     this.mewCrypto = mewCrypto;
     this.peersCreated = [];
+    this.allPeerIds = [];
     this.iceState = '';
+
+    this.signals = this.jsonDetails.signals;
+    this.rtcEvents = this.jsonDetails.rtc;
+    this.version = this.jsonDetails.version;
+    this.versions = this.jsonDetails.versions;
+    this.lifeCycle = this.jsonDetails.lifeCycle;
+    this.iceStates = this.jsonDetails.iceConnectionState;
   }
 
   isAlive() {
@@ -25,6 +36,7 @@ export default class WebRtcCommunication extends EventEmitter{
     }
     return false;
   }
+
 
   // Check if a WebRTC connection exists before a window/tab is closed or refreshed
   // Destroy the connection if one exists
@@ -44,13 +56,24 @@ export default class WebRtcCommunication extends EventEmitter{
     }
   }
 
+  setActivePeerId() {
+    this.activePeerId = uuid();
+    this.allPeerIds.push(this.activePeerId);
+  }
+
+  getActivePeerId() {
+    const split = this.activePeerId.split('-');
+    return split.join('-');
+  }
+
   start(simpleOptions){
+    this.setActivePeerId();
     this.p = new this.Peer(simpleOptions);
     const peerID = this.getActivePeerId();
     this.p.peerInstanceId = peerID;
     this.peersCreated.push(this.p);
     this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
-    this.p.on(this.rtcEvents.connect, this.onConnectV1.bind(this, peerID));
+    this.p.on(this.rtcEvents.connect, this.onConnect.bind(this, peerID));
     this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
     this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
     this.p.on(this.rtcEvents.signal, this.signalListener.bind(this));
@@ -61,7 +84,8 @@ export default class WebRtcCommunication extends EventEmitter{
   }
 
   onConnect(peerID){
-    this.emit('connected', peerID)
+    console.log('onConnect', peerID); // todo remove dev item
+    this.emit('connect', peerID)
   }
 
   signalListener(data){
@@ -69,6 +93,7 @@ export default class WebRtcCommunication extends EventEmitter{
   }
 
   recieveAnswer(plainTextOffer){
+    console.log('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
     this.p.signal(plainTextOffer);
   }
 
@@ -174,30 +199,30 @@ export default class WebRtcCommunication extends EventEmitter{
     debug('DATA RECEIVED', data.toString());
     debugPeer('peerID', peerID);
     this.emit('data', data);
-    // try {
-    //   let decryptedData;
-    //   if (this.isJSON(data)) {
-    //     decryptedData = await this.mewCrypto.decrypt(
-    //       JSON.parse(data.toString())
-    //     );
-    //   } else {
-    //     decryptedData = await this.mewCrypto.decrypt(
-    //       JSON.parse(data.toString())
-    //     );
-    //   }
-    //   if (this.isJSON(decryptedData)) {
-    //     const parsed = JSON.parse(decryptedData);
-    //     debug('DECRYPTED DATA RECEIVED 1', parsed);
-    //     this.emit(parsed.type, parsed.data);
-    //   } else {
-    //     debug('DECRYPTED DATA RECEIVED 2', decryptedData);
-    //     this.emit(decryptedData.type, decryptedData.data);
-    //   }
-    // } catch (e) {
-    //   logger.error(e);
-    //   debug('onData ERROR: data=', data);
-    //   debug('onData ERROR: data.toString()=', data.toString());
-    // }
+    try {
+      let decryptedData;
+      if (this.isJSON(data)) {
+        decryptedData = await this.mewCrypto.decrypt(
+          JSON.parse(data.toString())
+        );
+      } else {
+        decryptedData = await this.mewCrypto.decrypt(
+          JSON.parse(data.toString())
+        );
+      }
+      if (this.isJSON(decryptedData)) {
+        const parsed = JSON.parse(decryptedData);
+        debug('DECRYPTED DATA RECEIVED 1', parsed);
+        this.emit('data', {type: parsed.type, data: parsed.data});
+      } else {
+        debug('DECRYPTED DATA RECEIVED 2', decryptedData);
+        this.emit('data', {type: decryptedData.type, data: decryptedData.data});
+      }
+    } catch (e) {
+      logger.error(e);
+      debug('onData ERROR: data=', data);
+      debug('onData ERROR: data.toString()=', data.toString());
+    }
   }
 
   onClose(peerID, data) {
@@ -270,6 +295,7 @@ export default class WebRtcCommunication extends EventEmitter{
   }
 
   async rtcSend(arg) {
+    console.log(this.isAlive()); // todo remove dev item
     if (this.isAlive()) {
       let encryptedSend;
       if (typeof arg === 'string') {

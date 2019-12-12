@@ -32,7 +32,7 @@ import { stunServers, websocketURL } from '@config';
 |
 */
 
-const silent = true;
+const silent = false;
 /*
 ===================================================================================
   Test "Member Variables"

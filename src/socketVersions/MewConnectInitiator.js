@@ -50,6 +50,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       // this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
       this.Peer = SimplePeer;
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
+      this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
 
       this.socketV2 = new WebSocket();
       this.io = io;
@@ -192,7 +193,8 @@ Keys
       stunServers: this.stunServers,
       turnTest: this.turnTest,
       version: this.optionVersion,
-      uiCommunicator: this.uiCommunicator.bind(this)
+      uiCommunicator: this.uiCommunicator.bind(this),
+      webRtcCommunication: this.webRtcCommunication
     };
     this.V1 = new MewConnectInitiatorV1({ url: this.v1Url, ...options });
     this.V2 = new MewConnectInitiatorV2({ url: this.v2Url, ...options });
@@ -210,6 +212,10 @@ Keys
       this.socketV2Disconnect();
       this.beginRtcSequenceV2(data);
     }
+  }
+
+  async rtcSend(arg) {
+    this.webRtcCommunication.rtcSend(arg)
   }
 
   // ===============================================

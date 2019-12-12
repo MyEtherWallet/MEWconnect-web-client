@@ -382,11 +382,11 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
         ...webRtcConfig
       };
 
-
+      this.webRtcCommunication.start();
       debug(`initiatorStartRTC - options: ${simpleOptions}`);
       this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
       // this.p = new this.Peer(simpleOptions);
-      const peerID = this.getActivePeerId();
+      const peerID = this.webRtcCommunication.getActivePeerId();
       // this.p.peerInstanceId = peerID;
       // this.peersCreated.push(this.p);
       // this.rtcEvents.error

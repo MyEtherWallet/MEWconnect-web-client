@@ -51,7 +51,7 @@ const signals = {
 |
 */
 
-const silent = true;
+const silent = false;
 /*
 ===================================================================================
   Test "Member Variables"
@@ -159,7 +159,7 @@ describe('Pairing', () => {
     }
   }, 25000);
 
-  it('Should use Ice Servers', async done => {
+  xit('Should use Ice Servers', async done => {
     try {
       let firstView = true;
       initiator = new Initiator({turnTest: true});

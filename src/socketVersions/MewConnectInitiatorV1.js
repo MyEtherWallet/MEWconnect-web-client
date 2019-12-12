@@ -2,6 +2,7 @@ import createLogger from 'logging';
 import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
 import uuid from 'uuid/v4';
+import wrtc from 'wrtc';
 import io from 'socket.io-client';
 import SimplePeer from 'simple-peer';
 import MewConnectCommon from '../MewConnectCommon';
@@ -38,17 +39,15 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
       this.iceState = '';
       this.turnServers = [];
 
+      this.webRtcCommunication = options.webRtcCommunication;
       // this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
-      this.Peer = SimplePeer;
+      // this.Peer = SimplePeer;
       // this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
 
-      this.socketV2 = new WebSocket();
       this.io = io;
       this.connPath = '';
 
       this.signals = this.jsonDetails.signals;
-      this.signals = this.jsonDetails.signals;
-      this.signalsV2 = this.jsonDetails.signalsV2;
       this.rtcEvents = this.jsonDetails.rtc;
       this.version = this.jsonDetails.version;
       this.versions = this.jsonDetails.versions;
@@ -62,51 +61,43 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
           this.socketDisconnect();
         }
       }, 120000);
+      console.log(this.signals); // todo remove dev item
     } catch (e) {
       console.log(e); // todo remove dev item
       debug('constructor error:', e);
     }
   }
 
+  setWebRtc(webRtcCommunication) {
+    this.webRtcCommunication = webRtcCommunication;
+  }
+
   // Initalize a websocket connection with the signal server
   async initiatorStart(url = this.Url, cryptoInstance, details) {
-    this.mewCrypto = cryptoInstance;
-    const toSign = this.mewCrypto.generateMessage();
-
-    this.uiCommunicator(this.lifeCycle.signatureCheck);
-    const options = {
-      query: {
-        stage: 'initiator',
-        signed: details.signed,
-        message: toSign,
-        connId: details.connId
-      },
-      transports: ['websocket', 'polling', 'flashsocket'],
-      secure: true
-    };
-    this.socketManager = this.io(url, options);
-    this.socket = this.socketManager.connect();
-    this.initiatorConnect(this.socket);
+    try {
+      this.mewCrypto = cryptoInstance;
+      const toSign = this.mewCrypto.generateMessage();
+      this.connId = details.connId;
+      this.uiCommunicator(this.lifeCycle.signatureCheck);
+      const options = {
+        query: {
+          stage: 'initiator',
+          signed: details.signed,
+          message: toSign,
+          connId: this.connId
+        },
+        transports: ['websocket', 'polling', 'flashsocket'],
+        secure: true
+      };
+      this.socketManager = this.io(url, options);
+      this.socket = this.socketManager.connect();
+      this.initiatorConnect(this.socket);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   // ------------- WebSocket Communication Methods and Handlers ------------------------------
-
-  // ----- Wrapper around Socket.IO methods
-  // socket.emit wrapper
-  socketEmit(signal, data) {
-    this.socket.binary(false).emit(signal, data);
-  }
-
-  // socket.disconnect wrapper
-  socketDisconnect() {
-    this.socket.disconnect();
-    this.socketConnected = false;
-  }
-
-  // socket.on listener registration wrapper
-  socketOn(signal, func) {
-    this.socket.on(signal, func);
-  }
 
   // ----- Setup handlers for communication with the signal server
   initiatorConnect(socket) {
@@ -118,7 +109,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
       this.socketConnected = true;
     });
 
-    this.socketOn(this.signals.confirmation, this.sendOffer.bind(this)); // response
+    this.socketOn(this.signals.confirmation, this.beginRtcSequence.bind(this)); // response
     this.socketOn(this.signals.answer, this.recieveAnswer.bind(this));
     this.socketOn(
       this.signals.confirmationFailedBusy,
@@ -139,6 +130,23 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     this.socketOn(this.signals.attemptingTurn, this.willAttemptTurn.bind(this));
     this.socketOn(this.signals.turnToken, this.beginTurn.bind(this));
     return socket;
+  }
+
+  // ----- Wrapper around Socket.IO methods
+  // socket.emit wrapper
+  socketEmit(signal, data) {
+    this.socket.binary(false).emit(signal, data);
+  }
+
+  // socket.disconnect wrapper
+  socketDisconnect() {
+    this.socket.disconnect();
+    this.socketConnected = false;
+  }
+
+  // socket.on listener registration wrapper
+  socketOn(signal, func) {
+    this.socket.on(signal, func);
   }
 
   // ----- Socket Event handlers
@@ -200,13 +208,14 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
   // ----- WebRTC Setup Methods
 
   // A connection pair exists, create and send WebRTC OFFER
-  async sendOffer(source, data) {
-    console.log(': SOCKET CONFIRMATION');
+  async beginRtcSequence(data) {
+    console.log(data); // todo remove dev item
+    console.log('sendOffer: SOCKET CONFIRMATION');
     this.emit('beginRtcSequence', 'V1');
-    this.connPath = source;
-    const plainTextVersion = await this.mewCrypto.decrypt(data.version);
-    this.peerVersion = plainTextVersion;
-    this.uiCommunicator(this.lifeCycle.receiverVersion, plainTextVersion);
+    // this.connPath = source;
+    // const plainTextVersion = await this.mewCrypto.decrypt(data.version);
+    // this.peerVersion = plainTextVersion;
+    // this.uiCommunicator(this.lifeCycle.receiverVersion, plainTextVersion);
     debug('sendOffer', data);
     const options = {
       signalListener: this.initiatorSignalListener,
@@ -217,42 +226,9 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     this.initiatorStartRTC(this.socket, options);
   }
 
-  initiatorSignalListener(socket, options) {
-    return async data => {
-      try {
-        debug('SIGNAL', JSON.stringify(data));
-        const encryptedSend = await this.mewCrypto.encrypt(
-          JSON.stringify(data)
-        );
-        this.uiCommunicator(this.lifeCycle.sendOffer);
-        this.socketEmit(this.signals.offerSignal, {
-          data: encryptedSend,
-          connId: this.connId,
-          options: options.servers
-        });
-      } catch (e) {
-        logger.error(e);
-      }
-    };
-  }
-
-  // Handle the WebRTC ANSWER from the opposite (mobile) peer
-  async recieveAnswer(data) {
-    try {
-      const plainTextOffer = await this.mewCrypto.decrypt(data.data);
-      this.rtcRecieveAnswer({ data: plainTextOffer });
-    } catch (e) {
-      logger.error(e);
-    }
-  }
-
-  rtcRecieveAnswer(data) {
-    this.uiCommunicator(this.lifeCycle.answerReceived);
-    this.p.signal(JSON.parse(data.data));
-  }
-
   initiatorStartRTC(socket, options) {
-    this.setActivePeerId();
+    console.log('initiatorStartRTC'); // todo remove dev item
+    // this.setActivePeerId();
     const webRtcConfig = options.webRtcConfig || {};
     const signalListener = this.initiatorSignalListener(
       socket,
@@ -276,21 +252,64 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
       ...defaultOptions,
       suppliedOptions
     };
+
     debug(`initiatorStartRTC - options: ${simpleOptions}`);
+    this.webRtcCommunication.start(simpleOptions);
     this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
-    this.p = new this.Peer(simpleOptions);
-    const peerID = this.getActivePeerId();
-    this.p.peerInstanceId = peerID;
-    this.peersCreated.push(this.p);
-    this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
-    this.p.on(this.rtcEvents.connect, this.onConnect.bind(this, peerID));
-    this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
-    this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
-    this.p.on(this.rtcEvents.signal, signalListener.bind(this));
-    this.p._pc.addEventListener(
-      'iceconnectionstatechange',
-      this.stateChangeListener.bind(this, peerID)
+    const peerID = this.webRtcCommunication.getActivePeerId();
+    this.webRtcCommunication.on('connect', this.onConnect.bind(this, peerID));
+    this.webRtcCommunication.on('signal', this.onSignal.bind(this));
+    this.webRtcCommunication.on('data', this.onData.bind(this, peerID));
+  }
+
+  async onSignal(data) {
+    console.log('onSignal'); // todo remove dev item
+    console.log(data); // todo remove dev item
+    const encryptedSend = await this.mewCrypto.encrypt(
+      JSON.stringify(data)
     );
+    this.uiCommunicator(this.lifeCycle.sendOffer);
+    this.socketEmit(this.signals.offerSignal, {
+      data: encryptedSend,
+      connId: this.connId,
+      options: this.stunServers
+    });
+  }
+
+  initiatorSignalListener(socket, options) {
+    return async data => {
+      try {
+        debug('SIGNAL', JSON.stringify(data));
+        const encryptedSend = await this.mewCrypto.encrypt(
+          JSON.stringify(data)
+        );
+        this.uiCommunicator(this.lifeCycle.sendOffer);
+        this.socketEmit(this.signals.offerSignal, {
+          data: encryptedSend,
+          connId: this.connId,
+          options: options.servers
+        });
+      } catch (e) {
+        logger.error(e);
+      }
+    };
+  }
+
+  // Handle the WebRTC ANSWER from the opposite (mobile) peer
+  async recieveAnswer(data) {
+    console.log('recieveAnswer', data); // todo remove dev item
+    try {
+      const plainTextOffer = await this.mewCrypto.decrypt(data.data);
+      this.webRtcCommunication.recieveAnswer(JSON.parse(plainTextOffer));
+      // this.rtcRecieveAnswer({ data: plainTextOffer });
+    } catch (e) {
+      logger.error(e);
+    }
+  }
+
+  rtcRecieveAnswer(data) {
+    this.uiCommunicator(this.lifeCycle.answerReceived);
+    this.p.signal(JSON.parse(data.data));
   }
 
   async useFallback() {
@@ -307,6 +326,10 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     this.socketEmit(this.signals.rtcConnected, this.socketKey);
     this.socketDisconnect();
     this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+  }
+
+  onData(data) {
+    this.emit(data.type, data.data);
   }
 
 }
