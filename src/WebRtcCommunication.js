@@ -7,7 +7,6 @@ import { isBrowser } from 'browser-or-node';
 import uuid from 'uuid/v4';
 import MewConnectCommon from './MewConnectCommon';
 
-
 const debug = debugLogger('MEWconnect:initiator');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
@@ -37,7 +36,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
     return false;
   }
 
-
   // Check if a WebRTC connection exists before a window/tab is closed or refreshed
   // Destroy the connection if one exists
   destroyOnUnload() {
@@ -66,7 +64,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     return split.join('-');
   }
 
-  start(simpleOptions){
+  start(simpleOptions) {
     this.setActivePeerId();
     this.p = new this.Peer(simpleOptions);
     const peerID = this.getActivePeerId();
@@ -83,20 +81,21 @@ export default class WebRtcCommunication extends MewConnectCommon {
     );
   }
 
-  onConnect(peerID){
+  onConnect(peerID) {
     console.log('onConnect', peerID); // todo remove dev item
-    this.emit('connect', peerID)
+    this.emit('connect', peerID);
   }
 
-  signalListener(data){
-    this.emit('signal', data)
+  signalListener(data) {
+    this.emit('signal', data);
   }
 
-  recieveAnswer(plainTextOffer){
+  recieveAnswer(plainTextOffer) {
     console.log('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
     this.p.signal(plainTextOffer);
+    console.log('============ INITIATOR ================='); // todo remove dev item
+    console.log(this.p); // todo remove dev item
   }
-
 
   // ----- Socket Event handlers
 
@@ -169,9 +168,11 @@ export default class WebRtcCommunication extends MewConnectCommon {
           this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
         }
       }
-      if ((evt.target.iceConnectionState === 'failed' ||
-        evt.target.iceConnectionState === 'disconnected') &&
-        !this.turnDisabled) {
+      if (
+        (evt.target.iceConnectionState === 'failed' ||
+          evt.target.iceConnectionState === 'disconnected') &&
+        !this.turnDisabled
+      ) {
         this.turnDisabled = true;
         this.useFallback();
       }
@@ -213,10 +214,13 @@ export default class WebRtcCommunication extends MewConnectCommon {
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
         debug('DECRYPTED DATA RECEIVED 1', parsed);
-        this.emit('data', {type: parsed.type, data: parsed.data});
+        this.emit('data', { type: parsed.type, data: parsed.data });
       } else {
         debug('DECRYPTED DATA RECEIVED 2', decryptedData);
-        this.emit('data', {type: decryptedData.type, data: decryptedData.data});
+        this.emit('data', {
+          type: decryptedData.type,
+          data: decryptedData.data
+        });
       }
     } catch (e) {
       logger.error(e);
@@ -254,7 +258,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   useFallback() {
-    this.emit('useFallback')
+    this.emit('useFallback');
     // if (this.connPath === 'V2') {
     //   this.useFallbackV2();
     // } else if (this.connPath === 'V1') {
@@ -319,5 +323,4 @@ export default class WebRtcCommunication extends MewConnectCommon {
       this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
     }
   }
-
 }

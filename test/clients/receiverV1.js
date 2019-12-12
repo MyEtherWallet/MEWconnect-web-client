@@ -534,6 +534,9 @@ export default class MewConnectReceiver extends EventEmitter {
     } else {
       encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
     }
+    console.log("============ RECEIVER ================="); // todo remove dev item
+    console.log('rtc send', arg); // todo remove dev item
+    console.log(this.p); // todo remove dev item
     this.p.send(JSON.stringify(encryptedSend));
   }
 

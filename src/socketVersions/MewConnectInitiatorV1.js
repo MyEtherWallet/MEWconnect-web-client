@@ -1,17 +1,14 @@
 import createLogger from 'logging';
 import debugLogger from 'debug';
-import { isBrowser } from 'browser-or-node';
-import uuid from 'uuid/v4';
+
 import wrtc from 'wrtc';
 import io from 'socket.io-client';
-import SimplePeer from 'simple-peer';
 import MewConnectCommon from '../MewConnectCommon';
-import MewConnectCrypto from '../MewConnectCrypto';
-import WebSocket from '../websocketWrapper';
 
 const debug = debugLogger('MEWconnect:initiator');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
-const debugStages = debugLogger('MEWconnect:initiator-stages');
+// const debugStages = debugLogger('MEWconnect:initiator-stages');
+const debugStages = console.log;
 const logger = createLogger('MewConnectInitiator');
 
 export default class MewConnectInitiatorV1 extends MewConnectCommon {
@@ -40,12 +37,8 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
       this.turnServers = [];
 
       this.webRtcCommunication = options.webRtcCommunication;
-      // this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
-      // this.Peer = SimplePeer;
-      // this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
 
       this.io = io;
-      this.connPath = '';
 
       this.signals = this.jsonDetails.signals;
       this.rtcEvents = this.jsonDetails.rtc;
@@ -218,7 +211,6 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     // this.uiCommunicator(this.lifeCycle.receiverVersion, plainTextVersion);
     debug('sendOffer', data);
     const options = {
-      signalListener: this.initiatorSignalListener,
       webRtcConfig: {
         servers: this.stunServers
       }
@@ -230,10 +222,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     console.log('initiatorStartRTC'); // todo remove dev item
     // this.setActivePeerId();
     const webRtcConfig = options.webRtcConfig || {};
-    const signalListener = this.initiatorSignalListener(
-      socket,
-      webRtcConfig.servers
-    );
+
     const webRtcServers = webRtcConfig.servers || this.stunServers;
 
     const suppliedOptions = options.webRtcOptions || {};
@@ -262,6 +251,16 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     this.webRtcCommunication.on('data', this.onData.bind(this, peerID));
   }
 
+  onConnect(peerID) {
+    debugStages('RTC CONNECT', 'ok');
+    debugPeer('peerID', peerID);
+    this.connected = true;
+    this.turnDisabled = true;
+    this.socketEmit(this.signals.rtcConnected, this.socketKey);
+    this.socketDisconnect();
+    this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+  }
+
   async onSignal(data) {
     console.log('onSignal'); // todo remove dev item
     console.log(data); // todo remove dev item
@@ -276,24 +275,6 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     });
   }
 
-  initiatorSignalListener(socket, options) {
-    return async data => {
-      try {
-        debug('SIGNAL', JSON.stringify(data));
-        const encryptedSend = await this.mewCrypto.encrypt(
-          JSON.stringify(data)
-        );
-        this.uiCommunicator(this.lifeCycle.sendOffer);
-        this.socketEmit(this.signals.offerSignal, {
-          data: encryptedSend,
-          connId: this.connId,
-          options: options.servers
-        });
-      } catch (e) {
-        logger.error(e);
-      }
-    };
-  }
 
   // Handle the WebRTC ANSWER from the opposite (mobile) peer
   async recieveAnswer(data) {
@@ -318,15 +299,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
 
   // ----- WebRTC Communication Event Handlers
 
-  onConnect(peerID) {
-    debugStages('RTC CONNECT', 'ok');
-    debugPeer('peerID', peerID);
-    this.connected = true;
-    this.turnDisabled = true;
-    this.socketEmit(this.signals.rtcConnected, this.socketKey);
-    this.socketDisconnect();
-    this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
-  }
+
 
   onData(data) {
     this.emit(data.type, data.data);

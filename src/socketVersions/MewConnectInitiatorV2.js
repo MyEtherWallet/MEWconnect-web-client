@@ -3,7 +3,6 @@ import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
 import uuid from 'uuid/v4';
 import WebSocket from '../websocketWrapper';
-import SimplePeer from 'simple-peer';
 import wrtc from 'wrtc';
 import MewConnectCommon from '../MewConnectCommon';
 import MewConnectCrypto from '../MewConnectCrypto';
@@ -40,7 +39,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.turnServers = [];
 
       // this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
-      this.Peer = SimplePeer;
       // this.webRtcCommunication = new WebRtcCommunication();
       // this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
 

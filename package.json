@@ -12,6 +12,7 @@
     "buildBrowserTest": "webpack --config tests/browser/webpack.config.js",
     "buildBrowserTest:watch": "webpack --config tests/browser/webpack.config.js -w",
     "build": "npm run lint && rimraf dist/ && npx rollup -c",
+    "build:dev": "rimraf dist/ && npx rollup -c",
     "lint": "npx eslint --fix 'src/**.js'",
     "prepublishOnly": "npm run build"
   },
