@@ -7,6 +7,7 @@ import SimplePeer from 'simple-peer';
 import wrtc from 'wrtc';
 import MewConnectCommon from '../MewConnectCommon';
 import MewConnectCrypto from '../MewConnectCrypto';
+import WebRtcCommunication from '../WebRtcCommunication';
 
 const debug = debugLogger('MEWconnect:initiator');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
@@ -16,17 +17,21 @@ const logger = createLogger('MewConnectInitiator');
 export default class MewConnectInitiatorV2 extends MewConnectCommon {
   constructor(options = {}) {
     super(options.version);
-
     try {
       this.supportedBrowser = MewConnectCommon.checkBrowser();
 
       this.activePeerId = '';
       this.allPeerIds = [];
       this.peersCreated = [];
+      this.v1Url = options.v1Url || 'wss://connect.mewapi.io';
+      this.Url = options.Url || 'wss://connect2.mewapi.io/staging';
+
+      this.turnTest = options.turnTest;
 
       this.destroyOnUnload();
       this.p = null;
       this.socketConnected = false;
+      this.socketV1Connected = false;
       this.connected = false;
       this.tryingTurn = false;
       this.turnDisabled = false;
@@ -36,11 +41,16 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
       // this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
       this.Peer = SimplePeer;
-      this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
+      // this.webRtcCommunication = new WebRtcCommunication();
+      // this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
 
       this.socket = new WebSocket();
+      this.io = io;
+      this.connPath = '';
 
       this.signals = this.jsonDetails.signals;
+      this.signalsV1 = this.jsonDetails.signalsV1;
+      this.signals = this.jsonDetails.signalsV2;
       this.rtcEvents = this.jsonDetails.rtc;
       this.version = this.jsonDetails.version;
       this.versions = this.jsonDetails.versions;
@@ -48,7 +58,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.stunServers = options.stunServers || this.jsonDetails.stunSrvers;
       this.iceStates = this.jsonDetails.iceConnectionState;
       // Socket is abandoned.  disconnect.
-
+      this.timer = null;
       setTimeout(() => {
         if (this.socket) {
           this.socketDisconnect();
@@ -57,7 +67,9 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     } catch (e) {
       debug('constructor error:', e);
     }
+
   }
+
 
   isAlive() {
     if (this.p !== null) {
@@ -66,32 +78,26 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     return false;
   }
 
-  // Factory function to create instance using default supplied libraries
-  static init(opts) {
-    const options = opts !== null ? opts : {};
-    return new MewConnectInitiatorV2(options);
-  }
-
   // Check if a WebRTC connection exists before a window/tab is closed or refreshed
   // Destroy the connection if one exists
   destroyOnUnload() {
-    try {
-      if (isBrowser) {
-        // eslint-disable-next-line no-undef
-        window.onunload = window.onbeforeunload = () => {
-          const iceStates = [
-            this.iceStates.new,
-            this.iceStates.connecting,
-            this.iceStates.connected
-          ];
-          if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
-            this.rtcDestroy();
-          }
-        };
-      }
-    } catch (e) {
-      debug('destroyOnUnload error:', e);
+    if (isBrowser) {
+      // eslint-disable-next-line no-undef
+      window.onunload = window.onbeforeunload = () => {
+        const iceStates = [
+          this.iceStates.new,
+          this.iceStates.connecting,
+          this.iceStates.connected
+        ];
+        if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
+          this.rtcDestroy();
+        }
+      };
     }
+  }
+
+  setWebRtc(webRtcCommunication){
+    this.webRtcCommunication = webRtcCommunication;
   }
 
   static checkBrowser() {
@@ -102,75 +108,9 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     return MewConnectCommon.checkWebRTCAvailable();
   }
 
-  /*
-===================================================================================
-Keys
-===================================================================================
-*/
-
-  /* Set the public and private keys, connId, and signed that will be used
-   * for the duration of the pairing process. The receiver will need to have access
-   * to this information as well, however, the initiator creates the credentials to be
-   * shared with the receiver.
-   */
-  generateKeys(testPrivate) {
-    if (!this.mewCrypto) this.mewCrypto = MewConnectCrypto.create();
-    let keys = {};
-    if (testPrivate) {
-      keys = this.mewCrypto.setPrivate(testPrivate);
-    } else {
-      keys = this.mewCrypto.generateKeys();
-    }
-    this.publicKey = keys.publicKey;
-    this.privateKey = keys.privateKey;
-    this.connId = this.mewCrypto.generateConnId(this.publicKey);
-    this.signed = this.mewCrypto.signMessageSync(
-      this.privateKey,
-      this.privateKey
-    );
-    debug('this.signed', this.signed);
-  }
-
-  /*
-===================================================================================
-  Websocket
-===================================================================================
-*/
-
-  /**
-   * Given a @websocketURL, attempt to connect with given query param @options.
-   * If no options are given, default to -what should- be the correct parameters.
-   *
-   * @param  {String} websocketURL - WS/WSS websocket URL
-   * @param  {Object} options - (Optional) Connection query parameters
-   */
-  async connect(websocketURL, options = null) {
-    try {
-      if (!websocketURL)
-        websocketURL =
-          'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
-      if (typeof jest !== 'undefined' && this.connId === null) {
-        // for tests only
-        // this.generateKeys();
-      }
-      const queryOptions = options
-        ? options
-        : {
-            role: this.jsonDetails.stages.initiator,
-            connId: this.connId,
-            signed: this.signed
-          };
-
-      debug(websocketURL, queryOptions);
-      await this.socket.connect(websocketURL, queryOptions);
-    } catch (e) {
-      debug('connect error:', e);
-    }
-  }
-
   // Returns a boolean indicating whether the socket connection exists and is active
   getSocketConnectionState() {
-    return this.socketConnected;
+    return this.socketV1Connected || this.socketConnected;
   }
 
   // Returns a boolean indicating whether the WebRTC connection exists and is active
@@ -189,9 +129,83 @@ Keys
     this.emit('status', event);
   }
 
-  // ===================== [Start] WebSocket Communication Methods and Handlers ========================
+  // Emit/Provide the details used in creating the QR Code
+  displayCode(privateKey) {
+    try {
+      if (privateKey instanceof Buffer) {
+        privateKey = privateKey.toString('hex');
+      }
+      debug('handshake', privateKey);
+      this.socketKey = privateKey;
+      const separator = this.jsonDetails.connectionCodeSeparator;
+      const qrCodeString =
+        this.version + separator + privateKey + separator + this.connId;
 
-  // The initial method called to initiate the exchange that can create a WebRTC connection
+      debug(qrCodeString);
+
+      this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
+      this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
+      this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
+    } catch (e) {
+      debug('displayCode error:', e);
+    }
+  }
+
+  // async initiatorStart(url, testPrivate) {
+  //   this.generateKeys(testPrivate);
+  //   this.displayCode(this.privateKey);
+  //   this.initiatorStartV1(this.v1Url);
+  //   await this.initiatorStart(this.Url);
+  // }
+
+  async initiatorStart(url, cryptoInstance) {
+    try {
+      this.mewCrypto = cryptoInstance;
+      this.uiCommunicator(this.lifeCycle.signatureCheck);
+      await this.connect(url);
+      // this.socket = this.socketManager.connect();
+      this.initiatorConnect();
+    } catch (e) {
+      debug('initiatorStart error:', e);
+    }
+  }
+
+  // beginRtcSequence(source, data) {
+  //   if (source === '') {
+  //     this.connPath = '';
+  //     this.socketV1Disconnect();
+  //     this.beginRtcSequence(data);
+  //   } else if (source === 'V1') {
+  //     this.connPath = 'V1';
+  //     this.socketDisconnect();
+  //     this.beginRtcSequence(data);
+  //   }
+  // }
+
+  async connect(websocketURL, options = null) {
+    try {
+      // if (!websocketURL)
+      //   websocketURL =
+      //     'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
+      if (typeof jest !== 'undefined' && this.connId === null) {
+        // for tests only
+        // this.generateKeys();
+      }
+      const queryOptions = options
+        ? options
+        : {
+          role: this.jsonDetails.stages.initiator,
+          connId: this.connId,
+          signed: this.signed
+        };
+
+      debug(websocketURL, queryOptions);
+      await this.socket.connect(this.Url, queryOptions);
+    } catch (e) {
+      debug('connect error:', e);
+    }
+  }
+
   async regenerateCode() {
     if (this.signalUrl === null) {
       throw Error('regenerateCode called before initial code generation');
@@ -204,48 +218,6 @@ Keys
     this.socketEmit(this.signals.tryTurn, { connId: this.connId });
   }
 
-  // Initalize a websocket connection with the signal server
-  async initiatorStart(url, testPrivate) {
-    try {
-      if (this.signalUrl === null) {
-        this.signalUrl = url;
-      }
-      this.generateKeys(testPrivate);
-      this.displayCode(this.privateKey);
-      this.uiCommunicator(this.lifeCycle.signatureCheck);
-      await this.connect(this.signalUrl);
-      // this.socket = this.socketManager.connect();
-      this.initiatorConnect();
-    } catch (e) {
-      debug('initiatorStart error:', e);
-    }
-  }
-
-  // Emit/Provide the details used in creating the QR Code
-  displayCode(privateKey) {
-    try {
-      if (privateKey instanceof Buffer) {
-        privateKey = privateKey.toString('hex');
-      }
-      debug('handshake', privateKey);
-      this.socketKey = privateKey;
-      const separator = this.jsonDetails.connectionCodeSeparator;
-      const qrCodeString =
-        this.version + separator + privateKey + separator + this.connId;
-      debug(qrCodeString);
-
-      this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
-      this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
-      this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
-    } catch (e) {
-      debug('displayCode error:', e);
-    }
-  }
-
-  // ------------- WebSocket Communication Methods and Handlers ------------------------------
-
-  // ----- Wrapper around Socket.IO methods
-  // socket.emit wrapper
   socketEmit(signal, data) {
     try {
       this.socket.send(signal, data);
@@ -254,15 +226,14 @@ Keys
     }
   }
 
-  // socket.disconnect wrapper
   socketDisconnect() {
     this.socket.disconnect().catch(err => {
       debug('socketDisconnect', err);
     });
+    this.socket = {};
     this.socketConnected = false;
   }
 
-  // socket.on listener registration wrapper
   socketOn(signal, func) {
     try {
       this.socket.on(signal, func);
@@ -271,7 +242,6 @@ Keys
     }
   }
 
-  // ----- Setup handlers for communication with the signal server
   initiatorConnect() {
     try {
       debugStages('INITIATOR CONNECT');
@@ -285,10 +255,10 @@ Keys
       this.socketOn(this.signals.initiated, this.initiated.bind(this)); // response
       this.socketOn(
         this.signals.confirmation,
-        this.beginRtcSequence.bind(this)
+        this.beginRtcSequence.bind(this, '')
       ); // response
-
-      this.socketOn(this.signals.answer, this.recieveAnswer.bind(this));
+// this.signals.answer
+      this.socketOn('answer', this.recieveAnswer.bind(this));
       this.socketOn(
         this.signals.confirmationFailedBusy,
         this.busyFailure.bind(this)
@@ -315,73 +285,14 @@ Keys
     }
   }
 
-  // ----- Socket Event handlers
-
   initiated(data) {
     this.uiCommunicator(this.signals.initiated, data);
     debug('initiator', this.signals.initiated, data);
   }
 
-  // Handle Socket Disconnect Event
-  socketDisconnectHandler(reason) {
-    debug(reason);
-    this.socketConnected = false;
-  }
-
-  // Handle Socket Attempting Turn informative signal
-  // Provide Notice that initial WebRTC connection failed and the fallback method will be used
-  willAttemptTurn() {
-    this.tryingTurn = true;
-    debugStages('TRY TURN CONNECTION');
-    this.uiCommunicator(this.lifeCycle.UsingFallback);
-  }
-
-  // Handle Socket event to initiate turn connection
-  // Handle Receipt of TURN server details, and begin a WebRTC connection attempt using TURN
-  beginTurn(data) {
-    this.tryingTurn = true;
-    this.retryViaTurn(data);
-  }
-
-  // ----- Failure Handlers
-
-  // Handle Failure due to an attempt to join a connection with two existing endpoints
-  busyFailure() {
-    this.uiCommunicator(
-      this.lifeCycle.Failed,
-      this.lifeCycle.confirmationFailedBusyEvent
-    );
-    debug('confirmation Failed: Busy');
-  }
-
-  // Handle Failure due to no opposing peer existing
-  invalidFailure() {
-    this.uiCommunicator(
-      this.lifeCycle.Failed,
-      this.lifeCycle.invalidConnectionEvent
-    );
-    debug('confirmation Failed: no opposite peer found');
-  }
-
-  // Handle Failure due to the handshake/ verify details being invalid for the connection ID
-  confirmationFailure() {
-    this.uiCommunicator(
-      this.lifeCycle.Failed,
-      this.lifeCycle.confirmationFailedEvent
-    );
-    debug('confirmation Failed: invalid confirmation');
-  }
-
-  // =============== [End] WebSocket Communication Methods and Handlers ========================
-
-  // ======================== [Start] WebRTC Communication Methods =============================
-
-  // ----- WebRTC Setup Methods
-
-  // A connection pair exists, create and send WebRTC OFFER
   beginRtcSequence(data) {
     try {
-      debug('beginRtcSequence');
+      debug('beginRtcSequence ');
       debug('sendOffer', data);
       this.iceServers = null;
       const options = {
@@ -425,6 +336,7 @@ Keys
     try {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
       this.uiCommunicator(this.lifeCycle.answerReceived);
+      debug(plainTextOffer);
       this.p.signal(JSON.parse(plainTextOffer));
     } catch (e) {
       logger.error(e);
@@ -466,17 +378,18 @@ Keys
         ...webRtcConfig
       };
 
+
       debug(`initiatorStartRTC - options: ${simpleOptions}`);
       this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
-      this.p = new this.Peer(simpleOptions);
+      // this.p = new this.Peer(simpleOptions);
       const peerID = this.getActivePeerId();
-      this.p.peerInstanceId = peerID;
-      this.peersCreated.push(this.p);
-      this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
-      this.p.on(this.rtcEvents.connect, this.onConnect.bind(this, peerID));
-      this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
-      this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
-      this.p.on(this.rtcEvents.signal, this.sendOffer.bind(this));
+      // this.p.peerInstanceId = peerID;
+      // this.peersCreated.push(this.p);
+      // this.rtcEvents.error
+      // this.p.on('error', this.onError.bind(this, peerID));
+      this.webRtcCommunication.on('connect', this.onConnect.bind(this, peerID));
+      this.webRtcCommunication.on('signal', this.sendOffer.bind(this));
+      this.webRtcCommunication.on('data', this.onData.bind(this, peerID));
       this.p._pc.addEventListener(
         'iceconnectionstatechange',
         this.stateChangeListener.bind(this, peerID)
@@ -486,28 +399,31 @@ Keys
     }
   }
 
-  // ----- WebRTC Communication Event Handlers
-
   stateChangeListener(peerID, evt) {
-    try {
-      // eslint-disable-next-line no-undef
-      if (typeof jest === 'undefined') {
-        // included because target is not defined in jest
-        debug(`iceConnectionState: ${evt.target.iceConnectionState}`);
-        debugPeer('this.allPeerIds', this.allPeerIds);
-        debugPeer('peerID', peerID);
-        if (
-          evt.target.iceConnectionState === 'connected' ||
-          evt.target.iceConnectionState === 'completed'
-        ) {
-          if (!this.connected) {
-            this.connected = true;
-            this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
-          }
+    // eslint-disable-next-line no-undef
+    if (typeof jest === 'undefined') {
+      // included because target is not defined in jest
+      debug(`iceConnectionState: ${evt.target.iceConnectionState}`);
+      debugPeer('this.allPeerIds', this.allPeerIds);
+      debugPeer('peerID', peerID);
+      if (
+        evt.target.iceConnectionState === 'connected' ||
+        evt.target.iceConnectionState === 'completed'
+      ) {
+        if (this.timer) {
+          clearTimeout(this.timer);
+        }
+        if (!this.connected) {
+          this.connected = true;
+          this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
         }
       }
-    } catch (e) {
-      debug('stateChangeListener error:', e);
+      if ((evt.target.iceConnectionState === 'failed' ||
+        evt.target.iceConnectionState === 'disconnected') &&
+        !this.turnDisabled) {
+        this.turnDisabled = true;
+        this.useFallback();
+      }
     }
   }
 
@@ -555,20 +471,16 @@ Keys
   }
 
   onClose(peerID, data) {
-    try {
-      debugStages('WRTC MAYBE CLOSE');
-      debugPeer('peerID', peerID);
-      if (!this.isAlive()) {
-        debugStages('WRTC CLOSE', data);
-        if (this.connected) {
-          this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
-          this.connected = false;
-        } else {
-          this.connected = false;
-        }
+    debugStages('WRTC MAYBE CLOSE');
+    debugPeer('peerID', peerID);
+    if (!this.isAlive()) {
+      debugStages('WRTC CLOSE', data);
+      if (this.connected) {
+        this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
+        this.connected = false;
+      } else {
+        this.connected = false;
       }
-    } catch (e) {
-      debug('onClose error:', e);
     }
   }
 
@@ -578,9 +490,7 @@ Keys
     debug(err.code);
     debug('error', err);
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
-      this.useFallback().catch(err => {
-        debug('onError', err);
-      });
+      this.useFallback();
     } else {
       if (!this.isAlive()) {
         this.uiCommunicator(this.lifeCycle.RtcErrorEvent);
@@ -588,22 +498,19 @@ Keys
     }
   }
 
+
   // ----- WebRTC Communication Methods
 
   sendRtcMessageClosure(type, msg) {
     return () => {
       debug(`[SEND RTC MESSAGE Closure] type:  ${type},  message:  ${msg}`);
-      this.rtcSend(JSON.stringify({ type, data: msg })).catch(err => {
-        debug('sendRtcMessageClosure', err);
-      });
+      this.rtcSend(JSON.stringify({ type, data: msg }));
     };
   }
 
   sendRtcMessage(type, msg) {
     debug(`[SEND RTC MESSAGE] type:  ${type},  message:  ${msg}`);
-    this.rtcSend(JSON.stringify({ type, data: msg })).catch(err => {
-      debug('sendRtcMessage', err);
-    });
+    this.rtcSend(JSON.stringify({ type, data: msg }));
   }
 
   disconnectRTCClosure() {
@@ -617,69 +524,66 @@ Keys
   }
 
   disconnectRTC() {
-    try {
-      debugStages('DISCONNECT RTC');
-      this.connected = false;
-      this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
-      this.rtcDestroy();
-      this.instance = null;
-    } catch (e) {
-      debug('disconnectRTC error:', e);
-    }
+    debugStages('DISCONNECT RTC');
+    this.connected = false;
+    this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+    this.rtcDestroy();
+    this.instance = null;
   }
 
   async rtcSend(arg) {
-    try {
-      if (this.isAlive()) {
-        let encryptedSend;
-        if (typeof arg === 'string') {
-          encryptedSend = await this.mewCrypto.encrypt(arg);
-        } else {
-          encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
-        }
-        debug('SENDING RTC');
-        this.p.send(JSON.stringify(encryptedSend));
-        return true;
+    if (this.isAlive()) {
+      let encryptedSend;
+      if (typeof arg === 'string') {
+        encryptedSend = await this.mewCrypto.encrypt(arg);
+      } else {
+        encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
       }
+      debug('SENDING RTC');
+      this.p.send(JSON.stringify(encryptedSend));
+    } else {
       // eslint-disable-next-line
       this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
       return false;
-    } catch (e) {
-      debug('rtcSend error:', e);
     }
   }
 
   rtcDestroy() {
-    try {
-      if (this.isAlive()) {
-        this.p.destroy();
-        this.connected = false;
-        this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
-      }
-    } catch (e) {
-      debug('rtcDestroy', e);
+    if (this.isAlive()) {
+      this.p.destroy();
+      this.connected = false;
+      this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
     }
   }
 
-  // ----- WebRTC Communication TURN Fallback Initiator/Handler
-  // Fallback Step if initial webRTC connection attempt fails.
-  // Retries setting up the WebRTC connection using TURN
   retryViaTurn(data) {
     try {
-      debugStages('Retrying via TURN');
+      debugStages('Retrying via TURN v2');
+      this.iceServers = null;
       const options = {
-        signalListener: this.initiatorSignalListener,
         servers: data.iceServers.map(obj => {
           const newObject = {};
           delete Object.assign(newObject, obj, { ['urls']: obj['url'] })['url'];
           return newObject;
-        })
+        }),
+        webRtcConfig: {
+          initiator: true,
+          trickle: false,
+          iceTransportPolicy: 'relay',
+          config: {
+            iceServers: data.iceServers.map(obj => {
+              const newObject = {};
+              delete Object.assign(newObject, obj, { ['urls']: obj['url'] })['url'];
+              return newObject;
+            })
+          },
+          wrtc: wrtc
+        }
       };
-      this.initiatorStartRTC(this.socket, options);
+      this.initiatorStartRTC(options);
     } catch (e) {
       debug('retryViaTurn error:', e);
     }
   }
 
-  // ======================== [End] WebRTC Communication Methods =============================
 }

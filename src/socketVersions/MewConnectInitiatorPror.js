@@ -8,9 +8,7 @@ import wrtc from 'wrtc';
 import MewConnectCommon from '../MewConnectCommon';
 import MewConnectCrypto from '../MewConnectCrypto';
 import MewConnectInitiatorV2 from './MewConnectInitiatorV2';
-
 import io from 'socket.io-client';
-import WebRtcCommunication from '../WebRtcCommunication';
 
 const debug = debugLogger('MEWconnect:initiator');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
@@ -383,47 +381,45 @@ Keys
   }
 
   initiatorStartRTCV1(socket, options) {
-    this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
+    this.setActivePeerId();
+    const webRtcConfig = options.webRtcConfig || {};
+    const signalListener = this.initiatorSignalListener(
+      socket,
+      webRtcConfig.servers
+    );
+    const webRtcServers = webRtcConfig.servers || this.stunServers;
 
-    // this.setActivePeerId();
-    // const webRtcConfig = options.webRtcConfig || {};
-    // const signalListener = this.initiatorSignalListener(
-    //   socket,
-    //   webRtcConfig.servers
-    // );
-    // const webRtcServers = webRtcConfig.servers || this.stunServers;
-    //
-    // const suppliedOptions = options.webRtcOptions || {};
-    //
-    // const defaultOptions = {
-    //   initiator: true,
-    //   trickle: false,
-    //   iceTransportPolicy: 'relay',
-    //   config: {
-    //     iceServers: webRtcServers
-    //   },
-    //   wrtc: wrtc
-    // };
-    //
-    // const simpleOptions = {
-    //   ...defaultOptions,
-    //   suppliedOptions
-    // };
-    // debug(`initiatorStartRTC - options: ${simpleOptions}`);
-    // this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
-    // this.p = new this.Peer(simpleOptions);
-    // const peerID = this.getActivePeerId();
-    // this.p.peerInstanceId = peerID;
-    // this.peersCreated.push(this.p);
-    // this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
-    // this.p.on(this.rtcEvents.connect, this.onConnectV1.bind(this, peerID));
-    // this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
-    // this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
-    // this.p.on(this.rtcEvents.signal, signalListener.bind(this));
-    // this.p._pc.addEventListener(
-    //   'iceconnectionstatechange',
-    //   this.stateChangeListener.bind(this, peerID)
-    // );
+    const suppliedOptions = options.webRtcOptions || {};
+
+    const defaultOptions = {
+      initiator: true,
+      trickle: false,
+      iceTransportPolicy: 'relay',
+      config: {
+        iceServers: webRtcServers
+      },
+      wrtc: wrtc
+    };
+
+    const simpleOptions = {
+      ...defaultOptions,
+      suppliedOptions
+    };
+    debug(`initiatorStartRTC - options: ${simpleOptions}`);
+    this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
+    this.p = new this.Peer(simpleOptions);
+    const peerID = this.getActivePeerId();
+    this.p.peerInstanceId = peerID;
+    this.peersCreated.push(this.p);
+    this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
+    this.p.on(this.rtcEvents.connect, this.onConnectV1.bind(this, peerID));
+    this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
+    this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
+    this.p.on(this.rtcEvents.signal, signalListener.bind(this));
+    this.p._pc.addEventListener(
+      'iceconnectionstatechange',
+      this.stateChangeListener.bind(this, peerID)
+    );
   }
 
   async useFallbackV1() {
