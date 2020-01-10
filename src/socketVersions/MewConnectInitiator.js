@@ -9,7 +9,7 @@ import MewConnectInitiatorV1 from './MewConnectInitiatorV1';
 
 import WebRtcCommunication from '../WebRtcCommunication';
 
-const debug = debugLogger('MEWconnect:initiator');
+const debug = debugLogger('MEWconnect:initiator-base');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
 const logger = createLogger('MewConnectInitiator');
@@ -179,6 +179,7 @@ Keys
     debug('this.signed', this.signed);
   }
 
+
   // TODO change this to handle supplying urls at time point
   async initiatorStart(url, testPrivate) {
     this.generateKeys(testPrivate);
@@ -190,10 +191,18 @@ Keys
       uiCommunicator: this.uiCommunicator.bind(this),
       webRtcCommunication: this.webRtcCommunication
     };
+    this.webRtcCommunication.on('data', this.dataReceived.bind(this));
+    this.webRtcCommunication.on('address', (data) => console.log('address webrtc', data));
     this.V1 = new MewConnectInitiatorV1({ url: this.v1Url, ...options });
     this.V2 = new MewConnectInitiatorV2({ url: this.v2Url, ...options });
-    await this.V1.initiatorStart(this.v1Url, this.mewCrypto, {signed: this.signed, connId: this.connId});
-    await this.V2.initiatorStart(this.v2Url, this.mewCrypto, {signed: this.signed, connId: this.connId});
+    await this.V1.initiatorStart(this.v1Url, this.mewCrypto, {
+      signed: this.signed,
+      connId: this.connId
+    });
+    await this.V2.initiatorStart(this.v2Url, this.mewCrypto, {
+      signed: this.signed,
+      connId: this.connId
+    });
   }
 
   beginRtcSequence(source, data) {
@@ -209,7 +218,12 @@ Keys
   }
 
   async rtcSend(arg) {
-    this.webRtcCommunication.rtcSend(arg)
+    this.webRtcCommunication.rtcSend(arg);
+  }
+
+  dataReceived(data) {
+    debug('dataReceived', data);
+    this.uiCommunicator(data.type, data.data)
   }
 
 }

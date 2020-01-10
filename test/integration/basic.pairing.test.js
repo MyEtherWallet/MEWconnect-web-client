@@ -122,6 +122,11 @@ describe('Pairing', () => {
 
       // Receiver //
 
+      initiator.on('address', (data) => {
+        if(!silent) console.log('address', data); // todo remove dev item
+        // initiator.rtcSend({ type: 'address', data: '' });
+      });
+
       await receiver.setKeys(
         initiator.publicKey,
         initiator.privateKey,
@@ -158,6 +163,8 @@ describe('Pairing', () => {
         if(!silent) console.log('Initiator rtc connected event'); // todo remove dev item
         initiator.rtcSend({ type: 'address', data: '' });
       });
+
+
 
     } catch (e) {
       // console.log(e); // todo remove dev item

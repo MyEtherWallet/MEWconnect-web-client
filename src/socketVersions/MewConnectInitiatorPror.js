@@ -10,7 +10,7 @@ import MewConnectCrypto from '../MewConnectCrypto';
 import MewConnectInitiatorV2 from './MewConnectInitiatorV2';
 import io from 'socket.io-client';
 
-const debug = debugLogger('MEWconnect:initiator');
+const debug = debugLogger('MEWconnect:initiator-old');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
 const logger = createLogger('MewConnectInitiator');

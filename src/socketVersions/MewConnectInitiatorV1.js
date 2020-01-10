@@ -5,7 +5,7 @@ import wrtc from 'wrtc';
 import io from 'socket.io-client';
 import MewConnectCommon from '../MewConnectCommon';
 
-const debug = debugLogger('MEWconnect:initiator');
+const debug = debugLogger('MEWconnect:initiator-V1');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 // const debugStages = debugLogger('MEWconnect:initiator-stages');
 const debugStages = console.log;

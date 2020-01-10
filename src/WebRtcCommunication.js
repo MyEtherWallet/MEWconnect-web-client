@@ -7,7 +7,7 @@ import { isBrowser } from 'browser-or-node';
 import uuid from 'uuid/v4';
 import MewConnectCommon from './MewConnectCommon';
 
-const debug = debugLogger('MEWconnect:initiator');
+const debug = debugLogger('MEWconnect:webRTC-communication');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
 const logger = createLogger('MewConnectInitiator');

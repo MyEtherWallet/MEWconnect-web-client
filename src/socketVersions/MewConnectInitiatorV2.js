@@ -8,7 +8,7 @@ import MewConnectCommon from '../MewConnectCommon';
 import MewConnectCrypto from '../MewConnectCrypto';
 import WebRtcCommunication from '../WebRtcCommunication';
 
-const debug = debugLogger('MEWconnect:initiator');
+const debug = debugLogger('MEWconnect:initiator-V2');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
 const logger = createLogger('MewConnectInitiator');
@@ -38,12 +38,13 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.iceState = '';
       this.turnServers = [];
 
+
+
       // this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
       // this.webRtcCommunication = new WebRtcCommunication();
       // this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
-
       this.socket = new WebSocket();
-      this.io = io;
+      // this.io = io;
       this.connPath = '';
 
       this.signals = this.jsonDetails.signals;
