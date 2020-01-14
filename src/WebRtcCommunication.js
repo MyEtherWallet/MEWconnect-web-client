@@ -95,7 +95,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
   signalListener(data) {
     ++this.offersSent;
     console.log('signalListener'); // todo remove dev item
-    console.log(data.sdp.replace('\n', '').split(/\r/)); // todo remove dev item
     this.emit('signal', data);
   }
 
@@ -105,19 +104,16 @@ export default class WebRtcCommunication extends MewConnectCommon {
       if(this.turnTimer === null){
         console.log(this.turnTimer); // todo remove dev item
         const _self = this;
-        this.turnTimer = setTimeout(this.receiveTurnAnswer.bind(_self), 4000)
+        this.turnTimer = setTimeout(this.receiveTurnAnswer.bind(_self), 2000)
       }
     } else {
-      console.log(plainTextOffer.sdp.replace('\n', '').split(/\r/)); // todo remove dev item
       debug('webRtc receiveAnswer', this.answerReceived);
       debug(`active PEER_ID: ${this.p.peerInstanceId}`);
-      // if(!this.answerReceived[this.p.peerInstanceId]){
       try {
         this.answerReceived[this.p.peerInstanceId] = true;
         console.log('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
         this.p.signal(plainTextOffer);
         console.log('============ INITIATOR ================='); // todo remove dev item
-        // console.log(this.p); // todo remove dev item
       } catch (e) {
         // eslint-disable-next-line
         console.error(e);
@@ -127,7 +123,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   receiveTurnAnswer(){
     const plainTextOffer = this.answersReceived[this.answersReceived.length - 1];
-    console.log(plainTextOffer.sdp.replace('\n', '').split(/\r/)); // todo remove dev item
     debug('webRtc receiveTurnAnswer', this.answerReceived);
     debug(`active PEER_ID: ${this.p.peerInstanceId}`);
     // if(!this.answerReceived[this.p.peerInstanceId]){

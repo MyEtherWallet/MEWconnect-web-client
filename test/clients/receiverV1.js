@@ -547,7 +547,7 @@ export default class MewConnectReceiver extends EventEmitter {
   }
 
   rtcDestroyError() {
-    this.p.destroy('Intential Error');
+    this.p.destroy('Intentional Error');
   }
 
   attemptTurnConnect() {

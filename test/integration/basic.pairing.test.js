@@ -255,7 +255,6 @@ describe('Pairing', () => {
 
       let firstView = true;
 
-
       receiver.on(signals.confirmation, stuff => {
         if (!silent) console.log('receiver', signals.confirmation, stuff); // todo remove dev item
       });
@@ -274,24 +273,17 @@ describe('Pairing', () => {
       });
 
       receiver.on(signals.tryTurn, async data => {
-        // receiver.disconnectRTC();
         if (!silent) console.log(`receiver ${signals.tryTurn}`); // todo remove dev item
-        // firstView = false;
-        console.log("receiver", signals.tryTurn); // todo remove dev item
-        // firstView = false;
+        console.log('receiver', signals.tryTurn); // todo remove dev item
       });
 
-      initiator.on(signals.turnToken, () =>{
-
-      })
-
-      const handleAnswer = async (data) =>{
+      const handleAnswer = async (data) => {
 
         if (!silent) console.log('receiver 2'); // todo remove dev item
         webRTCOffer = await receiver.decrypt(data.data);
         receiver.canAnswer();
-        receiver.answer(webRTCOffer).then(answer =>{
-          if(!answer) return;
+        receiver.answer(webRTCOffer).then(answer => {
+          if (!answer) return;
           const message = { data: answer };
 
           receiver.onRTC(rtcSignals.connect, stuff => {
@@ -304,29 +296,18 @@ describe('Pairing', () => {
             done();
           });
           receiver.send(signals.answerSignal, message);
-        })
+        });
 
-      }
+      };
 
       receiver.on(signals.offer, async data => {
         if (!silent) console.log('receiver 1'); // todo remove dev item
         if (firstView) {
-          // setTimeout(() => {
-          //   firstView = false;
-          // }, 1000);
           firstView = false;
           receiver.send(signals.tryTurn);
-          // firstView = false;
-          // receiver.canAnswer();
-          // receiver.disconnectRTC();
-          // return;
         } else {
-          console.log('================================================='); // todo remove dev item
           handleAnswer(data);
         }
-
-
-        // receiver.send(signals.answerSignal, message);
       });
 
       initiator.on('RtcConnectedEvent', () => {
@@ -425,6 +406,88 @@ describe('Pairing', () => {
       done.fail(e);
     }
   }, 35000);
+
+  it('Should use Ice Servers V1 Initiator Initiate', async done => {
+    try {
+      initiator = new Initiator({ version: 'V1' });
+      receiver = new ReceiverV1({onlyTurn: true});
+
+      const websocketURL = 'wss://connect.mewapi.io';
+      // initiator.generateKeys();
+      await initiator.initiatorStart();
+
+      // Receiver //
+
+      await receiver.setKeys(
+        initiator.publicKey,
+        initiator.privateKey,
+        initiator.connId
+      );
+      await receiver.connect(websocketURL);
+
+      receiver.on(signals.confirmation, stuff => {
+        receiver.disconnectRTC();
+        receiver.attemptTurnConnect();
+        if (!silent) console.log('receiver', signals.confirmation, stuff); // todo remove dev item
+      });
+
+      receiver.on(signals.offerSignal, async data => {
+        if (!silent) console.log('receiver', signals.offerSignal, data); // todo remove dev item
+      });
+
+      receiver.on('address', stuff => {
+        if (!silent) console.log('receiver', rtcSignals.data, stuff); // todo remove dev item
+      });
+
+      receiver.on(rtcSignals.connect, stuff => {
+        receiver.sendRTC('address');
+        if (!silent) console.log('receiver', rtcSignals.connect, stuff); // todo remove dev item
+      });
+
+      let firstView = true;
+      receiver.on(signals.offer, async data => {
+        console.log("FIRST VIEW", firstView); // todo remove dev item
+        if (!silent) console.log('receiver', signals.offer, data); // todo remove dev item
+        webRTCOffer = await receiver.decrypt(data.data);
+        const answer = await receiver.answer(webRTCOffer);
+        const message = { data: answer };
+
+        receiver.on('RtcConnectedEvent', () => {
+          console.log('RtcConnectedEvent'); // todo remove dev item
+        });
+
+        receiver.send(signals.answerSignal, message);
+        // if (!firstView) {
+        //   firstView = false;
+        //   receiver.disconnectRTC();
+        //   receiver.attemptTurnConnect();
+        //   // receiver.disconnectRTC();
+        //   // setTimeout(receiver.disconnectRTC, 1000);
+        //   // receiver.send(signals.tryTurn);
+        //   return;
+        // } else {
+        //
+        // }
+
+      });
+
+      initiator.on('RtcConnectedEvent', () => {
+        console.log('RtcConnectedEvent'); // todo remove dev item
+        if (!silent) console.log('Initiator rtc connected event'); // todo remove dev item
+        initiator.rtcSend({ type: 'address', data: '' });
+      });
+
+      initiator.on('address', (data) => {
+        if (!silent) console.log('initiator: address', data); // todo remove dev item
+        done();
+      });
+
+    } catch (e) {
+      // console.log(e); // todo remove dev item
+      done.fail(e);
+    }
+  }, 90000);
+
   it('Should not send if no webRTC connection present', async done => {
     try {
       expect.assertions(1);

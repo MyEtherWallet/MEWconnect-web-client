@@ -164,6 +164,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
   // Handle Receipt of TURN server details, and begin a WebRTC connection attempt using TURN
   beginTurn(data) {
     this.tryingTurn = true;
+    this.webRtcCommunication.turnReset(this.activePeerId);
     this.retryViaTurn(data);
   }
 
@@ -327,10 +328,20 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
 
   // ----- WebRTC Communication Event Handlers
 
-
-
   onData(data) {
     this.emit(data.type, data.data);
+  }
+
+  retryViaTurn(data) {
+    debugStages('Retrying via TURN v1');
+    debug(data);
+    const options = {
+      signalListener: this.initiatorSignalListener,
+      webRtcConfig: {
+        servers: data.data
+      }
+    };
+    this.beginRtcSequence(options);
   }
 
 }
