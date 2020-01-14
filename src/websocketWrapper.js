@@ -6,6 +6,7 @@ import queryString from 'query-string';
 import 'isomorphic-ws';
 import debugLogger from 'debug';
 
+const debugPeer = debugLogger('MEWconnectVerbose:websocketWrapper');
 const debug = debugLogger('MEWconnect:websocketWrapper');
 
 export default class WebsocketConnection {
@@ -105,8 +106,8 @@ export default class WebsocketConnection {
    */
   onMessage(message) {
     try {
-      debug('message', message);
-      debug('message data', message.data);
+      debugPeer('message', message);
+      debugPeer('message data', message.data);
       let parsedMessage;
       if (typeof jest === 'undefined') {
         const parsedMessageRaw =
@@ -115,12 +116,12 @@ export default class WebsocketConnection {
           typeof parsedMessageRaw.data === 'string'
             ? JSON.parse(parsedMessageRaw.data)
             : parsedMessageRaw.data;
-        debug('parsedMessage', parsedMessage);
+        debugPeer('parsedMessage', parsedMessage);
       } else {
         parsedMessage =
           typeof message === 'string' ? JSON.parse(message) : message;
-        debug('parsedMessage: message', parsedMessage);
-        debug('parsedMessage: message data', parsedMessage.data);
+        debugPeer('parsedMessage: message', parsedMessage);
+        debugPeer('parsedMessage: message data', parsedMessage.data);
       }
 
       const signal = parsedMessage.signal;

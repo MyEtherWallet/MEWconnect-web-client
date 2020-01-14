@@ -6,10 +6,10 @@ import io from 'socket.io-client';
 import MewConnectCommon from '../MewConnectCommon';
 
 const debug = debugLogger('MEWconnect:initiator-V1');
-const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
-// const debugStages = debugLogger('MEWconnect:initiator-stages');
+const debugPeer = debugLogger('MEWconnectVerbose:peer-instances-V1');
+// const debugStages = debugLogger('MEWconnect:initiator-stages-V1');
 const debugStages = console.log;
-const logger = createLogger('MewConnectInitiator');
+const logger = createLogger('MewConnectInitiator-V1');
 
 export default class MewConnectInitiatorV1 extends MewConnectCommon {
   constructor(options = {}) {
@@ -18,7 +18,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     try {
       this.supportedBrowser = MewConnectCommon.checkBrowser();
       this.uiCommunicator = options.uiCommunicator;
-
+      this.active = true;
       this.activePeerId = '';
       this.allPeerIds = [];
       this.peersCreated = [];
@@ -133,8 +133,10 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
 
   // socket.disconnect wrapper
   socketDisconnect() {
+    this.active = false;
     this.socket.disconnect();
     this.socketConnected = false;
+    debug('webSocket Disconnected');
   }
 
   // socket.on listener registration wrapper
@@ -202,6 +204,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
 
   // A connection pair exists, create and send WebRTC OFFER
   async beginRtcSequence(data) {
+    this.emit('socketPaired');
     console.log(data); // todo remove dev item
     console.log('sendOffer: SOCKET CONFIRMATION');
     this.emit('beginRtcSequence', 'V1');
@@ -281,7 +284,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     console.log('recieveAnswer', data); // todo remove dev item
     try {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
-      this.webRtcCommunication.recieveAnswer(JSON.parse(plainTextOffer));
+      this.webRtcCommunication.receiveAnswer(JSON.parse(plainTextOffer));
       // this.rtcRecieveAnswer({ data: plainTextOffer });
     } catch (e) {
       logger.error(e);
@@ -291,6 +294,31 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
   rtcRecieveAnswer(data) {
     this.uiCommunicator(this.lifeCycle.answerReceived);
     this.p.signal(JSON.parse(data.data));
+  }
+
+  rtcDestroy() {
+    if(this.active){
+      this.webRtcCommunication.rtcDestroy();
+      this.connected = false;
+      this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
+    }
+  }
+  disconnectRTCClosure() {
+    return () => {
+      debugStages('DISCONNECT RTC Closure');
+      this.connected = false;
+      this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+      this.rtcDestroy();
+      this.instance = null;
+    };
+  }
+
+  disconnectRTC() {
+    debugStages('DISCONNECT RTC');
+    this.connected = false;
+    this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+    this.rtcDestroy();
+    this.instance = null;
   }
 
   async useFallback() {

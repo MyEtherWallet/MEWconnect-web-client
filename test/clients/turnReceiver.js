@@ -163,7 +163,6 @@ export default class Receiver {
       const answer = await this.peer.answer(offer)
       return await this.encrypt(answer)
     } else if(this.seenOnce){
-      this.seenOnce = false;
       this.peer = new WebRTCConnection()
       const answer = await this.peer.answer(offer)
       return await this.encrypt(answer)
@@ -201,7 +200,6 @@ export default class Receiver {
    * @param  {Function} fn - Callback function to perform
    */
   onRTC(signal, fn) {
-    console.log('onRTC', signal); // todo remove dev item
     this.peer.on(signal, fn)
   }
 }

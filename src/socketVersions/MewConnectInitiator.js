@@ -56,7 +56,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       // this.rtcEvents = this.jsonDetails.rtc;
       // this.version = this.jsonDetails.version;
       // this.versions = this.jsonDetails.versions;
-      // this.lifeCycle = this.jsonDetails.lifeCycle;
+      this.lifeCycle = this.jsonDetails.lifeCycle;
       this.stunServers = options.stunServers || this.jsonDetails.stunSrvers;
       // this.iceStates = this.jsonDetails.iceConnectionState;
       // Socket is abandoned.  disconnect.
@@ -189,10 +189,10 @@ Keys
       turnTest: this.turnTest,
       version: this.optionVersion,
       uiCommunicator: this.uiCommunicator.bind(this),
-      webRtcCommunication: this.webRtcCommunication
+      webRtcCommunication: this.webRtcCommunication,
+      crypto: this.mewCrypto
     };
     this.webRtcCommunication.on('data', this.dataReceived.bind(this));
-    this.webRtcCommunication.on('address', (data) => console.log('address webrtc', data));
     this.V1 = new MewConnectInitiatorV1({ url: this.v1Url, ...options });
     this.V2 = new MewConnectInitiatorV2({ url: this.v2Url, ...options });
     await this.V1.initiatorStart(this.v1Url, this.mewCrypto, {
@@ -203,9 +203,27 @@ Keys
       signed: this.signed,
       connId: this.connId
     });
+
+    this.V1.on('socketPaired', () =>{
+      this.V2.socketDisconnect();
+    })
+
+    this.V2.on('socketPaired', () =>{
+      this.V1.socketDisconnect();
+    })
+  }
+
+  disconnectRTC() {
+    debugStages('DISCONNECT RTC');
+    this.connected = false;
+    this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+    this.V1.disconnectRTC();
+    this.V2.disconnectRTC();
+    this.instance = null;
   }
 
   beginRtcSequence(source, data) {
+    console.log('beginRtcSequence', source, data); // todo remove dev item
     if (source === 'V2') {
       this.connPath = 'V2';
       this.V1.socketDisconnect();
@@ -224,6 +242,16 @@ Keys
   dataReceived(data) {
     debug('dataReceived', data);
     this.uiCommunicator(data.type, data.data)
+  }
+
+
+  testV1Turn(){
+    this.V1.disconnectRTC();
+  }
+
+  testV2Turn(){
+    this.V2.disconnectRTC();
+    this.V2.emit(this.lifeCycle)
   }
 
 }

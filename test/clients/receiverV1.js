@@ -39,7 +39,7 @@ const signalV1 = {
   confirmationFailed: 'confirmationFailed'
 };
 
-const debug = debugLogger('MEWconnect:receiver');
+const debug = debugLogger('MEWconnect:receiver-V1');
 const debugState = debugLogger('MEWconnect:receiver-state');
 
 export default class MewConnectReceiver extends EventEmitter {
@@ -536,7 +536,7 @@ export default class MewConnectReceiver extends EventEmitter {
     }
     console.log("============ RECEIVER ================="); // todo remove dev item
     console.log('rtc send', arg); // todo remove dev item
-    console.log(this.p); // todo remove dev item
+    // console.log(this.p); // todo remove dev item
     this.p.send(JSON.stringify(encryptedSend));
   }
 

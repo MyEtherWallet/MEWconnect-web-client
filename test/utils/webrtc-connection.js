@@ -46,6 +46,7 @@ export default class WebRTCConnection {
       this.peer.on(rtcSignals.signal, data => {
         resolve(data)
       })
+
     })
   }
 
@@ -68,7 +69,7 @@ export default class WebRTCConnection {
         wrtc: wrtc
       }
       this.peer = new Peer(options)
-      console.log(offer); // todo remove dev item
+      this.peer.on(rtcSignals.error, console.log)
       this.peer.signal(offer)
       this.peer.on(rtcSignals.signal, data => {
         resolve(data)

@@ -9,9 +9,9 @@ import MewConnectCrypto from '../MewConnectCrypto';
 import WebRtcCommunication from '../WebRtcCommunication';
 
 const debug = debugLogger('MEWconnect:initiator-V2');
-const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
-const debugStages = debugLogger('MEWconnect:initiator-stages');
-const logger = createLogger('MewConnectInitiator');
+const debugPeer = debugLogger('MEWconnectVerbose:peer-instances-V2');
+const debugStages = debugLogger('MEWconnect:initiator-stages-V2');
+const logger = createLogger('MewConnectInitiator-V2');
 
 export default class MewConnectInitiatorV2 extends MewConnectCommon {
   constructor(options = {}) {
@@ -25,7 +25,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.allPeerIds = [];
       this.peersCreated = [];
       this.Url = options.url || 'wss://connect2.mewapi.io/staging';
-
+      this.active = true;
       this.turnTest = options.turnTest;
 
       this.p = null;
@@ -37,12 +37,13 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.signalUrl = null;
       this.iceState = '';
       this.turnServers = [];
+      this.states = this.setResetStates();
 
-
+      this.webRtcCommunication = options.webRtcCommunication;
 
       // this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
       // this.webRtcCommunication = new WebRtcCommunication();
-      // this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
+      // this.mewCrypto = options.crypto || MewConnectCrypto.create();
       this.socket = new WebSocket();
       // this.io = io;
       this.connPath = '';
@@ -69,6 +70,12 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
   }
 
+  setResetStates(){
+    return {
+      offerSent: false,
+      answerReceived: false
+    }
+  }
 
   isAlive() {
     if (this.p !== null) {
@@ -95,7 +102,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     }
   }
 
-  setWebRtc(webRtcCommunication){
+  setWebRtc(webRtcCommunication) {
     this.webRtcCommunication = webRtcCommunication;
   }
 
@@ -222,17 +229,20 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
   socketEmit(signal, data) {
     try {
-      this.socket.send(signal, data);
+      if (this.socket) this.socket.send(signal, data);
     } catch (e) {
       debug('socketEmit error:', e);
     }
   }
 
   socketDisconnect() {
-    this.socket.disconnect().catch(err => {
+    debug(`Socket already disconnected: ${this.active}`);
+    this.active = false;
+    if (this.socket) this.socket.disconnect().catch(err => {
       debug('socketDisconnect', err);
     });
-    this.socket = {};
+    debug('webSocket Disconnected');
+    this.socket = null;
     this.socketConnected = false;
   }
 
@@ -287,13 +297,64 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     }
   }
 
+  // Handle Socket Disconnect Event
+  socketDisconnectHandler(reason) {
+    debug(reason);
+    this.socketConnected = false;
+  }
+
+  // ----- Failure Handlers
+  // Handle Socket Attempting Turn informative signal
+  // Provide Notice that initial WebRTC connection failed and the fallback method will be used
+  willAttemptTurn() {
+    this.tryingTurn = true;
+    debugStages('TRY TURN CONNECTION');
+    this.uiCommunicator(this.lifeCycle.UsingFallback);
+  }
+
+  // Handle Socket event to initiate turn connection
+  // Handle Receipt of TURN server details, and begin a WebRTC connection attempt using TURN
+  beginTurn(data) {
+    this.tryingTurn = true;
+    this.webRtcCommunication.turnReset(this.activePeerId);
+    this.retryViaTurn(data);
+  }
+
+  // Handle Failure due to an attempt to join a connection with two existing endpoints
+  busyFailure() {
+    this.uiCommunicator(
+      this.lifeCycle.Failed,
+      this.lifeCycle.confirmationFailedBusyEvent
+    );
+    debug('confirmation Failed: Busy');
+  }
+
+  // Handle Failure due to no opposing peer existing
+  invalidFailure() {
+    this.uiCommunicator(
+      this.lifeCycle.Failed,
+      this.lifeCycle.invalidConnectionEvent
+    );
+    debug('confirmation Failed: no opposite peer found');
+  }
+
+  // Handle Failure due to the handshake/ verify details being invalid for the connection ID
+  confirmationFailure() {
+    this.uiCommunicator(
+      this.lifeCycle.Failed,
+      this.lifeCycle.confirmationFailedEvent
+    );
+    debug('confirmation Failed: invalid confirmation');
+  }
+
   initiated(data) {
     this.uiCommunicator(this.signals.initiated, data);
     debug('initiator', this.signals.initiated, data);
   }
 
   beginRtcSequence(data) {
-    this.emit('beginRtcSequence', 'V2')
+    this.emit('socketPaired');
+    this.emit('beginRtcSequence', 'V2');
     try {
       debug('beginRtcSequence ');
       debug('sendOffer', data);
@@ -323,6 +384,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       debug('SIGNAL', JSON.stringify(data));
       const encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(data));
       this.uiCommunicator(this.lifeCycle.sendOffer);
+      this.states.offer = true;
       this.socketEmit(this.signals.offerSignal, {
         data: encryptedSend,
         connId: this.connId
@@ -335,21 +397,23 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
   // Handle the WebRTC ANSWER from the opposite (mobile) peer
   async recieveAnswer(data) {
-    debug('recieved answer');
+    debug('received answer');
     try {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
       this.uiCommunicator(this.lifeCycle.answerReceived);
       debug(plainTextOffer);
-      this.p.signal(JSON.parse(plainTextOffer));
+      this.webRtcCommunication.receiveAnswer(JSON.parse(plainTextOffer), this.activePeerId);
+      debug('answer relayed to webRTC instance');
     } catch (e) {
       logger.error(e);
       debug('recieveAnswer error:', e);
     }
+
   }
 
-  setActivePeerId() {
-    this.activePeerId = uuid();
-    this.allPeerIds.push(this.activePeerId);
+  setActivePeerId(peerId) {
+    this.activePeerId = peerId;
+    // this.allPeerIds.push(this.activePeerId);
   }
 
   getActivePeerId() {
@@ -360,7 +424,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   initiatorStartRTC(options) {
     try {
       debug('initiatorStartRTC');
-      this.setActivePeerId();
       const webRtcConfig = options.webRtcConfig || {};
       const webRtcServers = webRtcConfig.servers || this.stunServers;
 
@@ -381,59 +444,25 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
         ...webRtcConfig
       };
 
-      this.webRtcCommunication.start();
+      this.webRtcCommunication.start(simpleOptions);
+
       debug(`initiatorStartRTC - options: ${simpleOptions}`);
       this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
       // this.p = new this.Peer(simpleOptions);
       const peerID = this.webRtcCommunication.getActivePeerId();
-      // this.p.peerInstanceId = peerID;
-      // this.peersCreated.push(this.p);
-      // this.rtcEvents.error
-      // this.p.on('error', this.onError.bind(this, peerID));
+      this.setActivePeerId(peerID);
       this.webRtcCommunication.on('connect', this.onConnect.bind(this, peerID));
       this.webRtcCommunication.on('signal', this.sendOffer.bind(this));
       this.webRtcCommunication.on('data', this.onData.bind(this, peerID));
-      this.p._pc.addEventListener(
-        'iceconnectionstatechange',
-        this.stateChangeListener.bind(this, peerID)
-      );
     } catch (e) {
       debug('initiatorStartRTC error:', e);
-    }
-  }
-
-  stateChangeListener(peerID, evt) {
-    // eslint-disable-next-line no-undef
-    if (typeof jest === 'undefined') {
-      // included because target is not defined in jest
-      debug(`iceConnectionState: ${evt.target.iceConnectionState}`);
-      debugPeer('this.allPeerIds', this.allPeerIds);
-      debugPeer('peerID', peerID);
-      if (
-        evt.target.iceConnectionState === 'connected' ||
-        evt.target.iceConnectionState === 'completed'
-      ) {
-        if (this.timer) {
-          clearTimeout(this.timer);
-        }
-        if (!this.connected) {
-          this.connected = true;
-          this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
-        }
-      }
-      if ((evt.target.iceConnectionState === 'failed' ||
-        evt.target.iceConnectionState === 'disconnected') &&
-        !this.turnDisabled) {
-        this.turnDisabled = true;
-        this.useFallback();
-      }
     }
   }
 
   onConnect(peerID) {
     try {
       debugStages('RTC CONNECT', 'ok');
-      debugPeer('peerID', peerID);
+      debug('peerID', peerID);
       this.connected = true;
       this.turnDisabled = true;
       this.socketEmit(this.signals.rtcConnected, this.socketKey);
@@ -445,13 +474,15 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   async onData(peerID, data) {
+    console.log(data); // todo remove dev item
     debug('DATA RECEIVED', data.toString());
-    debugPeer('peerID', peerID);
+    debug('peerID', peerID);
     try {
       let decryptedData;
       if (this.isJSON(data)) {
         decryptedData = await this.mewCrypto.decrypt(
-          JSON.parse(data.toString())
+          // JSON.parse(data.toString())
+          JSON.parse(data)
         );
       } else {
         decryptedData = await this.mewCrypto.decrypt(
@@ -475,7 +506,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
   onClose(peerID, data) {
     debugStages('WRTC MAYBE CLOSE');
-    debugPeer('peerID', peerID);
+    debug('peerID', peerID);
     if (!this.isAlive()) {
       debugStages('WRTC CLOSE', data);
       if (this.connected) {
@@ -489,7 +520,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
   onError(peerID, err) {
     debugStages('WRTC ERROR');
-    debugPeer('peerID', peerID);
+    debug('peerID', peerID);
     debug(err.code);
     debug('error', err);
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
@@ -500,7 +531,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       }
     }
   }
-
 
   // ----- WebRTC Communication Methods
 
@@ -514,24 +544,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   sendRtcMessage(type, msg) {
     debug(`[SEND RTC MESSAGE] type:  ${type},  message:  ${msg}`);
     this.rtcSend(JSON.stringify({ type, data: msg }));
-  }
-
-  disconnectRTCClosure() {
-    return () => {
-      debugStages('DISCONNECT RTC Closure');
-      this.connected = false;
-      this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
-      this.rtcDestroy();
-      this.instance = null;
-    };
-  }
-
-  disconnectRTC() {
-    debugStages('DISCONNECT RTC');
-    this.connected = false;
-    this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
-    this.rtcDestroy();
-    this.instance = null;
   }
 
   async rtcSend(arg) {
@@ -552,15 +564,34 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   rtcDestroy() {
-    if (this.isAlive()) {
-      this.p.destroy();
+    if (this.active) {
+      this.webRtcCommunication.rtcDestroy();
       this.connected = false;
       this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
     }
   }
 
+  disconnectRTCClosure() {
+    return () => {
+      debugStages('DISCONNECT RTC Closure');
+      this.connected = false;
+      this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+      this.rtcDestroy();
+      this.instance = null;
+    };
+  }
+
+  disconnectRTC() {
+    debugStages('DISCONNECT RTC');
+    this.connected = false;
+    this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+    this.rtcDestroy();
+    this.instance = null;
+  }
+
   retryViaTurn(data) {
     try {
+      this.states = this.setResetStates();
       debugStages('Retrying via TURN v2');
       this.iceServers = null;
       const options = {
@@ -583,6 +614,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
           wrtc: wrtc
         }
       };
+
       this.initiatorStartRTC(options);
     } catch (e) {
       debug('retryViaTurn error:', e);

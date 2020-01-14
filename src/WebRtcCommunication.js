@@ -10,16 +10,20 @@ import MewConnectCommon from './MewConnectCommon';
 const debug = debugLogger('MEWconnect:webRTC-communication');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
-const logger = createLogger('MewConnectInitiator');
+const logger = createLogger('WebRtcCommunication');
 
 export default class WebRtcCommunication extends MewConnectCommon {
   constructor(mewCrypto) {
     super();
     this.Peer = SimplePeer;
     this.mewCrypto = mewCrypto;
-    this.peersCreated = [];
+    this.peersCreated = {};
     this.allPeerIds = [];
     this.iceState = '';
+    this.answerReceived = {};
+    this.answersReceived = [];
+    this.offersSent = -1;
+    this.turnTimer = null;
 
     this.signals = this.jsonDetails.signals;
     this.rtcEvents = this.jsonDetails.rtc;
@@ -68,13 +72,15 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.setActivePeerId();
     this.p = new this.Peer(simpleOptions);
     const peerID = this.getActivePeerId();
+    this.answerReceived[peerID] = false;
     this.p.peerInstanceId = peerID;
-    this.peersCreated.push(this.p);
+    this.peersCreated[peerID] = this.p;
     this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
     this.p.on(this.rtcEvents.connect, this.onConnect.bind(this, peerID));
     this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
     this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
     this.p.on(this.rtcEvents.signal, this.signalListener.bind(this));
+    debug(`active PEER_ID: ${this.p.peerInstanceId}`);
     this.p._pc.addEventListener(
       'iceconnectionstatechange',
       this.stateChangeListener.bind(this, peerID)
@@ -87,14 +93,53 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   signalListener(data) {
+    ++this.offersSent;
+    console.log('signalListener'); // todo remove dev item
+    console.log(data.sdp.replace('\n', '').split(/\r/)); // todo remove dev item
     this.emit('signal', data);
   }
 
-  recieveAnswer(plainTextOffer) {
-    console.log('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
-    this.p.signal(plainTextOffer);
-    console.log('============ INITIATOR ================='); // todo remove dev item
-    console.log(this.p); // todo remove dev item
+  receiveAnswer(plainTextOffer, peerID) {
+    if (this.tryingTurn) {
+      this.answersReceived.push(plainTextOffer);
+      if(this.turnTimer === null){
+        console.log(this.turnTimer); // todo remove dev item
+        const _self = this;
+        this.turnTimer = setTimeout(this.receiveTurnAnswer.bind(_self), 4000)
+      }
+    } else {
+      console.log(plainTextOffer.sdp.replace('\n', '').split(/\r/)); // todo remove dev item
+      debug('webRtc receiveAnswer', this.answerReceived);
+      debug(`active PEER_ID: ${this.p.peerInstanceId}`);
+      // if(!this.answerReceived[this.p.peerInstanceId]){
+      try {
+        this.answerReceived[this.p.peerInstanceId] = true;
+        console.log('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
+        this.p.signal(plainTextOffer);
+        console.log('============ INITIATOR ================='); // todo remove dev item
+        // console.log(this.p); // todo remove dev item
+      } catch (e) {
+        // eslint-disable-next-line
+        console.error(e);
+      }
+    }
+  }
+
+  receiveTurnAnswer(){
+    const plainTextOffer = this.answersReceived[this.answersReceived.length - 1];
+    console.log(plainTextOffer.sdp.replace('\n', '').split(/\r/)); // todo remove dev item
+    debug('webRtc receiveTurnAnswer', this.answerReceived);
+    debug(`active PEER_ID: ${this.p.peerInstanceId}`);
+    // if(!this.answerReceived[this.p.peerInstanceId]){
+    try {
+      this.answerReceived[this.p.peerInstanceId] = true;
+      console.log('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
+      this.p.signal(plainTextOffer);
+      // console.log(this.p); // todo remove dev item
+    } catch (e) {
+      // eslint-disable-next-line
+      console.error(e);
+    }
   }
 
   // ----- Socket Event handlers
@@ -214,6 +259,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
         debug('DECRYPTED DATA RECEIVED 1', parsed);
+        console.log(parsed.type, parsed.data); // todo remove dev item
         this.emit('data', { type: parsed.type, data: parsed.data });
       } else {
         debug('DECRYPTED DATA RECEIVED 2', decryptedData);
@@ -231,7 +277,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   onClose(peerID, data) {
     debugStages('WRTC MAYBE CLOSE');
-    debugPeer('peerID', peerID);
+    debug('peerID', peerID);
     if (!this.isAlive()) {
       debugStages('WRTC CLOSE', data);
       if (this.connected) {
@@ -245,7 +291,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   onError(peerID, err) {
     debugStages('WRTC ERROR');
-    debugPeer('peerID', peerID);
+    debug('peerID', peerID);
     debug(err.code);
     debug('error', err);
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
@@ -255,6 +301,12 @@ export default class WebRtcCommunication extends MewConnectCommon {
         this.uiCommunicator(this.lifeCycle.RtcErrorEvent);
       }
     }
+  }
+
+  turnReset(peerId) {
+    debug('TURN_RESET');
+    this.tryingTurn = true;
+    this.answerReceived[peerId] = false;
   }
 
   useFallback() {
