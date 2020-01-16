@@ -17,7 +17,7 @@ const logger = createLogger('MewConnectInitiator');
 export default class MewConnectInitiator extends MewConnectCommon {
   constructor(options = {}) {
     super(options.version);
-    this.optionVersion = options.version;
+    this.optionVersion = options.version || 2.0;
     try {
       this.supportedBrowser = MewConnectCommon.checkBrowser();
 
@@ -54,7 +54,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       // this.signalsV1 = this.jsonDetails.signalsV1;
       // this.signalsV2 = this.jsonDetails.signalsV2;
       // this.rtcEvents = this.jsonDetails.rtc;
-      // this.version = this.jsonDetails.version;
+      this.version = this.jsonDetails.version;
       // this.versions = this.jsonDetails.versions;
       this.lifeCycle = this.jsonDetails.lifeCycle;
       this.stunServers = options.stunServers || this.jsonDetails.stunSrvers;
@@ -117,6 +117,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
   // can be used to listen to specific events, especially those that pass data
   uiCommunicator(event, data) {
+    console.log(event, data); // todo remove dev item
     this.emit(event, data);
     this.emitStatus(event);
   }
@@ -139,7 +140,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
         this.version + separator + privateKey + separator + this.connId;
 
       debug(qrCodeString);
-
+      console.log(qrCodeString); // todo remove dev item
       this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
       this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
       this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
@@ -222,18 +223,18 @@ Keys
     this.instance = null;
   }
 
-  beginRtcSequence(source, data) {
-    console.log('beginRtcSequence', source, data); // todo remove dev item
-    if (source === 'V2') {
-      this.connPath = 'V2';
-      this.V1.socketDisconnect();
-      this.beginRtcSequenceV2(data);
-    } else if (source === 'V1') {
-      this.connPath = 'V1';
-      this.socketV2Disconnect();
-      this.beginRtcSequenceV2(data);
-    }
-  }
+  // beginRtcSequence(source, data) {
+  //   console.log('beginRtcSequence', source, data); // todo remove dev item
+  //   if (source === 'V2') {
+  //     this.connPath = 'V2';
+  //     this.V1.socketDisconnect();
+  //     this.beginRtcSequenceV2(data);
+  //   } else if (source === 'V1') {
+  //     this.connPath = 'V1';
+  //     this.socketV2Disconnect();
+  //     this.beginRtcSequenceV2(data);
+  //   }
+  // }
 
   async rtcSend(arg) {
     this.webRtcCommunication.rtcSend(arg);

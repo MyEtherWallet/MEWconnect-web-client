@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "@vue/web-component-wrapper": "^1.2.0",
+    "qrcode": "^1.4.4",
     "vue": "^2.6.11"
   }
 }
