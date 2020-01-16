@@ -11,13 +11,21 @@ import {
   ecsign,
   isValidPrivate,
   isValidPublic,
-  privateToPublic
+  privateToPublic, isHexString, toBuffer as utilsToBuffer
 } from 'ethereumjs-util';
-import { Misc } from '@/helpers';
-import commonGenerator from '@/helpers/commonGenerator';
+import commonGenerator from './helpers/commonGenerator';
 import { Transaction } from 'ethereumjs-tx';
-import { toChecksumAddress } from '@/helpers/addressUtils';
-import store from '@/store';
+import { toChecksumAddress } from './helpers/addressUtils';
+import {ETH} from './networks'
+
+
+const toBuffer = v => {
+  if (isHexString(v)) {
+    return utilsToBuffer(v);
+  }
+  return Buffer.from(v);
+};
+
 class WalletInterface {
   constructor(key, isPub = false, identifier, nick, keystore) {
     this.nickname = nick !== null && nick !== '' ? nick : '';
@@ -90,7 +98,7 @@ class WalletInterface {
     return new Promise((resolve, reject) => {
       if (!this.isPubOnly) {
         const tx = new Transaction(txParams, {
-          common: commonGenerator(store.state.network)
+          common: commonGenerator(ETH)
         });
         const networkId = tx.getChainId();
         tx.sign(this.privateKey);
@@ -116,7 +124,7 @@ class WalletInterface {
       throw new Error('public key only wallets needs a signer');
     return new Promise((resolve, reject) => {
       if (!this.isPubOnly) {
-        const msgHash = hashPersonalMessage(Misc.toBuffer(msg));
+        const msgHash = hashPersonalMessage(toBuffer(msg));
         const signed = ecsign(msgHash, this.privateKey);
         resolve(
           Buffer.concat([

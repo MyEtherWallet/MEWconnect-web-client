@@ -7,7 +7,7 @@ import { toPayload } from '../jsonrpc';
 import * as locStore from 'store';
 import { getSanitizedTx } from './utils';
 import BigNumber from 'bignumber.js';
-import { Misc } from '@/helpers';
+import  Misc from '../../helpers/misc';
 
 const setEvents = (promiObj, tx, dispatch) => {
   promiObj
@@ -47,47 +47,34 @@ export default async (
   tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
   getSanitizedTx(tx)
     .then(_tx => {
-      if (store.state.wallet.identifier === WEB3_WALLET) {
-        eventHub.$emit(EventNames.SHOW_WEB3_CONFIRM_MODAL, _tx, _promiObj => {
-          setEvents(_promiObj, _tx, store.dispatch);
-          _promiObj
-            .once('transactionHash', hash => {
-              res(null, toPayload(payload.id, hash));
-            })
-            .on('error', err => {
-              res(err);
-            });
-        });
-      } else {
-        eventHub.$emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
-          const _promiObj = store.state.web3.eth.sendSignedTransaction(
-            _response.rawTransaction
-          );
+      eventHub.$emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
+        const _promiObj = store.state.web3.eth.sendSignedTransaction(
+          _response.rawTransaction
+        );
 
-          _promiObj
-            .once('transactionHash', hash => {
-              if (store.state.wallet !== null) {
-                const localStoredObj = locStore.get(
-                  utils.sha3(store.state.wallet.getChecksumAddressString())
-                );
-                locStore.set(
-                  utils.sha3(store.state.wallet.getChecksumAddressString()),
-                  {
-                    nonce: Misc.sanitizeHex(
-                      new BigNumber(localStoredObj.nonce).plus(1).toString(16)
-                    ),
-                    timestamp: localStoredObj.timestamp
-                  }
-                );
-              }
-              res(null, toPayload(payload.id, hash));
-            })
-            .on('error', err => {
-              res(err);
-            });
-          setEvents(_promiObj, _tx, store.dispatch);
-        });
-      }
+        _promiObj
+          .once('transactionHash', hash => {
+            if (store.state.wallet !== null) {
+              const localStoredObj = locStore.get(
+                utils.sha3(store.state.wallet.getChecksumAddressString())
+              );
+              locStore.set(
+                utils.sha3(store.state.wallet.getChecksumAddressString()),
+                {
+                  nonce: Misc.sanitizeHex(
+                    new BigNumber(localStoredObj.nonce).plus(1).toString(16)
+                  ),
+                  timestamp: localStoredObj.timestamp
+                }
+              );
+            }
+            res(null, toPayload(payload.id, hash));
+          })
+          .on('error', err => {
+            res(err);
+          });
+        setEvents(_promiObj, _tx, store.dispatch);
+      });
     })
     .catch(e => {
       res(e);
