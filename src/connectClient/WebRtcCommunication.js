@@ -40,8 +40,16 @@ export default class WebRtcCommunication extends MewConnectCommon {
     return false;
   }
 
-  uiCommunicator(event, details){
-    this.emit(event, details)
+  // can be used to listen to specific events, especially those that pass data
+  uiCommunicator(event, data) {
+    console.log(event, data); // todo remove dev item
+    this.emit(event, data);
+    this.emitStatus(event);
+  }
+
+  // special status emitter to allow simple listening of various statuses in one listener
+  emitStatus(event) {
+    this.emit('status', event);
   }
 
   // Check if a WebRTC connection exists before a window/tab is closed or refreshed

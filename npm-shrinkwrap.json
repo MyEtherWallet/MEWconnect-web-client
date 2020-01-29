@@ -3238,6 +3238,12 @@
       "integrity": "sha512-EgmjVLMn22z7eGGv3kcnHwSnJXmFHjISTY9E/S5lIcTD3Oxw05QTcBLNkJFzcb3cNueUdF/IN4U+d78V0zO8Hw==",
       "dev": true
     },
+    "bind-decorator": {
+      "version": "1.0.11",
+      "resolved": "https://registry.npmjs.org/bind-decorator/-/bind-decorator-1.0.11.tgz",
+      "integrity": "sha1-5BvAah9l3ZzsR2yRxdrzl4SIJS8=",
+      "optional": true
+    },
     "bindings": {
       "version": "1.4.0",
       "resolved": "https://registry.npmjs.org/bindings/-/bindings-1.4.0.tgz",
@@ -5682,6 +5688,12 @@
       "resolved": "https://registry.npmjs.org/etag/-/etag-1.8.1.tgz",
       "integrity": "sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=",
       "dev": true
+    },
+    "eth-eip712-util": {
+      "version": "2.3.0",
+      "resolved": "https://registry.npmjs.org/eth-eip712-util/-/eth-eip712-util-2.3.0.tgz",
+      "integrity": "sha512-HyN6Bi55l5TIYbRBSrwVzC744YyKMnPgSAEfj08/hum6cjq3/1+nrnh7qENLM+DW8EOdRrs64GLZGXUIgRZxXQ==",
+      "optional": true
     },
     "eth-ens-namehash": {
       "version": "2.0.8",
@@ -16787,6 +16799,65 @@
       "dev": true,
       "requires": {
         "makeerror": "1.0.x"
+      }
+    },
+    "walletlink": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/walletlink/-/walletlink-1.0.0.tgz",
+      "integrity": "sha512-5d8DK2YWPqhkG8jw0xRc3BXLA/LPam7q1UlHArpjoIcgNcqwCKTMsI/Ann07IJf9+ddq8OeAX7kZB5peaSW6FA==",
+      "optional": true,
+      "requires": {
+        "bind-decorator": "^1.0.11",
+        "bn.js": "^5.0.0",
+        "eth-eip712-util": "^2.3.0",
+        "keccak": "^2.0.0"
+      },
+      "dependencies": {
+        "bindings": {
+          "version": "1.5.0",
+          "resolved": "https://registry.npmjs.org/bindings/-/bindings-1.5.0.tgz",
+          "integrity": "sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==",
+          "optional": true,
+          "requires": {
+            "file-uri-to-path": "1.0.0"
+          }
+        },
+        "bn.js": {
+          "version": "5.1.1",
+          "resolved": "https://registry.npmjs.org/bn.js/-/bn.js-5.1.1.tgz",
+          "integrity": "sha512-IUTD/REb78Z2eodka1QZyyEk66pciRcP6Sroka0aI3tG/iwIdYLrBD62RsubR7vqdt3WyX8p4jxeatzmRSphtA==",
+          "optional": true
+        },
+        "inherits": {
+          "version": "2.0.4",
+          "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz",
+          "integrity": "sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==",
+          "optional": true
+        },
+        "keccak": {
+          "version": "2.1.0",
+          "resolved": "https://registry.npmjs.org/keccak/-/keccak-2.1.0.tgz",
+          "integrity": "sha512-m1wbJRTo+gWbctZWay9i26v5fFnYkOn7D5PCxJ3fZUGUEb49dE1Pm4BREUYCt/aoO6di7jeoGmhvqN9Nzylm3Q==",
+          "optional": true,
+          "requires": {
+            "bindings": "^1.5.0",
+            "inherits": "^2.0.4",
+            "nan": "^2.14.0",
+            "safe-buffer": "^5.2.0"
+          }
+        },
+        "nan": {
+          "version": "2.14.0",
+          "resolved": "https://registry.npmjs.org/nan/-/nan-2.14.0.tgz",
+          "integrity": "sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==",
+          "optional": true
+        },
+        "safe-buffer": {
+          "version": "5.2.0",
+          "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.0.tgz",
+          "integrity": "sha512-fZEwUGbVl7kouZs1jCdMLdt95hdIv0ZeHg6L7qPeciMZhZ+/gdesW4wgTARkrFWEpspjEATAzUGPG8N2jJiwbg==",
+          "optional": true
+        }
       }
     },
     "watch": {

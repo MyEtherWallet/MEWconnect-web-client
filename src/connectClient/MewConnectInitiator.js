@@ -1,2 +1,2 @@
-import combined from './socketVersions/MewConnectInitiator.js';
+import combined from './initiator/MewConnectInitiator.js';
 export default combined;

@@ -27,11 +27,11 @@ export default async (
   getSanitizedTx(tx)
     .then(_tx => {
       if (_tx.hasOwnProperty('generateOnly')) {
-        eventHub.$emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
+        eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
           res(null, toPayload(payload.id, _response));
         });
       } else {
-        eventHub.$emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
+        eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
           res(null, _response);
         });
       }

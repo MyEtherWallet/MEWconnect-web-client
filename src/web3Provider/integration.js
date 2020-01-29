@@ -4,8 +4,11 @@ import QrCode from 'qrcode';
 import Initiator from '../connectClient/MewConnectInitiator';
 import Web3 from 'web3';
 import MEWProvider from './wallets/web3-provider';
+import MEWconnectWallet from './wallets/MEWconnect';
 import Networks from './wallets/networks';
 import url from 'url';
+import EventEmitter from 'events';
+import EventNames from './wallets/web3-provider/events';
 
 export default class Integration {
   constructor(RPC_URL) {
@@ -16,58 +19,99 @@ export default class Integration {
     this.walletLinkOrigin = '';
     // this.injectIframe();
     this.actionsPendingIframeLoad = [];
+    this.eventHub = new EventEmitter();
+    this.state = {};
     this.initiator = new Initiator();
     this.connectionString = '';
     const network = Networks['ETH'];
     console.log(Networks); // todo remove dev item
-    this.startWeb3();
+    // this.startWeb3();
     this.popUpHandler = new PopUpCreator();
-    // this.initiator.on(this.initiator.lifeCycle.codeDisplay, (text) => {
-    //   this.connectionString = text;
-    // });
-    this.initiator.on(this.initiator.lifeCycle.codeDisplay, (text) => {
-      this.popUpHandler.showPopupWindow(text);
-    });
+
   }
 
   async openPopupWindow() {
     this.showPopupWindow();
   }
 
+  async enable() {
+    this.state.wallet = await new MEWconnectWallet();
+    console.log(this.state.wallet); // todo remove dev item
+    return [this.state.wallet.getChecksumAddressString()];
+    // this.showPopupWindow();
+    // this.initiator.on(this.initiator.lifeCycle.codeDisplay, (text) => {
+    //   this.popUpHandler.showPopupWindow(text);
+    // });
+  }
+
+  disconnect() {
+    const connection = this.state.wallet.getConnection();
+    console.log(connection); // todo remove dev item
+    connection.disconnectRTC();
+  }
+
   showPopupWindow(qrcode = '') {
     this.initiator.initiatorStart();
+    this.makeWeb3Provider();
   }
 
-  makeWeb3Provider(RPC_URL, CHAIN_ID) {
+  ev(tx) {
+    const signPromise = this.state.wallet.signTransaction(tx);
 
+    signPromise
+      .then(_response => {
+        this.signedTxObject = _response;
+        this.signedTx = this.signedTxObject.rawTransaction;
+      })
+      .catch(this.state.wallet.errorHandler);
   }
 
-  startWeb3(RPC_URL) {
-    const defultNetwork = Networks['ETH'][0];
-    console.log(defultNetwork); // todo remove dev item
+  setupListeners() {
+    this.eventHub.on(EventNames.SHOW_TX_CONFIRM_MODAL, (tx, callback) => {
+      console.log(tx); // todo remove dev item
+      const signPromise = this.state.wallet.signTransaction(tx);
+      this.popUpHandler.showNotificationPopupWindow('Check your phone to sign the transaction');
+      signPromise
+        .then(_response => {
+          const signedTxObject = _response;
+          const signedTx = signedTxObject.rawTransaction;
+          this.popUpHandler.closePopupWindow();
+          callback(signedTx);
+        })
+        .catch(this.state.wallet.errorHandler);
+    });
+  }
+
+  makeWeb3Provider(RPC_URL) {
+    const chain = 'ROP'; // 'ETH'
+    const defaultNetwork = Networks[chain][0];
+    this.state.network = defaultNetwork;
+    console.log(defaultNetwork); // todo remove dev item
     const hostUrl = RPC_URL
       ? url.parse(RPC_URL)
-      : url.parse(defultNetwork.url);
+      : url.parse(defaultNetwork.url);
     const options = {};
     console.log(hostUrl); // todo remove dev item
     // // eslint-disable-next-line
     const parsedUrl = `${hostUrl.protocol}//${hostUrl.host}${
-      defultNetwork.port ? ':' + defultNetwork.port : ''
+      defaultNetwork.port ? ':' + defaultNetwork.port : ''
     }${hostUrl.pathname}`;
     console.log(parsedUrl); // todo remove dev item
-    const web3Instance = new Web3(
+    this.state.web3 = new Web3(
       new MEWProvider(
         parsedUrl,
-        options
-        // {
-        //   state,
-        //   dispatch
-        // },
-        // this._vm.$eventHub
+        options,
+        {
+          state: this.state
+          // dispatch
+        },
+        this.eventHub
       )
     );
-    web3Instance.currentProvider.sendAsync = web3Instance.currentProvider.send;
-    console.log(web3Instance); // todo remove dev item
+    this.state.web3.currentProvider.sendAsync = this.state.web3.currentProvider.send;
+    console.log(this.state.web3); // todo remove dev item
+    this.setupListeners();
+    return this.state.web3;
   }
 
 }

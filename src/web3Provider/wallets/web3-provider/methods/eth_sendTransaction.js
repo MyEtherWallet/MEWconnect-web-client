@@ -27,7 +27,7 @@ export default async (
 ) => {
   if (payload.method !== 'eth_sendTransaction') return next();
   const tx = Object.assign({}, payload.params[0]);
-  tx.gasPrice = unit.toWei(store.state.gasPrice, 'gwei').toString();
+  // tx.gasPrice = tx.gasPrice unit.toWei(store.state.gasPrice, 'gwei').toString();
   const localTx = Object.assign({}, tx);
   delete localTx['gas'];
   delete localTx['nonce'];
@@ -46,7 +46,7 @@ export default async (
   tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
   getSanitizedTx(tx)
     .then(_tx => {
-      eventHub.$emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
+      eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
         const _promiObj = store.state.web3.eth.sendSignedTransaction(
           _response.rawTransaction
         );

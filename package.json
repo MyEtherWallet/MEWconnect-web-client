@@ -88,5 +88,8 @@
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1",
     "yorkie": "^2.0.0"
+  },
+  "optionalDependencies": {
+    "walletlink": "^1.0.0"
   }
 }

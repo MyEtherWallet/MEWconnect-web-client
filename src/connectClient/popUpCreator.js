@@ -1,10 +1,10 @@
 import path from 'path';
 import QrCode from 'qrcode';
-import Initiator from './connectClient/MewConnectInitiator';
-import Web3 from 'web3';
-import MEWProvider from './web3Provider/wallets/web3-provider';
-import Networks from './web3Provider/wallets/networks';
-import url from 'url';
+// import Initiator from './connectClient/MewConnectInitiator';
+// import Web3 from 'web3';
+// import MEWProvider from './web3Provider/wallets/web3-provider';
+// import Networks from './web3Provider/wallets/networks';
+// import url from 'url';
 
 const IPCMessageType = {
   SESSION_ID_REQUEST: 'SESSION_ID_REQUEST',
@@ -29,48 +29,8 @@ export default class PopUpCreator {
     this.showPopupWindow(text);
   }
 
-  showNotificationPopupWindow(words) {
-    if(!words){
-      words = "check your phone to sign"
-    }
-    console.log('open?'); // todo remove dev item
-    const popupUrl = `${this.walletLinkUrl}/#MEWconnect`;
-
-    if (this.popupWindow && this.popupWindow.opener) {
-      if (this.popupUrl !== popupUrl) {
-        this.popupWindow.location.href = popupUrl;
-        this.popupUrl = popupUrl;
-      }
-      this.popupWindow.focus();
-      return;
-    }
-
-    const width = 320;
-    const height = 520;
-    const left = Math.floor(window.outerWidth / 2 - width / 2 + window.screenX);
-    const top = Math.floor(window.outerHeight / 2 - height / 2 + window.screenY);
-    this.popupUrl = popupUrl;
-    this.popupWindow = window.open(
-      popupUrl,
-      '_blank',
-      [
-        `width=${width}`,
-        `height=${height}`,
-        `left=${left}`,
-        `top=${top}`,
-        'location=yes',
-        'menubar=no',
-        'resizable=no',
-        'status=no',
-        'titlebar=yes',
-        'toolbar=no'
-      ].join(',')
-    );
-
-    this.popupWindow.document.write(`<body><h3>${words}</h3></body>`);
-  }
-
   showPopupWindow(qrcode) {
+    console.log('showPopupWindow'); // todo remove dev item
     if(!qrcode){
       throw Error("No connection string supplied to popup window")
     }
@@ -114,6 +74,7 @@ export default class PopUpCreator {
   }
 
   closePopupWindow() {
+    console.log(this.popupWindow); // todo remove dev item
     if (this.popupWindow) {
       this.popupWindow.close();
       this.popupUrl = null;

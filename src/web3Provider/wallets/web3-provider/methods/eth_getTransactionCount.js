@@ -1,23 +1,22 @@
 import utils from 'web3-utils';
 import { toPayload } from '../jsonrpc';
 import EthCalls from '../web3Calls';
-import store from 'store';
 import BigNumber from 'bignumber.js';
 import  Misc  from '../../helpers/misc';
 
 export default async ({ payload, requestManager }, res, next) => {
+  console.log(payload, requestManager); // todo remove dev item
   if (payload.method !== 'eth_getTransactionCount') return next();
   const ethCalls = new EthCalls(requestManager);
   const addr = payload.params[0];
   let cached = {};
-  if (store.get(utils.sha3(addr)) === undefined) {
+  if (requestManager.nonceCache === undefined) {
     cached = {
       nonce: '0x00',
       timestamp: 0
     };
-    store.set(utils.sha3(addr), cached);
   } else {
-    cached = store.get(utils.sha3(addr));
+    cached = requestManager.nonceCache;
   }
   const timeDiff =
     Math.round((new Date().getTime() - cached.timestamp) / 1000) / 60;
@@ -36,7 +35,7 @@ export default async ({ payload, requestManager }, res, next) => {
         timestamp: +new Date()
       };
     }
-    store.set(utils.sha3(addr), cached);
+    requestManager.nonceCache = cached;
   }
   res(null, toPayload(payload.id, cached.nonce));
 };

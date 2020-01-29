@@ -1,18 +1,18 @@
-import MEWconnect from '../../../../index';
-import networks from '../../networks';
+import MEWconnect from '../../../index';
+import networks from '../networks';
 import { Transaction } from 'ethereumjs-tx';
-import WalletInterface from '../../../wallets/WalletInterface';
-import { MEW_CONNECT as mewConnectType } from '../../bip44';
+import WalletInterface from '../WalletInterface';
+import { MEW_CONNECT as mewConnectType } from '../bip44';
 import {
   getSignTransactionObject,
   sanitizeHex,
   getBufferFromHex,
   calculateChainIdFromV
-} from '../../utils';
+} from '../utils';
 import { hashPersonalMessage } from 'ethereumjs-util';
 import errorHandler from './errorHandler';
-import commonGenerator from '../../helpers/commonGenerator';
-import  Misc  from '../../helpers/misc';
+import commonGenerator from '../helpers/commonGenerator';
+import Misc from '../helpers/misc';
 
 const V1_SIGNAL_URL = 'https://connect.mewapi.io';
 const V2_SIGNAL_URL = 'wss://connect2.mewapi.io/staging';
@@ -26,14 +26,17 @@ class MEWconnectWalletInterface extends WalletInterface {
     this.txSigner = txSigner;
     this.msgSigner = msgSigner;
     this.isHardware = isHardware;
-    this.mewConnect = mewConnect;
+    this.mewConnect = mewConnect();
   }
+
   getConnection() {
     return this.mewConnect;
   }
+
   signTransaction(txParams) {
     return super.signTransaction(txParams, this.txSigner);
   }
+
   signMessage(msg) {
     return super.signMessage(msg, this.msgSigner);
   }
@@ -45,11 +48,13 @@ class MEWconnectWallet {
     this.isHardware = IS_HARDWARE;
     this.mewConnect = new MEWconnect.Initiator({
       v1Url: V1_SIGNAL_URL,
-      v2Url: V2_SIGNAL_URL
+      v2Url: V2_SIGNAL_URL,
+      showPopup: true
     });
   }
-  async init(qrcode) {
-    this.mewConnect.on('codeDisplay', qrcode);
+
+  async init(qrcodeListener = () => {}) {
+    this.mewConnect.on('codeDisplay', qrcodeListener);
     const txSigner = async tx => {
       let tokenInfo;
       if (tx.data.slice(0, 10) === '0xa9059cbb') {
@@ -79,9 +84,9 @@ class MEWconnectWallet {
           if (signedChainId !== networkId)
             throw new Error(
               'Invalid networkId signature returned. Expected: ' +
-                networkId +
-                ', Got: ' +
-                signedChainId,
+              networkId +
+              ', Got: ' +
+              signedChainId,
               'InvalidNetworkId'
             );
           resolve(getSignTransactionObject(tx));
@@ -104,6 +109,7 @@ class MEWconnectWallet {
     const mewConnect = () => {
       return this.mewConnect;
     };
+
     const address = await signalerConnect(V1_SIGNAL_URL, this.mewConnect);
 
     return new MEWconnectWalletInterface(
@@ -116,9 +122,10 @@ class MEWconnectWallet {
     );
   }
 }
-const createWallet = async qrcode => {
+
+const createWallet = async qrcodeListener => {
   const _MEWconnectWallet = new MEWconnectWallet();
-  const _tWallet = await _MEWconnectWallet.init(qrcode);
+  const _tWallet = await _MEWconnectWallet.init(qrcodeListener);
   return _tWallet;
 };
 createWallet.errorHandler = errorHandler;
@@ -128,6 +135,7 @@ const signalerConnect = (url, mewConnect) => {
     mewConnect.on('RtcConnectedEvent', () => {
       mewConnect.sendRtcMessage('address', '');
       mewConnect.once('address', data => {
+        console.log('mewConnect.once', data); // todo remove dev item
         resolve(data.address);
       });
     });

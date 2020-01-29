@@ -8,7 +8,7 @@ import MewConnectInitiatorV2 from './MewConnectInitiatorV2';
 import MewConnectInitiatorV1 from './MewConnectInitiatorV1';
 
 import WebRtcCommunication from '../WebRtcCommunication';
-
+import PopUpCreator from '../popUpCreator';
 const debug = debugLogger('MEWconnect:initiator-base');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
@@ -18,6 +18,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
   constructor(options = {}) {
     super(options.version);
     this.optionVersion = options.version || 2.0;
+    this.showPopup = options.showPopup || false;
     try {
       this.supportedBrowser = MewConnectCommon.checkBrowser();
 
@@ -47,18 +48,15 @@ export default class MewConnectInitiator extends MewConnectCommon {
       // this.Peer = SimplePeer;
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
       this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
+      this.popupCreator = new PopUpCreator();
 
       this.connPath = '';
 
-      // this.signals = this.jsonDetails.signals;
-      // this.signalsV1 = this.jsonDetails.signalsV1;
-      // this.signalsV2 = this.jsonDetails.signalsV2;
-      // this.rtcEvents = this.jsonDetails.rtc;
       this.version = this.jsonDetails.version;
       // this.versions = this.jsonDetails.versions;
       this.lifeCycle = this.jsonDetails.lifeCycle;
       this.stunServers = options.stunServers || this.jsonDetails.stunSrvers;
-      // this.iceStates = this.jsonDetails.iceConnectionState;
+
       // Socket is abandoned.  disconnect.
       this.timer = null;
       setTimeout(() => {
@@ -93,6 +91,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
         if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
           this.rtcDestroy();
         }
+        this.popupCreator.closePopupWindow();
       };
     }
   }
@@ -117,7 +116,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
   // can be used to listen to specific events, especially those that pass data
   uiCommunicator(event, data) {
-    console.log(event, data); // todo remove dev item
+    console.log('MewConnectInitiator', event, data); // todo remove dev item
     this.emit(event, data);
     this.emitStatus(event);
   }
@@ -141,9 +140,13 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
       debug(qrCodeString);
       console.log(qrCodeString); // todo remove dev item
-      this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
-      this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
-      this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
+      if(this.showPopup){
+        this.popupCreator.openPopupWindow(qrCodeString);
+      } else {
+        this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
+        this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
+        this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
+      }
     } catch (e) {
       debug('displayCode error:', e);
     }
@@ -212,32 +215,27 @@ Keys
     this.V2.on('socketPaired', () =>{
       this.V1.socketDisconnect();
     })
+
+    this.webRtcCommunication.on(this.jsonDetails.lifeCycle.RtcConnectedEvent, ()=>{
+      this.popupCreator.closePopupWindow();
+    })
   }
 
   disconnectRTC() {
     debugStages('DISCONNECT RTC');
     this.connected = false;
     this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
-    this.V1.disconnectRTC();
-    this.V2.disconnectRTC();
+    this.webRtcCommunication.disconnectRTC();
+    // this.V2.disconnectRTC();
     this.instance = null;
   }
 
-  // beginRtcSequence(source, data) {
-  //   console.log('beginRtcSequence', source, data); // todo remove dev item
-  //   if (source === 'V2') {
-  //     this.connPath = 'V2';
-  //     this.V1.socketDisconnect();
-  //     this.beginRtcSequenceV2(data);
-  //   } else if (source === 'V1') {
-  //     this.connPath = 'V1';
-  //     this.socketV2Disconnect();
-  //     this.beginRtcSequenceV2(data);
-  //   }
-  // }
-
   async rtcSend(arg) {
     this.webRtcCommunication.rtcSend(arg);
+  }
+
+  sendRtcMessage(type, data){
+    this.webRtcCommunication.sendRtcMessage(type, data);
   }
 
   dataReceived(data) {
