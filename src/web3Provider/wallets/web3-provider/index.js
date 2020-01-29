@@ -1,22 +1,18 @@
 import HttpProvider from './providers/http-provider';
 import WSProvider from './providers/ws-provider';
-import EtherscanProvider from './providers/etherscan-provider';
-import PocketProvider from './providers/pocket-provider';
+
 class MEWProvider {
-  constructor(host, options, store, eventHub) {
+  constructor(host, options, web3, eventHub) {
     if (host && typeof host === 'string') {
-      if (host.includes('etherscan')) {
-        return new EtherscanProvider(host, options, store, eventHub);
-      } else if (host.includes('pokt')) {
-        return new PocketProvider(host, options, store, eventHub);
-      } else if (/^http(s)?:\/\//i.test(host)) {
-        return new HttpProvider(host, options, store, eventHub);
+      if (/^http(s)?:\/\//i.test(host)) {
+        return new HttpProvider(host, options, web3, eventHub);
       } else if (/^ws(s)?:\/\//i.test(host)) {
-        return new WSProvider(host, options, store, eventHub);
+        return new WSProvider(host, options, web3, eventHub);
       } else if (host) {
         throw new Error('Can\'t autodetect provider for "' + host + '"');
       }
     }
   }
 }
+
 export default MEWProvider;

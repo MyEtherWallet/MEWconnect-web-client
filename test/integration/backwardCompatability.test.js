@@ -1,8 +1,8 @@
 'use strict';
 
 // Libs //
-import Initiator from '../../src/MewConnectInitiator';
-import MewConnectCrypto from '../../src/MewConnectCrypto';
+import Initiator from '../../src/connectClient/MewConnectInitiator';
+import MewConnectCrypto from '../../src/connectClient/MewConnectCrypto';
 import Receiver from '@clients/receiverV1';
 import ReceiverTurn from '@clients/receiverV1Turn';
 import { rtcSignals, roles } from '@signals';

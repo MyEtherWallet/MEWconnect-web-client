@@ -1,23 +1,26 @@
-import {
+const LEDGER = 'ledger';
+const TREZOR = 'trezor';
+const BITBOX = 'bitbox';
+const SECALOT = 'secalot';
+const KEEPKEY = 'keepkey';
+const MEW_CONNECT = 'mew_connect';
+const KEYSTORE = 'keystore';
+const MNEMONIC = 'mnemonic';
+const WEB3_WALLET = 'web3_wallet';
+const PRIV_KEY = 'priv_key';
+const WATCH_ONLY = 'watchOnly';
+const XWALLET = 'xwallet';
+export {
   LEDGER,
   TREZOR,
   BITBOX,
   SECALOT,
   KEEPKEY,
-  MNEMONIC
-} from './walletTypes';
-import ledgerPaths from './ledgerPaths';
-import trezorPaths from './trezorPaths';
-import bitboxPaths from './bitboxPaths';
-import secalotPaths from './secalotPaths';
-import keepkeyPaths from './keepkeyPaths';
-import mnemonicPaths from './mnemonicPaths';
-
-export default {
-  [LEDGER]: ledgerPaths,
-  [TREZOR]: trezorPaths,
-  [BITBOX]: bitboxPaths,
-  [SECALOT]: secalotPaths,
-  [KEEPKEY]: keepkeyPaths,
-  [MNEMONIC]: mnemonicPaths
+  MEW_CONNECT,
+  KEYSTORE,
+  MNEMONIC,
+  WEB3_WALLET,
+  PRIV_KEY,
+  WATCH_ONLY,
+  XWALLET
 };

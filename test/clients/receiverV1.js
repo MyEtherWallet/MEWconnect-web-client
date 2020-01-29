@@ -16,8 +16,8 @@ const {
   stages,
   lifeCycle,
   communicationTypes
-} = require('../../src/constants');
-const { version, stunServers } = require('../../src/config');
+} = require('../../src/connectClient/constants');
+const { version, stunServers } = require('../../src/connectClient/config');
 
 const signalV1 = {
   attemptingTurn: 'attemptingTurn',

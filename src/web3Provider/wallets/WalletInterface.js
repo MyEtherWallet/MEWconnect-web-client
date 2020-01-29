@@ -16,7 +16,7 @@ import {
 import commonGenerator from './helpers/commonGenerator';
 import { Transaction } from 'ethereumjs-tx';
 import { toChecksumAddress } from './helpers/addressUtils';
-import {ETH} from './networks'
+import Networks from './networks'
 
 
 const toBuffer = v => {
@@ -98,7 +98,7 @@ class WalletInterface {
     return new Promise((resolve, reject) => {
       if (!this.isPubOnly) {
         const tx = new Transaction(txParams, {
-          common: commonGenerator(ETH)
+          common: commonGenerator(Networks.ETH)
         });
         const networkId = tx.getChainId();
         tx.sign(this.privateKey);

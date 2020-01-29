@@ -13,8 +13,8 @@ const {
   stages,
   lifeCycle,
   communicationTypes
-} = require('../../src/constants/constants');
-const { version, stunServers } = require('../../src/config');
+} = require('../../src/connectClient/constants/constants');
+const { version, stunServers } = require('../../src/connectClient/config');
 
 const debug = debugLogger('MEWconnect:receiver');
 const debugState = debugLogger('MEWconnect:receiver-state');

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Integration from '../../../../src/web3Provider/popUpHandler.js'
+import Integration from '../../../../src/web3Provider/integration'
 export default {
   name: 'app',
   data(){

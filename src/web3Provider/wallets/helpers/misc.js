@@ -3,7 +3,7 @@ import url from 'url';
 import utils from 'web3-utils';
 import { isHexString, toBuffer as utilsToBuffer } from 'ethereumjs-util';
 import { uint, address, string, bytes, bool } from './solidityTypes';
-import xss from 'xss';
+// import xss from 'xss';
 import darkList from '../address-darklist/address-darklist'
 
 // import { MEW_CX } from '@/builds/configs/types';
@@ -212,16 +212,16 @@ const isContractArgValid = (value, solidityType) => {
   return false;
 };
 
-const stripTags = content => {
-  const insertToDom = new DOMParser().parseFromString(content, 'text/html');
-  insertToDom.body.textContent.replace(/(<([^>]+)>)/gi, '') || '';
-  const string = xss(insertToDom.body.textContent, {
-    whitelist: [],
-    stripIgnoreTag: true,
-    stripIgnoreTagBody: '*'
-  });
-  return string;
-};
+// const stripTags = content => {
+//   const insertToDom = new DOMParser().parseFromString(content, 'text/html');
+//   insertToDom.body.textContent.replace(/(<([^>]+)>)/gi, '') || '';
+//   const string = xss(insertToDom.body.textContent, {
+//     whitelist: [],
+//     stripIgnoreTag: true,
+//     stripIgnoreTagBody: '*'
+//   });
+//   return string;
+// };
 //
 // const isMewCx = () => {
 //   return BUILD_TYPE === MEW_CX;
@@ -233,12 +233,12 @@ export default {
   padLeftEven,
   formatDate,
   isValidENSorEtherAddress,
-  isValidENSAddress,
+  // isValidENSAddress,
   isValidETHAddress,
   sanitizeHex,
   validateHexString,
   scrollToTop,
-  reorderNetworks,
+  // reorderNetworks,
   isDarklisted,
   solidityType,
   isInt,
@@ -246,7 +246,7 @@ export default {
   getService,
   stringToArray,
   isContractArgValid,
-  stripTags,
-  isMewCx,
+  // stripTags,
+  // isMewCx,
   toBuffer
 };

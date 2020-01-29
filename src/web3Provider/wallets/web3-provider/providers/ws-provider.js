@@ -1,7 +1,7 @@
 import Web3WSProvider from './ws-web3-provider';
 import { Manager as Web3RequestManager } from 'web3-core-requestmanager';
 import MiddleWare from '../middleware';
-import workerTimer from '@/helpers/webWorkerTimer';
+import workerTimer from '../../helpers/webWorkerTimer';
 import {
   ethSendTransaction,
   ethSignTransaction,
@@ -12,7 +12,7 @@ import {
   netVersion
 } from '../methods';
 class WSProvider {
-  constructor(host, options, store, eventHub) {
+  constructor(host, options, web3, eventHub) {
     this.wsProvider = new Web3WSProvider(host, options);
     this.oWSProvider = new Web3WSProvider(host, options);
     this.lastMessage = new Date().getTime();
@@ -32,7 +32,7 @@ class WSProvider {
           '{"jsonrpc":"2.0","method":"net_version","params":[],"id":1}'
         );
       if (
-        !Object.is(this.wsProvider, store.state.web3.currentProvider) &&
+        /*!Object.is(this.wsProvider, web3.currentProvider) &&*/
         this.lastMessage + 10 * 60 * 1000 < new Date().getTime() //wait extra 10 minutes
       ) {
         this.wsProvider.disconnect();
@@ -60,9 +60,9 @@ class WSProvider {
       }
       const req = {
         payload,
-        store,
+        // store,
         requestManager: new Web3RequestManager(this.oWSProvider),
-        eventHub
+        // eventHub
       };
       const middleware = new MiddleWare();
       middleware.use(ethSendTransaction);
