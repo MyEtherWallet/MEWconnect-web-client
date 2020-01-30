@@ -195,7 +195,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     try {
       // if (!websocketURL)
       //   websocketURL =
-      //     'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev';
       if (typeof jest !== 'undefined' && this.connId === null) {
         // for tests only
         // this.generateKeys();

@@ -43,7 +43,7 @@ class MEWconnectWalletInterface extends WalletInterface {
 }
 
 class MEWconnectWallet {
-  constructor() {
+  constructor(state) {
     this.identifier = mewConnectType;
     this.isHardware = IS_HARDWARE;
     this.mewConnect = new MEWconnect.Initiator({
@@ -51,6 +51,7 @@ class MEWconnectWallet {
       v2Url: V2_SIGNAL_URL,
       showPopup: true
     });
+    this.state = state || {}
   }
 
   async init(qrcodeListener = () => {}) {
@@ -77,8 +78,7 @@ class MEWconnectWallet {
         this.mewConnect.sendRtcMessage('signTx', JSON.stringify(tx));
         this.mewConnect.once('signTx', result => {
           tx = new Transaction(sanitizeHex(result), {
-            // common: commonGenerator(store.state.network)
-            common: commonGenerator(networks.ETH)
+            common: commonGenerator(this.state.network.type)
           });
           const signedChainId = calculateChainIdFromV(tx.v);
           if (signedChainId !== networkId)
@@ -123,9 +123,9 @@ class MEWconnectWallet {
   }
 }
 
-const createWallet = async qrcodeListener => {
-  const _MEWconnectWallet = new MEWconnectWallet();
-  const _tWallet = await _MEWconnectWallet.init(qrcodeListener);
+const createWallet = async state => {
+  const _MEWconnectWallet = new MEWconnectWallet(state);
+  const _tWallet = await _MEWconnectWallet.init();
   return _tWallet;
 };
 createWallet.errorHandler = errorHandler;

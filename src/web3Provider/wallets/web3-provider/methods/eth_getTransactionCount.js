@@ -5,7 +5,6 @@ import BigNumber from 'bignumber.js';
 import  Misc  from '../../helpers/misc';
 
 export default async ({ payload, requestManager }, res, next) => {
-  console.log(payload, requestManager); // todo remove dev item
   if (payload.method !== 'eth_getTransactionCount') return next();
   const ethCalls = new EthCalls(requestManager);
   const addr = payload.params[0];

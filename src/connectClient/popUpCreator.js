@@ -1,10 +1,4 @@
-import path from 'path';
 import QrCode from 'qrcode';
-// import Initiator from './connectClient/MewConnectInitiator';
-// import Web3 from 'web3';
-// import MEWProvider from './web3Provider/wallets/web3-provider';
-// import Networks from './web3Provider/wallets/networks';
-// import url from 'url';
 
 const IPCMessageType = {
   SESSION_ID_REQUEST: 'SESSION_ID_REQUEST',

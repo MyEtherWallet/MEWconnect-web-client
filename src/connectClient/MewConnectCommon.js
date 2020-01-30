@@ -16,7 +16,7 @@ import {
   stages,
   lifeCycle,
   communicationTypes
-} from './constants';
+} from './constants/index';
 import { stunServers } from './config';
 
 const logger = createLogger('MewConnectCommon');

@@ -6,18 +6,21 @@ import { toPayload } from '../jsonrpc';
 import * as locStore from 'store';
 import { getSanitizedTx } from './utils';
 import BigNumber from 'bignumber.js';
-import  Misc from '../../helpers/misc';
+import Misc from '../../helpers/misc';
 
 const setEvents = (promiObj, tx, dispatch) => {
   promiObj
     .once('transactionHash', hash => {
-      dispatch('addNotification', ['Hash', tx.from, tx, hash]);
+      console.log(['Hash', tx.from, tx, hash]); // todo remove dev item
+      // dispatch('addNotification', ['Hash', tx.from, tx, hash]);
     })
     .once('receipt', res => {
-      dispatch('addNotification', ['Receipt', tx.from, tx, res]);
+      console.log(['Receipt', tx.from, tx, res]); // todo remove dev item
+      // dispatch('addNotification', ['Receipt', tx.from, tx, res]);
     })
     .on('error', err => {
-      dispatch('addNotification', ['Error', tx.from, tx, err]);
+      console.log(['Error', tx.from, tx, err]); // todo remove dev item
+      // dispatch('addNotification', ['Error', tx.from, tx, err]);
     });
 };
 export default async (
@@ -28,6 +31,7 @@ export default async (
   if (payload.method !== 'eth_sendTransaction') return next();
   const tx = Object.assign({}, payload.params[0]);
   // tx.gasPrice = tx.gasPrice unit.toWei(store.state.gasPrice, 'gwei').toString();
+  console.log("eth_sendTransaction", tx); // todo remove dev item
   const localTx = Object.assign({}, tx);
   delete localTx['gas'];
   delete localTx['nonce'];
@@ -35,8 +39,8 @@ export default async (
   try {
     tx.nonce = !tx.nonce
       ? await store.state.web3.eth.getTransactionCount(
-          store.state.wallet.getAddressString()
-        )
+        store.state.wallet.getAddressString()
+      )
       : tx.nonce;
     tx.gas = !tx.gas ? await ethCalls.estimateGas(localTx) : tx.gas;
   } catch (e) {
@@ -47,6 +51,7 @@ export default async (
   getSanitizedTx(tx)
     .then(_tx => {
       eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
+        console.log('_response.rawTransaction', _response); // todo remove dev item
         const _promiObj = store.state.web3.eth.sendSignedTransaction(
           _response.rawTransaction
         );
@@ -54,18 +59,14 @@ export default async (
         _promiObj
           .once('transactionHash', hash => {
             if (store.state.wallet !== null) {
-              const localStoredObj = locStore.get(
-                utils.sha3(store.state.wallet.getChecksumAddressString())
-              );
-              locStore.set(
-                utils.sha3(store.state.wallet.getChecksumAddressString()),
-                {
-                  nonce: Misc.sanitizeHex(
-                    new BigNumber(localStoredObj.nonce).plus(1).toString(16)
-                  ),
-                  timestamp: localStoredObj.timestamp
-                }
-              );
+
+              const localStoredObj = requestManager.nonceCache;
+              requestManager.nonceCache = {
+                nonce: Misc.sanitizeHex(
+                  new BigNumber(localStoredObj.nonce).plus(1).toString(16)
+                ),
+                timestamp: localStoredObj.timestamp
+              };
             }
             res(null, toPayload(payload.id, hash));
           })

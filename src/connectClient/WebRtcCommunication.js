@@ -137,12 +137,10 @@ export default class WebRtcCommunication extends MewConnectCommon {
     const plainTextOffer = this.answersReceived[this.answersReceived.length - 1];
     debug('webRtc receiveTurnAnswer', this.answerReceived);
     debug(`active PEER_ID: ${this.p.peerInstanceId}`);
-    // if(!this.answerReceived[this.p.peerInstanceId]){
     try {
       this.answerReceived[this.p.peerInstanceId] = true;
       console.log('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
       this.p.signal(plainTextOffer);
-      // console.log(this.p); // todo remove dev item
     } catch (e) {
       // eslint-disable-next-line
       console.error(e);
@@ -231,20 +229,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
     }
   }
 
-  // onConnectV2(peerID) {
-  //   try {
-  //     debugStages('RTC CONNECT', 'ok');
-  //     debugPeer('peerID', peerID);
-  //     this.connected = true;
-  //     this.turnDisabled = true;
-  //     this.socketV2Emit(this.signalsV2.rtcConnected, this.socketKey);
-  //     this.socketV2Disconnect();
-  //     this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
-  //   } catch (e) {
-  //     debug('onConnect error:', e);
-  //   }
-  // }
-
   // =========================================================
   // =========================================================
   // =========================================================
@@ -318,11 +302,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   useFallback() {
     this.emit('useFallback');
-    // if (this.connPath === 'V2') {
-    //   this.useFallbackV2();
-    // } else if (this.connPath === 'V1') {
-    //   this.useFallbackV1();
-    // }
   }
 
   // ----- WebRTC Communication Methods

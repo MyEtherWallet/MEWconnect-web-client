@@ -64,7 +64,7 @@ export default {
     walletLink() {
       const APP_NAME = 'My Awesome App';
       // const APP_LOGO_URL = "https://example.com/logo.png"
-      const ETH_JSONRPC_URL = 'https://mainnet.infura.io/v3/c9b249497d074ab59c47a97bdfe6b401';
+      const ETH_JSONRPC_URL = 'https://mainnet.infura.io/v3/';
       const CHAIN_ID = 1;
 
 // Initialize WalletLink

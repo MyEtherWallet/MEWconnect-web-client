@@ -9,11 +9,8 @@
 
 import MewConnectInitiator from './connectClient/MewConnectInitiator';
 import MewConnectCrypto from './connectClient/MewConnectCrypto';
-import PopUpCreator from './popUpCreator';
-
 
 export default {
   Crypto: MewConnectCrypto,
-  Initiator: MewConnectInitiator,
-  PopUpCreator: PopUpCreator
+  Initiator: MewConnectInitiator
 };

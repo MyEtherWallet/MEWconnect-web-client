@@ -17,7 +17,7 @@ import { signalV1, signalV2 } from './signals';
 
 const signalUrl = {
   V1: 'https://connect.mewapi.io',
-  V2: 'wss://0ec2scxqck.execute-api.us-west-1.amazonaws.com/dev'
+  V2: 'wss://connect2.mewapi.io/staging'
 };
 
 const signals = {
