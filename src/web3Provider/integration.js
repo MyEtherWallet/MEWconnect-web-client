@@ -1,4 +1,4 @@
-import PopUpCreator from '../popUpCreator';
+import PopUpCreator from './popUpCreator';
 import path from 'path';
 import QrCode from 'qrcode';
 import Initiator from '../connectClient/MewConnectInitiator';
@@ -36,8 +36,8 @@ export default class Integration {
     this.isEnabled = false;
   }
 
-  async openPopupWindow() {
-    this.showPopupWindow();
+  showNotice(){
+    this.popUpHandler.showNotice("disconnected");
   }
 
   async enable() {
@@ -45,10 +45,6 @@ export default class Integration {
     console.log(this.state.wallet); // todo remove dev item
     this.disconnectNotifier();
     return [this.state.wallet.getChecksumAddressString()];
-    // this.showPopupWindow();
-    // this.initiator.on(this.initiator.lifeCycle.codeDisplay, (text) => {
-    //   this.popUpHandler.showPopupWindow(text);
-    // });
   }
 
   makeWeb3Provider(RPC_URL) {
@@ -86,10 +82,10 @@ export default class Integration {
     console.log(connection); // todo remove dev item
     console.log(connection.lifeCycle); // todo remove dev item
     connection.webRtcCommunication.on(connection.lifeCycle.RtcDisconnectEvent, () => {
-      this.popUpHandler.showDisconnectedNotifier();
+      this.popUpHandler.showNotice("disconnected");
     });
     connection.webRtcCommunication.on(connection.lifeCycle.RtcClosedEvent, () => {
-      this.popUpHandler.showDisconnectedNotifier();
+      this.popUpHandler.showNotice("disconnected");
     });
 
 
@@ -115,12 +111,12 @@ export default class Integration {
       }
       this.responseFunction = resolve;
       const signPromise = this.state.wallet.signTransaction(tx);
-      this.popUpHandler.showNotificationPopupWindow('Check your phone to sign the transaction');
+      this.popUpHandler.showNotice('Check your phone to sign the transaction');
       signPromise
         .then(_response => {
           const signedTxObject = _response;
           const signedTx = signedTxObject.rawTransaction;
-          this.popUpHandler.closePopupWindow();
+          // this.popUpHandler.closePopupWindow();
           resolve(signedTxObject);
         })
         .catch(this.state.wallet.errorHandler);
@@ -150,6 +146,15 @@ export default class Integration {
       this.signedTx = this.signedTxObject.rawTransaction;
       this.responseFunction(this.signedTxObject);
     });
+    this.eventHub.on('Hash', (hash) =>{
+      this.popUpHandler.showNotice(`Transaction sent: <a href="${this.state.network.type.blockExplorerTX.replace('[[txHash]]', hash)}" target="_blank">View</a>`);
+    })
+    this.eventHub.on('Receipt', () =>{
+      this.popUpHandler.showNotice("Transaction Completed");
+    })
+    this.eventHub.on('Error', () =>{
+      this.popUpHandler.showNotice("Error");
+    })
   }
 
   parseRawTx(tx) {

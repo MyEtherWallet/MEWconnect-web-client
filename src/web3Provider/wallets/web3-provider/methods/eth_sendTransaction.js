@@ -8,18 +8,21 @@ import { getSanitizedTx } from './utils';
 import BigNumber from 'bignumber.js';
 import Misc from '../../helpers/misc';
 
-const setEvents = (promiObj, tx, dispatch) => {
+const setEvents = (promiObj, tx, eventHub) => {
   promiObj
     .once('transactionHash', hash => {
       console.log(['Hash', tx.from, tx, hash]); // todo remove dev item
+      eventHub.emit('Hash', hash)
       // dispatch('addNotification', ['Hash', tx.from, tx, hash]);
     })
     .once('receipt', res => {
       console.log(['Receipt', tx.from, tx, res]); // todo remove dev item
+      eventHub.emit('Receipt')
       // dispatch('addNotification', ['Receipt', tx.from, tx, res]);
     })
     .on('error', err => {
       console.log(['Error', tx.from, tx, err]); // todo remove dev item
+      eventHub.emit('Error', err)
       // dispatch('addNotification', ['Error', tx.from, tx, err]);
     });
 };
@@ -73,7 +76,7 @@ export default async (
           .on('error', err => {
             res(err);
           });
-        setEvents(_promiObj, _tx, store.dispatch);
+        setEvents(_promiObj, _tx, eventHub);
       });
     })
     .catch(e => {

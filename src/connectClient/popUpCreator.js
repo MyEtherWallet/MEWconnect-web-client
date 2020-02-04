@@ -63,6 +63,71 @@ export default class PopUpCreator {
     );
 
     this.popupWindow.document.write('<body><canvas id="canvas"></canvas></body>');
+    // const cssText = `/* The snackbar - position it at the bottom and in the middle of the screen */
+    //     #${this.elementId}-img {
+    //       height: 25%;
+    //       width: 75%;
+    //     }
+    //
+    //     .hidden {
+    //       visibility: hidden;
+    //     }
+    //
+    //     .shown {
+    //       visibility: visible;
+    //     }
+    //
+    //     #${this.elementId} {
+    //       visibility: hidden; /* Hidden by default. Visible on click */
+    //       min-width: 250px; /* Set a default minimum width */
+    //       margin-left: -125px; /* Divide value of min-width by 2 */
+    //       background-color: rgba(226, 226, 226, 0.2);
+    //       color: #000000; /* White text color */
+    //       text-align: center; /* Centered text */
+    //       border-radius: 2px; /* Rounded borders */
+    //       padding: 16px; /* Padding */
+    //       position: fixed; /* Sit on top of the screen */
+    //       z-index: 1; /* Add a z-index if needed */
+    //       right: 30px; /* Center the snackbar */
+    //       top: 30px; /* 30px from the bottom */
+    //     }
+    //
+    //     /* Show the snackbar when clicking on a button (class added with JavaScript) */
+    //     #${this.elementId}.show {
+    //       visibility: visible; /* Show the snackbar */
+    //       /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+    //       However, delay the fade out process for 2.5 seconds */
+    //       -webkit-animation: fadein-${this.elementId} 0.5s, fadeout-${this.elementId} 0.5s 2.5s;
+    //       animation: fadein-${this.elementId} 0.5s, fadeout-${this.elementId} 0.5s 2.5s;
+    //     }
+    //
+    //     /* Animations to fade the snackbar in and out */
+    //     @-webkit-keyframes fadein-${this.elementId} {
+    //       from {top: 0; opacity: 0;}
+    //       to {top: 30px; opacity: 1;}
+    //     }
+    //
+    //     @keyframes fadein-${this.elementId} {
+    //       from {top: 0; opacity: 0;}
+    //       to {top: 30px; opacity: 1;}
+    //     }
+    //
+    //     @-webkit-keyframes fadeout-${this.elementId} {
+    //       from {top: 30px; opacity: 1;}
+    //       to {top: 0; opacity: 0;}
+    //     }
+    //
+    //     @keyframes fadeout-${this.elementId} {
+    //       from {top: 30px; opacity: 1;}
+    //       to {top: 0; opacity: 0;}
+    //     }`;
+    // const css = document.createElement('style');
+    // css.type = 'text/css';
+    // if ('textContent' in css)
+    //   css.textContent = cssText;
+    // else
+    //   css.innerText = cssText;
+    // document.body.appendChild(css);
     const element = this.popupWindow.document.getElementById('canvas');
     QrCode.toCanvas(element, qrcode);
   }
