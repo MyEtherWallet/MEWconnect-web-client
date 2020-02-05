@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import MewConnect from '../../../../src';
+import {Provider} from '../../../../src';
 import WalletLink from 'walletlink';
 import Web3 from 'web3';
 import logo from '../../../../src/connectProvider/logo.svg'
@@ -37,7 +37,7 @@ export default {
     };
   },
   mounted() {
-    this.connect = new MewConnect.Provider();
+    this.connect = new Provider();
     this.ethereum = this.connect.makeWeb3Provider();
   },
   methods: {
