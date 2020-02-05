@@ -1,8 +1,8 @@
 import MEWconnect from '../../../index';
-import networks from '../networks';
+import networks from '../networks/index';
 import { Transaction } from 'ethereumjs-tx';
 import WalletInterface from '../WalletInterface';
-import { MEW_CONNECT as mewConnectType } from '../bip44';
+import { MEW_CONNECT as mewConnectType } from '../bip44/index';
 import {
   getSignTransactionObject,
   sanitizeHex,
@@ -51,7 +51,7 @@ class MEWconnectWallet {
       v2Url: V2_SIGNAL_URL,
       showPopup: true
     });
-    this.state = state || {}
+    this.state = state || {};
   }
 
   async init(qrcodeListener = () => {}) {
@@ -130,8 +130,11 @@ const createWallet = async state => {
 };
 createWallet.errorHandler = errorHandler;
 const signalerConnect = (url, mewConnect) => {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     mewConnect.initiatorStart(url);
+    // mewConnect.on('AuthRejected', () => {
+    //   reject();
+    // });
     mewConnect.on('RtcConnectedEvent', () => {
       mewConnect.sendRtcMessage('address', '');
       mewConnect.once('address', data => {

@@ -1,4 +1,4 @@
-import tokens from '../tokens/tokens-eth'
+import tokens from '../tokens/tokens-eth.json'
 export default {
   name: 'ETH',
   name_long: 'Ethereum',

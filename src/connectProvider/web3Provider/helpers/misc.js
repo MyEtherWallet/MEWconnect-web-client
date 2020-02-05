@@ -4,7 +4,7 @@ import utils from 'web3-utils';
 import { isHexString, toBuffer as utilsToBuffer } from 'ethereumjs-util';
 import { uint, address, string, bytes, bool } from './solidityTypes';
 // import xss from 'xss';
-import darkList from '../address-darklist/address-darklist'
+import darkList from '../address-darklist/address-darklist.json'
 
 // import { MEW_CX } from '@/builds/configs/types';
 

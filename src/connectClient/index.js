@@ -7,12 +7,10 @@
 // the crypto constructor is a collection of methods used by both the initiator and receiver
 // in creating the direct connection
 
-import MewConnectClient from './connectClient/index';
-import MewConnectProvider from './connectProvider/index';
+import MewConnectInitiator from './MewConnectInitiator';
+import MewConnectCrypto from './MewConnectCrypto';
 
 export default {
-  Initiator: MewConnectClient.Initiator,
-  Crypto: MewConnectClient.Crypto,
-  Client: MewConnectClient,
-  Provider: MewConnectProvider
+  Crypto: MewConnectCrypto,
+  Initiator: MewConnectInitiator
 };

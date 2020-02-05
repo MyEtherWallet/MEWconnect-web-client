@@ -5,7 +5,7 @@ import {
   ethSign,
   ethSignTransaction,
   ethGetTransactionCount
-} from '../methods';
+} from '../methods/index';
 class GivenProvider {
   constructor(host, options, store, eventHub) {
     this.givenProvider = Object.assign({}, host);

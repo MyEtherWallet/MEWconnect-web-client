@@ -1,8 +1,8 @@
-import { ETH } from '../types';
+import { KOV } from '../types/index';
 export default {
-  type: ETH,
+  type: KOV,
   service: 'myetherwallet.com',
-  url: 'https://nodes.mewapi.io/rpc/eth',
+  url: 'https://nodes.mewapi.io/rpc/kovan',
   port: 443,
   auth: false,
   username: '',

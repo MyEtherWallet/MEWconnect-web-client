@@ -49,7 +49,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
       this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
       this.popupCreator = new PopUpCreator();
-
+      this.popUpWindow = {};
       this.connPath = '';
 
       this.version = this.jsonDetails.version;
@@ -142,6 +142,12 @@ export default class MewConnectInitiator extends MewConnectCommon {
       console.log(qrCodeString); // todo remove dev item
       if(this.showPopup){
         this.popupCreator.openPopupWindow(qrCodeString);
+        this.popupCreator.window.addEventListener("beforeunload", (event) => {
+          if(!this.connected){
+            this.socketDisconnect();
+            this.emit(this.lifeCycle.AuthRejected)
+          }
+        });
       } else {
         this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
         this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
@@ -217,8 +223,14 @@ Keys
     })
 
     this.webRtcCommunication.on(this.jsonDetails.lifeCycle.RtcConnectedEvent, ()=>{
+      this.connected = true;
       this.popupCreator.closePopupWindow();
     })
+  }
+
+  socketDisconnect(){
+    this.V2.socketDisconnect();
+    this.V1.socketDisconnect();
   }
 
   disconnectRTC() {

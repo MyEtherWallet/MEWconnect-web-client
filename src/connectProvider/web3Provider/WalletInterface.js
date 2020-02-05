@@ -16,7 +16,7 @@ import {
 import commonGenerator from './helpers/commonGenerator';
 import { Transaction } from 'ethereumjs-tx';
 import { toChecksumAddress } from './helpers/addressUtils';
-import Networks from './networks'
+import Networks from './networks/index'
 
 
 const toBuffer = v => {

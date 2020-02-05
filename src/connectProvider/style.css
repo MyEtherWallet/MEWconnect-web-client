@@ -2,7 +2,7 @@
     visibility: hidden; /* Hidden by default. Visible on click */
     min-width: 250px; /* Set a default minimum width */
     margin-left: -125px; /* Divide value of min-width by 2 */
-    background-color: rgba(226, 226, 226, 0.1); /* Black background color */
+    background-color: rgba(5, 158, 135, 0.88); /* Black background color */
     color: #fff; /* White text color */
     text-align: center; /* Centered text */
     border-radius: 2px; /* Rounded borders */
@@ -11,6 +11,7 @@
     z-index: 1; /* Add a z-index if needed */
     left: 50%; /* Center the snackbar */
     bottom: 30px; /* 30px from the bottom */
+    border: rgba(5, 158, 135, 0.88) solid 2px;
 }
 
 /* Show the snackbar when clicking on a button (class added with JavaScript) */

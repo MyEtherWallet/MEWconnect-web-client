@@ -1,4 +1,4 @@
-import { ROP } from '../types';
+import { ROP } from '../types/index';
 export default {
   type: ROP,
   service: 'myetherwallet.com',

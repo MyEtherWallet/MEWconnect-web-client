@@ -1,7 +1,4 @@
 import QrCode from 'qrcode';
-import logo from '../connectProvider/logo.svg';
-import cssStyles from './popupStyles'
-import { noticetext } from '../connectProvider/popupStyles';
 
 const IPCMessageType = {
   SESSION_ID_REQUEST: 'SESSION_ID_REQUEST',
@@ -13,26 +10,97 @@ const IPCMessageType = {
   WEB3_RESPONSE: 'WEB3_RESPONSE',
   LOCAL_STORAGE_BLOCKED: 'LOCAL_STORAGE_BLOCKED'
 };
+import logo from './logo.svg';
+import { popUpStyles, noticetext, innerHTML } from './popupStyles';
+import cssStyles from './windowStyles';
 
-export default class PopUpCreator {
+export default class PopUpHandler {
   constructor(linkUrl) {
     this.walletLinkUrl = linkUrl || 'connect-MEWconnect';
     this.sessionId = '';
     this.sessionId = false;
-    // this.createWindowNotifier();
+    this.index = 0;
+    this.checkCount = 0;
+    this.elementId = 'mew-connect-notice';
+    this.initialcheckIfIdExists();
+    this.createCss();
+    this.createNotice();
+    this.createWindowInformer();
+    this.styleDefaults = {};
+  }
+
+  initialcheckIfIdExists() {
+    const element = window.document.getElementById(this.elementId);
+    if (element) {
+      this.checkCount++;
+      this.elementId = this.elementId + `-${this.checkCount}`;
+      this.initialcheckIfIdExists();
+    }
   }
 
   openPopupWindow(text) {
     this.showPopupWindow(text);
   }
 
-  get window(){
-    return this.popupWindow;
+  showNotice(text, styleOverrides) {
+    if (!text) {
+      text = 'Check your phone to continue';
+    }
+
+    const element = window.document.getElementById(this.elementId);
+    if (styleOverrides) {
+      for (const key in styleOverrides) {
+        this.styleDefaults[key] = element.style[key];
+        element.style[key] = styleOverrides[key];
+      }
+    } else {
+      for (const key in this.styleDefaults) {
+        element.style[key] = this.styleDefaults[key];
+      }
+    }
+    element.className = 'show';
+
+    const elementText = window.document.getElementById(`${this.elementId}-text`);
+    elementText.innerHTML = text;
+
+    setTimeout(function() { element.className = element.className.replace('show', ''); }, 3800);
   }
 
-  createWindowNotifier() {
+  createNotice() {
+    console.log('showPopupWindow'); // todo remove dev item
+    console.log('open?'); // todo remove dev item
+    this.index++;
+
+    const div = window.document.createElement('div');
+    div.id = this.elementId;
+    const img = window.document.createElement('img');
+    img.src = logo;
+    img.id = this.elementId + '-img';
+    div.appendChild(img);
+    const textDiv = window.document.createElement('div');
+    textDiv.id = this.elementId + '-text';
+    div.appendChild(textDiv);
+    // const link = window.document.createElement('a');
+    // link.className = 'hidden'
+    // link.id = this.elementId + '-link';
+    // div.appendChild(link)
+    window.document.body.appendChild(div);
+  }
+
+  createCss() {
+    const css = document.createElement('style');
+    css.type = 'text/css';
+    if ('textContent' in css)
+      css.textContent = popUpStyles(this.elementId);
+    else
+      css.innerText = popUpStyles(this.elementId);
+    document.body.appendChild(css);
+  }
+
+  createWindowInformer() {
     console.log('createWindowInformer'); // todo remove dev item
     console.log('open?'); // todo remove dev item
+    this.index++;
 
     const css = document.createElement('style');
     css.type = 'text/css';
@@ -95,19 +163,17 @@ export default class PopUpCreator {
   showPopupWindow(qrcode) {
     console.log('showPopupWindow'); // todo remove dev item
 
+    const popupUrl = `${this.walletLinkUrl}/#MEWconnect`;
 
     if (this.popupWindow && this.popupWindow.opener) {
       this.popupWindow.focus();
       console.log('returning 1'); // todo remove dev item
       return this.popupWindow;
     }
-
     if (!qrcode) {
       throw Error('No connection string supplied to popup window');
     }
-    const popupUrl = `${this.walletLinkUrl}/#MEWconnect`;
-
-    // this.showWindowInformer();
+    this.showWindowInformer();
 
     const width = 320;
     const height = 520;
@@ -166,7 +232,6 @@ export default class PopUpCreator {
     const element = this.popupWindow.document.getElementById('canvas');
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
 
-
     const css = this.popupWindow.document.createElement('style');
     css.type = 'text/css';
     if ('textContent' in css)
@@ -176,21 +241,19 @@ export default class PopUpCreator {
     this.popupWindow.document.body.appendChild(css);
     console.log(this.popupWindow); // todo remove dev item
     console.log(window); // todo remove dev item
-    console.log('returning 2'); // todo remove dev item
-
     this.popupWindow.addEventListener('beforeunload', () => {
       this.hideNotifier();
     });
-
+    console.log('returning 2'); // todo remove dev item
     return this.popupWindow;
   }
 
   closePopupWindow() {
-    console.log(this.popupWindow); // todo remove dev item
     if (this.popupWindow) {
       this.popupWindow.close();
       this.popupUrl = null;
       this.popupWindow = null;
+      console.log(this.popupWindow); // todo remove dev item
     }
     window.focus();
   }

@@ -1,18 +1,18 @@
-import PopUpCreator from './popUpCreator';
+import PopUpHandler from './popUpHandler';
 import path from 'path';
 import QrCode from 'qrcode';
 import Initiator from '../connectClient/MewConnectInitiator';
 import Web3 from 'web3';
-import MEWProvider from './wallets/web3-provider';
-import MEWconnectWallet from './wallets/MEWconnect';
-import Networks from './wallets/networks';
+import MEWProvider from './web3Provider/web3-provider/index';
+import MEWconnectWallet from './web3Provider/MEWconnect/index';
+import Networks from './web3Provider/networks/index';
 import url from 'url';
 import EventEmitter from 'events';
-import EventNames from './wallets/web3-provider/events';
+import EventNames from './web3Provider/web3-provider/events';
 import { Transaction } from 'ethereumjs-tx';
 import BigNumber from 'bignumber.js';
 import * as unit from 'ethjs-unit';
-import parseTokensData from './wallets/helpers/parseTokensData';
+import parseTokensData from './web3Provider/helpers/parseTokensData';
 
 export default class Integration {
   constructor(RPC_URL) {
@@ -32,18 +32,25 @@ export default class Integration {
     const network = Networks['ETH'];
     console.log(Networks); // todo remove dev item
     // this.startWeb3();
-    this.popUpHandler = new PopUpCreator();
-    this.isEnabled = false;
+    this.popUpHandler = new PopUpHandler();
+    this.connectionState = false;
   }
 
   showNotice(){
-    this.popUpHandler.showNotice("disconnected");
+    // this.popUpHandler.showNotice("disconnected", {border: 'rgba(5, 158, 135, 0.88) solid 2px'});
+    this.popUpHandler.showPopupWindow('lksdfsdfsdfsdfsdfsdfsdfsfsfdsf');
   }
 
   async enable() {
-    this.state.wallet = await new MEWconnectWallet(this.state);
     console.log(this.state.wallet); // todo remove dev item
-    this.disconnectNotifier();
+    if(!this.state.wallet){
+      this.connectionState = 'connecting';
+      this.state.wallet = await new MEWconnectWallet(this.state);
+      this.popUpHandler.showNotice("connected", {border: 'rgba(5, 158, 135, 0.88) solid 2px'});
+      this.popUpHandler.hideNotifier();
+      console.log(this.state.wallet); // todo remove dev item
+      this.disconnectNotifier();
+    }
     return [this.state.wallet.getChecksumAddressString()];
   }
 

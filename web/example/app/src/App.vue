@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import Integration from '../../../../src/web3Provider/integration';
+import MewConnect from '../../../../src';
 import WalletLink from 'walletlink';
 import Web3 from 'web3';
-import logo from '../../../../src/web3Provider/logo.svg'
+import logo from '../../../../src/connectProvider/logo.svg'
 export default {
   name: 'app',
   data() {
@@ -37,18 +37,12 @@ export default {
     };
   },
   mounted() {
-    this.connect = new Integration();
+    this.connect = new MewConnect.Provider();
     this.ethereum = this.connect.makeWeb3Provider();
   },
   methods: {
     animate(){
       this.connect.showNotice();
-      // const element = window.document.getElementById('element')
-      // const elementText = window.document.getElementById('element-text')
-      //
-      // elementText.textContent = 'Stuff shown';
-      // element.className = "show";
-      // setTimeout(function(){ element.className = element.className.replace("show", ""); }, 2800);
     },
     onClick() {
       this.connect.enable().then((accounts) => {
@@ -108,6 +102,7 @@ export default {
 //       })
 //
 // Alternatively, you can use ethereum.enable()
+      console.log( ethereum.enable()); // todo remove dev item
       ethereum.enable().then((accounts) => {
         console.log(`User's address is ${accounts[0]}`)
       })

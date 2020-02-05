@@ -11,7 +11,7 @@ import {
   ethGetBlockByNumber,
   ethGetBlockNumber,
   netVersion
-} from '../methods';
+} from '../methods/index';
 class HttpProvider {
   constructor(host, options, store, eventHub) {
     const requestManager = new HttpRequestManger(host, options);

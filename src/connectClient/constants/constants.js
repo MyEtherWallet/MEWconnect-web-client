@@ -46,6 +46,7 @@ const stages = {
 };
 
 const lifeCycle = {
+  AuthRejected: 'AuthRejected',
   RtcInitiatedEvent: 'RtcInitiatedEvent',
   signatureCheck: 'signatureCheck',
   SocketConnectedEvent: 'SocketConnectedEvent',
