@@ -9,9 +9,9 @@ module.exports = {
     'filename': 'index.js',
     // library: 'someLibName',
     // libraryTarget: 'umd',
-    libraryTarget: 'umd',
+    libraryTarget: 'commonjs',
     globalObject: 'this',
-    // libraryExport: 'default',
+    libraryExport: 'default',
     library: 'MEWconnect'
   },
   'module': {
@@ -50,15 +50,14 @@ module.exports = {
 
   ],
   optimization: {
-    runtimeChunk: true
-    // splitChunks: {
-    //   cacheGroups: {
-    //     commons: {
-    //       test: /[\\/]node_modules[\\/]/,
-    //       name: 'vendors',
-    //       chunks: 'initial'
-    //     }
-    //   }
-    // }
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'initial'
+        }
+      }
+    }
   }
 };
