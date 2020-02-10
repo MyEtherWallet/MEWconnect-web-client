@@ -16,28 +16,28 @@ export default {
     }
   },
   plugins: [
-    commonjs(),
+    // commonjs(),
     json(),
     image(),
-    nodePolyfills(),
-    resolve({
-      modulesOnly: true
-    }),
-    babel({
-      "babelrc": false,
-      "runtimeHelpers": true,
-      "plugins": [
-        "@babel/plugin-transform-async-to-generator",
-        "@babel/plugin-transform-regenerator",
-        ["@babel/plugin-transform-runtime", {
-          "helpers": true,
-          "regenerator": true
-        }]
-      ],
-      "presets": [
-        "@babel/preset-env"
-      ],
-      exclude: 'node_modules/**',
-    })
+    // nodePolyfills(),
+    // resolve({
+    //   modulesOnly: true
+    // }),
+    // babel({
+    //   "babelrc": false,
+    //   "runtimeHelpers": true,
+    //   "plugins": [
+    //     "@babel/plugin-transform-async-to-generator",
+    //     "@babel/plugin-transform-regenerator",
+    //     ["@babel/plugin-transform-runtime", {
+    //       "helpers": true,
+    //       "regenerator": true
+    //     }]
+    //   ],
+    //   "presets": [
+    //     "@babel/preset-env"
+    //   ],
+    //   exclude: 'node_modules/**',
+    // })
   ]
 }

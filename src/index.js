@@ -10,7 +10,7 @@
 import MewConnectClient from './connectClient/index';
 import MewConnectProvider from './connectProvider/index';
 
-console.log("Something2"); // todo remove dev item
+console.log('Something rollup'); // todo remove dev item
 export default {
   Initiator: MewConnectClient.Initiator,
   Crypto: MewConnectClient.Crypto,
