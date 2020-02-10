@@ -223,7 +223,7 @@ export default class PopUpHandler {
             <div class="bottom-container">
             
             <h5 class="bottom-container-text">Powered by</h5>
-             <img src="${logo}"/>
+             MEWconnect
            </div>
           </div>
         </body>
