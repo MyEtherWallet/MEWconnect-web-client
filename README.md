@@ -3,6 +3,11 @@
 ### Getting Started
 
 
+```npm i @myetherwallet/mewconnect-web-client```
+
+
+
+
 ### Get the code
 The example requires both MEWconnect-web-client (this repo) and MEWconnect-Signal-Server (MEWconnect-hanshake-server)
 ```

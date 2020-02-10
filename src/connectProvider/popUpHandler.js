@@ -10,7 +10,7 @@ const IPCMessageType = {
   WEB3_RESPONSE: 'WEB3_RESPONSE',
   LOCAL_STORAGE_BLOCKED: 'LOCAL_STORAGE_BLOCKED'
 };
-import logo from './logo.svg';
+import logo from './logoImage';
 import { popUpStyles, noticetext, innerHTML } from './popupStyles';
 import cssStyles from './windowStyles';
 

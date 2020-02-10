@@ -1,5 +1,5 @@
 import QrCode from 'qrcode';
-import logo from '../connectProvider/logo.svg';
+import logo from '../connectProvider/logoImage';
 import cssStyles from './popupStyles'
 import { noticetext } from '../connectProvider/popupStyles';
 
@@ -19,6 +19,7 @@ export default class PopUpCreator {
     this.walletLinkUrl = linkUrl || 'connect-MEWconnect';
     this.sessionId = '';
     this.sessionId = false;
+    this.logo = logo;
     // this.createWindowNotifier();
   }
 
@@ -157,7 +158,7 @@ export default class PopUpCreator {
             <div class="bottom-container">
             
             <h5 class="bottom-container-text">Powered by</h5>
-             <img src="${logo}"/>
+             <img src="${this.logo}"/>
            </div>
           </div>
         </body>

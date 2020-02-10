@@ -2,31 +2,29 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-  'mode': 'development',
+  mode: 'production',
   'entry': './src/index.js',
-  'output': {
-    path: path.resolve(__dirname, 'dist'),
-    'filename': 'index.js',
-    // library: 'someLibName',
-    // libraryTarget: 'umd',
-    libraryTarget: 'commonjs',
+  output: {
+    path: path.resolve(__dirname, './dist'),
+    filename: 'index.js',
+    libraryTarget: 'umd',
     globalObject: 'this',
-    libraryExport: 'default',
-    library: 'MEWconnect'
+    // libraryExport: 'default',
+    library: 'webpackNumbers'
   },
   'module': {
     'rules': [
       {
         'test': /\.js$/,
         'exclude': /node_modules/,
-        // 'use': {
-        //   'loader': 'babel-loader',
-        //   'options': {
-        //     'presets': [
-        //       'env'
-        //     ]
-        //   }
-        // }
+        'use': {
+          'loader': 'babel-loader',
+          'options': {
+            'presets': [
+              'env'
+            ]
+          }
+        }
       },
       {
         'test': /\.css$/,
@@ -36,10 +34,8 @@ module.exports = {
         ]
       },
       {
-        'test': /\.(png|svg|jpg|gif)$/,
-        use: [
-          'file-loader'
-        ]
+        test: /\.svg$/,
+        loader: 'svg-inline-loader'
       }
     ]
   },
@@ -48,16 +44,16 @@ module.exports = {
   ],
   externals: [
 
-  ],
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'initial'
-        }
-      }
-    }
-  }
+  ]
+  // optimization: {
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       commons: {
+  //         test: /[\\/]node_modules[\\/]/,
+  //         name: 'vendors',
+  //         chunks: 'initial'
+  //       }
+  //     }
+  //   }
+  // }
 };
