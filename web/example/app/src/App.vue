@@ -1,27 +1,49 @@
 <template>
   <div id="app">
-    <h2>connector</h2>
-    <button @click="onClick">OPEN</button>
-    <h2>WalletLink</h2>
-    <button @click="walletLink">OPEN</button>
-    <h3>{{userAddress}}</h3>
-    <button v-show="userAddress !== ''" @click="disconnect">Disconnect</button>
-    <h3>Send</h3>
-    <button v-show="userAddress !== ''" @click="sendTx">send</button>
-    <h3>{{balance}}</h3>
-    <button v-show="userAddress !== ''" @click="getBalance">balance</button>
+
+    <ul >
+      <li>
+        <h2>connector</h2>
+        <button @click="onClick">OPEN</button>
+        <h3>{{userAddress}}</h3>
+      </li>
+    </ul>
+    <ul v-show="userAddress !== ''">
+      <li>
+        <button @click="disconnect">Disconnect</button>
+      </li>
+      <li>
+        <h3>Send</h3>
+        <button v-show="userAddress !== ''" @click="sendTx">send</button>
+        <h3>Tx Hash: </h3> {{txHash}}
+      </li>
+      <li>
+        <button @click="getBalance">balance</button>
+        <h3>{{balance}}</h3>
+      </li>
+      <li>
+        <button @click="getCoinBase">getCoinBase</button>
+        <h3>{{coinBase}}</h3>
+      </li>
+      <li>
+        <button @click="makeCall">makeCall</button>
+        <h3>{{callRes}}</h3>
+      </li>
+      <li>
+        <button @click="getChainId">getChainId</button>
+        <h3>{{chainId}}</h3>
+      </li>
+      <li>
+        <button @click="createSubscription">createSubscription</button>
+      </li>
+    </ul>
+
     <button  @click="animate">animate</button>
-    <div id="element">
-      <img id="element-img" :src="logo"/>
-      <div id="element-text">
-        Stuff qqqqqqqqqqqqqqqqqqqqqqqq
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
-import {Provider} from '../../../../src';
+import mewConnect from '../../../../src';
 import WalletLink from 'walletlink';
 import Web3 from 'web3';
 import logo from '../../../../src/connectProvider/logo.svg'
@@ -33,12 +55,18 @@ export default {
       connect: {},
       userAddress: '',
       ethereum: {},
-      balance: 0
+      balance: 0,
+      web3: {},
+      coinBase: 0,
+      txHash: '',
+      callRes: '',
+      chainId: 0
     };
   },
   mounted() {
-    this.connect = new Provider();
+    this.connect = new mewConnect.Provider();
     this.ethereum = this.connect.makeWeb3Provider();
+    this.web3 = new Web3(this.ethereum);
   },
   methods: {
     animate(){
@@ -54,14 +82,12 @@ export default {
       this.connect.disconnect()
     },
     getBalance(){
-      const web3 = new Web3(this.ethereum);
-      web3.eth.getBalance(this.userAddress).then(bal => this.balance = bal)
+      this.web3.eth.getBalance(this.userAddress).then(bal => this.balance = bal)
     },
     sendTx(){
-      const web3 = new Web3(this.ethereum);
-      web3.eth.getBalance(this.userAddress).then(bal => this.balance)
-      web3.eth.getTransactionCount(this.userAddress).then(nonce =>{
-        web3.eth.sendTransaction({
+      this.web3.eth.getBalance(this.userAddress).then(bal => this.balance)
+      this.web3.eth.getTransactionCount(this.userAddress).then(nonce =>{
+        this.web3.eth.sendTransaction({
           from: this.userAddress,
           to: this.userAddress,
           nonce,
@@ -69,43 +95,40 @@ export default {
           gasPrice: 1000000000,
           gas: 21000
         })
-          .then(console.log)
+          .then(txhash => this.txHash = txhash)
       })
     },
-    walletLink() {
-      const APP_NAME = 'My Awesome App';
-      // const APP_LOGO_URL = "https://example.com/logo.png"
-      const ETH_JSONRPC_URL = 'https://mainnet.infura.io/v3/';
-      const CHAIN_ID = 1;
-
-// Initialize WalletLink
-      const walletLink = new WalletLink({
-        appName: APP_NAME
-      });
-      console.log(walletLink); // todo remove dev item
-      // walletLink.openPopupWindow();
-// Initialize a Web3 Provider object
-      const ethereum = walletLink.makeWeb3Provider(ETH_JSONRPC_URL, CHAIN_ID);
-      console.log(ethereum); // todo remove dev item
-// Initialize a Web3 object
-//       const web3 = new Web3(ethereum);
-//
-// // Optionally, have the default account be set automatically when available
-//       ethereum.on('accountsChanged', (accounts) => {
-//         web3.eth.defaultAccount = accounts[0];
-//       });
-//
-//       // Use eth_RequestAccounts
-//       ethereum.send("eth_requestAccounts").then((accounts) => {
-//         console.log(`User's address is ${accounts[0]}`)
-//
-//       })
-//
-// Alternatively, you can use ethereum.enable()
-      console.log( ethereum.enable()); // todo remove dev item
-      ethereum.enable().then((accounts) => {
-        console.log(`User's address is ${accounts[0]}`)
+    getCoinBase(){
+      this.web3.eth.getCoinbase()
+        .then(cb => this.coinBase = cb);
+    },
+    makeCall(){
+      this.web3.eth.call({
+        to: "0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe", // contract address
+        data: "0xc6888fa10000000000000000000000000000000000000000000000000000000000000003"
       })
+        .then(res => this.callRes = res);
+    },
+    getChainId(){
+      this.web3.eth.getChainId().then(res => this.chainId = res);
+    },
+    createSubscription(){
+      let subscription = this.web3.eth.subscribe('newBlockHeaders', function(error, result){
+        if (!error) {
+          console.log(result);
+        } else {
+          console.log(error); // todo remove dev item
+        }
+      })
+        .on("data", function(transaction){
+          console.log(transaction);
+        })
+        .on("error", function(transaction){
+          console.log(transaction);
+        })
+        .on("connected", function(transaction){
+          console.log(transaction);
+        });
     }
   }
 };
@@ -169,5 +192,12 @@ export default {
   @keyframes fadeout {
     from {top: 30px; opacity: 1;}
     to {top: 0; opacity: 0;}
+  }
+
+  ul{
+    list-style-type: none;
+    li{
+      text-align: center;
+    }
   }
 </style>

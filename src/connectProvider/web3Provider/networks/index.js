@@ -8,6 +8,7 @@ Object.keys(types).forEach(key => {
 });
 
 Object.keys(nodes).forEach(key => {
+  console.log(nodes[key]); // todo remove dev item
   if (nodes[key].service === nodes['ethmew'].service) {
     nodeList[nodes[key].type.name].splice(0, 0, nodes[key]);
   } else if (

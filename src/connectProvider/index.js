@@ -76,7 +76,6 @@ export default class Integration {
     connection.webRtcCommunication.on(connection.lifeCycle.RtcClosedEvent, () => {
       this.popUpHandler.showNotice('disconnected');
     });
-
   }
 
   disconnect() {
