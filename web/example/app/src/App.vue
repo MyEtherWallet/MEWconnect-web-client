@@ -1,7 +1,7 @@
 <template>
   <div id="app">
 
-    <ul >
+    <ul>
       <li>
         <h2>connector</h2>
         <button @click="onClick">OPEN</button>
@@ -38,7 +38,7 @@
       </li>
     </ul>
 
-    <button  @click="animate">animate</button>
+    <button @click="animate">animate</button>
   </div>
 </template>
 
@@ -46,7 +46,8 @@
 import mewConnect from '../../../../src';
 import WalletLink from 'walletlink';
 import Web3 from 'web3';
-import logo from '../../../../src/connectProvider/logo.svg'
+import logo from '../../../../src/connectProvider/logo.svg';
+
 export default {
   name: 'app',
   data() {
@@ -65,28 +66,28 @@ export default {
   },
   mounted() {
     this.connect = new mewConnect.Provider();
-    this.ethereum = this.connect.makeWeb3Provider();
+    this.ethereum = this.connect.makeWeb3Provider(3);
     this.web3 = new Web3(this.ethereum);
   },
   methods: {
-    animate(){
+    animate() {
       this.connect.showNotice();
     },
     onClick() {
       this.connect.enable().then((accounts) => {
-        console.log(`User's address is ${accounts[0]}`)
+        console.log(`User's address is ${accounts[0]}`);
         this.userAddress = accounts[0];
-      })
+      });
     },
-    disconnect(){
-      this.connect.disconnect()
+    disconnect() {
+      this.connect.disconnect();
     },
-    getBalance(){
-      this.web3.eth.getBalance(this.userAddress).then(bal => this.balance = bal)
+    getBalance() {
+      this.web3.eth.getBalance(this.userAddress).then(bal => this.balance = bal);
     },
-    sendTx(){
-      this.web3.eth.getBalance(this.userAddress).then(bal => this.balance)
-      this.web3.eth.getTransactionCount(this.userAddress).then(nonce =>{
+    sendTx() {
+      this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
+      this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
         this.web3.eth.sendTransaction({
           from: this.userAddress,
           to: this.userAddress,
@@ -94,39 +95,51 @@ export default {
           value: 1000000000000000000,
           gasPrice: 1000000000,
           gas: 21000
+        }).once('transactionHash', hash => {
+          console.log(['Hash', hash]); // todo remove dev item
+          this.txHash = hash
+          // dispatch('addNotification', ['Hash', tx.from, tx, hash]);
         })
-          .then(txhash => this.txHash = txhash)
-      })
+          .once('receipt', res => {
+            console.log(['Receipt', res]); // todo remove dev item
+            // dispatch('addNotification', ['Receipt', tx.from, tx, res]);
+          })
+          .on('error', err => {
+            console.log(['Error', err]); // todo remove dev item
+            // dispatch('addNotification', ['Error', tx.from, tx, err]);
+          })
+          .then(txhash => console.log("THEN: ", txhash));
+      });
     },
-    getCoinBase(){
+    getCoinBase() {
       this.web3.eth.getCoinbase()
         .then(cb => this.coinBase = cb);
     },
-    makeCall(){
+    makeCall() {
       this.web3.eth.call({
-        to: "0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe", // contract address
-        data: "0xc6888fa10000000000000000000000000000000000000000000000000000000000000003"
+        to: '0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe', // contract address
+        data: '0xc6888fa10000000000000000000000000000000000000000000000000000000000000003'
       })
         .then(res => this.callRes = res);
     },
-    getChainId(){
+    getChainId() {
       this.web3.eth.getChainId().then(res => this.chainId = res);
     },
-    createSubscription(){
-      let subscription = this.web3.eth.subscribe('newBlockHeaders', function(error, result){
+    createSubscription() {
+      let subscription = this.web3.eth.subscribe('newBlockHeaders', function(error, result) {
         if (!error) {
           console.log(result);
         } else {
           console.log(error); // todo remove dev item
         }
       })
-        .on("data", function(transaction){
+        .on('data', function(transaction) {
           console.log(transaction);
         })
-        .on("error", function(transaction){
+        .on('error', function(transaction) {
           console.log(transaction);
         })
-        .on("connected", function(transaction){
+        .on('connected', function(transaction) {
           console.log(transaction);
         });
     }
@@ -144,7 +157,7 @@ export default {
     margin-top: 60px;
   }
 
-  #element-img{
+  #element-img {
     height: 25%;
     width: 75%;
   }
@@ -175,28 +188,53 @@ export default {
 
   /* Animations to fade the snackbar in and out */
   @-webkit-keyframes fadein {
-    from {top: 0; opacity: 0;}
-    to {top: 30px; opacity: 1;}
+    from {
+      top: 0;
+      opacity: 0;
+    }
+    to {
+      top: 30px;
+      opacity: 1;
+    }
   }
 
   @keyframes fadein {
-    from {top: 0; opacity: 0;}
-    to {top: 30px; opacity: 1;}
+    from {
+      top: 0;
+      opacity: 0;
+    }
+    to {
+      top: 30px;
+      opacity: 1;
+    }
   }
 
   @-webkit-keyframes fadeout {
-    from {top: 30px; opacity: 1;}
-    to {top: 0; opacity: 0;}
+    from {
+      top: 30px;
+      opacity: 1;
+    }
+    to {
+      top: 0;
+      opacity: 0;
+    }
   }
 
   @keyframes fadeout {
-    from {top: 30px; opacity: 1;}
-    to {top: 0; opacity: 0;}
+    from {
+      top: 30px;
+      opacity: 1;
+    }
+    to {
+      top: 0;
+      opacity: 0;
+    }
   }
 
-  ul{
+  ul {
     list-style-type: none;
-    li{
+
+    li {
       text-align: center;
     }
   }

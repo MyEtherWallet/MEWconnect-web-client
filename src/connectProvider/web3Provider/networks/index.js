@@ -9,7 +9,7 @@ Object.keys(types).forEach(key => {
 
 Object.keys(nodes).forEach(key => {
   console.log(nodes[key]); // todo remove dev item
-  if (nodes[key].service === nodes['ethmew'].service) {
+  if (nodes[key].service === nodes['ethmewws'].service) {
     nodeList[nodes[key].type.name].splice(0, 0, nodes[key]);
   } else if (
     nodes[key].service === 'infura.io' &&
