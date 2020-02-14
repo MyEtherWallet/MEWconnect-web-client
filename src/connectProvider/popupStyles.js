@@ -1,7 +1,7 @@
 
 
 
-const cssText = (elementId) =>{
+const notifierCSS = (elementId) =>{
   return `
     /* The snackbar - position it at the bottom and in the middle of the screen */
         #${elementId}-img {
@@ -21,15 +21,17 @@ const cssText = (elementId) =>{
           visibility: hidden; /* Hidden by default. Visible on click */
           min-width: 250px; /* Set a default minimum width */
           margin-left: -125px; /* Divide value of min-width by 2 */
-          background-color: rgba(226, 226, 226, 0.2);
+          background-color: white;
           color: #000000; /* White text color */
           text-align: center; /* Centered text */
-          border-radius: 2px; /* Rounded borders */
+          border-radius: 15px; /* Rounded borders */
+          border: rgba(5, 158, 135, 1) solid 4px;
           padding: 16px; /* Padding */
           position: fixed; /* Sit on top of the screen */
-          z-index: 1; /* Add a z-index if needed */
+          z-index: 999999999999999; /* Add a z-index if needed */
           right: 30px; /* Center the snackbar */
           top: 30px; /* 30px from the bottom */
+          box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.1);
         }
         
         /* Show the snackbar when clicking on a button (class added with JavaScript) */
@@ -39,6 +41,38 @@ const cssText = (elementId) =>{
           However, delay the fade out process for 2.5 seconds */
           -webkit-animation: fadein-${elementId} 0.5s, fadeout-${elementId} 0.5s 3.5s;
           animation: fadein-${elementId} 0.5s, fadeout-${elementId} 0.5s 3.5s;
+        }
+        
+        #${elementId}.show-persistent {
+          visibility: visible; /* Show the snackbar */
+          /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+          However, delay the fade out process for 2.5 seconds */
+          -webkit-animation: fadein-${elementId} 0.5s, fadeout-${elementId} 0.5s 5.5s;
+          animation: fadein-${elementId} 0.5s, fadeout-${elementId} 0.5s 5.5s;
+        }
+        
+        #${elementId}.show-persistent-leave {
+          visibility: visible; /* Show the snackbar */
+          /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+          However, delay the fade out process for 2.5 seconds */
+          -webkit-animation: fadeout-${elementId} 0.5s 1.5s;
+          animation: fadeout-${elementId} 0.5s 1.5s;
+        }
+        
+        #${elementId}.show-in {
+          visibility: visible; /* Show the snackbar */
+          /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+          However, delay the fade out process for 2.5 seconds */
+          -webkit-animation: fadein-${elementId} 0.5s;
+          animation: fadein-${elementId} 0.5s;
+        }
+        
+        #${elementId}.show-out {
+          visibility: visible; /* Show the snackbar */
+          /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+          However, delay the fade out process for 2.5 seconds */
+          -webkit-animation: fadeout-${elementId} 0.5s;
+          animation: fadeout-${elementId} 0.5s;
         }
         
         /* Animations to fade the snackbar in and out */
@@ -109,7 +143,7 @@ const cssText = (elementId) =>{
     `
 };
 
-const noticetext = `
+const WindowInformerCSS = `
 
         div#Notifications.hidden {
           visibility: hidden; 
@@ -269,7 +303,7 @@ const noticetext = `
         widows: 0;
         width: auto;
         word-spacing: normal;
-        z-index: auto;
+        z-index: 9999999999;
         all: initial;
         all: unset;
 
@@ -510,7 +544,7 @@ const innerHTML = `
   </div>
 `
 export {
-  cssText as popUpStyles,
-  noticetext,
+  notifierCSS,
+  WindowInformerCSS,
   innerHTML
 };

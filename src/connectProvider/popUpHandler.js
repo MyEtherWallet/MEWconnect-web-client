@@ -11,8 +11,8 @@ const IPCMessageType = {
   LOCAL_STORAGE_BLOCKED: 'LOCAL_STORAGE_BLOCKED'
 };
 import logo from './logoImage';
-import { popUpStyles, noticetext } from './popupStyles';
-import {popupWindow, windowInformer} from './popupHtml';
+import { notifierCSS, WindowInformerCSS } from './popupStyles';
+import { windowPopup, windowInformer } from './popupHtml';
 import cssStyles from './windowStyles';
 
 export default class PopUpHandler {
@@ -24,10 +24,10 @@ export default class PopUpHandler {
     this.checkCount = 0;
     this.elementId = 'mew-connect-notice';
     this.initialcheckIfIdExists();
-    this.createCss();
     this.createNotice();
     this.createWindowInformer();
     this.styleDefaults = {};
+    this.timeoutTracker = null;
   }
 
   initialcheckIfIdExists() {
@@ -44,6 +44,49 @@ export default class PopUpHandler {
   }
 
   showNotice(text, styleOverrides) {
+    let timeoutTime = 3800;
+    let timeoutOverride = false;
+    if (!text) {
+      text = 'Check your phone to continue';
+    }
+
+    if (typeof styleOverrides === 'number') {
+      timeoutTime = styleOverrides;
+      timeoutOverride = true;
+    }
+    const element = window.document.getElementById(this.elementId);
+
+    if (styleOverrides && typeof styleOverrides === 'object') {
+      for (const key in styleOverrides) {
+        this.styleDefaults[key] = element.style[key];
+        element.style[key] = styleOverrides[key];
+      }
+    } else {
+      for (const key in this.styleDefaults) {
+        element.style[key] = this.styleDefaults[key];
+      }
+    }
+
+    if (!timeoutOverride) {
+      element.className = 'show';
+
+      const elementText = window.document.getElementById(`${this.elementId}-text`);
+      elementText.innerHTML = text;
+
+      setTimeout(function() { element.className = element.className.replace('show', ''); }, timeoutTime);
+    } else {
+      element.className = 'show-in';
+
+      const elementText = window.document.getElementById(`${this.elementId}-text`);
+      elementText.innerHTML = text;
+
+      setTimeout(function() { element.className = element.className.replace('show-in', 'show-out'); }, timeoutTime - 500);
+      setTimeout(function() { element.className = element.className.replace('show-out', ''); }, timeoutTime);
+    }
+
+  }
+
+  showNoticePersistentEnter(text, styleOverrides) {
     if (!text) {
       text = 'Check your phone to continue';
     }
@@ -59,12 +102,23 @@ export default class PopUpHandler {
         element.style[key] = this.styleDefaults[key];
       }
     }
-    element.className = 'show';
+
+    element.className = 'show-persistent';
 
     const elementText = window.document.getElementById(`${this.elementId}-text`);
     elementText.innerHTML = text;
 
-    setTimeout(function() { element.className = element.className.replace('show', ''); }, 3800);
+    this.timeoutTracker = setTimeout(function() { element.className = element.className.replace('show-persistent', ''); }, 10800);
+  }
+
+  showNoticePersistentExit() {
+    if (this.timeoutTracker) {
+      clearTimeout(this.timeoutTracker);
+      const element = window.document.getElementById(this.elementId);
+      element.className = element.className.replace('show-persistent', 'show-persistent-leave');
+
+      this.timeoutTracker = setTimeout(function() { element.className = element.className.replace('show-persistent-leave', ''); }, 1800);
+    }
   }
 
   createNotice() {
@@ -80,15 +134,13 @@ export default class PopUpHandler {
     textDiv.id = this.elementId + '-text';
     div.appendChild(textDiv);
     window.document.body.appendChild(div);
-  }
 
-  createCss() {
     const css = document.createElement('style');
     css.type = 'text/css';
     if ('textContent' in css)
-      css.textContent = popUpStyles(this.elementId);
+      css.textContent = notifierCSS(this.elementId);
     else
-      css.innerText = popUpStyles(this.elementId);
+      css.innerText = notifierCSS(this.elementId);
     document.body.appendChild(css);
   }
 
@@ -98,9 +150,9 @@ export default class PopUpHandler {
     const css = document.createElement('style');
     css.type = 'text/css';
     if ('textContent' in css)
-      css.textContent = noticetext;
+      css.textContent = WindowInformerCSS;
     else
-      css.innerText = noticetext;
+      css.innerText = WindowInformerCSS;
     document.body.appendChild(css);
     const div = window.document.createElement('div');
     div.id = 'Notifications';
@@ -165,7 +217,7 @@ export default class PopUpHandler {
         'toolbar=0'
       ].join(',')
     );
-    this.popupWindow.document.write(popupWindow);
+    this.popupWindow.document.write(windowPopup(logo));
     const element = this.popupWindow.document.getElementById('canvas');
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
 

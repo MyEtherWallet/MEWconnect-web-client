@@ -39,21 +39,25 @@
     </ul>
 
     <button @click="animate">animate</button>
+    <p><button @click="animateDirect">animate direct</button></p>
+    <p><button @click="animateNotifier">animate notifier</button></p>
   </div>
 </template>
 
 <script>
+// import mewConnect from '../../../../dist';
 import mewConnect from '../../../../src';
+
 import WalletLink from 'walletlink';
+import PopUpCreator from '../../../../src/connectClient/popUpCreator'
 import Web3 from 'web3';
-import logo from '../../../../src/connectProvider/logo.svg';
 
 export default {
   name: 'app',
   data() {
     return {
-      logo: logo,
       connect: {},
+      altPopup: {},
       userAddress: '',
       ethereum: {},
       balance: 0,
@@ -68,10 +72,17 @@ export default {
     this.connect = new mewConnect.Provider();
     this.ethereum = this.connect.makeWeb3Provider(3);
     this.web3 = new Web3(this.ethereum);
+    this.altPopup = new PopUpCreator();
   },
   methods: {
     animate() {
       this.connect.showNotice();
+    },
+    animateDirect(){
+      this.altPopup.showPopupWindow('sdfsdfsdf')
+    },
+    animateNotifier(){
+      this.connect.showNotifier();
     },
     onClick() {
       this.connect.enable().then((accounts) => {
@@ -155,81 +166,10 @@ export default {
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+    /*background-color: #2c3e50;*/
   }
 
-  #element-img {
-    height: 25%;
-    width: 75%;
-  }
 
-  #element {
-    visibility: hidden; /* Hidden by default. Visible on click */
-    min-width: 250px; /* Set a default minimum width */
-    margin-left: -125px; /* Divide value of min-width by 2 */
-    background-color: rgba(51, 51, 51, 0.2); /* Black background color */
-    color: #000000; /* White text color */
-    text-align: center; /* Centered text */
-    border-radius: 2px; /* Rounded borders */
-    padding: 16px; /* Padding */
-    position: fixed; /* Sit on top of the screen */
-    z-index: 1; /* Add a z-index if needed */
-    right: 30px; /* Center the snackbar */
-    top: 30px; /* 30px from the bottom */
-  }
-
-  /* Show the snackbar when clicking on a button (class added with JavaScript) */
-  #element.show {
-    visibility: visible; /* Show the snackbar */
-    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-    However, delay the fade out process for 2.5 seconds */
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  }
-
-  /* Animations to fade the snackbar in and out */
-  @-webkit-keyframes fadein {
-    from {
-      top: 0;
-      opacity: 0;
-    }
-    to {
-      top: 30px;
-      opacity: 1;
-    }
-  }
-
-  @keyframes fadein {
-    from {
-      top: 0;
-      opacity: 0;
-    }
-    to {
-      top: 30px;
-      opacity: 1;
-    }
-  }
-
-  @-webkit-keyframes fadeout {
-    from {
-      top: 30px;
-      opacity: 1;
-    }
-    to {
-      top: 0;
-      opacity: 0;
-    }
-  }
-
-  @keyframes fadeout {
-    from {
-      top: 30px;
-      opacity: 1;
-    }
-    to {
-      top: 0;
-      opacity: 0;
-    }
-  }
 
   ul {
     list-style-type: none;

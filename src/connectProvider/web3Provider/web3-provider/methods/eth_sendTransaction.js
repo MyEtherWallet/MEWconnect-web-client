@@ -11,7 +11,7 @@ const setEvents = (promiObj, tx, eventHub) => {
       eventHub.emit('Hash', hash)
     })
     .once('receipt', res => {
-      eventHub.emit('Receipt')
+      eventHub.emit('Receipt', res)
     })
     .on('error', err => {
       eventHub.emit('Error', err)

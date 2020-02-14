@@ -16,16 +16,12 @@ const state = {
   wallet: null
 }
 export default class Integration {
-  constructor(RPC_URL) {
+  constructor() {
     this.eventHub = new EventEmitter();
-
     this.initiator = new Initiator();
-    const network = Networks['ETH'];
-    console.log(Networks); // todo remove dev item
     this.popUpHandler = new PopUpHandler();
     this.connectionState = false;
     this.chainIdMapping = Object.keys(Networks).reduce((acc, curr) => {
-      console.log(Networks[curr]); // todo remove dev item
       if (Networks[curr].length === 0) return acc;
       acc.push({
         name: Networks[curr][0].type.name_long.toLowerCase(),
@@ -34,11 +30,15 @@ export default class Integration {
       });
       return acc;
     }, [{ name: 'mainnet', chainId: 1, key: 'ETH' }]);
-    console.log(this.chainIdMapping); // todo remove dev item
   }
 
   showNotice() {
     this.popUpHandler.showPopupWindow('lksdfsdfsdfsdfsdfsdfsdfsfsfdsf');
+  }
+
+  showNotifier(){
+    this.popUpHandler.showNotice('connected', { border: 'rgba(5, 158, 135, 0.88) solid 2px' });
+
   }
 
   async enable() {
@@ -100,6 +100,7 @@ export default class Integration {
     connection.webRtcCommunication.on(connection.lifeCycle.RtcDisconnectEvent, () => {
       this.popUpHandler.showNotice('disconnected');
     });
+
     connection.webRtcCommunication.on(connection.lifeCycle.RtcClosedEvent, () => {
       this.popUpHandler.showNotice('disconnected');
     });
@@ -118,28 +119,33 @@ export default class Integration {
 
   setupListeners() {
     this.eventHub.on(EventNames.SHOW_TX_CONFIRM_MODAL, (tx, resolve) => {
-      // this.parseRawTx(tx);
-      // if (tx.hasOwnProperty('ensObj')) {
-      //   delete tx['ensObj'];
-      // }
       this.responseFunction = resolve;
-      const signPromise = state.wallet.signTransaction(tx);
-      this.popUpHandler.showNotice('Check your phone to sign the transaction');
+      this.popUpHandler.showNoticePersistentEnter('Check your phone to sign the transaction');
       state.wallet.signTransaction(tx)
         .then(_response => {
+          this.popUpHandler.showNoticePersistentExit();
           resolve(_response);
         })
-        .catch(state.wallet.errorHandler);
+        .catch(err =>{
+          this.popUpHandler.showNoticePersistentExit();
+          state.wallet.errorHandler(err)
+        });
     });
 
     this.eventHub.on(EventNames.SHOW_MSG_CONFIRM_MODAL, (msg, resolve) => {
+      this.popUpHandler.showNoticePersistentEnter('Check your phone to sign the transaction');
       state.wallet.signMessage(msg)
         .then(result => {
           resolve(result);
-        });
+        })
+        .catch(err =>{
+          this.popUpHandler.showNoticePersistentExit();
+        })
     });
+
     this.eventHub.on('showSendSignedTx', (tx, resolve) => {
       console.log('showSendSignedTx'); // todo remove dev item
+      this.popUpHandler.showNotice();
       const newTx = new Transaction(tx);
       this.responseFunction = resolve;
       this.signedTxObject = {
@@ -157,11 +163,10 @@ export default class Integration {
           s: `0x${newTx.s.toString('hex')}`
         }
       };
-      // this.parseRawTx(this.signedTxObject.tx);
       this.responseFunction(this.signedTxObject);
     });
     this.eventHub.on('Hash', (hash) => {
-      this.popUpHandler.showNotice(`Transaction sent: <a href="${state.network.type.blockExplorerTX.replace('[[txHash]]', hash)}" target="_blank">View</a>`);
+      this.popUpHandler.showNotice(`Transaction sent: <a href="${state.network.type.blockExplorerTX.replace('[[txHash]]', hash)}" target="_blank">View</a>`, 10000);
     });
     this.eventHub.on('Receipt', () => {
       this.popUpHandler.showNotice('Transaction Completed');
@@ -169,40 +174,6 @@ export default class Integration {
     this.eventHub.on('Error', () => {
       this.popUpHandler.showNotice('Error');
     });
-  }
-
-  parseRawTx(tx) {
-    let tokenData = '';
-    if (tx.to && tx.data) {
-      tokenData = parseTokensData(
-        tx.data,
-        tx.to,
-        state.web3,
-        state.network.type.tokens,
-        state.network.type.name
-      );
-      tx.tokenTransferTo = tokenData.tokenTransferTo;
-      tx.tokenTransferVal = tokenData.tokenTransferVal;
-      tx.tokenSymbol = tokenData.tokenSymbol;
-    }
-
-    this.raw = tx;
-    this.nonce = tx.nonce === '0x' ? 0 : new BigNumber(tx.nonce).toFixed();
-    this.data = tx.data;
-    this.gasLimit = new BigNumber(tx.gas).toFixed();
-    this.gasPrice = parseInt(
-      unit.fromWei(new BigNumber(tx.gasPrice).toFixed(), 'gwei')
-    );
-    this.toAddress = tx.to;
-    this.amount = tx.value === '0x' ? '0' : new BigNumber(tx.value).toFixed();
-    this.transactionFee = unit
-      .fromWei(new BigNumber(tx.gas).times(tx.gasPrice).toFixed(), 'ether')
-      .toString();
-    this.ens = {};
-    if (tx.hasOwnProperty('ensObj')) {
-      this.ens = Object.assign({}, tx.ensObj);
-    }
-    this.lastRaw = tx;
   }
 
 }
