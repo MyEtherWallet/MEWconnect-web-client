@@ -63,7 +63,6 @@ export default class PopUpCreator {
       this.popupWindow.focus();
       return this.popupWindow;
     }
-    console.log('showPopupWindow'); // todo remove dev item
     if (!qrcode) {
       throw Error('No connection string supplied to popup window');
     }

@@ -42,7 +42,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   // can be used to listen to specific events, especially those that pass data
   uiCommunicator(event, data) {
-    console.log(event, data); // todo remove dev item
+    debug(event, data); // todo remove dev item
     this.emit(event, data);
     this.emitStatus(event);
   }
@@ -100,13 +100,13 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   onConnect(peerID) {
-    console.log('onConnect', peerID); // todo remove dev item
+    debug('onConnect', peerID); // todo remove dev item
     this.emit('connect', peerID);
   }
 
   signalListener(data) {
     ++this.offersSent;
-    console.log('signalListener'); // todo remove dev item
+    debug('signalListener'); // todo remove dev item
     this.emit('signal', data);
   }
 
@@ -114,7 +114,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     if (this.tryingTurn) {
       this.answersReceived.push(plainTextOffer);
       if(this.turnTimer === null){
-        console.log(this.turnTimer); // todo remove dev item
+        debug(this.turnTimer); // todo remove dev item
         const _self = this;
         this.turnTimer = setTimeout(this.receiveTurnAnswer.bind(_self), 2000)
       }
@@ -123,9 +123,9 @@ export default class WebRtcCommunication extends MewConnectCommon {
       debug(`active PEER_ID: ${this.p.peerInstanceId}`);
       try {
         this.answerReceived[this.p.peerInstanceId] = true;
-        console.log('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
+        debug('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
         this.p.signal(plainTextOffer);
-        console.log('============ INITIATOR ================='); // todo remove dev item
+        debug('============ INITIATOR ================='); // todo remove dev item
       } catch (e) {
         // eslint-disable-next-line
         console.error(e);
@@ -139,7 +139,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     debug(`active PEER_ID: ${this.p.peerInstanceId}`);
     try {
       this.answerReceived[this.p.peerInstanceId] = true;
-      console.log('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
+      debug('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
       this.p.signal(plainTextOffer);
     } catch (e) {
       // eslint-disable-next-line
@@ -250,7 +250,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
         debug('DECRYPTED DATA RECEIVED 1', parsed);
-        console.log(parsed.type, parsed.data); // todo remove dev item
+        debug(parsed.type, parsed.data); // todo remove dev item
         this.emit('data', { type: parsed.type, data: parsed.data });
       } else {
         debug('DECRYPTED DATA RECEIVED 2', decryptedData);
@@ -337,7 +337,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   async rtcSend(arg) {
-    console.log(this.isAlive()); // todo remove dev item
+    debug(this.isAlive()); // todo remove dev item
     if (this.isAlive()) {
       let encryptedSend;
       if (typeof arg === 'string') {

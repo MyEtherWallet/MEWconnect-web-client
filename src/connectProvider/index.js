@@ -144,7 +144,6 @@ export default class Integration {
     });
 
     this.eventHub.on('showSendSignedTx', (tx, resolve) => {
-      console.log('showSendSignedTx'); // todo remove dev item
       this.popUpHandler.showNotice();
       const newTx = new Transaction(tx);
       this.responseFunction = resolve;

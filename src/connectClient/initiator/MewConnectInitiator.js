@@ -116,7 +116,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
   // can be used to listen to specific events, especially those that pass data
   uiCommunicator(event, data) {
-    console.log('MewConnectInitiator', event, data); // todo remove dev item
+    debug('MewConnectInitiator', event, data); // todo remove dev item
     this.emit(event, data);
     this.emitStatus(event);
   }
@@ -139,7 +139,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
         this.version + separator + privateKey + separator + this.connId;
 
       debug(qrCodeString);
-      console.log(qrCodeString); // todo remove dev item
+      debug(qrCodeString); // todo remove dev item
       if(this.showPopup){
         this.popupCreator.openPopupWindow(qrCodeString);
         this.popupCreator.window.addEventListener("beforeunload", (event) => {

@@ -168,7 +168,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     this.connId = details.connId;
     this.signed = details.signed;
     try {
-      console.log('initiatorStart V2'); // todo remove dev item
+      debug('initiatorStart V2'); // todo remove dev item
       this.mewCrypto = cryptoInstance;
       this.uiCommunicator(this.lifeCycle.signatureCheck);
       await this.connect(url);
@@ -473,7 +473,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   async onData(peerID, data) {
-    console.log(data); // todo remove dev item
+    debug(data); // todo remove dev item
     debug('DATA RECEIVED', data.toString());
     debug('peerID', peerID);
     try {
