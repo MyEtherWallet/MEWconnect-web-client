@@ -1,7 +1,7 @@
 import { toPayload } from '../jsonrpc';
 import EthCalls from '../web3Calls';
 import BigNumber from 'bignumber.js';
-import  Misc  from '../../helpers/misc';
+import Misc from '../../helpers/misc';
 
 export default async ({ payload, store, requestManager }, res, next) => {
   if (payload.method !== 'eth_getTransactionCount') return next();

@@ -11,6 +11,7 @@ import {
   ethGetTransactionCount,
   netVersion
 } from '../methods/index';
+
 class WSProvider {
   constructor(host, options, store, eventHub) {
     this.wsProvider = new Web3WSProvider(host, options);
@@ -60,9 +61,9 @@ class WSProvider {
       }
       const req = {
         payload,
-         store,
+        store,
         requestManager: new Web3RequestManager(this.oWSProvider),
-         eventHub
+        eventHub
       };
       const middleware = new MiddleWare();
       middleware.use(ethSendTransaction);
@@ -80,4 +81,5 @@ class WSProvider {
     return this.wsProvider;
   }
 }
+
 export default WSProvider;

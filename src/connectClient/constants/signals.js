@@ -1,4 +1,3 @@
-
 const signalV1 = {
   attemptingTurn: 'attemptingTurn',
   turnToken: 'turnToken',
@@ -48,4 +47,4 @@ const signalV2 = {
 export {
   signalV1,
   signalV2
-}
+};

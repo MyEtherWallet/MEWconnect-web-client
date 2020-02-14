@@ -1,4 +1,5 @@
-import tokens from '../tokens/tokens-rop.json'
+import tokens from '../tokens/tokens-rop.json';
+
 export default {
   name: 'ROP',
   name_long: 'Ropsten',

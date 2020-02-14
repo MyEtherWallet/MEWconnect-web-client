@@ -1,7 +1,4 @@
-
-
-
-const notifierCSS = (elementId) =>{
+const notifierCSS = (elementId) => {
   return `
     /* The snackbar - position it at the bottom and in the middle of the screen */
         #${elementId}-img {
@@ -140,7 +137,7 @@ const notifierCSS = (elementId) =>{
           );
         }
       }
-    `
+    `;
 };
 
 const WindowInformerCSS = `
@@ -493,7 +490,6 @@ const WindowInformerCSS = `
       }
       `;
 
-
 const innerHTML = `
     <div class="_WalletLinkNotification _WalletLinkNotificationShow _WalletLinkNotificationExpand">
       <div class="_WalletLinkNotificationBox">
@@ -542,7 +538,7 @@ const innerHTML = `
       </div>
     </div>
   </div>
-`
+`;
 export {
   notifierCSS,
   WindowInformerCSS,

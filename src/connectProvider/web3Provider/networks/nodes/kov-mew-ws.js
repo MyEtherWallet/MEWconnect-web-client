@@ -1,4 +1,5 @@
 import { KOV } from '../types/index';
+
 export default {
   type: KOV,
   service: 'myetherwallet.com-ws',

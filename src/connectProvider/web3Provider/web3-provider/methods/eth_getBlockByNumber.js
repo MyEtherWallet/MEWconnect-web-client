@@ -1,5 +1,6 @@
 import { toPayload } from '../jsonrpc';
 import EthCalls from '../web3Calls';
+
 const WAIT_TIME = 10 * 1000; //10 seconds
 const memcache = {};
 export default async ({ payload, requestManager }, res, next) => {

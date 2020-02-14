@@ -14,7 +14,7 @@ import parseTokensData from './web3Provider/helpers/parseTokensData';
 
 const state = {
   wallet: null
-}
+};
 export default class Integration {
   constructor() {
     this.eventHub = new EventEmitter();
@@ -36,7 +36,7 @@ export default class Integration {
     this.popUpHandler.showPopupWindow('lksdfsdfsdfsdfsdfsdfsdfsfsfdsf');
   }
 
-  showNotifier(){
+  showNotifier() {
     this.popUpHandler.showNotice('connected', { border: 'rgba(5, 158, 135, 0.88) solid 2px' });
 
   }
@@ -126,9 +126,9 @@ export default class Integration {
           this.popUpHandler.showNoticePersistentExit();
           resolve(_response);
         })
-        .catch(err =>{
+        .catch(err => {
           this.popUpHandler.showNoticePersistentExit();
-          state.wallet.errorHandler(err)
+          state.wallet.errorHandler(err);
         });
     });
 
@@ -138,9 +138,9 @@ export default class Integration {
         .then(result => {
           resolve(result);
         })
-        .catch(err =>{
+        .catch(err => {
           this.popUpHandler.showNoticePersistentExit();
-        })
+        });
     });
 
     this.eventHub.on('showSendSignedTx', (tx, resolve) => {

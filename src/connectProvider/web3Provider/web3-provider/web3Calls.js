@@ -1,6 +1,7 @@
 import Method from 'web3-core-method';
 import utils from 'web3-utils';
 import { formatters } from 'web3-core-helpers';
+
 class Web3Calls {
   constructor(requestManager) {
     const ethereumCalls = [
@@ -55,8 +56,8 @@ class Web3Calls {
             }
             throw new Error(
               'Address ' +
-                address +
-                ' is not a valid address to get the "transactionCount".'
+              address +
+              ' is not a valid address to get the "transactionCount".'
             );
           },
           function() {
@@ -73,4 +74,5 @@ class Web3Calls {
     return this.ethereumCalls;
   }
 }
+
 export default Web3Calls;

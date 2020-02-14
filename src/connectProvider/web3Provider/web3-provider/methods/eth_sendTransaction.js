@@ -8,13 +8,13 @@ import Misc from '../../helpers/misc';
 const setEvents = (promiObj, tx, eventHub) => {
   promiObj
     .once('transactionHash', hash => {
-      eventHub.emit('Hash', hash)
+      eventHub.emit('Hash', hash);
     })
     .once('receipt', res => {
-      eventHub.emit('Receipt', res)
+      eventHub.emit('Receipt', res);
     })
     .on('error', err => {
-      eventHub.emit('Error', err)
+      eventHub.emit('Error', err);
     });
 };
 export default async (

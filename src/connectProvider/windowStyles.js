@@ -1,6 +1,3 @@
-
-
-
 const cssText = `
     .outer-container{
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
@@ -104,6 +101,5 @@ const cssText = `
       text-align: center;
     }
     `;
-
 
 export default cssText;

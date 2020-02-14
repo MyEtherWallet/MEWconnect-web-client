@@ -20,11 +20,10 @@ const windowInformer = `
         </div>
       </div>
     </div>
-`
+`;
 
-
-const windowPopup = (image) =>{
-  if(!image){
+const windowPopup = (image) => {
+  if (!image) {
     return `
       <html>
       <head>
@@ -56,7 +55,7 @@ const windowPopup = (image) =>{
           </div>
         </body>
       </html>
-`
+`;
   } else {
     return `
       <html>
@@ -89,13 +88,12 @@ const windowPopup = (image) =>{
           </div>
         </body>
       </html>
-`
+`;
   }
 
-}
-
+};
 
 export {
   windowInformer,
   windowPopup
-}
+};

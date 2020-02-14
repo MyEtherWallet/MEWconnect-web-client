@@ -4,7 +4,7 @@ import utils from 'web3-utils';
 import { isHexString, toBuffer as utilsToBuffer } from 'ethereumjs-util';
 import { uint, address, string, bytes, bool } from './solidityTypes';
 // import xss from 'xss';
-import darkList from '../address-darklist/address-darklist.json'
+import darkList from '../address-darklist/address-darklist.json';
 
 // import { MEW_CX } from '@/builds/configs/types';
 
@@ -77,9 +77,8 @@ const isValidETHAddress = address => {
   return isAddress(address);
 };
 const isValidENSorEtherAddress = address => {
-  return isValidETHAddress(address)
+  return isValidETHAddress(address);
 };
-
 
 const sanitizeHex = hex => {
   hex = hex.substring(0, 2) == '0x' ? hex.substring(2) : hex;
@@ -162,11 +161,11 @@ const isDarklisted = addr => {
   const darklisted =
     storedDarklist > 0
       ? storedDarklist.findIndex(item => {
-          return (
-            utils.toChecksumAddress(item.address.toLowerCase()) ===
-            utils.toChecksumAddress(addr.toLowerCase())
-          );
-        })
+        return (
+          utils.toChecksumAddress(item.address.toLowerCase()) ===
+          utils.toChecksumAddress(addr.toLowerCase())
+        );
+      })
       : -1;
   const errMsg =
     darklisted === -1 ? '' : darkList.data[darklisted].comment;

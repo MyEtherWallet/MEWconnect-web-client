@@ -1,4 +1,5 @@
 import { ETH } from '../types/index';
+
 export default {
   type: ETH,
   service: 'myetherwallet.com-ws',

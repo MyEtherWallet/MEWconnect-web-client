@@ -9,6 +9,7 @@ import MewConnectInitiatorV1 from './MewConnectInitiatorV1';
 
 import WebRtcCommunication from '../WebRtcCommunication';
 import PopUpCreator from '../popUpCreator';
+
 const debug = debugLogger('MEWconnect:initiator-base');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
@@ -140,12 +141,12 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
       debug(qrCodeString);
       debug(qrCodeString); // todo remove dev item
-      if(this.showPopup){
+      if (this.showPopup) {
         this.popupCreator.openPopupWindow(qrCodeString);
-        this.popupCreator.window.addEventListener("beforeunload", (event) => {
-          if(!this.connected){
+        this.popupCreator.window.addEventListener('beforeunload', (event) => {
+          if (!this.connected) {
             this.socketDisconnect();
-            this.emit(this.lifeCycle.AuthRejected)
+            this.emit(this.lifeCycle.AuthRejected);
           }
         });
       } else {
@@ -189,7 +190,6 @@ Keys
     debug('this.signed', this.signed);
   }
 
-
   // TODO change this to handle supplying urls at time point
   async initiatorStart(url, testPrivate) {
     this.generateKeys(testPrivate);
@@ -214,21 +214,21 @@ Keys
       connId: this.connId
     });
 
-    this.V1.on('socketPaired', () =>{
+    this.V1.on('socketPaired', () => {
       this.V2.socketDisconnect();
-    })
+    });
 
-    this.V2.on('socketPaired', () =>{
+    this.V2.on('socketPaired', () => {
       this.V1.socketDisconnect();
-    })
+    });
 
-    this.webRtcCommunication.on(this.jsonDetails.lifeCycle.RtcConnectedEvent, ()=>{
+    this.webRtcCommunication.on(this.jsonDetails.lifeCycle.RtcConnectedEvent, () => {
       this.connected = true;
       this.popupCreator.closePopupWindow();
-    })
+    });
   }
 
-  socketDisconnect(){
+  socketDisconnect() {
     this.V2.socketDisconnect();
     this.V1.socketDisconnect();
   }
@@ -246,23 +246,22 @@ Keys
     this.webRtcCommunication.rtcSend(arg);
   }
 
-  sendRtcMessage(type, data){
+  sendRtcMessage(type, data) {
     this.webRtcCommunication.sendRtcMessage(type, data);
   }
 
   dataReceived(data) {
     debug('dataReceived', data);
-    this.uiCommunicator(data.type, data.data)
+    this.uiCommunicator(data.type, data.data);
   }
 
-
-  testV1Turn(){
+  testV1Turn() {
     this.V1.disconnectRTC();
   }
 
-  testV2Turn(){
+  testV2Turn() {
     this.V2.disconnectRTC();
-    this.V2.emit(this.lifeCycle)
+    this.V2.emit(this.lifeCycle);
   }
 
 }

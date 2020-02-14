@@ -7,5 +7,5 @@ export {
   ETH,
   GOERLI,
   KOV,
-  ROP,
+  ROP
 };

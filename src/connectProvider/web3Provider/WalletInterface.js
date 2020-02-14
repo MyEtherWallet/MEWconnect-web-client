@@ -16,8 +16,7 @@ import {
 import commonGenerator from './helpers/commonGenerator';
 import { Transaction } from 'ethereumjs-tx';
 import { toChecksumAddress } from './helpers/addressUtils';
-import Networks from './networks/index'
-
+import Networks from './networks/index';
 
 const toBuffer = v => {
   if (isHexString(v)) {
@@ -51,6 +50,7 @@ class WalletInterface {
       this.isPubOnly = true;
     }
   }
+
   getPrivateKey() {
     if (this.isPubOnly) throw new Error('public key only wallet');
     return this.privateKey;
@@ -92,6 +92,7 @@ class WalletInterface {
   getChecksumAddressString() {
     return toChecksumAddress(this.getAddressString());
   }
+
   signTransaction(txParams, signer) {
     if (this.isPubOnly && typeof signer !== 'function')
       throw new Error('public key only wallets needs a signer');
@@ -106,9 +107,9 @@ class WalletInterface {
         if (signedChainId !== networkId)
           throw new Error(
             'Invalid networkId signature returned. Expected: ' +
-              networkId +
-              ', Got: ' +
-              signedChainId,
+            networkId +
+            ', Got: ' +
+            signedChainId,
             'InvalidNetworkId'
           );
         resolve(getSignTransactionObject(tx));
@@ -119,6 +120,7 @@ class WalletInterface {
       }
     });
   }
+
   signMessage(msg, signer) {
     if (this.isPubOnly && typeof signer !== 'function')
       throw new Error('public key only wallets needs a signer');
@@ -141,4 +143,5 @@ class WalletInterface {
     });
   }
 }
+
 export default WalletInterface;

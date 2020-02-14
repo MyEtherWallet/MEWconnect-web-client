@@ -1,4 +1,3 @@
-
 import BigNumber from 'bignumber.js';
 
 function parseTokensData(data, to, _web3, networkToken, networkName) {
@@ -34,9 +33,9 @@ function parseTokensData(data, to, _web3, networkToken, networkName) {
     tokenData.tokenTransferTo = params[0];
     tokenData.tokenTransferVal = token
       ? value
-          .div(new BigNumber(10).pow(token.decimals))
-          .toFixed()
-          .toString()
+        .div(new BigNumber(10).pow(token.decimals))
+        .toFixed()
+        .toString()
       : value.toString();
     tokenData.tokenSymbol = token ? token.symbol : 'Unidentified Token';
   }

@@ -278,7 +278,6 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     });
   }
 
-
   // Handle the WebRTC ANSWER from the opposite (mobile) peer
   async recieveAnswer(data) {
     debug('recieveAnswer', data); // todo remove dev item
@@ -297,12 +296,13 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
   }
 
   rtcDestroy() {
-    if(this.active){
+    if (this.active) {
       this.webRtcCommunication.rtcDestroy();
       this.connected = false;
       this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
     }
   }
+
   disconnectRTCClosure() {
     return () => {
       debugStages('DISCONNECT RTC Closure');

@@ -1,6 +1,6 @@
 import QrCode from 'qrcode';
 import logo from './logoImage';
-import {cssStyles, htmlDesign, noticetext, windowInformer} from './popupWindowDesign'
+import { cssStyles, htmlDesign, noticetext, windowInformer } from './popupWindowDesign';
 
 export default class PopUpCreator {
   constructor(linkUrl) {
@@ -14,10 +14,9 @@ export default class PopUpCreator {
     this.showPopupWindow(text);
   }
 
-  get window(){
+  get window() {
     return this.popupWindow;
   }
-
 
   hideNotifier() {
     const notify = document.getElementById('Notifications');
@@ -94,7 +93,6 @@ export default class PopUpCreator {
     this.popupWindow.document.write(htmlDesign(this.logo));
     const element = this.popupWindow.document.getElementById('canvas');
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
-
 
     const css = this.popupWindow.document.createElement('style');
     css.type = 'text/css';

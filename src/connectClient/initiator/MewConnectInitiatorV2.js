@@ -70,11 +70,11 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
   }
 
-  setResetStates(){
+  setResetStates() {
     return {
       offerSent: false,
       answerReceived: false
-    }
+    };
   }
 
   isAlive() {

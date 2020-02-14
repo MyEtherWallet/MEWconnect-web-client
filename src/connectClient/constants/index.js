@@ -27,7 +27,7 @@ const signals = {
 
 const versionIdentify = (ver) => {
   const parts = ver.toString().split('.');
-  if(parts.length > 0){
+  if (parts.length > 0) {
     ver = parts[0];
   }
   switch (ver) {

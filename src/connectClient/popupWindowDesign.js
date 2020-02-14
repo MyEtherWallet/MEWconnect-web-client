@@ -1,6 +1,3 @@
-
-
-
 const cssStyles = `
     .outer-container{
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
@@ -105,8 +102,6 @@ const cssStyles = `
     }
     `;
 
-
-
 const htmlDesign = (image) => {
   if (!image) {
     return `
@@ -140,7 +135,7 @@ const htmlDesign = (image) => {
           </div>
         </body>
       </html>
-`
+`;
   } else {
     return `
       <html>
@@ -173,10 +168,9 @@ const htmlDesign = (image) => {
           </div>
         </body>
       </html>
-`
+`;
   }
-}
-
+};
 
 const noticetext = `
 
@@ -550,5 +544,5 @@ const windowInformer = `
         </div>
       </div>
     </div>
-`
-export {cssStyles, htmlDesign, noticetext, windowInformer};
+`;
+export { cssStyles, htmlDesign, noticetext, windowInformer };

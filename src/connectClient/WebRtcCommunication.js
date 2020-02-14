@@ -113,10 +113,10 @@ export default class WebRtcCommunication extends MewConnectCommon {
   receiveAnswer(plainTextOffer, peerID) {
     if (this.tryingTurn) {
       this.answersReceived.push(plainTextOffer);
-      if(this.turnTimer === null){
+      if (this.turnTimer === null) {
         debug(this.turnTimer); // todo remove dev item
         const _self = this;
-        this.turnTimer = setTimeout(this.receiveTurnAnswer.bind(_self), 2000)
+        this.turnTimer = setTimeout(this.receiveTurnAnswer.bind(_self), 2000);
       }
     } else {
       debug('webRtc receiveAnswer', this.answerReceived);
@@ -133,7 +133,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     }
   }
 
-  receiveTurnAnswer(){
+  receiveTurnAnswer() {
     const plainTextOffer = this.answersReceived[this.answersReceived.length - 1];
     debug('webRtc receiveTurnAnswer', this.answerReceived);
     debug(`active PEER_ID: ${this.p.peerInstanceId}`);

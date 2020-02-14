@@ -8,7 +8,6 @@ const connectionCodeSchemas = {
 
 const connectionCodeSeparator = '_';
 
-
 const rtc = {
   error: 'error',
   connect: 'connect',
