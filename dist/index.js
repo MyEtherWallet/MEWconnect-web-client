@@ -3,32 +3,33 @@
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var createLogger = _interopDefault(require('logging'));
-var debugLogger = _interopDefault(require('debug'));
-var browserOrNode = require('browser-or-node');
 var EventEmitter = _interopDefault(require('events'));
+var browserOrNode = require('browser-or-node');
 var detectBrowser = require('detect-browser');
 var eccrypto = _interopDefault(require('eccrypto'));
 var ethUtils = require('ethereumjs-util');
 var ethUtils__default = _interopDefault(ethUtils);
 var crypto = _interopDefault(require('crypto'));
 var secp256k1 = _interopDefault(require('secp256k1'));
-var uuid = _interopDefault(require('uuid/v4'));
 var queryString = _interopDefault(require('query-string'));
 require('isomorphic-ws');
-var wrtc = _interopDefault(require('wrtc'));
+var debugLogger = _interopDefault(require('debug'));
 var SimplePeer = _interopDefault(require('simple-peer'));
+var uuid = _interopDefault(require('uuid/v4'));
+var wrtc = _interopDefault(require('wrtc'));
 var io = _interopDefault(require('socket.io-client'));
 var QrCode = _interopDefault(require('qrcode'));
-var web3 = _interopDefault(require('web3'));
-var web3CoreRequestmanager = require('web3-core-requestmanager');
 var Method = _interopDefault(require('web3-core-method'));
 var utils = _interopDefault(require('web3-utils'));
 var web3CoreHelpers = require('web3-core-helpers');
-var BigNumber = _interopDefault(require('bignumber.js'));
+var web3 = _interopDefault(require('web3'));
 var url = _interopDefault(require('url'));
-var unit = _interopDefault(require('ethjs-unit'));
-var ethereumjsTx = require('ethereumjs-tx');
+var BigNumber = _interopDefault(require('bignumber.js'));
+var unit = require('ethjs-unit');
+var unit__default = _interopDefault(unit);
+var web3CoreRequestmanager = require('web3-core-requestmanager');
 var Common = _interopDefault(require('ethereumjs-common'));
+var ethereumjsTx = require('ethereumjs-tx');
 
 const stunServers = [
   { urls: 'stun:global.stun.twilio.com:3478?transport=udp' }
@@ -235,7 +236,7 @@ class MewConnectCommon extends EventEmitter {
 
   static getBrowserRTC() {
     if (typeof window === 'undefined') return null;
-    const wrtc = {
+    const wrtc$$1 = {
       RTCPeerConnection:
       // eslint-disable-next-line no-undef
         window.RTCPeerConnection ||
@@ -258,8 +259,8 @@ class MewConnectCommon extends EventEmitter {
         // eslint-disable-next-line no-undef
         window.webkitRTCIceCandidate
     };
-    if (!wrtc.RTCPeerConnection) return null;
-    return wrtc;
+    if (!wrtc$$1.RTCPeerConnection) return null;
+    return wrtc$$1;
   }
 
   static checkWebRTCAvailable() {
@@ -553,14 +554,14 @@ class WebsocketConnection {
    */
   async connect(websocketUrl, options = {}) {
     try {
-      const url = `${websocketUrl}?${queryString.stringify(options)}`;
-      debug(url);
+      const url$$1 = `${websocketUrl}?${queryString.stringify(options)}`;
+      debug(url$$1);
       if (typeof jest !== 'undefined' && typeof window === 'undefined') {
         const WebSocket = require('promise-ws').default;
-        this.socket = await WebSocket.create(url);
+        this.socket = await WebSocket.create(url$$1);
         this.socket.on('message', this.onMessage.bind(this));
       } else {
-        this.socket = new WebSocket(url);
+        this.socket = new WebSocket(url$$1);
         this.socket.onmessage = this.onMessage.bind(this);
         this.socket.onerror = this.onError.bind(this);
         this.socket.onopen = this.onOpen.bind(this);
@@ -1210,14 +1211,14 @@ class MewConnectInitiatorV2 extends MewConnectCommon {
   //   await this.initiatorStart(this.Url);
   // }
 
-  async initiatorStart(url = this.Url, cryptoInstance, details = {}) {
+  async initiatorStart(url$$1 = this.Url, cryptoInstance, details = {}) {
     this.connId = details.connId;
     this.signed = details.signed;
     try {
       debug$2('initiatorStart V2'); // todo remove dev item
       this.mewCrypto = cryptoInstance;
       this.uiCommunicator(this.lifeCycle.signatureCheck);
-      await this.connect(url);
+      await this.connect(url$$1);
       // this.socket = this.socketManager.connect();
       this.initiatorConnect();
     } catch (e) {
@@ -1241,10 +1242,7 @@ class MewConnectInitiatorV2 extends MewConnectCommon {
     try {
       // if (!websocketURL)
       //   websocketURL =
-      if (typeof jest !== 'undefined' && this.connId === null) {
-        // for tests only
-        // this.generateKeys();
-      }
+      if (typeof jest !== 'undefined' && this.connId === null) ;
       const queryOptions = options
         ? options
         : {
@@ -1728,7 +1726,7 @@ class MewConnectInitiatorV1 extends MewConnectCommon {
   }
 
   // Initalize a websocket connection with the signal server
-  async initiatorStart(url = this.Url, cryptoInstance, details) {
+  async initiatorStart(url$$1 = this.Url, cryptoInstance, details) {
     try {
       this.mewCrypto = cryptoInstance;
       const toSign = this.mewCrypto.generateMessage();
@@ -1744,7 +1742,7 @@ class MewConnectInitiatorV1 extends MewConnectCommon {
         transports: ['websocket', 'polling', 'flashsocket'],
         secure: true
       };
-      this.socketManager = this.io(url, options);
+      this.socketManager = this.io(url$$1, options);
       this.socket = this.socketManager.connect();
       this.initiatorConnect(this.socket);
     } catch (e) {
@@ -2862,7 +2860,7 @@ Keys
   }
 
   // TODO change this to handle supplying urls at time point
-  async initiatorStart(url, testPrivate) {
+  async initiatorStart(url$$1, testPrivate) {
     this.generateKeys(testPrivate);
     this.displayCode(this.privateKey);
     const options = {
@@ -3876,22 +3874,22 @@ const errors = require('web3-core-helpers').errors;
 let Ws = null;
 let _btoa = null;
 let parseURL = null;
-Ws = function(url, protocols) {
-  if (protocols) return new window.WebSocket(url, protocols);
-  return new window.WebSocket(url);
+Ws = function(url$$1, protocols) {
+  if (protocols) return new window.WebSocket(url$$1, protocols);
+  return new window.WebSocket(url$$1);
 };
 _btoa = btoa;
-parseURL = function(url) {
-  return new URL(url);
+parseURL = function(url$$1) {
+  return new URL(url$$1);
 };
-const WebsocketProvider = function WebsocketProvider(url, options) {
+const WebsocketProvider = function WebsocketProvider(url$$1, options) {
   const _this = this;
   this.responseCallbacks = {};
   this.notificationCallbacks = [];
 
   options = options || {};
   this._customTimeout = options.timeout;
-  const parsedURL = parseURL(url);
+  const parsedURL = parseURL(url$$1);
   const headers = options.headers || {};
   const protocol = options.protocol || undefined;
   if (parsedURL.username && parsedURL.password) {
@@ -3903,7 +3901,7 @@ const WebsocketProvider = function WebsocketProvider(url, options) {
     headers.authorization = 'Basic ' + _btoa(parsedURL.auth);
   }
   this.connection = new Ws(
-    url,
+    url$$1,
     protocol,
     undefined,
     headers,
@@ -4089,6 +4087,9 @@ WebsocketProvider.prototype.removeAllListeners = function(type) {
     case 'error':
       this.connection.onerror = null;
       break;
+
+    default:
+      break;
   }
 };
 
@@ -4267,10 +4268,10 @@ const getTimer = () => {
   ) {
     return createTimerObject();
   } else if (worker === undefined) {
-    const url = URL.createObjectURL(
+    const url$$1 = URL.createObjectURL(
       new Blob([workerCode()], { type: 'text/javascript' })
     );
-    worker = new Worker(url);
+    worker = new Worker(url$$1);
     worker.onmessage = Timer.onmessage;
     return Timer;
   }
@@ -4495,11 +4496,11 @@ const formatDate = date => {
   });
   return `${day}. ${dateString} ${GMTtime} - ${localTime} ${stripTimezone}`;
 };
-const isValidETHAddress = address => {
-  return isAddress(address);
+const isValidETHAddress = address$$1 => {
+  return isAddress(address$$1);
 };
-const isValidENSorEtherAddress = address => {
-  return isValidETHAddress(address);
+const isValidENSorEtherAddress = address$$1 => {
+  return isValidETHAddress(address$$1);
 };
 
 const sanitizeHex = hex => {
@@ -4777,7 +4778,7 @@ var ethSignTransaction = async (
   tx.gas = !tx.gas ? await ethCalls.estimateGas(localTx) : tx.gas;
   tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
   tx.gasPrice = !tx.gasPrice
-    ? unit.toWei(store.state.gasPrice, 'gwei').toString()
+    ? unit__default.toWei(store.state.gasPrice, 'gwei').toString()
     : tx.gasPrice;
   getSanitizedTx(tx)
     .then(_tx => {
@@ -53068,7 +53069,6 @@ var ROP = {
 
 
 var types = /*#__PURE__*/Object.freeze({
-  __proto__: null,
   ETH: ETH,
   GOERLI: GOERLI,
   KOV: KOV,
@@ -53108,7 +53108,6 @@ var ropMewWs = {
 
 
 var nodes = /*#__PURE__*/Object.freeze({
-  __proto__: null,
   ethmewws: ethMewWs,
   kovmewws: kovMewWs,
   ropmewws: ropMewWs
@@ -53443,9 +53442,9 @@ const createWallet = async state => {
   return _tWallet;
 };
 createWallet.errorHandler = errorHandler;
-const signalerConnect = (url, mewConnect) => {
+const signalerConnect = (url$$1, mewConnect) => {
   return new Promise((resolve, reject) => {
-    mewConnect.initiatorStart(url);
+    mewConnect.initiatorStart(url$$1);
     // mewConnect.on('AuthRejected', () => {
     //   reject();
     // });

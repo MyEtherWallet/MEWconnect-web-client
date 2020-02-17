@@ -1,6 +1,6 @@
-'use strict';
 
 // Libs //
+import Web3 from 'web3';
 import Initiator from '../../src/connectClient/MewConnectInitiator';
 import MewConnectCrypto from '../../src/connectClient/MewConnectCrypto';
 import Receiver from '@clients/receiver';

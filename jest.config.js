@@ -1,4 +1,5 @@
 module.exports = {
+  verbose: true,
   clearMocks: true,
   collectCoverage: true,
   setTimeout: 10000,
@@ -7,6 +8,9 @@ module.exports = {
   testMatch: ['**/__tests__/**/*.js?(x)', '**/test/**/?(*.)+(spec|test).js?(x)'],
   testPathIgnorePatterns: ['/node_modules/'],
   "testEnvironment": "node",
+  transform: {
+    "^.+\\.(js) ? $": "babel-jest"
+},
   "setupFiles": [
     "<rootDir>/test/jest.setup.js"
   ],
