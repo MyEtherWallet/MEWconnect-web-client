@@ -31,6 +31,14 @@ const notifierCSS = (elementId) => {
           box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.1);
         }
         
+        #${elementId}-close {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          color: #1ca1f1;
+          cursor: pointer;
+        }
+        
         /* Show the snackbar when clicking on a button (class added with JavaScript) */
         #${elementId}.show {
           visibility: visible; /* Show the snackbar */

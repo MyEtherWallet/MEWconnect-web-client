@@ -1,3 +1,10 @@
+### Release v2.1.0
+- Refactor version 1 and version 2 checking and selection
+- Include stand alone provider
+
+### Release v2.0.0-beta.23
+- Include both version 1 and version 2 and allow for seamless connection from app using either
+
 ### Release v1.0.4
 - Switch from webpack to rollup
 - clean unused code

@@ -12,7 +12,7 @@ const IPCMessageType = {
 };
 import logo from './logoImage';
 import { notifierCSS, WindowInformerCSS } from './popupStyles';
-import { windowPopup, windowInformer } from './popupHtml';
+import { windowPopup, windowInformer, noticeHtml } from './popupHtml';
 import cssStyles from './windowStyles';
 
 export default class PopUpHandler {
@@ -81,9 +81,8 @@ export default class PopUpHandler {
       elementText.innerHTML = text;
 
       setTimeout(function() { element.className = element.className.replace('show-in', 'show-out'); }, timeoutTime - 500);
-      setTimeout(function() { element.className = element.className.replace('show-out', ''); }, timeoutTime);
+      this.timeoutTracker = setTimeout(function() { element.className = element.className.replace('show-out', ''); }, timeoutTime);
     }
-
   }
 
   showNoticePersistentEnter(text, styleOverrides) {
@@ -126,13 +125,18 @@ export default class PopUpHandler {
 
     const div = window.document.createElement('div');
     div.id = this.elementId;
-    const img = window.document.createElement('img');
-    img.src = logo;
-    img.id = this.elementId + '-img';
-    div.appendChild(img);
-    const textDiv = window.document.createElement('div');
-    textDiv.id = this.elementId + '-text';
-    div.appendChild(textDiv);
+    div.innerHTML = noticeHtml(this.elementId, logo);
+    // const divClose = window.document.createElement('div');
+    // divClose.id = this.elementId + 'close';
+    // divClose.textContent = 'X';
+    // div.appendChild(divClose);
+    // const img = window.document.createElement('img');
+    // img.src = logo;
+    // img.id = this.elementId + '-img';
+    // div.appendChild(img);
+    // const textDiv = window.document.createElement('div');
+    // textDiv.id = this.elementId + '-text';
+    // div.appendChild(textDiv);
     window.document.body.appendChild(div);
 
     const css = document.createElement('style');
@@ -142,6 +146,15 @@ export default class PopUpHandler {
     else
       css.innerText = notifierCSS(this.elementId);
     document.body.appendChild(css);
+
+    const closeEl = document.getElementById(this.elementId + '-close')
+    closeEl.addEventListener('click', (event) =>{
+      const el = document.getElementById(this.elementId)
+      if(this.timeoutTracker){
+        clearTimeout(this.timeoutTracker);
+      }
+      el.className = el.className.replace('show', '')
+    })
   }
 
   createWindowInformer() {

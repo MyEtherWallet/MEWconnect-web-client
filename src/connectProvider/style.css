@@ -21,6 +21,7 @@
     However, delay the fade out process for 2.5 seconds */
     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    color: #1ca1f1;
 }
 
 /* Animations to fade the snackbar in and out */

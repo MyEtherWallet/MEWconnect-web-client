@@ -53624,7 +53624,6 @@ class Integration {
 
 // INITIATOR CLIENT
 
-console.log('Something rollup'); // todo remove dev item
 var MEWconnect = {
   Initiator: MewConnectClient.Initiator,
   Crypto: MewConnectClient.Crypto,

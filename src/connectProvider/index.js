@@ -70,12 +70,15 @@ export default class Integration {
     return 'ETH';
   }
 
-  makeWeb3Provider(CHAIN_ID) {
+  makeWeb3Provider(CHAIN_ID, RPC_URL) {
     const chain = this.identifyChain(CHAIN_ID);
     const defaultNetwork = Networks[chain][0];
     state.network = defaultNetwork;
-    const hostUrl = url.parse(defaultNetwork.url);
+    const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
     const options = {};
+    if (!/[wW]/.test(hostUrl.protocol)) {
+      throw Error('websocket rpc endpoint required');
+    }
     // // eslint-disable-next-line
     const parsedUrl = `${hostUrl.protocol}//${hostUrl.host}${
       defaultNetwork.port ? ':' + defaultNetwork.port : ''

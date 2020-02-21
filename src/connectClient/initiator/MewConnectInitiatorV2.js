@@ -472,22 +472,33 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     }
   }
 
+  async decryptIncomming(data) {
+    if (this.isJSON(data)) {
+      const parsedJson = JSON.parse(data);
+      if (parsedJson.type && parsedJson.data) {
+        return parsedJson;
+      }
+      return await this.mewCrypto.decrypt(
+        JSON.parse(data)
+      );
+
+    } else {
+      if (data.type && data.data) {
+        return data;
+      }
+      return await this.mewCrypto.decrypt(
+        JSON.parse(JSON.stringify(data))
+      );
+    }
+  }
+
   async onData(peerID, data) {
     debug(data); // todo remove dev item
     debug('DATA RECEIVED', data.toString());
     debug('peerID', peerID);
     try {
-      let decryptedData;
-      if (this.isJSON(data)) {
-        decryptedData = await this.mewCrypto.decrypt(
-          // JSON.parse(data.toString())
-          JSON.parse(data)
-        );
-      } else {
-        decryptedData = await this.mewCrypto.decrypt(
-          JSON.parse(data.toString())
-        );
-      }
+      let decryptedData = await this.decryptIncomming(data);
+
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
         debug('DECRYPTED DATA RECEIVED 1', parsed);

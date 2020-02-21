@@ -93,7 +93,20 @@ const windowPopup = (image) => {
 
 };
 
+const noticeHtml = (elementId, imageSrc) =>{
+  return `
+  <div id="${elementId + '-close'}">
+  X
+</div>
+  <img id="${elementId + '-img'}" src="${imageSrc}"/>
+  <div id="${elementId + '-text'}">
+  
+</div>
+  `
+}
+
 export {
   windowInformer,
-  windowPopup
+  windowPopup,
+  noticeHtml
 };
