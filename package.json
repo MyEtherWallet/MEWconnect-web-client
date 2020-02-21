@@ -5,7 +5,8 @@
   "main": "./dist/index.js",
   "module": "./src/index.js",
   "scripts": {
-    "start": "node ./example/peer_server/www.js",
+    "preinstall": "cd web/example/app &&  npm install",
+    "start": "cd web/example/app &&  npm run serve",
     "test:jest": "npx jest --detectOpenHandles --forceExit --runInBand",
     "test:browser": "npx opn ./tests/browser/browser_test.html",
     "test:old": "npm run buildBrowserTest && npm run test:jest && npm run test:browser",
