@@ -44,7 +44,7 @@ class WSProvider {
     this.keepAliveTimer = workerTimer.setInterval(keepAlive, 5000);
     const _this = this.wsProvider;
     delete this.wsProvider['send'];
-    this.wsProvider.send = (payload, callback) => {
+    const rawSend = (payload, callback) => {
       this.lastMessage = new Date().getTime();
       if (_this.connection.readyState === _this.connection.CONNECTING) {
         setTimeout(() => {
@@ -65,6 +65,7 @@ class WSProvider {
         requestManager: new Web3RequestManager(this.oWSProvider),
         eventHub
       };
+
       const middleware = new MiddleWare();
       middleware.use(ethSendTransaction);
       middleware.use(ethSignTransaction);
@@ -78,6 +79,27 @@ class WSProvider {
         _this._addResponseCallback(payload, callback);
       });
     };
+    const handler = {
+      apply: function(target, thisArg, argumentsList) {
+        if (argumentsList.length === 1) {
+          if (argumentsList[0] === 'eth_requestAccounts') {
+            return new Promise((resolve, reject) => {
+              let callback = (err, response) => {
+                if(err) reject(err);
+                else resolve(response.result);
+              };
+              let payload = {
+                id: 1,
+                method: 'eth_accounts'
+              };
+              target(payload, callback);
+            });
+          }
+        }
+        return target(argumentsList[0], argumentsList[1]);
+      }
+    };
+    this.wsProvider.send = new Proxy(rawSend, handler);
     return this.wsProvider;
   }
 }

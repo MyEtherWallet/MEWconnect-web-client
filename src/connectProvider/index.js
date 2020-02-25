@@ -52,6 +52,10 @@ export default class Integration {
     if (state.web3) {
       await state.web3.eth.getTransactionCount(state.wallet.getChecksumAddressString());
     }
+
+    if(state.web3Provider){
+      state.web3Provider.accountsChanged([state.wallet.getChecksumAddressString()])
+    }
     return [state.wallet.getChecksumAddressString()];
   }
 
@@ -79,23 +83,28 @@ export default class Integration {
     if (!/[wW]/.test(hostUrl.protocol)) {
       throw Error('websocket rpc endpoint required');
     }
+    if(!hostUrl.hostname.includes(chain.name) && hostUrl.hostname.includes('infura.io')){
+      throw Error(`ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} d match`)
+    }
     // // eslint-disable-next-line
     const parsedUrl = `${hostUrl.protocol}//${hostUrl.host}${
       defaultNetwork.port ? ':' + defaultNetwork.port : ''
     }${hostUrl.pathname}`;
+    const web3Provider = new MEWProvider(
+      parsedUrl,
+      options,
+      {
+        state: state
+      },
+      this.eventHub
+    );
+    state.web3Provider = web3Provider;
     state.web3 = new Web3(
-      new MEWProvider(
-        parsedUrl,
-        options,
-        {
-          state: state
-        },
-        this.eventHub
-      )
+      web3Provider
     );
     state.web3.currentProvider.sendAsync = state.web3.currentProvider.send;
     this.setupListeners();
-    return state.web3;
+    return web3Provider;
   }
 
   disconnectNotifier() {
@@ -112,6 +121,7 @@ export default class Integration {
   disconnect() {
     const connection = state.wallet.getConnection();
     connection.disconnectRTC();
+
   }
 
   sign(tx) {

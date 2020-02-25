@@ -170,6 +170,8 @@ WebsocketProvider.prototype.send = function(payload, callback) {
   this.connection.send(JSON.stringify(payload));
   this._addResponseCallback(payload, callback);
 };
+
+
 WebsocketProvider.prototype.on = function(type, callback) {
   if (typeof callback !== 'function')
     throw new Error('The second parameter callback must be a function.');
@@ -190,8 +192,13 @@ WebsocketProvider.prototype.on = function(type, callback) {
     case 'error':
       this.connection.onerror = callback;
       break;
+
+    case 'accountsChanged':
+      this.accountsChanged = callback;
+      break;
   }
 };
+
 WebsocketProvider.prototype.removeListener = function(type, callback) {
   const _this = this;
 

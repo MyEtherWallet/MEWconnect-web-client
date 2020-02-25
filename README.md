@@ -1,5 +1,121 @@
 <!--##### Note This Repository Nees Some Cleaning-->
 
+
+MEWconnect
+==========
+
+
+With WalletLink, users can use your DApp in any desktop browser without
+installing an extension, and end-to-end encryption using client-side generated
+keys keeps all user activity private.
+
+For DApp developers to integrate with MEW wallet using MEWconnect, all you need to do is drop a
+few lines of code into your application, and WalletLink will take care of the
+rest.
+
+## Getting Started
+
+### Installation
+
+```shell
+# With NPM
+npm install @myetherwallet/mewconnect-web-client
+```
+
+### Initializing MEWconnect and a Web3 instance using the default node
+
+```javascript
+import MEWconnect from "@myetherwallet/mewconnect-web-client"
+import Web3 from "web3"
+
+const CHAIN_ID = 1
+
+// Initialize 
+export const mewConnect = new MEWconnect.Provider()
+
+// Initialize a Web3 Provider object
+export const ethereum = mewConnect.makeWeb3Provider(CHAIN_ID)
+
+// Initialize a Web3 object
+export const web3 = new Web3(ethereum)
+
+```
+
+#### Alternatively, a node rpc url may be supplied 
+
+- Note: only websocket urls are supported.
+```javascript
+import MEWconnect from "@myetherwallet/mewconnect-web-client"
+import Web3 from "web3"
+
+const ETH_JSONRPC_URL = "wss://mainnet.infura.io/v3/<YOUR_INFURA_API_KEY>"
+const CHAIN_ID = 1
+
+// Initialize WalletLink
+export const mewConnect = new MEWconnect.Provider()
+
+// Initialize a Web3 Provider object
+export const ethereum = mewConnect.makeWeb3Provider(CHAIN_ID, ETH_JSONRPC_URL)
+
+// Initialize a Web3 object
+export const web3 = new Web3(ethereum)
+
+```
+
+### Use EIP-1102 to obtain authorization and get Ethereum accounts
+
+Invoking EIP-1102 will show a QR code dialog if the user's mobile wallet is not
+already connected to their browser. The following code should run in response to
+a user-initiated action such as clicking a button to ensure the pop up is not
+blocked by the browser.
+
+```javascript
+// Use eth_RequestAccounts
+ethereum.send("eth_requestAccounts").then((accounts) => {
+  console.log(`User's address is ${accounts[0]}`)
+
+})
+
+// Alternatively, you can use ethereum.enable()
+ethereum.enable().then((accounts) => {
+  console.log(`User's address is ${accounts[0]}`)
+})
+```
+
+That's it! Once the connection between the phone and the site is established, the Web3 object
+(`web3`) and the Web3 Provider (`ethereum`) are ready to be used as usual.
+
+
+---
+## Setting up the wallet using a supplied web3 instance
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### Getting Started
 
 

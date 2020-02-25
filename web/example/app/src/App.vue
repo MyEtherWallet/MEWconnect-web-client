@@ -18,6 +18,10 @@
         <h3>Tx Hash: </h3> {{txHash}}
       </li>
       <li>
+        <button @click="getAccount">get account</button>
+        <h3>{{account}}</h3>
+      </li>
+      <li>
         <button @click="getBalance">balance</button>
         <h3>{{balance}}</h3>
       </li>
@@ -65,7 +69,8 @@ export default {
       coinBase: 0,
       txHash: '',
       callRes: '',
-      chainId: 0
+      chainId: 0,
+      account: ''
     };
   },
   mounted() {
@@ -73,6 +78,9 @@ export default {
     this.ethereum = this.connect.makeWeb3Provider(3);
     this.web3 = new Web3(this.ethereum);
     this.altPopup = new PopUpCreator();
+    this.ethereum.on("accountsChanged", (accounts) => {
+      console.log(`accountsChanged User's address is ${accounts[0]}`)
+    })
   },
   methods: {
     animate() {
@@ -92,6 +100,14 @@ export default {
     },
     disconnect() {
       this.connect.disconnect();
+      this.userAddress = '';
+    },
+    getAccount(){
+      this.ethereum.send("eth_requestAccounts").then((accounts) => {
+        console.log('eth_requestAccounts', accounts); // todo remove dev item
+        console.log(`User's address is ${accounts[0]}`)
+
+      })
     },
     getBalance() {
       this.web3.eth.getBalance(this.userAddress).then(bal => this.balance = bal);
