@@ -9,6 +9,7 @@ import MewConnectCrypto from '../MewConnectCrypto';
 import WebRtcCommunication from '../WebRtcCommunication';
 
 const debug = debugLogger('MEWconnect:initiator-V2');
+const debugTurn = debugLogger('MEWconnect:turn-V2');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances-V2');
 const debugStages = debugLogger('MEWconnect:initiator-stages-V2');
 const logger = createLogger('MewConnectInitiator-V2');
@@ -67,6 +68,12 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     } catch (e) {
       debug('constructor error:', e);
     }
+
+
+    this.webRtcCommunication.on('useFallback', () =>{
+      console.log("TURN ======================================================================"); // todo remove dev item
+      this.useFallback();
+    })
 
   }
 
@@ -307,7 +314,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   // Provide Notice that initial WebRTC connection failed and the fallback method will be used
   willAttemptTurn() {
     this.tryingTurn = true;
-    debugStages('TRY TURN CONNECTION');
+    debugTurn('TRY TURN CONNECTION');
     this.uiCommunicator(this.lifeCycle.UsingFallback);
   }
 
@@ -443,6 +450,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
         ...webRtcConfig
       };
 
+      this.webRtcCommunication.setConnectionVersion('V2');
       this.webRtcCommunication.start(simpleOptions);
 
       debug(`initiatorStartRTC - options: ${simpleOptions}`);
@@ -602,7 +610,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   retryViaTurn(data) {
     try {
       this.states = this.setResetStates();
-      debugStages('Retrying via TURN v2');
+      debugTurn('Retrying via TURN v2');
       this.iceServers = null;
       const options = {
         servers: data.iceServers.map(obj => {
@@ -627,7 +635,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
       this.initiatorStartRTC(options);
     } catch (e) {
-      debug('retryViaTurn error:', e);
+      debugTurn('retryViaTurn error:', e);
     }
   }
 
