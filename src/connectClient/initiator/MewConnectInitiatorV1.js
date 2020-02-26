@@ -246,6 +246,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     };
 
     debug(`initiatorStartRTC - options: ${simpleOptions}`);
+    console.log("START V1"); // todo remove dev item
     this.webRtcCommunication.setConnectionVersion('V1');
     this.webRtcCommunication.start(simpleOptions);
     this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
