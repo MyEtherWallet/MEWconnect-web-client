@@ -67,7 +67,7 @@ const windowPopup = (image) => {
       </head>
 
         <body>
-          <div class="outer-container">
+          <div id="outer-container" class="outer-container">
             <div class="container">
             <h3 class="text-one">Scan QR Code</h3>
             <h4 class="text-two">To connect mobile wallet</h4>

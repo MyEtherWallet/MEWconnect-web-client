@@ -147,14 +147,14 @@ export default class PopUpHandler {
       css.innerText = notifierCSS(this.elementId);
     document.body.appendChild(css);
 
-    const closeEl = document.getElementById(this.elementId + '-close')
-    closeEl.addEventListener('click', (event) =>{
-      const el = document.getElementById(this.elementId)
-      if(this.timeoutTracker){
+    const closeEl = document.getElementById(this.elementId + '-close');
+    closeEl.addEventListener('click', (event) => {
+      const el = document.getElementById(this.elementId);
+      if (this.timeoutTracker) {
         clearTimeout(this.timeoutTracker);
       }
-      el.className = el.className.replace('show', '')
-    })
+      el.className = el.className.replace('show', '');
+    });
   }
 
   createWindowInformer() {
@@ -230,6 +230,7 @@ export default class PopUpHandler {
         'toolbar=0'
       ].join(',')
     );
+
     this.popupWindow.document.write(windowPopup(logo));
     const element = this.popupWindow.document.getElementById('canvas');
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
@@ -241,8 +242,12 @@ export default class PopUpHandler {
     else
       css.innerText = cssStyles;
     this.popupWindow.document.body.appendChild(css);
-    this.popupWindow.addEventListener('beforeunload', () => {
+    this.popupWindow.addEventListener('onbeforeunload', () => {
       this.hideNotifier();
+    });
+    const popupwindow = this.popupWindow;
+    window.addEventListener('onbeforeunload', () => {
+      popupwindow.close();
     });
     return this.popupWindow;
   }

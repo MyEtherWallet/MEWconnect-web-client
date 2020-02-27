@@ -252,7 +252,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     if (!this.connected) {
       console.log(this.turnTimer); // todo remove dev item
       this.emit('useFallback');
-      this.rtcDestroy();
+      // this.rtcDestroy();
     }
   }
 
@@ -303,6 +303,9 @@ export default class WebRtcCommunication extends MewConnectCommon {
         evt.target.iceConnectionState === 'connected' ||
         evt.target.iceConnectionState === 'completed'
       ) {
+        if (this.timer) {
+          clearTimeout(this.timer);
+        }
         if (!this.connected) {
           this.connected = true;
           this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
