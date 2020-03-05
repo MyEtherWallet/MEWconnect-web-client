@@ -1,3 +1,9 @@
+### Release v2.1.0-beta.5
+- MEWconnect disconnecting after connection fix
+
+### Release v2.1.0-beta.4
+- version 2 (MEW mobile) turn connection fix
+
 ### Release v2.1.0
 - Refactor version 1 and version 2 checking and selection
 - Include stand alone provider

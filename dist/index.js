@@ -30,6 +30,8 @@ var unit__default = _interopDefault(unit);
 var web3CoreRequestmanager = require('web3-core-requestmanager');
 var Common = _interopDefault(require('ethereumjs-common'));
 var ethereumjsTx = require('ethereumjs-tx');
+require('core-js/stable');
+require('regenerator-runtime/runtime');
 
 const stunServers = [
   { urls: 'stun:global.stun.twilio.com:3478?transport=udp' }
@@ -701,7 +703,8 @@ class WebsocketConnection {
 
 const debug$1 = debugLogger('MEWconnect:webRTC-communication');
 const debugPeer$1 = debugLogger('MEWconnectVerbose:peer-instances');
-const debugStages = debugLogger('MEWconnect:initiator-stages');
+const debugStages = debugLogger('MEWconnect:peer-stages');
+const debugTemp = console.error; //debugLogger('temp');
 const logger$2 = createLogger('WebRtcCommunication');
 
 class WebRtcCommunication extends MewConnectCommon {
@@ -710,12 +713,19 @@ class WebRtcCommunication extends MewConnectCommon {
     this.Peer = SimplePeer;
     this.mewCrypto = mewCrypto;
     this.peersCreated = {};
+    this.peersActive = {};
     this.allPeerIds = [];
     this.iceState = '';
     this.answerReceived = {};
     this.answersReceived = [];
     this.offersSent = -1;
     this.turnTimer = null;
+    this.turnResponseTimer = null;
+    this.turnWaitTime = 5000;
+    this.enableTimer = true;
+    this.tryingTurn = false;
+    this.connected = false;
+
 
     this.signals = this.jsonDetails.signals;
     this.rtcEvents = this.jsonDetails.rtc;
@@ -723,6 +733,18 @@ class WebRtcCommunication extends MewConnectCommon {
     this.versions = this.jsonDetails.versions;
     this.lifeCycle = this.jsonDetails.lifeCycle;
     this.iceStates = this.jsonDetails.iceConnectionState;
+
+    this.usingVersion = '';
+    this.p = null;
+    this.canSignal = false;
+  }
+
+  clearExtraOnConnection() {
+    this.peersCreated = {};
+    this.peersActive = {};
+    this.allPeerIds = [];
+    this.answerReceived = {};
+    this.answersReceived = [];
   }
 
   isAlive() {
@@ -730,6 +752,10 @@ class WebRtcCommunication extends MewConnectCommon {
       return this.p.connected && !this.p.destroyed;
     }
     return false;
+  }
+
+  setConnectionVersion(version) {
+    this.usingVersion = version;
   }
 
   // can be used to listen to specific events, especially those that pass data
@@ -772,43 +798,85 @@ class WebRtcCommunication extends MewConnectCommon {
     return split.join('-');
   }
 
+  fallbackTimer(clear) {
+    if (this.usingVersion === 'V2') {
+      if (clear) {
+        clearTimeout(this.turnTimer);
+      } else if (this.enableTimer) {
+        clearTimeout(this.turnTimer);
+        this.turnTimer = setTimeout(() => {
+          this.willAttemptTurn();
+        }, this.turnWaitTime);
+      }
+
+    }
+  }
+
   start(simpleOptions) {
+    debugTemp('start');
+    this.canSignal = !this.canSignal;
+    this.fallbackTimer();
     this.setActivePeerId();
-    this.p = new this.Peer(simpleOptions);
-    const peerID = this.getActivePeerId();
-    this.answerReceived[peerID] = false;
-    this.p.peerInstanceId = peerID;
-    this.peersCreated[peerID] = this.p;
-    this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
-    this.p.on(this.rtcEvents.connect, this.onConnect.bind(this, peerID));
-    this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
-    this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
-    this.p.on(this.rtcEvents.signal, this.signalListener.bind(this));
-    debug$1(`active PEER_ID: ${this.p.peerInstanceId}`);
-    this.p._pc.addEventListener(
-      'iceconnectionstatechange',
-      this.stateChangeListener.bind(this, peerID)
-    );
+      this.p = new this.Peer(simpleOptions);
+      const peerID = this.getActivePeerId();
+      this.answerReceived[peerID] = false;
+      this.p.peerInstanceId = peerID;
+      this.peersCreated[peerID] = this.p;
+      this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
+      this.p.on(this.rtcEvents.connect, this.onConnect.bind(this, peerID));
+      this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
+      this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
+      this.p.on(this.rtcEvents.signal, this.signalListener.bind(this));
+      debug$1(`active PEER_ID: ${this.p.peerInstanceId}`);
+      this.p._pc.addEventListener(
+        'iceconnectionstatechange',
+        this.stateChangeListener.bind(this, peerID)
+      );
+
   }
 
   onConnect(peerID) {
+    console.log('onConnect'); // todo remove dev item
     debug$1('onConnect', peerID); // todo remove dev item
+    this.connected = true;
     this.emit('connect', peerID);
+    this.clearExtraOnConnection();
   }
 
   signalListener(data) {
-    ++this.offersSent;
-    debug$1('signalListener'); // todo remove dev item
-    this.emit('signal', data);
+    if(this.canSignal) {
+      this.canSignal = !this.canSignal;
+      ++this.offersSent;
+      debug$1('signalListener'); // todo remove dev item
+      this.emit('signal', data);
+    }
   }
 
   receiveAnswer(plainTextOffer, peerID) {
-    if (this.tryingTurn) {
+
+    debugTemp('receiveAnswer', this.usingVersion);
+    this.fallbackTimer();
+    if (this.tryingTurn && this.usingVersion === 'V1') {
       this.answersReceived.push(plainTextOffer);
       if (this.turnTimer === null) {
         debug$1(this.turnTimer); // todo remove dev item
         const _self = this;
-        this.turnTimer = setTimeout(this.receiveTurnAnswer.bind(_self), 2000);
+        this.turnTimer = setTimeout(this.receiveTurnAnswer.bind(_self), 1000);
+      }
+    } else if (this.tryingTurn && this.usingVersion === 'V2') {
+      this.enableTimer = false;
+      if (this.turnTimer !== null) {
+        clearTimeout(this.turnTimer);
+      }
+      debug$1('webRtc receiveAnswer', this.answerReceived);
+      debug$1(`active PEER_ID: ${this.p.peerInstanceId}`);
+      try {
+        debug$1('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
+        this.p.signal(plainTextOffer);
+        debug$1('============ INITIATOR ================='); // todo remove dev item
+      } catch (e) {
+        // eslint-disable-next-line
+        console.error(e);
       }
     } else {
       debug$1('webRtc receiveAnswer', this.answerReceived);
@@ -826,6 +894,7 @@ class WebRtcCommunication extends MewConnectCommon {
   }
 
   receiveTurnAnswer() {
+    if (!this.connected) ;
     const plainTextOffer = this.answersReceived[this.answersReceived.length - 1];
     debug$1('webRtc receiveTurnAnswer', this.answerReceived);
     debug$1(`active PEER_ID: ${this.p.peerInstanceId}`);
@@ -837,6 +906,7 @@ class WebRtcCommunication extends MewConnectCommon {
       // eslint-disable-next-line
       console.error(e);
     }
+
   }
 
   // ----- Socket Event handlers
@@ -850,9 +920,36 @@ class WebRtcCommunication extends MewConnectCommon {
   // Handle Socket Attempting Turn informative signal
   // Provide Notice that initial WebRTC connection failed and the fallback method will be used
   willAttemptTurn() {
-    this.tryingTurn = true;
     debugStages('TRY TURN CONNECTION');
+    console.log(this.tryingTurn); // todo remove dev item
     this.uiCommunicator(this.lifeCycle.UsingFallback);
+    if (!this.tryingTurn && this.usingVersion === 'V2') {
+      console.log('emit try tuen =========================================================='); // todo remove dev item
+      console.log(this.usingVersion); // todo remove dev item
+      this.tryingTurn = true;
+      try {
+        this.useFallback();
+        this.uiCommunicator(this.lifeCycle.UsingFallback);
+      } catch (e) {
+        // eslint-disable-next-line
+        console.error(e);
+      }
+    }
+    this.tryingTurn = true;
+  }
+
+  turnReset(peerId) {
+    debug$1('TURN_RESET');
+    this.tryingTurn = true;
+    this.answerReceived[peerId] = false;
+  }
+
+  useFallback() {
+    if (!this.connected) {
+      console.log(this.turnTimer); // todo remove dev item
+      this.emit('useFallback');
+      // this.rtcDestroy();
+    }
   }
 
   // Handle Socket event to initiate turn connection
@@ -927,6 +1024,8 @@ class WebRtcCommunication extends MewConnectCommon {
   async onData(peerID, data) {
     debug$1('DATA RECEIVED', data.toString());
     debugPeer$1('peerID', peerID);
+    this.fallbackTimer();
+
     this.emit('data', data);
     try {
       let decryptedData;
@@ -959,6 +1058,7 @@ class WebRtcCommunication extends MewConnectCommon {
   }
 
   onClose(peerID, data) {
+    console.log('onClose'); // todo remove dev item
     debugStages('WRTC MAYBE CLOSE');
     debug$1('peerID', peerID);
     if (!this.isAlive()) {
@@ -973,6 +1073,7 @@ class WebRtcCommunication extends MewConnectCommon {
   }
 
   onError(peerID, err) {
+    console.log('onError'); // todo remove dev item
     debugStages('WRTC ERROR');
     debug$1('peerID', peerID);
     debug$1(err.code);
@@ -984,16 +1085,6 @@ class WebRtcCommunication extends MewConnectCommon {
         this.uiCommunicator(this.lifeCycle.RtcErrorEvent);
       }
     }
-  }
-
-  turnReset(peerId) {
-    debug$1('TURN_RESET');
-    this.tryingTurn = true;
-    this.answerReceived[peerId] = false;
-  }
-
-  useFallback() {
-    this.emit('useFallback');
   }
 
   // ----- WebRTC Communication Methods
@@ -1013,6 +1104,7 @@ class WebRtcCommunication extends MewConnectCommon {
   disconnectRTCClosure() {
     return () => {
       debugStages('DISCONNECT RTC Closure');
+      console.log('disconnectRTCClosure'); // todo remove dev item
       this.connected = false;
       this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
       this.rtcDestroy();
@@ -1021,6 +1113,7 @@ class WebRtcCommunication extends MewConnectCommon {
   }
 
   disconnectRTC() {
+    console.log('disconnectRTCClosure'); // todo remove dev item
     debugStages('DISCONNECT RTC');
     this.connected = false;
     this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
@@ -1047,15 +1140,25 @@ class WebRtcCommunication extends MewConnectCommon {
   }
 
   rtcDestroy() {
+    console.log('rtcDestroy'); // todo remove dev item
     if (this.isAlive()) {
       this.p.destroy();
+      console.log('DESTROYED'); // todo remove dev item
       this.connected = false;
       this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
+    } else if (!this.p.destroyed) {
+      try {
+        this.p.destroy();
+      } catch (e) {
+        // eslint-disable-next-line
+        console.error(e);
+      }
     }
   }
 }
 
 const debug$2 = debugLogger('MEWconnect:initiator-V2');
+const debugTurn = debugLogger('MEWconnect:turn-V2');
 const debugPeer$2 = debugLogger('MEWconnectVerbose:peer-instances-V2');
 const debugStages$1 = debugLogger('MEWconnect:initiator-stages-V2');
 const logger$3 = createLogger('MewConnectInitiator-V2');
@@ -1114,6 +1217,12 @@ class MewConnectInitiatorV2 extends MewConnectCommon {
     } catch (e) {
       debug$2('constructor error:', e);
     }
+
+
+    this.webRtcCommunication.on('useFallback', () =>{
+      console.log("TURN ======================================================================"); // todo remove dev item
+      this.useFallback();
+    });
 
   }
 
@@ -1351,7 +1460,7 @@ class MewConnectInitiatorV2 extends MewConnectCommon {
   // Provide Notice that initial WebRTC connection failed and the fallback method will be used
   willAttemptTurn() {
     this.tryingTurn = true;
-    debugStages$1('TRY TURN CONNECTION');
+    debugTurn('TRY TURN CONNECTION');
     this.uiCommunicator(this.lifeCycle.UsingFallback);
   }
 
@@ -1487,6 +1596,7 @@ class MewConnectInitiatorV2 extends MewConnectCommon {
         ...webRtcConfig
       };
 
+      this.webRtcCommunication.setConnectionVersion('V2');
       this.webRtcCommunication.start(simpleOptions);
 
       debug$2(`initiatorStartRTC - options: ${simpleOptions}`);
@@ -1516,22 +1626,33 @@ class MewConnectInitiatorV2 extends MewConnectCommon {
     }
   }
 
+  async decryptIncomming(data) {
+    if (this.isJSON(data)) {
+      const parsedJson = JSON.parse(data);
+      if (parsedJson.type && parsedJson.data) {
+        return parsedJson;
+      }
+      return await this.mewCrypto.decrypt(
+        JSON.parse(data)
+      );
+
+    } else {
+      if (data.type && data.data) {
+        return data;
+      }
+      return await this.mewCrypto.decrypt(
+        JSON.parse(JSON.stringify(data))
+      );
+    }
+  }
+
   async onData(peerID, data) {
     debug$2(data); // todo remove dev item
     debug$2('DATA RECEIVED', data.toString());
     debug$2('peerID', peerID);
     try {
-      let decryptedData;
-      if (this.isJSON(data)) {
-        decryptedData = await this.mewCrypto.decrypt(
-          // JSON.parse(data.toString())
-          JSON.parse(data)
-        );
-      } else {
-        decryptedData = await this.mewCrypto.decrypt(
-          JSON.parse(data.toString())
-        );
-      }
+      let decryptedData = await this.decryptIncomming(data);
+
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
         debug$2('DECRYPTED DATA RECEIVED 1', parsed);
@@ -1635,7 +1756,7 @@ class MewConnectInitiatorV2 extends MewConnectCommon {
   retryViaTurn(data) {
     try {
       this.states = this.setResetStates();
-      debugStages$1('Retrying via TURN v2');
+      debugTurn('Retrying via TURN v2');
       this.iceServers = null;
       const options = {
         servers: data.iceServers.map(obj => {
@@ -1657,10 +1778,10 @@ class MewConnectInitiatorV2 extends MewConnectCommon {
           wrtc: wrtc
         }
       };
-
+      console.log('turn info arrived and begin turn'); // todo remove dev item
       this.initiatorStartRTC(options);
     } catch (e) {
-      debug$2('retryViaTurn error:', e);
+      debugTurn('retryViaTurn error:', e);
     }
   }
 
@@ -1884,7 +2005,6 @@ class MewConnectInitiatorV1 extends MewConnectCommon {
 
   initiatorStartRTC(socket, options) {
     debug$3('initiatorStartRTC'); // todo remove dev item
-    // this.setActivePeerId();
     const webRtcConfig = options.webRtcConfig || {};
 
     const webRtcServers = webRtcConfig.servers || this.stunServers;
@@ -1907,12 +2027,14 @@ class MewConnectInitiatorV1 extends MewConnectCommon {
     };
 
     debug$3(`initiatorStartRTC - options: ${simpleOptions}`);
+    debug$3("START V1"); // todo remove dev item
+    this.webRtcCommunication.setConnectionVersion('V1');
     this.webRtcCommunication.start(simpleOptions);
     this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
     const peerID = this.webRtcCommunication.getActivePeerId();
-    this.webRtcCommunication.on('connect', this.onConnect.bind(this, peerID));
-    this.webRtcCommunication.on('signal', this.onSignal.bind(this));
-    this.webRtcCommunication.on('data', this.onData.bind(this, peerID));
+    this.webRtcCommunication.once('connect', this.onConnect.bind(this, peerID));
+    this.webRtcCommunication.once('signal', this.onSignal.bind(this));
+    this.webRtcCommunication.once('data', this.onData.bind(this, peerID));
   }
 
   onConnect(peerID) {
@@ -2977,6 +3099,14 @@ const notifierCSS = (elementId) => {
           box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.1);
         }
         
+        #${elementId}-close {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          color: #1ca1f1;
+          cursor: pointer;
+        }
+        
         /* Show the snackbar when clicking on a button (class added with JavaScript) */
         #${elementId}.show {
           visibility: visible; /* Show the snackbar */
@@ -3505,7 +3635,7 @@ const windowPopup = (image) => {
       </head>
 
         <body>
-          <div class="outer-container">
+          <div id="outer-container" class="outer-container">
             <div class="container">
             <h3 class="text-one">Scan QR Code</h3>
             <h4 class="text-two">To connect mobile wallet</h4>
@@ -3529,6 +3659,18 @@ const windowPopup = (image) => {
 `;
   }
 
+};
+
+const noticeHtml = (elementId, imageSrc) =>{
+  return `
+  <div id="${elementId + '-close'}">
+  X
+</div>
+  <img id="${elementId + '-img'}" src="${imageSrc}"/>
+  <div id="${elementId + '-text'}">
+  
+</div>
+  `
 };
 
 const cssText = `
@@ -3701,9 +3843,8 @@ class PopUpHandler {
       elementText.innerHTML = text;
 
       setTimeout(function() { element.className = element.className.replace('show-in', 'show-out'); }, timeoutTime - 500);
-      setTimeout(function() { element.className = element.className.replace('show-out', ''); }, timeoutTime);
+      this.timeoutTracker = setTimeout(function() { element.className = element.className.replace('show-out', ''); }, timeoutTime);
     }
-
   }
 
   showNoticePersistentEnter(text, styleOverrides) {
@@ -3746,13 +3887,18 @@ class PopUpHandler {
 
     const div = window.document.createElement('div');
     div.id = this.elementId;
-    const img = window.document.createElement('img');
-    img.src = image$1;
-    img.id = this.elementId + '-img';
-    div.appendChild(img);
-    const textDiv = window.document.createElement('div');
-    textDiv.id = this.elementId + '-text';
-    div.appendChild(textDiv);
+    div.innerHTML = noticeHtml(this.elementId, image$1);
+    // const divClose = window.document.createElement('div');
+    // divClose.id = this.elementId + 'close';
+    // divClose.textContent = 'X';
+    // div.appendChild(divClose);
+    // const img = window.document.createElement('img');
+    // img.src = logo;
+    // img.id = this.elementId + '-img';
+    // div.appendChild(img);
+    // const textDiv = window.document.createElement('div');
+    // textDiv.id = this.elementId + '-text';
+    // div.appendChild(textDiv);
     window.document.body.appendChild(div);
 
     const css = document.createElement('style');
@@ -3762,6 +3908,15 @@ class PopUpHandler {
     else
       css.innerText = notifierCSS(this.elementId);
     document.body.appendChild(css);
+
+    const closeEl = document.getElementById(this.elementId + '-close');
+    closeEl.addEventListener('click', (event) => {
+      const el = document.getElementById(this.elementId);
+      if (this.timeoutTracker) {
+        clearTimeout(this.timeoutTracker);
+      }
+      el.className = el.className.replace('show', '');
+    });
   }
 
   createWindowInformer() {
@@ -3837,6 +3992,7 @@ class PopUpHandler {
         'toolbar=0'
       ].join(',')
     );
+
     this.popupWindow.document.write(windowPopup(image$1));
     const element = this.popupWindow.document.getElementById('canvas');
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
@@ -3848,8 +4004,12 @@ class PopUpHandler {
     else
       css.innerText = cssText;
     this.popupWindow.document.body.appendChild(css);
-    this.popupWindow.addEventListener('beforeunload', () => {
+    this.popupWindow.addEventListener('onbeforeunload', () => {
       this.hideNotifier();
+    });
+    const popupwindow = this.popupWindow;
+    window.addEventListener('onbeforeunload', () => {
+      popupwindow.close();
     });
     return this.popupWindow;
   }
@@ -4038,6 +4198,8 @@ WebsocketProvider.prototype.send = function(payload, callback) {
   this.connection.send(JSON.stringify(payload));
   this._addResponseCallback(payload, callback);
 };
+
+
 WebsocketProvider.prototype.on = function(type, callback) {
   if (typeof callback !== 'function')
     throw new Error('The second parameter callback must be a function.');
@@ -4058,8 +4220,13 @@ WebsocketProvider.prototype.on = function(type, callback) {
     case 'error':
       this.connection.onerror = callback;
       break;
+
+    case 'accountsChanged':
+      this.accountsChanged = callback;
+      break;
   }
 };
+
 WebsocketProvider.prototype.removeListener = function(type, callback) {
   const _this = this;
 
@@ -4869,7 +5036,7 @@ class WSProvider {
     this.keepAliveTimer = workerTimer.setInterval(keepAlive, 5000);
     const _this = this.wsProvider;
     delete this.wsProvider['send'];
-    this.wsProvider.send = (payload, callback) => {
+    const rawSend = (payload, callback) => {
       this.lastMessage = new Date().getTime();
       if (_this.connection.readyState === _this.connection.CONNECTING) {
         setTimeout(() => {
@@ -4890,6 +5057,7 @@ class WSProvider {
         requestManager: new web3CoreRequestmanager.Manager(this.oWSProvider),
         eventHub
       };
+
       const middleware = new Middleware();
       middleware.use(ethSendTransaction);
       middleware.use(ethSignTransaction);
@@ -4903,6 +5071,27 @@ class WSProvider {
         _this._addResponseCallback(payload, callback);
       });
     };
+    const handler = {
+      apply: function(target, thisArg, argumentsList) {
+        if (argumentsList.length === 1) {
+          if (argumentsList[0] === 'eth_requestAccounts') {
+            return new Promise((resolve, reject) => {
+              let callback = (err, response) => {
+                if(err) reject(err);
+                else resolve(response.result);
+              };
+              let payload = {
+                id: 1,
+                method: 'eth_accounts'
+              };
+              target(payload, callback);
+            });
+          }
+        }
+        return target(argumentsList[0], argumentsList[1]);
+      }
+    };
+    this.wsProvider.send = new Proxy(rawSend, handler);
     return this.wsProvider;
   }
 }
@@ -53497,6 +53686,10 @@ class Integration {
     if (state.web3) {
       await state.web3.eth.getTransactionCount(state.wallet.getChecksumAddressString());
     }
+
+    if(state.web3Provider){
+      state.web3Provider.accountsChanged([state.wallet.getChecksumAddressString()]);
+    }
     return [state.wallet.getChecksumAddressString()];
   }
 
@@ -53515,29 +53708,37 @@ class Integration {
     return 'ETH';
   }
 
-  makeWeb3Provider(CHAIN_ID) {
+  makeWeb3Provider(CHAIN_ID, RPC_URL) {
     const chain = this.identifyChain(CHAIN_ID);
     const defaultNetwork = nodeList[chain][0];
     state.network = defaultNetwork;
-    const hostUrl = url.parse(defaultNetwork.url);
+    const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
     const options = {};
+    if (!/[wW]/.test(hostUrl.protocol)) {
+      throw Error('websocket rpc endpoint required');
+    }
+    if(!hostUrl.hostname.includes(chain.name) && hostUrl.hostname.includes('infura.io')){
+      throw Error(`ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} d match`)
+    }
     // // eslint-disable-next-line
     const parsedUrl = `${hostUrl.protocol}//${hostUrl.host}${
       defaultNetwork.port ? ':' + defaultNetwork.port : ''
     }${hostUrl.pathname}`;
+    const web3Provider = new MEWProvider(
+      parsedUrl,
+      options,
+      {
+        state: state
+      },
+      this.eventHub
+    );
+    state.web3Provider = web3Provider;
     state.web3 = new web3(
-      new MEWProvider(
-        parsedUrl,
-        options,
-        {
-          state: state
-        },
-        this.eventHub
-      )
+      web3Provider
     );
     state.web3.currentProvider.sendAsync = state.web3.currentProvider.send;
     this.setupListeners();
-    return state.web3;
+    return web3Provider;
   }
 
   disconnectNotifier() {
@@ -53554,6 +53755,7 @@ class Integration {
   disconnect() {
     const connection = state.wallet.getConnection();
     connection.disconnectRTC();
+
   }
 
   sign(tx) {

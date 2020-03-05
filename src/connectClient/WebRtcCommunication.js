@@ -42,7 +42,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
     this.usingVersion = '';
     this.p = null;
-
+    this.canSignal = false;
   }
 
   clearExtraOnConnection() {
@@ -120,6 +120,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   start(simpleOptions) {
     debugTemp('start');
+    this.canSignal = !this.canSignal;
     this.fallbackTimer();
     this.setActivePeerId();
       this.p = new this.Peer(simpleOptions);
@@ -149,9 +150,12 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   signalListener(data) {
-    ++this.offersSent;
-    debug('signalListener'); // todo remove dev item
-    this.emit('signal', data);
+    if(this.canSignal) {
+      this.canSignal = !this.canSignal;
+      ++this.offersSent;
+      debug('signalListener'); // todo remove dev item
+      this.emit('signal', data);
+    }
   }
 
   receiveAnswer(plainTextOffer, peerID) {

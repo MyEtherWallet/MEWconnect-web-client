@@ -6,7 +6,8 @@
 // CRYPTO
 // the crypto constructor is a collection of methods used by both the initiator and receiver
 // in creating the direct connection
-
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import MewConnectClient from './connectClient/index';
 import MewConnectProvider from './connectProvider/index';
 

@@ -223,7 +223,6 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
 
   initiatorStartRTC(socket, options) {
     debug('initiatorStartRTC'); // todo remove dev item
-    // this.setActivePeerId();
     const webRtcConfig = options.webRtcConfig || {};
 
     const webRtcServers = webRtcConfig.servers || this.stunServers;
@@ -246,14 +245,14 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     };
 
     debug(`initiatorStartRTC - options: ${simpleOptions}`);
-    console.log("START V1"); // todo remove dev item
+    debug("START V1"); // todo remove dev item
     this.webRtcCommunication.setConnectionVersion('V1');
     this.webRtcCommunication.start(simpleOptions);
     this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
     const peerID = this.webRtcCommunication.getActivePeerId();
-    this.webRtcCommunication.on('connect', this.onConnect.bind(this, peerID));
-    this.webRtcCommunication.on('signal', this.onSignal.bind(this));
-    this.webRtcCommunication.on('data', this.onData.bind(this, peerID));
+    this.webRtcCommunication.once('connect', this.onConnect.bind(this, peerID));
+    this.webRtcCommunication.once('signal', this.onSignal.bind(this));
+    this.webRtcCommunication.once('data', this.onData.bind(this, peerID));
   }
 
   onConnect(peerID) {
