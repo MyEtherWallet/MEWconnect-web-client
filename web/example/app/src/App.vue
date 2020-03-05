@@ -52,7 +52,6 @@
 // import mewConnect from '../../../../dist';
 import mewConnect from '../../../../src';
 
-import WalletLink from 'walletlink';
 import PopUpCreator from '../../../../src/connectClient/popUpCreator'
 import Web3 from 'web3';
 
