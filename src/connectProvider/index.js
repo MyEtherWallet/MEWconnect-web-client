@@ -109,6 +109,7 @@ export default class Integration {
 
   disconnectNotifier() {
     const connection = state.wallet.getConnection();
+    console.log(connection); // todo remove dev item
     connection.webRtcCommunication.on(connection.lifeCycle.RtcDisconnectEvent, () => {
       this.popUpHandler.showNotice('disconnected');
     });

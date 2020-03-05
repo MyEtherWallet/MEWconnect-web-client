@@ -265,33 +265,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   // ----- Failure Handlers
 
-  // Handle Failure due to an attempt to join a connection with two existing endpoints
-  busyFailure() {
-    this.uiCommunicator(
-      this.lifeCycle.Failed,
-      this.lifeCycle.confirmationFailedBusyEvent
-    );
-    debug('confirmation Failed: Busy');
-  }
-
-  // Handle Failure due to no opposing peer existing
-  invalidFailure() {
-    this.uiCommunicator(
-      this.lifeCycle.Failed,
-      this.lifeCycle.invalidConnectionEvent
-    );
-    debug('confirmation Failed: no opposite peer found');
-  }
-
-  // Handle Failure due to the handshake/ verify details being invalid for the connection ID
-  confirmationFailure() {
-    this.uiCommunicator(
-      this.lifeCycle.Failed,
-      this.lifeCycle.confirmationFailedEvent
-    );
-    debug('confirmation Failed: invalid confirmation');
-  }
-
   stateChangeListener(peerID, evt) {
     // eslint-disable-next-line no-undef
     if (typeof jest === 'undefined') {
