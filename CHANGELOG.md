@@ -1,3 +1,6 @@
+### Release v2.1.0-beta.6
+- fix missing property in MewConnectInitiator [this.iceStates]
+
 ### Release v2.1.0-beta.5
 - MEWconnect disconnecting after connection fix
 

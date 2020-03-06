@@ -56,6 +56,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.version = this.jsonDetails.version;
       // this.versions = this.jsonDetails.versions;
       this.lifeCycle = this.jsonDetails.lifeCycle;
+      this.iceStates = this.jsonDetails.iceConnectionState;
       this.stunServers = options.stunServers || this.jsonDetails.stunSrvers;
 
       // Socket is abandoned.  disconnect.
@@ -82,18 +83,21 @@ export default class MewConnectInitiator extends MewConnectCommon {
   // Destroy the connection if one exists
   destroyOnUnload() {
     if (isBrowser) {
-      // eslint-disable-next-line no-undef
-      window.onunload = window.onbeforeunload = () => {
-        const iceStates = [
-          this.iceStates.new,
-          this.iceStates.connecting,
-          this.iceStates.connected
-        ];
-        if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
-          this.rtcDestroy();
-        }
-        this.popupCreator.closePopupWindow();
-      };
+      try { // eslint-disable-next-line no-undef
+        window.onunload = window.onbeforeunload = () => {
+          const iceStates = [
+            this.iceStates.new,
+            this.iceStates.connecting,
+            this.iceStates.connected
+          ];
+          if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
+            this.rtcDestroy();
+          }
+          this.popupCreator.closePopupWindow();
+        };
+      } catch (e) {
+        debug(e);
+      }
     }
   }
 
