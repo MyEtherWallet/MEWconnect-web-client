@@ -52,7 +52,7 @@
 // import mewConnect from '../../../../dist';
 import mewConnect from '../../../../src';
 
-import PopUpCreator from '../../../../src/connectClient/popUpCreator'
+import PopUpCreator from '../../../../src/connectClient/connectWindow/popUpCreator'
 import Web3 from 'web3';
 
 export default {

@@ -14,6 +14,10 @@ import logo from './logoImage';
 import { notifierCSS, WindowInformerCSS } from './popupStyles';
 import { windowPopup, windowInformer, noticeHtml } from './popupHtml';
 import cssStyles from './windowStyles';
+import debugLogger from 'debug';
+
+
+const debug = debugLogger('MEWconnect:popup-handler');
 
 export default class PopUpHandler {
   constructor(linkUrl) {
@@ -198,58 +202,62 @@ export default class PopUpHandler {
   }
 
   showPopupWindow(qrcode) {
-    const popupUrl = `${this.walletLinkUrl}/#MEWconnect`;
+    try {
+      const popupUrl = `${this.walletLinkUrl}/#MEWconnect`;
 
-    if (this.popupWindow && this.popupWindow.opener) {
-      this.popupWindow.focus();
+      if (this.popupWindow && this.popupWindow.opener) {
+        this.popupWindow.focus();
+        return this.popupWindow;
+      }
+      if (!qrcode) {
+        throw Error('No connection string supplied to popup window');
+      }
+      this.showWindowInformer();
+
+      const width = 320;
+      const height = 520;
+      const left = Math.floor(window.outerWidth / 2 - width / 2 + window.screenX);
+      const top = Math.floor(window.outerHeight / 2 - height / 2 + window.screenY);
+      this.popupUrl = popupUrl;
+      this.popupWindow = window.open(
+        '',
+        'windowName',
+        [
+          `width=${width}`,
+          `height=${height}`,
+          `left=${left}`,
+          `top=${top}`,
+          'location=0',
+          'menubar=0',
+          'resizable=0',
+          'status=0',
+          'titlebar=0',
+          'toolbar=0'
+        ].join(',')
+      );
+
+      this.popupWindow.document.write(windowPopup(logo));
+      const element = this.popupWindow.document.getElementById('canvas');
+      QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
+
+      const css = this.popupWindow.document.createElement('style');
+      css.type = 'text/css';
+      if ('textContent' in css)
+        css.textContent = cssStyles;
+      else
+        css.innerText = cssStyles;
+      this.popupWindow.document.body.appendChild(css);
+      this.popupWindow.addEventListener('onbeforeunload', () => {
+        this.hideNotifier();
+      });
+      const popupwindow = this.popupWindow;
+      window.addEventListener('onbeforeunload', () => {
+        popupwindow.close();
+      });
       return this.popupWindow;
+    } catch (e) {
+      debug(e);
     }
-    if (!qrcode) {
-      throw Error('No connection string supplied to popup window');
-    }
-    this.showWindowInformer();
-
-    const width = 320;
-    const height = 520;
-    const left = Math.floor(window.outerWidth / 2 - width / 2 + window.screenX);
-    const top = Math.floor(window.outerHeight / 2 - height / 2 + window.screenY);
-    this.popupUrl = popupUrl;
-    this.popupWindow = window.open(
-      '',
-      'windowName',
-      [
-        `width=${width}`,
-        `height=${height}`,
-        `left=${left}`,
-        `top=${top}`,
-        'location=0',
-        'menubar=0',
-        'resizable=0',
-        'status=0',
-        'titlebar=0',
-        'toolbar=0'
-      ].join(',')
-    );
-
-    this.popupWindow.document.write(windowPopup(logo));
-    const element = this.popupWindow.document.getElementById('canvas');
-    QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
-
-    const css = this.popupWindow.document.createElement('style');
-    css.type = 'text/css';
-    if ('textContent' in css)
-      css.textContent = cssStyles;
-    else
-      css.innerText = cssStyles;
-    this.popupWindow.document.body.appendChild(css);
-    this.popupWindow.addEventListener('onbeforeunload', () => {
-      this.hideNotifier();
-    });
-    const popupwindow = this.popupWindow;
-    window.addEventListener('onbeforeunload', () => {
-      popupwindow.close();
-    });
-    return this.popupWindow;
   }
 
   closePopupWindow() {
