@@ -103,8 +103,8 @@ const cssStyles = `
     `;
 
 const htmlDesign = (image) => {
-  if (!image) {
-    return `
+  let middlePart = '';
+  const beginningPart = `
       <html>
       <head>
         <meta charset="utf-8"/>
@@ -121,6 +121,7 @@ const htmlDesign = (image) => {
             <div class="qr-code">
               <canvas id="canvas"></canvas>
             </div>
+            <button id="refresh" style="display: none">Refresh code</button>
               <ol class="list-style">
                 <li>Open compatible wallet app</li>
                 <li>Find and open the QR scanner</li>
@@ -131,45 +132,34 @@ const htmlDesign = (image) => {
             
             <h5 class="bottom-container-text">Powered by</h5>
              MEWconnect
-           </div>
-          </div>
-        </body>
-      </html>
-`;
-  } else {
-    return `
-      <html>
-      <head>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
-        <meta name="theme-color" content="#000000"/>
-        <title>MEWconnect</title>
-      </head>
 
-        <body>
-          <div class="outer-container">
-            <div class="container">
-            <h3 class="text-one">Scan QR Code</h3>
-            <h4 class="text-two">To connect mobile wallet</h4>
-            <div class="qr-code">
-              <canvas id="canvas"></canvas>
-            </div>
-              <ol class="list-style">
-                <li>Open compatible wallet app</li>
-                <li>Find and open the QR scanner</li>
-                <li>Scan this QR code</li>
-              </ol>
-            </div>
-            <div class="bottom-container">
-            
-            <h5 class="bottom-container-text">Powered by</h5>
+`;
+  if (!image) {
+    middlePart = 'MEWconnect';
+
+  } else {
+    middlePart = `
              <img src="${image}" />
-           </div>
-          </div>
-        </body>
-      </html>
 `;
   }
+
+  const endingPart = `           </div>
+          </div>
+          <script>
+          const channel = new BroadcastChannel('refresh-channel');
+          const refreshButton = window.document.getElementById("refresh");
+          refreshButton.addEventListener("click", () => {
+            channel.postMessage("refresh");
+          })
+          setTimeout(() => {
+            refreshButton.style.display = 'block';
+          }, 1000)
+
+</script>
+        </body>
+      </html>`;
+
+  return beginningPart + middlePart + endingPart;
 };
 
 const noticetext = `

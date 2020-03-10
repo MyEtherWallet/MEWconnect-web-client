@@ -8,6 +8,7 @@ export default class PopUpCreator {
     this.sessionId = '';
     this.sessionId = false;
     this.logo = logo;
+    this.popupWindowOpen = false;
   }
 
   openPopupWindow(text) {
@@ -107,8 +108,19 @@ export default class PopUpCreator {
       this.hideNotifier();
       this.popupWindow = null;
     });
-
+    const channel = new BroadcastChannel('refresh-channel');
+    channel.addEventListener('message', (event) => {
+      console.log(event.data); // todo remove dev item
+      this.refreshQrcode();
+    });
+    this.popupWindowOpen = true;
     return this.popupWindow;
+  }
+
+  updateQrCode(qrcode){
+    const element = this.popupWindow.document.getElementById('canvas');
+    console.log(element); // todo remove dev item
+    QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
   }
 
   closePopupWindow() {

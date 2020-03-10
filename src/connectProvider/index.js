@@ -30,7 +30,10 @@ export default class Integration {
       });
       return acc;
     }, [{ name: 'mainnet', chainId: 1, key: 'ETH' }]);
+    this.returnPromise = null;
   }
+
+
 
   showNotice() {
     this.popUpHandler.showPopupWindow('lksdfsdfsdfsdfsdfsdfsdfsfsfdsf');
@@ -42,19 +45,29 @@ export default class Integration {
   }
 
   async enable() {
-    if (!state.wallet) {
+    if(MEWconnectWallet.getConnectionState() === 'disconnected' && this.returnPromise === null){
+      this.returnPromise = this.enabler();
+    }
+    return this.returnPromise;
+  }
+
+  async enabler() {
+
+    if (!state.wallet && MEWconnectWallet.getConnectionState() === 'disconnected' ) {
+      MEWconnectWallet.setConnectionState('connecting');
       this.connectionState = 'connecting';
       state.wallet = await new MEWconnectWallet(state);
       this.popUpHandler.showNotice('connected', { border: 'rgba(5, 158, 135, 0.88) solid 2px' });
       this.popUpHandler.hideNotifier();
       this.disconnectNotifier();
     }
-    if (state.web3) {
+
+    if (state.web3 && state.wallet) {
       await state.web3.eth.getTransactionCount(state.wallet.getChecksumAddressString());
     }
 
-    if(state.web3Provider){
-      state.web3Provider.accountsChanged([state.wallet.getChecksumAddressString()])
+    if (state.web3Provider && state.wallet) {
+      state.web3Provider.accountsChanged([state.wallet.getChecksumAddressString()]);
     }
     return [state.wallet.getChecksumAddressString()];
   }
@@ -83,8 +96,8 @@ export default class Integration {
     if (!/[wW]/.test(hostUrl.protocol)) {
       throw Error('websocket rpc endpoint required');
     }
-    if(!hostUrl.hostname.includes(chain.name) && hostUrl.hostname.includes('infura.io')){
-      throw Error(`ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} d match`)
+    if (!hostUrl.hostname.includes(chain.name) && hostUrl.hostname.includes('infura.io')) {
+      throw Error(`ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} d match`);
     }
     // // eslint-disable-next-line
     const parsedUrl = `${hostUrl.protocol}//${hostUrl.host}${
@@ -189,3 +202,4 @@ export default class Integration {
   }
 
 }
+

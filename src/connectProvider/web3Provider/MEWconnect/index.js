@@ -51,7 +51,18 @@ class MEWconnectWallet {
       v2Url: V2_SIGNAL_URL,
       showPopup: true
     });
+    // this.popupCreator = this.mewConnect.popupCreator;
     this.state = state || {};
+  }
+
+  static setConnectionState(connectionState) {
+    if (!connectionState) MEWconnect.Initiator.connectionState = 'disconnected';
+    else MEWconnect.Initiator.connectionState = connectionState;
+  }
+
+  static getConnectionState() {
+    if (!MEWconnect.Initiator.connectionState) return 'disconnected';
+    return MEWconnect.Initiator.connectionState;
   }
 
   async init(qrcodeListener = () => {}) {
@@ -125,6 +136,7 @@ class MEWconnectWallet {
 
 const createWallet = async state => {
   const _MEWconnectWallet = new MEWconnectWallet(state);
+  createWallet.connectionState = _MEWconnectWallet.connectionState;
   const _tWallet = await _MEWconnectWallet.init();
   return _tWallet;
 };
@@ -143,5 +155,8 @@ const signalerConnect = (url, mewConnect) => {
     });
   });
 };
+
+createWallet.getConnectionState = MEWconnectWallet.getConnectionState;
+createWallet.setConnectionState = MEWconnectWallet.setConnectionState;
 
 export default createWallet;

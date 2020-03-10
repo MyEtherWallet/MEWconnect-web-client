@@ -8,7 +8,7 @@ import MewConnectInitiatorV2 from './MewConnectInitiatorV2';
 import MewConnectInitiatorV1 from './MewConnectInitiatorV1';
 
 import WebRtcCommunication from '../WebRtcCommunication';
-import PopUpCreator from '../popUpCreator';
+import PopUpCreator from '../connectWindow/popUpCreator';
 
 const debug = debugLogger('MEWconnect:initiator-base');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
@@ -52,7 +52,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.popupCreator = new PopUpCreator();
       this.popUpWindow = {};
       this.connPath = '';
-
+      console.log(MewConnectInitiator.getConnectionState()); // todo remove dev item
       this.version = this.jsonDetails.version;
       // this.versions = this.jsonDetails.versions;
       this.lifeCycle = this.jsonDetails.lifeCycle;
@@ -70,6 +70,16 @@ export default class MewConnectInitiator extends MewConnectCommon {
       debug('constructor error:', e);
     }
 
+  }
+
+  static setConnectionState(connectionState) {
+    if (!connectionState) MewConnectInitiator.connectionState = 'disconnected';
+    else MewConnectInitiator.connectionState = connectionState;
+  }
+
+  static getConnectionState() {
+    if (!MewConnectInitiator.connectionState) return 'disconnected';
+    return MewConnectInitiator.connectionState;
   }
 
   isAlive() {
@@ -146,13 +156,19 @@ export default class MewConnectInitiator extends MewConnectCommon {
       debug(qrCodeString);
       debug(qrCodeString); // todo remove dev item
       if (this.showPopup) {
-        this.popupCreator.openPopupWindow(qrCodeString);
-        this.popupCreator.window.addEventListener('beforeunload', (event) => {
-          if (!this.connected) {
-            this.socketDisconnect();
-            this.emit(this.lifeCycle.AuthRejected);
-          }
-        });
+        if(this.popupCreator.popupWindowOpen){
+          this.popupCreator.updateQrCode(qrCodeString)
+        } else {
+          this.popupCreator.refreshQrcode = this.initiatorStart.bind(this);
+          this.popupCreator.openPopupWindow(qrCodeString);
+          this.popupCreator.window.addEventListener('beforeunload', (event) => {
+            if (!this.connected) {
+              MewConnectInitiator.setConnectionState('disconnected');
+              this.socketDisconnect();
+              this.emit(this.lifeCycle.AuthRejected);
+            }
+          });
+        }
       } else {
         this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
         this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
@@ -196,6 +212,12 @@ Keys
 
   // TODO change this to handle supplying urls at time point
   async initiatorStart(url, testPrivate) {
+    if(this.socketV1Connected){
+      this.V1.socketDisconnect();
+    }
+    if(this.socketV2Connected){
+      this.V2.socketDisconnect();
+    }
     this.generateKeys(testPrivate);
     this.displayCode(this.privateKey);
     const options = {
@@ -220,15 +242,18 @@ Keys
 
     this.V1.on('socketPaired', () => {
       this.V2.socketDisconnect();
+      this.socketV1Connected = true;
     });
 
     this.V2.on('socketPaired', () => {
       this.V1.socketDisconnect();
+      this.socketV2Connected = true;
     });
 
     this.webRtcCommunication.on(this.jsonDetails.lifeCycle.RtcConnectedEvent, () => {
       this.connected = true;
       this.popupCreator.closePopupWindow();
+      MewConnectInitiator.setConnectionState('connected');
     });
   }
 
@@ -267,5 +292,4 @@ Keys
     this.V2.disconnectRTC();
     this.V2.emit(this.lifeCycle);
   }
-
 }
