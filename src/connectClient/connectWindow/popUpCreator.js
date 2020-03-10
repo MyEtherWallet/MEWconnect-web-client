@@ -9,6 +9,10 @@ export default class PopUpCreator {
     this.sessionId = false;
     this.logo = logo;
     this.popupWindowOpen = false;
+
+    window.addEventListener('beforeunload', () => {
+      this.closePopupWindow();
+    });
   }
 
   openPopupWindow(text) {
@@ -74,7 +78,7 @@ export default class PopUpCreator {
     const height = 520;
     const left = Math.floor(window.outerWidth / 2 - width / 2 + window.screenX);
     const top = Math.floor(window.outerHeight / 2 - height / 2 + window.screenY);
-    this.popupUrl = popupUrl;
+    this.popupUrl = Math.random().toString();
     this.popupWindow = window.open(
       '',
       'windowName',
@@ -108,6 +112,7 @@ export default class PopUpCreator {
       this.hideNotifier();
       this.popupWindow = null;
     });
+
     const channel = new BroadcastChannel('refresh-channel');
     channel.addEventListener('message', (event) => {
       console.log(event.data); // todo remove dev item
