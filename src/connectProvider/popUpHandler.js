@@ -10,7 +10,7 @@ const IPCMessageType = {
   WEB3_RESPONSE: 'WEB3_RESPONSE',
   LOCAL_STORAGE_BLOCKED: 'LOCAL_STORAGE_BLOCKED'
 };
-import logo from './logoImage';
+import {logo, refresh} from './images';
 import { notifierCSS, WindowInformerCSS } from './popupStyles';
 import { windowPopup, windowInformer, noticeHtml } from './popupHtml';
 import cssStyles from './windowStyles';
@@ -236,7 +236,7 @@ export default class PopUpHandler {
         ].join(',')
       );
 
-      this.popupWindow.document.write(windowPopup(logo));
+      this.popupWindow.document.write(windowPopup(refresh, logo));
       const element = this.popupWindow.document.getElementById('canvas');
       QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
 

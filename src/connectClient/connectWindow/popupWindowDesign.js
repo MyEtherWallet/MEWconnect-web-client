@@ -38,7 +38,7 @@ const cssStyles = `
       border-radius: 8px;
       box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
       display: inline-block;
-      padding: 16px;
+      padding: 16px 16px 0 16px;
     }
     .text-one{
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
@@ -100,9 +100,19 @@ const cssStyles = `
       padding: 16px;
       text-align: center;
     }
+    
+    .refreshIcon {
+      justify-content: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .hidden{
+    display: none;
+    }
     `;
-
-const htmlDesign = (image) => {
+// <button id="refresh" style="display: none">Refresh code</button>
+const htmlDesign = (refresh, image) => {
   let middlePart = '';
   const beginningPart = `
       <html>
@@ -121,7 +131,10 @@ const htmlDesign = (image) => {
             <div class="qr-code">
               <canvas id="canvas"></canvas>
             </div>
-            <button id="refresh" style="display: none">Refresh code</button>
+            <div id="refresh-container" class="refreshIcon hidden">
+            <img id="refresh" src="${refresh}"/>
+            </div>
+            
               <ol class="list-style">
                 <li>Open compatible wallet app</li>
                 <li>Find and open the QR scanner</li>
@@ -147,13 +160,15 @@ const htmlDesign = (image) => {
           </div>
           <script>
           const channel = new BroadcastChannel('refresh-channel');
+          const refreshContainer = window.document.getElementById("refresh-container")
           const refreshButton = window.document.getElementById("refresh");
+          
           refreshButton.addEventListener("click", () => {
             channel.postMessage("refresh");
           })
           setTimeout(() => {
-            refreshButton.style.display = 'block';
-          }, 1000)
+            refreshContainer.className = refreshContainer.className.replace('hidden', '');
+          }, 5000)
 
 </script>
         </body>

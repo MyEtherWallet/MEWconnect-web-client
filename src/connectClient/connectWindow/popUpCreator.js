@@ -1,5 +1,5 @@
 import QrCode from 'qrcode';
-import logo from './logoImage';
+import {logo, refresh} from './images';
 import { cssStyles, htmlDesign, noticetext, windowInformer } from './popupWindowDesign';
 
 export default class PopUpCreator {
@@ -8,6 +8,7 @@ export default class PopUpCreator {
     this.sessionId = '';
     this.sessionId = false;
     this.logo = logo;
+    this.refreshIcon = refresh;
     this.popupWindowOpen = false;
 
     window.addEventListener('beforeunload', () => {
@@ -95,7 +96,7 @@ export default class PopUpCreator {
         'toolbar=0'
       ].join(',')
     );
-    this.popupWindow.document.write(htmlDesign(this.logo));
+    this.popupWindow.document.write(htmlDesign(this.refreshIcon, this.logo));
     const element = this.popupWindow.document.getElementById('canvas');
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
 
