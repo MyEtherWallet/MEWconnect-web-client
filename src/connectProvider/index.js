@@ -1,4 +1,4 @@
-import PopUpHandler from './popUpHandler';
+import PopUpHandler from '../connectWindow/popUpHandler';
 import Initiator from '../connectClient/MewConnectInitiator';
 import Web3 from 'web3';
 import MEWProvider from './web3Provider/web3-provider/index';
@@ -48,6 +48,8 @@ export default class Integration {
     if(MEWconnectWallet.getConnectionState() === 'disconnected' && this.returnPromise === null){
       this.returnPromise = this.enabler();
     }
+    console.log(MEWconnectWallet.getConnectionState()); // todo remove dev item
+    console.log(this.returnPromise); // todo remove dev item
     return this.returnPromise;
   }
 
@@ -125,10 +127,12 @@ export default class Integration {
     console.log(connection); // todo remove dev item
     connection.webRtcCommunication.on(connection.lifeCycle.RtcDisconnectEvent, () => {
       this.popUpHandler.showNotice('disconnected');
+      MEWconnectWallet.setConnectionState('disconnected');
     });
 
     connection.webRtcCommunication.on(connection.lifeCycle.RtcClosedEvent, () => {
       this.popUpHandler.showNotice('disconnected');
+      MEWconnectWallet.setConnectionState('disconnected');
     });
   }
 

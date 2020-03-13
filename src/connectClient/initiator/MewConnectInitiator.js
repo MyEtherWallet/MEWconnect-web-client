@@ -8,7 +8,7 @@ import MewConnectInitiatorV2 from './MewConnectInitiatorV2';
 import MewConnectInitiatorV1 from './MewConnectInitiatorV1';
 
 import WebRtcCommunication from '../WebRtcCommunication';
-import PopUpCreator from '../connectWindow/popUpCreator';
+import PopUpCreator from '../../connectWindow/popUpCreator';
 
 const debug = debugLogger('MEWconnect:initiator-base');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
@@ -34,7 +34,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
       this.turnTest = options.turnTest;
 
-      this.destroyOnUnload();
+      this.destroyOnUnload(typeof window !== 'undefined');
       this.p = null;
       this.socketV2Connected = false;
       this.socketV1Connected = false;

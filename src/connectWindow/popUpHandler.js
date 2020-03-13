@@ -1,19 +1,10 @@
 import QrCode from 'qrcode';
 
-const IPCMessageType = {
-  SESSION_ID_REQUEST: 'SESSION_ID_REQUEST',
-  SESSION_ID_RESPONSE: 'SESSION_ID_RESPONSE',
-  LINKED: 'LINKED',
-  UNLINKED: 'UNLINKED',
-  WEB3_REQUEST: 'WEB3_REQUEST',
-  WEB3_REQUEST_CANCELED: 'WEB3_REQUEST_CANCELED',
-  WEB3_RESPONSE: 'WEB3_RESPONSE',
-  LOCAL_STORAGE_BLOCKED: 'LOCAL_STORAGE_BLOCKED'
-};
-import {logo, refresh} from './images';
+
+import {logo, refresh} from '../connectProvider/images';
 import { notifierCSS, WindowInformerCSS } from './popupStyles';
 import { windowPopup, windowInformer, noticeHtml } from './popupHtml';
-import cssStyles from './windowStyles';
+import cssStyles from '../connectProvider/windowStyles';
 import debugLogger from 'debug';
 
 
@@ -21,9 +12,6 @@ const debug = debugLogger('MEWconnect:popup-handler');
 
 export default class PopUpHandler {
   constructor(linkUrl) {
-    this.walletLinkUrl = linkUrl || 'connect-MEWconnect';
-    this.sessionId = '';
-    this.sessionId = false;
     this.index = 0;
     this.checkCount = 0;
     this.elementId = 'mew-connect-notice';
@@ -130,17 +118,6 @@ export default class PopUpHandler {
     const div = window.document.createElement('div');
     div.id = this.elementId;
     div.innerHTML = noticeHtml(this.elementId, logo);
-    // const divClose = window.document.createElement('div');
-    // divClose.id = this.elementId + 'close';
-    // divClose.textContent = 'X';
-    // div.appendChild(divClose);
-    // const img = window.document.createElement('img');
-    // img.src = logo;
-    // img.id = this.elementId + '-img';
-    // div.appendChild(img);
-    // const textDiv = window.document.createElement('div');
-    // textDiv.id = this.elementId + '-text';
-    // div.appendChild(textDiv);
     window.document.body.appendChild(div);
 
     const css = document.createElement('style');
@@ -184,92 +161,4 @@ export default class PopUpHandler {
     notify.className = 'hidden';
   }
 
-  showWindowInformer() {
-
-    const notify = document.getElementById('Notifications');
-    notify.className = 'shown';
-
-    const showButton = document.getElementById('NotificationButton1');
-    showButton.addEventListener('click', () => {
-      this.showPopupWindow();
-    });
-
-    const cancelButton = document.getElementById('NotificationButton2');
-    cancelButton.addEventListener('click', () => {
-      this.hideNotifier();
-      this.closePopupWindow();
-    });
-  }
-
-  showPopupWindow(qrcode) {
-    try {
-      const popupUrl = `${this.walletLinkUrl}/#MEWconnect`;
-
-      if (this.popupWindow && this.popupWindow.opener) {
-        this.popupWindow.focus();
-        return this.popupWindow;
-      }
-      if (!qrcode) {
-        throw Error('No connection string supplied to popup window');
-      }
-      this.showWindowInformer();
-
-      const width = 320;
-      const height = 520;
-      const left = Math.floor(window.outerWidth / 2 - width / 2 + window.screenX);
-      const top = Math.floor(window.outerHeight / 2 - height / 2 + window.screenY);
-      this.popupUrl = popupUrl;
-      this.popupWindow = window.open(
-        '',
-        'windowName',
-        [
-          `width=${width}`,
-          `height=${height}`,
-          `left=${left}`,
-          `top=${top}`,
-          'location=0',
-          'menubar=0',
-          'resizable=0',
-          'status=0',
-          'titlebar=0',
-          'toolbar=0'
-        ].join(',')
-      );
-
-      this.popupWindow.document.write(windowPopup(refresh, logo));
-      const element = this.popupWindow.document.getElementById('canvas');
-      QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
-
-      const css = this.popupWindow.document.createElement('style');
-      css.type = 'text/css';
-      if ('textContent' in css)
-        css.textContent = cssStyles;
-      else
-        css.innerText = cssStyles;
-      this.popupWindow.document.body.appendChild(css);
-      this.popupWindow.addEventListener('onbeforeunload', () => {
-        this.hideNotifier();
-      });
-      const popupwindow = this.popupWindow;
-      window.addEventListener('onbeforeunload', () => {
-        popupwindow.close();
-      });
-      return this.popupWindow;
-    } catch (e) {
-      debug(e);
-    }
-  }
-
-  closePopupWindow() {
-    if (this.popupWindow) {
-      this.popupWindow.close();
-      this.popupUrl = null;
-      this.popupWindow = null;
-    }
-    window.focus();
-  }
-
-  handleBeforeUnload(_evt) {
-    this.closePopupWindow();
-  }
 }
