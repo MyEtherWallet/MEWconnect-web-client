@@ -4,7 +4,6 @@ import { cssStyles, htmlDesign, noticetext, windowInformer } from './popupWindow
 
 export default class PopUpCreator {
   constructor(linkUrl) {
-    this.walletLinkUrl = linkUrl || 'connect-MEWconnect';
     this.sessionId = '';
     this.sessionId = false;
     this.logo = logo;
@@ -73,7 +72,6 @@ export default class PopUpCreator {
     }
 
     this.createWindowInformer();
-    const popupUrl = `${this.walletLinkUrl}/#MEWconnect`;
 
     const width = 320;
     const height = 520;

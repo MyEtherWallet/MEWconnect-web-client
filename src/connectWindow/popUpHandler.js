@@ -1,6 +1,3 @@
-import QrCode from 'qrcode';
-
-
 import {logo, refresh} from '../connectProvider/images';
 import { notifierCSS, WindowInformerCSS } from './popupStyles';
 import { windowPopup, windowInformer, noticeHtml } from './popupHtml';
@@ -11,7 +8,7 @@ import debugLogger from 'debug';
 const debug = debugLogger('MEWconnect:popup-handler');
 
 export default class PopUpHandler {
-  constructor(linkUrl) {
+  constructor() {
     this.index = 0;
     this.checkCount = 0;
     this.elementId = 'mew-connect-notice';
@@ -29,10 +26,6 @@ export default class PopUpHandler {
       this.elementId = this.elementId + `-${this.checkCount}`;
       this.initialcheckIfIdExists();
     }
-  }
-
-  openPopupWindow(text) {
-    this.showPopupWindow(text);
   }
 
   showNotice(text, styleOverrides) {
