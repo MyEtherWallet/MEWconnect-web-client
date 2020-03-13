@@ -1,16 +1,16 @@
 <!--##### Note This Repository Nees Some Cleaning-->
 
 
-MEWconnect
+MEWconnect Client for MEW wallet
 ==========
 
 
-With WalletLink, users can use your DApp in any desktop browser without
-installing an extension, and end-to-end encryption using client-side generated
+With the MEWconnect client, users can use your DApp in any desktop browser without
+installing an extension.  Additionally, end-to-end encryption using client-side generated
 keys keeps all user activity private.
 
 For DApp developers to integrate with MEW wallet using MEWconnect, all you need to do is drop a
-few lines of code into your application, and WalletLink will take care of the
+few lines of code into your application, and the MEW wallet app and MEWconnect client will take care of the
 rest.
 
 ## Getting Started
@@ -51,7 +51,7 @@ import Web3 from "web3"
 const ETH_JSONRPC_URL = "wss://mainnet.infura.io/v3/<YOUR_INFURA_API_KEY>"
 const CHAIN_ID = 1
 
-// Initialize WalletLink
+// Initialize MEWconnect
 export const mewConnect = new MEWconnect.Provider()
 
 // Initialize a Web3 Provider object
@@ -87,7 +87,39 @@ That's it! Once the connection between the phone and the site is established, th
 
 
 ---
-## Setting up the wallet using a supplied web3 instance
+
+## Tokens
+In order to have your token included in the list of tokens identified by the app the token needs to be included as a token in the [ethereum-lists](https://github.com/MyEtherWallet/ethereum-lists) repository.
+
+Instructions one how to add a token there may be found [here](https://kb.myetherwallet.com/en/tokens/adding-token-as-a-default/)
+
+## Debugging
+
+The MEWconnect client uses the debug library to provide verbose debug logging.  In local storage add the key 'debug' with the value:
+  - \* 
+    - to see everything
+  - MEWconnect: *
+    -  to see everything related to the MEWconnect client
+  - MEWconnect:connection-state
+    - to see the connection state when it changes
+  - MEWconnect:webRTC-communication
+    - to see the events and signals related to webRTC
+  - MEWconnect:websocketWrapper
+    - to see the events related to setting up the webRTC connection
+  - MEWconnect:*,MEWconnectVerbose:*,simple-peer
+    - what we usually use for debugging
+    
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+----
 
 
 
@@ -110,15 +142,9 @@ That's it! Once the connection between the phone and the site is established, th
 
 
 
+### Using only the wallet with an external web3 instance (not recommended)
 
-
-
-
-
-
-### Getting Started
-
-
+Install the client
 ```npm i @myetherwallet/mewconnect-web-client```
 
 
@@ -126,6 +152,7 @@ That's it! Once the connection between the phone and the site is established, th
 
 ### Get the code
 The example requires both MEWconnect-web-client (this repo) and MEWconnect-Signal-Server (MEWconnect-hanshake-server)
+
 ```
 git clone https://github.com/MyEtherWallet/MEWconnect-web-client.git
 ```
@@ -268,16 +295,6 @@ Additional events are emitted at various points to signal various stages of the 
 
 
 
-
+---
 ##### Browser
 mew-connect-client can be included for use in the browser via webpack or browerfy
-
-
-<!-- ##### API -->
-
-
-
-
-## Run Tests
-*first the ```import WebSocket from 'promise-ws'``` line needs to be uncommented in websocketWrapper.js*
-```npm run test```

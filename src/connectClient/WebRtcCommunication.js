@@ -10,7 +10,6 @@ import MewConnectCommon from './MewConnectCommon';
 const debug = debugLogger('MEWconnect:webRTC-communication');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:peer-stages');
-const debugTemp = console.error; //debugLogger('temp');
 const logger = createLogger('WebRtcCommunication');
 
 export default class WebRtcCommunication extends MewConnectCommon {
@@ -19,14 +18,12 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.Peer = SimplePeer;
     this.mewCrypto = mewCrypto;
     this.peersCreated = {};
-    this.peersActive = {};
     this.allPeerIds = [];
     this.iceState = '';
     this.answerReceived = {};
     this.answersReceived = [];
     this.offersSent = -1;
     this.turnTimer = null;
-    this.turnResponseTimer = null;
     this.turnWaitTime = 5000;
     this.enableTimer = true;
     this.tryingTurn = false;
@@ -47,7 +44,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   clearExtraOnConnection() {
     this.peersCreated = {};
-    this.peersActive = {};
     this.allPeerIds = [];
     this.answerReceived = {};
     this.answersReceived = [];
@@ -66,7 +62,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   // can be used to listen to specific events, especially those that pass data
   uiCommunicator(event, data) {
-    debug(event, data); // todo remove dev item
+    debug(event, data);
     this.emit(event, data);
     this.emitStatus(event);
   }
@@ -119,7 +115,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   start(simpleOptions) {
-    debugTemp('start');
     this.canSignal = !this.canSignal;
     this.fallbackTimer();
     this.setActivePeerId();
@@ -142,8 +137,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   onConnect(peerID) {
-    console.log('onConnect'); // todo remove dev item
-    debug('onConnect', peerID); // todo remove dev item
+    debug('onConnect', peerID);
     this.connected = true;
     this.emit('connect', peerID);
     this.clearExtraOnConnection();
@@ -153,19 +147,18 @@ export default class WebRtcCommunication extends MewConnectCommon {
     if(this.canSignal) {
       this.canSignal = !this.canSignal;
       ++this.offersSent;
-      debug('signalListener'); // todo remove dev item
+      debug('webRTC setup signal received');
       this.emit('signal', data);
     }
   }
 
   receiveAnswer(plainTextOffer, peerID) {
 
-    debugTemp('receiveAnswer', this.usingVersion);
+    debug('receiveAnswer for version: ', this.usingVersion);
     this.fallbackTimer();
     if (this.tryingTurn && this.usingVersion === 'V1') {
       this.answersReceived.push(plainTextOffer);
       if (this.turnTimer === null) {
-        debug(this.turnTimer); // todo remove dev item
         const _self = this;
         this.turnTimer = setTimeout(this.receiveTurnAnswer.bind(_self), 1000);
       }
@@ -174,12 +167,11 @@ export default class WebRtcCommunication extends MewConnectCommon {
       if (this.turnTimer !== null) {
         clearTimeout(this.turnTimer);
       }
-      debug('webRtc receiveAnswer', this.answerReceived);
+      debug('webRtc receiveAnswer');
       debug(`active PEER_ID: ${this.p.peerInstanceId}`);
       try {
-        debug('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
         this.p.signal(plainTextOffer);
-        debug('============ INITIATOR ================='); // todo remove dev item
+        debug('webRTC answer received and processed');
       } catch (e) {
         // eslint-disable-next-line
         console.error(e);
@@ -189,9 +181,8 @@ export default class WebRtcCommunication extends MewConnectCommon {
       debug(`active PEER_ID: ${this.p.peerInstanceId}`);
       try {
         this.answerReceived[this.p.peerInstanceId] = true;
-        debug('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
         this.p.signal(plainTextOffer);
-        debug('============ INITIATOR ================='); // todo remove dev item
+        debug('webRTC answer received and processed');
       } catch (e) {
         // eslint-disable-next-line
         console.error(e);
@@ -200,16 +191,13 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   receiveTurnAnswer() {
-    if (!this.connected) {
-
-    }
     const plainTextOffer = this.answersReceived[this.answersReceived.length - 1];
     debug('webRtc receiveTurnAnswer', this.answerReceived);
     debug(`active PEER_ID: ${this.p.peerInstanceId}`);
     try {
       this.answerReceived[this.p.peerInstanceId] = true;
-      debug('recieveAnswer: plaintext', plainTextOffer); // todo remove dev item
       this.p.signal(plainTextOffer);
+      debug('webRTC answer received and processed');
     } catch (e) {
       // eslint-disable-next-line
       console.error(e);
@@ -229,11 +217,9 @@ export default class WebRtcCommunication extends MewConnectCommon {
   // Provide Notice that initial WebRTC connection failed and the fallback method will be used
   willAttemptTurn() {
     debugStages('TRY TURN CONNECTION');
-    console.log(this.tryingTurn); // todo remove dev item
     this.uiCommunicator(this.lifeCycle.UsingFallback);
     if (!this.tryingTurn && this.usingVersion === 'V2') {
-      console.log('emit try tuen =========================================================='); // todo remove dev item
-      console.log(this.usingVersion); // todo remove dev item
+      debugStages(' TRY TURN V2');
       this.tryingTurn = true;
       try {
         this.useFallback();
@@ -254,9 +240,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   useFallback() {
     if (!this.connected) {
-      console.log(this.turnTimer); // todo remove dev item
       this.emit('useFallback');
-      // this.rtcDestroy();
     }
   }
 
@@ -268,33 +252,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   // ----- Failure Handlers
-
-  // Handle Failure due to an attempt to join a connection with two existing endpoints
-  busyFailure() {
-    this.uiCommunicator(
-      this.lifeCycle.Failed,
-      this.lifeCycle.confirmationFailedBusyEvent
-    );
-    debug('confirmation Failed: Busy');
-  }
-
-  // Handle Failure due to no opposing peer existing
-  invalidFailure() {
-    this.uiCommunicator(
-      this.lifeCycle.Failed,
-      this.lifeCycle.invalidConnectionEvent
-    );
-    debug('confirmation Failed: no opposite peer found');
-  }
-
-  // Handle Failure due to the handshake/ verify details being invalid for the connection ID
-  confirmationFailure() {
-    this.uiCommunicator(
-      this.lifeCycle.Failed,
-      this.lifeCycle.confirmationFailedEvent
-    );
-    debug('confirmation Failed: invalid confirmation');
-  }
 
   stateChangeListener(peerID, evt) {
     // eslint-disable-next-line no-undef
@@ -330,7 +287,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
   // =========================================================
   // =========================================================
   async onData(peerID, data) {
-    debug('DATA RECEIVED', data.toString());
+    debug('DATA RECEIVED');
     debugPeer('peerID', peerID);
     this.fallbackTimer();
 
@@ -348,11 +305,8 @@ export default class WebRtcCommunication extends MewConnectCommon {
       }
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
-        debug('DECRYPTED DATA RECEIVED 1', parsed);
-        debug(parsed.type, parsed.data); // todo remove dev item
         this.emit('data', { type: parsed.type, data: parsed.data });
       } else {
-        debug('DECRYPTED DATA RECEIVED 2', decryptedData);
         this.emit('data', {
           type: decryptedData.type,
           data: decryptedData.data
@@ -366,8 +320,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   onClose(peerID, data) {
-    console.log('onClose'); // todo remove dev item
-    debugStages('WRTC MAYBE CLOSE');
+    debugStages('WRTC onClose event');
     debug('peerID', peerID);
     if (!this.isAlive()) {
       debugStages('WRTC CLOSE', data);
@@ -381,8 +334,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   onError(peerID, err) {
-    console.log('onError'); // todo remove dev item
-    debugStages('WRTC ERROR');
+    debugStages('WRTC onError event');
     debug('peerID', peerID);
     debug(err.code);
     debug('error', err);

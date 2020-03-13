@@ -8,12 +8,13 @@ import MewConnectInitiatorV2 from './MewConnectInitiatorV2';
 import MewConnectInitiatorV1 from './MewConnectInitiatorV1';
 
 import WebRtcCommunication from '../WebRtcCommunication';
-import PopUpCreator from '../connectWindow/popUpCreator';
+import PopUpCreator from '../../connectWindow/popUpCreator';
 
 const debug = debugLogger('MEWconnect:initiator-base');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
 const logger = createLogger('MewConnectInitiator');
+const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
 export default class MewConnectInitiator extends MewConnectCommon {
   constructor(options = {}) {
@@ -34,7 +35,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
       this.turnTest = options.turnTest;
 
-      this.destroyOnUnload();
+      this.destroyOnUnload(typeof window !== 'undefined');
       this.p = null;
       this.socketV2Connected = false;
       this.socketV1Connected = false;
@@ -45,16 +46,12 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.iceState = '';
       this.turnServers = [];
 
-      // this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
-      // this.Peer = SimplePeer;
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
       this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
       this.popupCreator = new PopUpCreator();
-      this.popUpWindow = {};
-      this.connPath = '';
-      console.log(MewConnectInitiator.getConnectionState()); // todo remove dev item
+
+      debugConnectionState('Initial Connection State:', MewConnectInitiator.getConnectionState());
       this.version = this.jsonDetails.version;
-      // this.versions = this.jsonDetails.versions;
       this.lifeCycle = this.jsonDetails.lifeCycle;
       this.iceStates = this.jsonDetails.iceConnectionState;
       this.stunServers = options.stunServers || this.jsonDetails.stunSrvers;
@@ -131,7 +128,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
   // can be used to listen to specific events, especially those that pass data
   uiCommunicator(event, data) {
-    debug('MewConnectInitiator', event, data); // todo remove dev item
+    debug('MewConnectInitiator event emitted', event);
     this.emit(event, data);
     this.emitStatus(event);
   }
@@ -154,7 +151,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
         this.version + separator + privateKey + separator + this.connId;
 
       debug(qrCodeString);
-      debug(qrCodeString); // todo remove dev item
       if (this.showPopup) {
         if(this.popupCreator.popupWindowOpen){
           this.popupCreator.updateQrCode(qrCodeString)
@@ -210,7 +206,7 @@ Keys
     debug('this.signed', this.signed);
   }
 
-  // TODO change this to handle supplying urls at time point
+  // TODO change this to use supplied urls at time point
   async initiatorStart(url, testPrivate) {
     if(this.socketV1Connected){
       this.V1.socketDisconnect();
@@ -267,12 +263,11 @@ Keys
     this.connected = false;
     this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
     this.webRtcCommunication.disconnectRTC();
-    // this.V2.disconnectRTC();
     this.instance = null;
   }
 
   async rtcSend(arg) {
-    this.webRtcCommunication.rtcSend(arg);
+    await this.webRtcCommunication.rtcSend(arg);
   }
 
   sendRtcMessage(type, data) {

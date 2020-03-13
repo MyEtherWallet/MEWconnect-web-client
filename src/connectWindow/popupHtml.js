@@ -22,7 +22,7 @@ const windowInformer = `
     </div>
 `;
 
-const windowPopup = (image) => {
+const windowPopup = (refresh, image) => {
   if (!image) {
     return `
       <html>

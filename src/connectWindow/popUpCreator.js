@@ -1,13 +1,19 @@
 import QrCode from 'qrcode';
-import logo from './logoImage';
+import {logo, refresh} from './images';
 import { cssStyles, htmlDesign, noticetext, windowInformer } from './popupWindowDesign';
+import debugLogger from 'debug';
 
+// TODO add debug logging
+const debug = debugLogger('MEWconnect:popup-window');
+const debugConnectionState = debugLogger('MEWconnect:connection-state');
+
+debug
 export default class PopUpCreator {
-  constructor(linkUrl) {
-    this.walletLinkUrl = linkUrl || 'connect-MEWconnect';
+  constructor() {
     this.sessionId = '';
     this.sessionId = false;
     this.logo = logo;
+    this.refreshIcon = refresh;
     this.popupWindowOpen = false;
 
     window.addEventListener('beforeunload', () => {
@@ -72,7 +78,6 @@ export default class PopUpCreator {
     }
 
     this.createWindowInformer();
-    const popupUrl = `${this.walletLinkUrl}/#MEWconnect`;
 
     const width = 320;
     const height = 520;
@@ -95,7 +100,7 @@ export default class PopUpCreator {
         'toolbar=0'
       ].join(',')
     );
-    this.popupWindow.document.write(htmlDesign(this.logo));
+    this.popupWindow.document.write(htmlDesign(this.refreshIcon, this.logo));
     const element = this.popupWindow.document.getElementById('canvas');
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
 
@@ -115,7 +120,6 @@ export default class PopUpCreator {
 
     const channel = new BroadcastChannel('refresh-channel');
     channel.addEventListener('message', (event) => {
-      console.log(event.data); // todo remove dev item
       this.refreshQrcode();
     });
     this.popupWindowOpen = true;
@@ -124,7 +128,6 @@ export default class PopUpCreator {
 
   updateQrCode(qrcode){
     const element = this.popupWindow.document.getElementById('canvas');
-    console.log(element); // todo remove dev item
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
   }
 

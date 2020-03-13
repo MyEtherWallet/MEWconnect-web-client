@@ -1,21 +1,41 @@
 <template>
   <div id="app">
 
-    <ul>
-      <li>
-        <h2>connector</h2>
-        <button @click="onClick">OPEN</button>
-        <h3>{{userAddress}}</h3>
-      </li>
-    </ul>
+    <h2>MEW connect client library example</h2>
+    <button @click="onClick">CONNECT</button>
+    <h3>{{userAddress}}</h3>
+
     <ul v-show="userAddress !== ''">
       <li>
         <button @click="disconnect">Disconnect</button>
       </li>
       <li>
         <h3>Send</h3>
+        <label for="toAmount">
+          to amount
+          <input id="toAmount" v-model="toAmount" placeholder="amount"/>
+        </label><br/>
         <button v-show="userAddress !== ''" @click="sendTx">send</button>
+        <h6>Sends to the connected wallet address</h6>
         <h3>Tx Hash: </h3> {{txHash}}
+      </li>
+      <li>
+        <h3>Send Token</h3>
+        <label for="tokenAddress">
+          token address
+          <input id="tokenAddress" v-model="tokenAddress" placeholder="token address"/>
+        </label><br/>
+        <label for="tokenDecimals">
+          token decimals
+          <input id="tokenDecimals" v-model="tokenDecimals" placeholder="token decimals"/>
+        </label><br/>
+        <label for="tokenAmount">
+          token amount
+          <input id="tokenAmount" v-model="tokenAmount" placeholder="amount"/>
+        </label><br/>
+
+        <button v-show="tokenAddress !== ''" @click="sendToken(tokenAmount)">send</button>
+        <h3>Tx Hash: </h3> {{tokenTxHash}}
       </li>
       <li>
         <button @click="getAccount">get account</button>
@@ -41,19 +61,25 @@
         <button @click="createSubscription">createSubscription</button>
       </li>
     </ul>
-
-    <button @click="animate">animate</button>
-    <p><button @click="animateDirect">animate direct</button></p>
-    <p><button @click="animateNotifier">animate notifier</button></p>
+    <br>
+    <hr style="width: 50%">
+    <h6> The two buttons below show the various windows and notification types that occur. They are
+         for display only and use dummy data.</h6>
+    <p>
+      <button @click="animateDirect">Display popup window</button>
+    </p>
+    <p>
+      <button @click="animateNotifier">Display action notifier</button>
+    </p>
   </div>
 </template>
 
 <script>
-// import mewConnect from '../../../../dist';
 import mewConnect from '../../../../src';
 
-import PopUpCreator from '../../../../src/connectClient/connectWindow/popUpCreator'
+import PopUpCreator from '../../../../src/connectWindow/popUpCreator';
 import Web3 from 'web3';
+import BigNumber from 'bignumber.js';
 
 export default {
   name: 'app',
@@ -69,26 +95,31 @@ export default {
       txHash: '',
       callRes: '',
       chainId: 0,
-      account: ''
+      account: '',
+      tokenAddress: '',
+      tokenDecimals: 18,
+      tokenTxHash: '',
+      tokenAmount: 0,
+      toAmount: 0
     };
   },
   mounted() {
     this.connect = new mewConnect.Provider();
-    this.ethereum = this.connect.makeWeb3Provider(3);
+    this.ethereum = this.connect.makeWeb3Provider(1);
     this.web3 = new Web3(this.ethereum);
     this.altPopup = new PopUpCreator();
-    this.ethereum.on("accountsChanged", (accounts) => {
-      console.log(`accountsChanged User's address is ${accounts[0]}`)
-    })
+    this.ethereum.on('accountsChanged', (accounts) => {
+      console.log(`accountsChanged User's address is ${accounts[0]}`);
+    });
   },
   methods: {
     animate() {
       this.connect.showNotice();
     },
-    animateDirect(){
-      this.altPopup.showPopupWindow('sdfsdfsdf')
+    animateDirect() {
+      this.altPopup.showPopupWindow('sdfsdfsdf');
     },
-    animateNotifier(){
+    animateNotifier() {
       this.connect.showNotifier();
     },
     onClick() {
@@ -101,41 +132,100 @@ export default {
       this.connect.disconnect();
       this.userAddress = '';
     },
-    getAccount(){
-      this.ethereum.send("eth_requestAccounts").then((accounts) => {
-        console.log('eth_requestAccounts', accounts); // todo remove dev item
-        console.log(`User's address is ${accounts[0]}`)
+    getAccount() {
+      this.ethereum.send('eth_requestAccounts').then((accounts) => {
+        console.log(`User's address is ${accounts[0]}`);
 
-      })
+      });
     },
     getBalance() {
       this.web3.eth.getBalance(this.userAddress).then(bal => this.balance = bal);
     },
     sendTx() {
       this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
-      this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
-        this.web3.eth.sendTransaction({
-          from: this.userAddress,
-          to: this.userAddress,
-          nonce,
-          value: 1000000000000000000,
-          gasPrice: 1000000000,
-          gas: 21000
-        }).once('transactionHash', hash => {
-          console.log(['Hash', hash]); // todo remove dev item
-          this.txHash = hash
-          // dispatch('addNotification', ['Hash', tx.from, tx, hash]);
-        })
-          .once('receipt', res => {
-            console.log(['Receipt', res]); // todo remove dev item
-            // dispatch('addNotification', ['Receipt', tx.from, tx, res]);
+      this.web3.eth.getGasPrice().then(gasPrice => {
+        this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
+          this.web3.eth.sendTransaction({
+            from: this.userAddress,
+            to: this.userAddress,
+            nonce,
+            value: new BigNumber(this.toAmount).times(new BigNumber(10).pow(18)).toFixed(),
+            gasPrice: gasPrice,
+            gas: 21000
+          }).once('transactionHash', hash => {
+            console.log(['Hash', hash]);
+            this.tokenTxHash = hash;
           })
-          .on('error', err => {
-            console.log(['Error', err]); // todo remove dev item
-            // dispatch('addNotification', ['Error', tx.from, tx, err]);
-          })
-          .then(txhash => console.log("THEN: ", txhash));
+            .once('receipt', res => {
+              console.log(['Receipt', res]);
+            })
+            .on('error', err => {
+              console.log(['Error', err]);
+            })
+            .then(txhash => console.log('THEN: ', txhash));
+        });
       });
+
+    },
+    sendToken(amount, decimals = 18) {
+      const jsonInterface = [
+        {
+          constant: false,
+          inputs: [
+            { name: '_to', type: 'address' },
+            { name: '_amount', type: 'uint256' }
+          ],
+          name: 'transfer',
+          outputs: [{ name: '', type: 'bool' }],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function'
+        }
+      ];
+      const contract = new this.web3.eth.Contract(jsonInterface);
+      const data = contract.methods
+        .transfer(
+          this.tokenAddress.toLowerCase(),
+          new BigNumber(amount).times(new BigNumber(10).pow(decimals)).toFixed()
+        )
+        .encodeABI();
+
+      let gasLimit = 100000;
+      this.web3.eth.estimateGas({
+        from: this.userAddress,
+        to: this.tokenAddress,
+        value: 0,
+        data
+      }).then(gas => {
+        console.log(gas);
+        gasLimit = gas;
+      })
+        .catch(console.error);
+
+      this.web3.eth.getGasPrice().then(gasPrice => {
+        this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
+          this.web3.eth.sendTransaction({
+            from: this.userAddress,
+            to: this.tokenAddress,
+            nonce,
+            value: 0,
+            gasPrice: gasPrice,
+            gas: gasLimit,
+            data
+          }).once('transactionHash', hash => {
+            console.log(['Hash', hash]);
+            this.txHash = hash;
+          })
+            .once('receipt', res => {
+              console.log(['Receipt', res]);
+            })
+            .on('error', err => {
+              console.log(['Error', err]);
+            })
+            .then(txhash => console.log('THEN: ', txhash));
+        });
+      });
+
     },
     getCoinBase() {
       this.web3.eth.getCoinbase()
@@ -156,7 +246,7 @@ export default {
         if (!error) {
           console.log(result);
         } else {
-          console.log(error); // todo remove dev item
+          console.log(error);
         }
       })
         .on('data', function(transaction) {
@@ -181,9 +271,7 @@ export default {
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
-    /*background-color: #2c3e50;*/
   }
-
 
 
   ul {

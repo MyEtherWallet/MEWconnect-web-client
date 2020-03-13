@@ -13,12 +13,16 @@ import { hashPersonalMessage } from 'ethereumjs-util';
 import errorHandler from './errorHandler';
 import commonGenerator from '../helpers/commonGenerator';
 import Misc from '../helpers/misc';
+import debugLogger from 'debug';
+
+// TODO add debug logging
+const debug = debugLogger('MEWconnect:popup-window');
+const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
 const V1_SIGNAL_URL = 'https://connect.mewapi.io';
 const V2_SIGNAL_URL = 'wss://connect2.mewapi.io/staging';
 const IS_HARDWARE = true;
 
-// TODO: add listener and ui notification on RtcConnectedEvent and RtcClosedEvent
 class MEWconnectWalletInterface extends WalletInterface {
   constructor(pubkey, isHardware, identifier, txSigner, msgSigner, mewConnect) {
     super(pubkey, true, identifier);
@@ -51,7 +55,6 @@ class MEWconnectWallet {
       v2Url: V2_SIGNAL_URL,
       showPopup: true
     });
-    // this.popupCreator = this.mewConnect.popupCreator;
     this.state = state || {};
   }
 
@@ -129,7 +132,7 @@ class MEWconnectWallet {
       this.identifier,
       txSigner,
       msgSigner,
-      mewConnect // <- using this.mewConnect here was causing a circular reference and data clone error
+      mewConnect
     );
   }
 }
@@ -144,6 +147,7 @@ createWallet.errorHandler = errorHandler;
 const signalerConnect = (url, mewConnect) => {
   return new Promise((resolve, reject) => {
     mewConnect.initiatorStart(url);
+    // future extension
     // mewConnect.on('AuthRejected', () => {
     //   reject();
     // });
