@@ -106,6 +106,8 @@ The MEWconnect client uses the debug library to provide verbose debug logging.  
     - to see the events and signals related to webRTC
   - MEWconnect:websocketWrapper
     - to see the events related to setting up the webRTC connection
+  - MEWconnect:*,MEWconnectVerbose:*,simple-peer
+    - what we usually use for debugging
     
 
 <br>
