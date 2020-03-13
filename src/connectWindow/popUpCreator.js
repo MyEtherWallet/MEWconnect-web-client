@@ -1,9 +1,15 @@
 import QrCode from 'qrcode';
 import {logo, refresh} from './images';
 import { cssStyles, htmlDesign, noticetext, windowInformer } from './popupWindowDesign';
+import debugLogger from 'debug';
 
+// TODO add debug logging
+const debug = debugLogger('MEWconnect:popup-window');
+const debugConnectionState = debugLogger('MEWconnect:connection-state');
+
+debug
 export default class PopUpCreator {
-  constructor(linkUrl) {
+  constructor() {
     this.sessionId = '';
     this.sessionId = false;
     this.logo = logo;
@@ -114,7 +120,6 @@ export default class PopUpCreator {
 
     const channel = new BroadcastChannel('refresh-channel');
     channel.addEventListener('message', (event) => {
-      console.log(event.data); // todo remove dev item
       this.refreshQrcode();
     });
     this.popupWindowOpen = true;
@@ -123,7 +128,6 @@ export default class PopUpCreator {
 
   updateQrCode(qrcode){
     const element = this.popupWindow.document.getElementById('canvas');
-    console.log(element); // todo remove dev item
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
   }
 

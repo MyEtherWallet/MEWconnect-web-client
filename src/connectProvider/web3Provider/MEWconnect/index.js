@@ -13,6 +13,11 @@ import { hashPersonalMessage } from 'ethereumjs-util';
 import errorHandler from './errorHandler';
 import commonGenerator from '../helpers/commonGenerator';
 import Misc from '../helpers/misc';
+import debugLogger from 'debug';
+
+// TODO add debug logging
+const debug = debugLogger('MEWconnect:popup-window');
+const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
 const V1_SIGNAL_URL = 'https://connect.mewapi.io';
 const V2_SIGNAL_URL = 'wss://connect2.mewapi.io/staging';

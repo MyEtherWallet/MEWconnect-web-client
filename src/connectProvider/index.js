@@ -8,9 +8,11 @@ import url from 'url';
 import EventEmitter from 'events';
 import EventNames from './web3Provider/web3-provider/events';
 import { Transaction } from 'ethereumjs-tx';
-import BigNumber from 'bignumber.js';
-import * as unit from 'ethjs-unit';
+
 import parseTokensData from './web3Provider/helpers/parseTokensData';
+import debugLogger from 'debug';
+
+const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
 const state = {
   wallet: null
@@ -34,11 +36,6 @@ export default class Integration {
   }
 
 
-
-  showNotice() {
-    this.popUpHandler.showPopupWindow('lksdfsdfsdfsdfsdfsdfsdfsfsfdsf');
-  }
-
   showNotifier() {
     this.popUpHandler.showNotice('connected', { border: 'rgba(5, 158, 135, 0.88) solid 2px' });
 
@@ -48,8 +45,6 @@ export default class Integration {
     if(MEWconnectWallet.getConnectionState() === 'disconnected' && this.returnPromise === null){
       this.returnPromise = this.enabler();
     }
-    console.log(MEWconnectWallet.getConnectionState()); // todo remove dev item
-    console.log(this.returnPromise); // todo remove dev item
     return this.returnPromise;
   }
 
@@ -58,10 +53,12 @@ export default class Integration {
     if (!state.wallet && MEWconnectWallet.getConnectionState() === 'disconnected' ) {
       MEWconnectWallet.setConnectionState('connecting');
       this.connectionState = 'connecting';
+      debugConnectionState(MEWconnectWallet.getConnectionState());
       state.wallet = await new MEWconnectWallet(state);
       this.popUpHandler.showNotice('connected', { border: 'rgba(5, 158, 135, 0.88) solid 2px' });
       this.popUpHandler.hideNotifier();
-      this.disconnectNotifier();
+      this.createDisconnectNotifier();
+      debugConnectionState(MEWconnectWallet.getConnectionState());
     }
 
     if (state.web3 && state.wallet) {
@@ -122,9 +119,9 @@ export default class Integration {
     return web3Provider;
   }
 
-  disconnectNotifier() {
+  createDisconnectNotifier() {
     const connection = state.wallet.getConnection();
-    console.log(connection); // todo remove dev item
+    debugConnectionState(MEWconnectWallet.getConnectionState());
     connection.webRtcCommunication.on(connection.lifeCycle.RtcDisconnectEvent, () => {
       this.popUpHandler.showNotice('disconnected');
       MEWconnectWallet.setConnectionState('disconnected');

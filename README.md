@@ -93,6 +93,20 @@ In order to have your token included in the list of tokens identified by the app
 
 Instructions one how to add a token there may be found [here](https://kb.myetherwallet.com/en/tokens/adding-token-as-a-default/)
 
+## Debugging
+
+The MEWconnect client uses the debug library to provide verbose debug logging.  In local storage add the key 'debug' with the value:
+  - \* 
+    - to see everything
+  - MEWconnect: *
+    -  to see everything related to the MEWconnect client
+  - MEWconnect:connection-state
+    - to see the connection state when it changes
+  - MEWconnect:webRTC-communication
+    - to see the events and signals related to webRTC
+  - MEWconnect:websocketWrapper
+    - to see the events related to setting up the webRTC connection
+    
 
 <br>
 <br>

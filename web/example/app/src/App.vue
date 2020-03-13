@@ -1,13 +1,10 @@
 <template>
   <div id="app">
 
-    <ul>
-      <li>
-        <h2>connector</h2>
-        <button @click="onClick">OPEN</button>
-        <h3>{{userAddress}}</h3>
-      </li>
-    </ul>
+    <h2>MEW connect client library example</h2>
+    <button @click="onClick">CONNECT</button>
+    <h3>{{userAddress}}</h3>
+
     <ul v-show="userAddress !== ''">
       <li>
         <button @click="disconnect">Disconnect</button>
@@ -64,13 +61,15 @@
         <button @click="createSubscription">createSubscription</button>
       </li>
     </ul>
-
-    <button @click="animate">animate</button>
+    <br>
+    <hr style="width: 50%">
+    <h6> The two buttons below show the various windows and notification types that occur. They are
+         for display only and use dummy data.</h6>
     <p>
-      <button @click="animateDirect">animate direct</button>
+      <button @click="animateDirect">Display popup window</button>
     </p>
     <p>
-      <button @click="animateNotifier">animate notifier</button>
+      <button @click="animateNotifier">Display action notifier</button>
     </p>
   </div>
 </template>
@@ -272,7 +271,6 @@ export default {
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
-    /*background-color: #2c3e50;*/
   }
 
 

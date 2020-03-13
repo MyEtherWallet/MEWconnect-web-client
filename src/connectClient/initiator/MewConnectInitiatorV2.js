@@ -42,15 +42,9 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
       this.webRtcCommunication = options.webRtcCommunication;
 
-      // this.Peer = options.wrtc || SimplePeer; //WebRTCConnection
-      // this.webRtcCommunication = new WebRtcCommunication();
-      // this.mewCrypto = options.crypto || MewConnectCrypto.create();
       this.socket = new WebSocket();
-      // this.io = io;
-      this.connPath = '';
 
       this.signals = this.jsonDetails.signals;
-      this.signalsV1 = this.jsonDetails.signalsV1;
       this.signals = this.jsonDetails.signalsV2;
       this.rtcEvents = this.jsonDetails.rtc;
       this.version = this.jsonDetails.version;
@@ -71,7 +65,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
 
     this.webRtcCommunication.on('useFallback', () =>{
-      console.log("TURN ======================================================================"); // todo remove dev item
+      debug('USING TURN FALLBACK')
       this.useFallback();
     })
 
@@ -164,18 +158,11 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     }
   }
 
-  // async initiatorStart(url, testPrivate) {
-  //   this.generateKeys(testPrivate);
-  //   this.displayCode(this.privateKey);
-  //   this.initiatorStartV1(this.v1Url);
-  //   await this.initiatorStart(this.Url);
-  // }
-
   async initiatorStart(url = this.Url, cryptoInstance, details = {}) {
     this.connId = details.connId;
     this.signed = details.signed;
     try {
-      debug('initiatorStart V2'); // todo remove dev item
+      debug('initiatorStart V2');
       this.mewCrypto = cryptoInstance;
       this.uiCommunicator(this.lifeCycle.signatureCheck);
       await this.connect(url);
@@ -185,23 +172,8 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       debug('initiatorStart error:', e);
     }
   }
-
-  // beginRtcSequence(source, data) {
-  //   if (source === '') {
-  //     this.connPath = '';
-  //     this.socketV1Disconnect();
-  //     this.beginRtcSequence(data);
-  //   } else if (source === 'V1') {
-  //     this.connPath = 'V1';
-  //     this.socketDisconnect();
-  //     this.beginRtcSequence(data);
-  //   }
-  // }
-
   async connect(websocketURL, options = null) {
     try {
-      // if (!websocketURL)
-      //   websocketURL =
       if (typeof jest !== 'undefined' && this.connId === null) {
         // for tests only
         // this.generateKeys();

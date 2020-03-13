@@ -1,11 +1,10 @@
-import {logo, refresh} from '../connectProvider/images';
-import { notifierCSS, WindowInformerCSS } from './popupStyles';
-import { windowPopup, windowInformer, noticeHtml } from './popupHtml';
-import cssStyles from '../connectProvider/windowStyles';
-import debugLogger from 'debug';
+import {logo} from './images';
+import { notifierCSS } from './popupStyles';
+import { noticeHtml } from './popupHtml';
+// import debugLogger from 'debug';
 
-
-const debug = debugLogger('MEWconnect:popup-handler');
+// TODO add debug logging
+// const debug = debugLogger('MEWconnect:popup-handler');
 
 export default class PopUpHandler {
   constructor() {
@@ -14,7 +13,6 @@ export default class PopUpHandler {
     this.elementId = 'mew-connect-notice';
     this.initialcheckIfIdExists();
     this.createNotice();
-    this.createWindowInformer();
     this.styleDefaults = {};
     this.timeoutTracker = null;
   }
@@ -131,27 +129,12 @@ export default class PopUpHandler {
     });
   }
 
-  createWindowInformer() {
-    this.index++;
-
-    const css = document.createElement('style');
-    css.type = 'text/css';
-    if ('textContent' in css)
-      css.textContent = WindowInformerCSS;
-    else
-      css.innerText = WindowInformerCSS;
-    document.body.appendChild(css);
-    const div = window.document.createElement('div');
-    div.id = 'Notifications';
-    div.className = 'hidden';
-
-    div.innerHTML = windowInformer;
-    window.document.body.appendChild(div);
-  }
 
   hideNotifier() {
     const notify = document.getElementById('Notifications');
-    notify.className = 'hidden';
+    if(notify){
+      notify.className = 'hidden';
+    }
   }
 
 }
