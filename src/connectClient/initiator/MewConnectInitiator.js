@@ -1,4 +1,4 @@
-import createLogger from 'logging';
+// import createLogger from 'logging';
 import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
 
@@ -11,9 +11,9 @@ import WebRtcCommunication from '../WebRtcCommunication';
 import PopUpCreator from '../../connectWindow/popUpCreator';
 
 const debug = debugLogger('MEWconnect:initiator-base');
-const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
+// const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
-const logger = createLogger('MewConnectInitiator');
+// const logger = createLogger('MewConnectInitiator');
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
 export default class MewConnectInitiator extends MewConnectCommon {
@@ -48,9 +48,12 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
       this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
-      this.popupCreator = new PopUpCreator();
+      this.popupCreator = options.popupCreator || new PopUpCreator();
 
-      debugConnectionState('Initial Connection State:', MewConnectInitiator.getConnectionState());
+      debugConnectionState(
+        'Initial Connection State:',
+        MewConnectInitiator.getConnectionState()
+      );
       this.version = this.jsonDetails.version;
       this.lifeCycle = this.jsonDetails.lifeCycle;
       this.iceStates = this.jsonDetails.iceConnectionState;
@@ -66,7 +69,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
     } catch (e) {
       debug('constructor error:', e);
     }
-
   }
 
   static setConnectionState(connectionState) {
@@ -86,11 +88,18 @@ export default class MewConnectInitiator extends MewConnectCommon {
     return false;
   }
 
+  focusPopupWindow() {
+    if (this.popupCreator.popupWindowOpen) {
+      this.popupCreator.popupWindow.focus();
+    }
+  }
+
   // Check if a WebRTC connection exists before a window/tab is closed or refreshed
   // Destroy the connection if one exists
   destroyOnUnload() {
     if (isBrowser) {
-      try { // eslint-disable-next-line no-undef
+      try {
+        // eslint-disable-next-line no-undef
         window.onunload = window.onbeforeunload = () => {
           const iceStates = [
             this.iceStates.new,
@@ -152,14 +161,16 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
       debug(qrCodeString);
       if (this.showPopup) {
-        if(this.popupCreator.popupWindowOpen){
-          this.popupCreator.updateQrCode(qrCodeString)
+        if (this.popupCreator.popupWindowOpen) {
+          this.popupCreator.updateQrCode(qrCodeString);
         } else {
           this.popupCreator.refreshQrcode = this.initiatorStart.bind(this);
           this.popupCreator.openPopupWindow(qrCodeString);
-          this.popupCreator.window.addEventListener('beforeunload', (event) => {
+          this.popupCreator.popupWindow.addEventListener('beforeunload', () => {
             if (!this.connected) {
-              MewConnectInitiator.setConnectionState('disconnected');
+              // eslint-disable-next-line no-console
+              console.log('popup window closed'); // todo remove dev item
+              MewConnectInitiator.setConnectionState();
               this.socketDisconnect();
               this.emit(this.lifeCycle.AuthRejected);
             }
@@ -208,10 +219,10 @@ Keys
 
   // TODO change this to use supplied urls at time point
   async initiatorStart(url, testPrivate) {
-    if(this.socketV1Connected){
+    if (this.socketV1Connected) {
       this.V1.socketDisconnect();
     }
-    if(this.socketV2Connected){
+    if (this.socketV2Connected) {
       this.V2.socketDisconnect();
     }
     this.generateKeys(testPrivate);
@@ -246,11 +257,14 @@ Keys
       this.socketV2Connected = true;
     });
 
-    this.webRtcCommunication.on(this.jsonDetails.lifeCycle.RtcConnectedEvent, () => {
-      this.connected = true;
-      this.popupCreator.closePopupWindow();
-      MewConnectInitiator.setConnectionState('connected');
-    });
+    this.webRtcCommunication.on(
+      this.jsonDetails.lifeCycle.RtcConnectedEvent,
+      () => {
+        this.connected = true;
+        this.popupCreator.closePopupWindow();
+        MewConnectInitiator.setConnectionState('connected');
+      }
+    );
   }
 
   socketDisconnect() {

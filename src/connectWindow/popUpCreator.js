@@ -1,13 +1,18 @@
 import QrCode from 'qrcode';
-import {logo, refresh} from './images';
-import { cssStyles, htmlDesign, noticetext, windowInformer } from './popupWindowDesign';
+import { logo, refresh } from './images/index';
+import {
+  cssStyles,
+  htmlDesign,
+  noticetext,
+  windowInformer
+} from './popupWindowDesign';
 import debugLogger from 'debug';
 
 // TODO add debug logging
 const debug = debugLogger('MEWconnect:popup-window');
-const debugConnectionState = debugLogger('MEWconnect:connection-state');
+// const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
-debug
+debug;
 export default class PopUpCreator {
   constructor() {
     this.sessionId = '';
@@ -35,13 +40,10 @@ export default class PopUpCreator {
   }
 
   createWindowInformer() {
-
     const css = document.createElement('style');
     css.type = 'text/css';
-    if ('textContent' in css)
-      css.textContent = noticetext;
-    else
-      css.innerText = noticetext;
+    if ('textContent' in css) css.textContent = noticetext;
+    else css.innerText = noticetext;
     document.body.appendChild(css);
     const div = window.document.createElement('div');
     div.id = 'Notifications';
@@ -52,7 +54,6 @@ export default class PopUpCreator {
   }
 
   showWindowInformer() {
-
     const notify = document.getElementById('Notifications');
     notify.className = 'shown';
 
@@ -63,6 +64,7 @@ export default class PopUpCreator {
 
     const cancelButton = document.getElementById('NotificationButton2');
     cancelButton.addEventListener('click', () => {
+      this.popupWindowOpen = false;
       this.hideNotifier();
       this.closePopupWindow();
     });
@@ -82,7 +84,9 @@ export default class PopUpCreator {
     const width = 320;
     const height = 520;
     const left = Math.floor(window.outerWidth / 2 - width / 2 + window.screenX);
-    const top = Math.floor(window.outerHeight / 2 - height / 2 + window.screenY);
+    const top = Math.floor(
+      window.outerHeight / 2 - height / 2 + window.screenY
+    );
     this.popupUrl = Math.random().toString();
     this.popupWindow = window.open(
       '',
@@ -106,27 +110,26 @@ export default class PopUpCreator {
 
     const css = this.popupWindow.document.createElement('style');
     css.type = 'text/css';
-    if ('textContent' in css)
-      css.textContent = cssStyles;
-    else
-      css.innerText = cssStyles;
+    if ('textContent' in css) css.textContent = cssStyles;
+    else css.innerText = cssStyles;
     this.popupWindow.document.body.appendChild(css);
 
     this.showWindowInformer();
     this.popupWindow.addEventListener('beforeunload', () => {
       this.hideNotifier();
+      this.popupWindowOpen = false;
       this.popupWindow = null;
     });
 
     const channel = new BroadcastChannel('refresh-channel');
-    channel.addEventListener('message', (event) => {
+    channel.addEventListener('message', () => {
       this.refreshQrcode();
     });
     this.popupWindowOpen = true;
     return this.popupWindow;
   }
 
-  updateQrCode(qrcode){
+  updateQrCode(qrcode) {
     const element = this.popupWindow.document.getElementById('canvas');
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
   }
@@ -140,7 +143,7 @@ export default class PopUpCreator {
     window.focus();
   }
 
-  handleBeforeUnload(_evt) {
+  handleBeforeUnload() {
     this.closePopupWindow();
   }
 }

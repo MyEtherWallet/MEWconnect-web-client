@@ -29,7 +29,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.tryingTurn = false;
     this.connected = false;
 
-
     this.signals = this.jsonDetails.signals;
     this.rtcEvents = this.jsonDetails.rtc;
     this.version = this.jsonDetails.version;
@@ -110,7 +109,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
           this.willAttemptTurn();
         }, this.turnWaitTime);
       }
-
     }
   }
 
@@ -118,22 +116,21 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.canSignal = !this.canSignal;
     this.fallbackTimer();
     this.setActivePeerId();
-      this.p = new this.Peer(simpleOptions);
-      const peerID = this.getActivePeerId();
-      this.answerReceived[peerID] = false;
-      this.p.peerInstanceId = peerID;
-      this.peersCreated[peerID] = this.p;
-      this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
-      this.p.on(this.rtcEvents.connect, this.onConnect.bind(this, peerID));
-      this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
-      this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
-      this.p.on(this.rtcEvents.signal, this.signalListener.bind(this));
-      debug(`active PEER_ID: ${this.p.peerInstanceId}`);
-      this.p._pc.addEventListener(
-        'iceconnectionstatechange',
-        this.stateChangeListener.bind(this, peerID)
-      );
-
+    this.p = new this.Peer(simpleOptions);
+    const peerID = this.getActivePeerId();
+    this.answerReceived[peerID] = false;
+    this.p.peerInstanceId = peerID;
+    this.peersCreated[peerID] = this.p;
+    this.p.on(this.rtcEvents.error, this.onError.bind(this, peerID));
+    this.p.on(this.rtcEvents.connect, this.onConnect.bind(this, peerID));
+    this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
+    this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
+    this.p.on(this.rtcEvents.signal, this.signalListener.bind(this));
+    debug(`active PEER_ID: ${this.p.peerInstanceId}`);
+    this.p._pc.addEventListener(
+      'iceconnectionstatechange',
+      this.stateChangeListener.bind(this, peerID)
+    );
   }
 
   onConnect(peerID) {
@@ -144,7 +141,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   signalListener(data) {
-    if(this.canSignal) {
+    if (this.canSignal) {
       this.canSignal = !this.canSignal;
       ++this.offersSent;
       debug('webRTC setup signal received');
@@ -153,7 +150,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   receiveAnswer(plainTextOffer, peerID) {
-
     debug('receiveAnswer for version: ', this.usingVersion);
     this.fallbackTimer();
     if (this.tryingTurn && this.usingVersion === 'V1') {
@@ -191,7 +187,9 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   receiveTurnAnswer() {
-    const plainTextOffer = this.answersReceived[this.answersReceived.length - 1];
+    const plainTextOffer = this.answersReceived[
+      this.answersReceived.length - 1
+    ];
     debug('webRtc receiveTurnAnswer', this.answerReceived);
     debug(`active PEER_ID: ${this.p.peerInstanceId}`);
     try {
@@ -202,7 +200,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
       // eslint-disable-next-line
       console.error(e);
     }
-
   }
 
   // ----- Socket Event handlers

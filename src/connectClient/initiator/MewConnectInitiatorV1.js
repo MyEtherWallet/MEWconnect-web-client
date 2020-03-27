@@ -245,7 +245,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     };
 
     debug(`initiatorStartRTC - options: ${simpleOptions}`);
-    debug("START V1"); // todo remove dev item
+    debug('START V1'); // todo remove dev item
     this.webRtcCommunication.setConnectionVersion('V1');
     this.webRtcCommunication.start(simpleOptions);
     this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
@@ -268,9 +268,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
   async onSignal(data) {
     debug('onSignal'); // todo remove dev item
     debug(data); // todo remove dev item
-    const encryptedSend = await this.mewCrypto.encrypt(
-      JSON.stringify(data)
-    );
+    const encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(data));
     this.uiCommunicator(this.lifeCycle.sendOffer);
     this.socketEmit(this.signals.offerSignal, {
       data: encryptedSend,
@@ -343,5 +341,4 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     };
     this.beginRtcSequence(options);
   }
-
 }

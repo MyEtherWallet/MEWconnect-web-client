@@ -1,4 +1,4 @@
-const notifierCSS = (elementId) => {
+const notifierCSS = elementId => {
   return `
     /* The snackbar - position it at the bottom and in the middle of the screen */
         #${elementId}-img {
@@ -497,7 +497,4 @@ const WindowInformerCSS = `
         opacity: 0.6;
       }
       `;
-export {
-  notifierCSS,
-  WindowInformerCSS
-};
+export { notifierCSS, WindowInformerCSS };

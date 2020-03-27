@@ -148,8 +148,9 @@ const htmlDesign = (refresh, image) => {
 
 `;
   if (!image) {
+    // eslint-disable-next-line no-console
+    console.log(image); // todo remove dev item
     middlePart = 'MEWconnect';
-
   } else {
     middlePart = `
              <img src="${image}" />

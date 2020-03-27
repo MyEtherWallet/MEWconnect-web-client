@@ -74,21 +74,21 @@ export default class MewConnectCommon extends EventEmitter {
     if (typeof window === 'undefined') return null;
     const wrtc = {
       RTCPeerConnection:
-      // eslint-disable-next-line no-undef
+        // eslint-disable-next-line no-undef
         window.RTCPeerConnection ||
         // eslint-disable-next-line no-undef
         window.mozRTCPeerConnection ||
         // eslint-disable-next-line no-undef
         window.webkitRTCPeerConnection,
       RTCSessionDescription:
-      // eslint-disable-next-line no-undef
+        // eslint-disable-next-line no-undef
         window.RTCSessionDescription ||
         // eslint-disable-next-line no-undef
         window.mozRTCSessionDescription ||
         // eslint-disable-next-line no-undef
         window.webkitRTCSessionDescription,
       RTCIceCandidate:
-      // eslint-disable-next-line no-undef
+        // eslint-disable-next-line no-undef
         window.RTCIceCandidate ||
         // eslint-disable-next-line no-undef
         window.mozRTCIceCandidate ||

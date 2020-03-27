@@ -61,9 +61,7 @@ export default class WebsocketConnection {
         debug(`extensions used: ${this.socket.extensions} or none`);
         debug(`protocol used: ${this.socket.protocol} or default`);
         debug(
-          `binary type used: ${
-            this.socket.binaryType
-          } [either blob or arraybuffer]`
+          `binary type used: ${this.socket.binaryType} [either blob or arraybuffer]`
         );
       }
     } catch (e) {

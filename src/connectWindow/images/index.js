@@ -1,7 +1,4 @@
-import logo from './logoImage'
-import refresh from './refreshIcon'
+import logo from './logoImage';
+import refresh from './refreshIcon';
 
-export {
-  logo,
-  refresh
-}
+export { logo, refresh };

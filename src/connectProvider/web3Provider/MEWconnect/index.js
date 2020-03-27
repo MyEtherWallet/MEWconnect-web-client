@@ -1,5 +1,5 @@
 import MEWconnect from '../../../index';
-import networks from '../networks/index';
+// import networks from '../networks/index';
 import { Transaction } from 'ethereumjs-tx';
 import WalletInterface from '../WalletInterface';
 import { MEW_CONNECT as mewConnectType } from '../bip44/index';
@@ -13,11 +13,11 @@ import { hashPersonalMessage } from 'ethereumjs-util';
 import errorHandler from './errorHandler';
 import commonGenerator from '../helpers/commonGenerator';
 import Misc from '../helpers/misc';
-import debugLogger from 'debug';
+// import debugLogger from 'debug';
 
 // TODO add debug logging
-const debug = debugLogger('MEWconnect:popup-window');
-const debugConnectionState = debugLogger('MEWconnect:connection-state');
+// const debug = debugLogger('MEWconnect:popup-window');
+// const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
 const V1_SIGNAL_URL = 'https://connect.mewapi.io';
 const V2_SIGNAL_URL = 'wss://connect2.mewapi.io/staging';
@@ -47,13 +47,14 @@ class MEWconnectWalletInterface extends WalletInterface {
 }
 
 class MEWconnectWallet {
-  constructor(state) {
+  constructor(state, popupCreator) {
     this.identifier = mewConnectType;
     this.isHardware = IS_HARDWARE;
     this.mewConnect = new MEWconnect.Initiator({
       v1Url: V1_SIGNAL_URL,
       v2Url: V2_SIGNAL_URL,
-      showPopup: true
+      showPopup: true,
+      popupCreator: popupCreator
     });
     this.state = state || {};
   }
@@ -64,6 +65,11 @@ class MEWconnectWallet {
   }
 
   static getConnectionState() {
+    if (!MEWconnect.Initiator.connectionState) return 'disconnected';
+    return MEWconnect.Initiator.connectionState;
+  }
+
+  static getPopupWindowRef() {
     if (!MEWconnect.Initiator.connectionState) return 'disconnected';
     return MEWconnect.Initiator.connectionState;
   }
@@ -98,9 +104,9 @@ class MEWconnectWallet {
           if (signedChainId !== networkId)
             throw new Error(
               'Invalid networkId signature returned. Expected: ' +
-              networkId +
-              ', Got: ' +
-              signedChainId,
+                networkId +
+                ', Got: ' +
+                signedChainId,
               'InvalidNetworkId'
             );
           resolve(getSignTransactionObject(tx));
@@ -137,15 +143,15 @@ class MEWconnectWallet {
   }
 }
 
-const createWallet = async state => {
-  const _MEWconnectWallet = new MEWconnectWallet(state);
+const createWallet = async (state, popupCreator) => {
+  const _MEWconnectWallet = new MEWconnectWallet(state, popupCreator);
   createWallet.connectionState = _MEWconnectWallet.connectionState;
   const _tWallet = await _MEWconnectWallet.init();
   return _tWallet;
 };
 createWallet.errorHandler = errorHandler;
 const signalerConnect = (url, mewConnect) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     mewConnect.initiatorStart(url);
     // future extension
     // mewConnect.on('AuthRejected', () => {

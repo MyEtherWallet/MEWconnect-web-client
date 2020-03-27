@@ -161,14 +161,13 @@ const isDarklisted = addr => {
   const darklisted =
     storedDarklist > 0
       ? storedDarklist.findIndex(item => {
-        return (
-          utils.toChecksumAddress(item.address.toLowerCase()) ===
-          utils.toChecksumAddress(addr.toLowerCase())
-        );
-      })
+          return (
+            utils.toChecksumAddress(item.address.toLowerCase()) ===
+            utils.toChecksumAddress(addr.toLowerCase())
+          );
+        })
       : -1;
-  const errMsg =
-    darklisted === -1 ? '' : darkList.data[darklisted].comment;
+  const errMsg = darklisted === -1 ? '' : darkList.data[darklisted].comment;
   const errObject = {
     error: darklisted === -1 ? false : true,
     msg: errMsg

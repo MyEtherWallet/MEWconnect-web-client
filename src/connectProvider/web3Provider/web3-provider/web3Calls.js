@@ -56,8 +56,8 @@ class Web3Calls {
             }
             throw new Error(
               'Address ' +
-              address +
-              ' is not a valid address to get the "transactionCount".'
+                address +
+                ' is not a valid address to get the "transactionCount".'
             );
           },
           function() {

@@ -31,8 +31,8 @@ export default async (
   try {
     tx.nonce = !tx.nonce
       ? await store.state.web3.eth.getTransactionCount(
-        store.state.wallet.getAddressString()
-      )
+          store.state.wallet.getAddressString()
+        )
       : tx.nonce;
     tx.gas = !tx.gas ? await ethCalls.estimateGas(localTx) : tx.gas;
   } catch (e) {
@@ -42,7 +42,6 @@ export default async (
   tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
   getSanitizedTx(tx)
     .then(_tx => {
-
       eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
         const _promiObj = store.state.web3.eth.sendSignedTransaction(
           _response.rawTransaction
@@ -66,7 +65,6 @@ export default async (
           });
         setEvents(_promiObj, _tx, eventHub);
       });
-
     })
     .catch(e => {
       res(e);

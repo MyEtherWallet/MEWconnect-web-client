@@ -85,6 +85,9 @@ ethereum.enable().then((accounts) => {
 That's it! Once the connection between the phone and the site is established, the Web3 object
 (`web3`) and the Web3 Provider (`ethereum`) are ready to be used as usual.
 
+---
+## Example
+An example may be found in the example directory
 
 ---
 

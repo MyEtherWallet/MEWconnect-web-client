@@ -18,7 +18,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   constructor(options = {}) {
     super('V2');
     try {
-
       this.uiCommunicator = options.uiCommunicator;
       this.supportedBrowser = MewConnectCommon.checkBrowser();
 
@@ -63,12 +62,10 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       debug('constructor error:', e);
     }
 
-
-    this.webRtcCommunication.on('useFallback', () =>{
-      debug('USING TURN FALLBACK')
+    this.webRtcCommunication.on('useFallback', () => {
+      debug('USING TURN FALLBACK');
       this.useFallback();
-    })
-
+    });
   }
 
   setResetStates() {
@@ -181,10 +178,10 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       const queryOptions = options
         ? options
         : {
-          role: this.jsonDetails.stages.initiator,
-          connId: this.connId,
-          signed: this.signed
-        };
+            role: this.jsonDetails.stages.initiator,
+            connId: this.connId,
+            signed: this.signed
+          };
 
       debug(websocketURL, queryOptions);
       await this.socket.connect(this.Url, queryOptions);
@@ -216,9 +213,10 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   socketDisconnect() {
     debug(`Socket already disconnected: ${this.active}`);
     this.active = false;
-    if (this.socket) this.socket.disconnect().catch(err => {
-      debug('socketDisconnect', err);
-    });
+    if (this.socket)
+      this.socket.disconnect().catch(err => {
+        debug('socketDisconnect', err);
+      });
     debug('webSocket Disconnected');
     this.socket = null;
     this.socketConnected = false;
@@ -247,7 +245,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
         this.signals.confirmation,
         this.beginRtcSequence.bind(this, '')
       ); // response
-// this.signals.answer
+      // this.signals.answer
       this.socketOn('answer', this.recieveAnswer.bind(this));
       this.socketOn(
         this.signals.confirmationFailedBusy,
@@ -380,13 +378,15 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
       this.uiCommunicator(this.lifeCycle.answerReceived);
       debug(plainTextOffer);
-      this.webRtcCommunication.receiveAnswer(JSON.parse(plainTextOffer), this.activePeerId);
+      this.webRtcCommunication.receiveAnswer(
+        JSON.parse(plainTextOffer),
+        this.activePeerId
+      );
       debug('answer relayed to webRTC instance');
     } catch (e) {
       logger.error(e);
       debug('recieveAnswer error:', e);
     }
-
   }
 
   setActivePeerId(peerId) {
@@ -458,17 +458,12 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       if (parsedJson.type && parsedJson.data) {
         return parsedJson;
       }
-      return await this.mewCrypto.decrypt(
-        JSON.parse(data)
-      );
-
+      return await this.mewCrypto.decrypt(JSON.parse(data));
     } else {
       if (data.type && data.data) {
         return data;
       }
-      return await this.mewCrypto.decrypt(
-        JSON.parse(JSON.stringify(data))
-      );
+      return await this.mewCrypto.decrypt(JSON.parse(JSON.stringify(data)));
     }
   }
 
@@ -597,7 +592,9 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
           config: {
             iceServers: data.iceServers.map(obj => {
               const newObject = {};
-              delete Object.assign(newObject, obj, { ['urls']: obj['url'] })['url'];
+              delete Object.assign(newObject, obj, { ['urls']: obj['url'] })[
+                'url'
+              ];
               return newObject;
             })
           },
@@ -610,5 +607,4 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       debugTurn('retryViaTurn error:', e);
     }
   }
-
 }

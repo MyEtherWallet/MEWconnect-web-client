@@ -17,8 +17,8 @@ export default async (
   const ethCalls = new EthCalls(requestManager);
   tx.nonce = !tx.nonce
     ? await store.state.web3.eth.getTransactionCount(
-      store.state.wallet.getAddressString()
-    )
+        store.state.wallet.getAddressString()
+      )
     : tx.nonce;
   tx.gas = !tx.gas ? await ethCalls.estimateGas(localTx) : tx.gas;
   tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;

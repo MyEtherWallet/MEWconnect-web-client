@@ -11,7 +11,9 @@ import {
   ecsign,
   isValidPrivate,
   isValidPublic,
-  privateToPublic, isHexString, toBuffer as utilsToBuffer
+  privateToPublic,
+  isHexString,
+  toBuffer as utilsToBuffer
 } from 'ethereumjs-util';
 import commonGenerator from './helpers/commonGenerator';
 import { Transaction } from 'ethereumjs-tx';
@@ -107,9 +109,9 @@ class WalletInterface {
         if (signedChainId !== networkId)
           throw new Error(
             'Invalid networkId signature returned. Expected: ' +
-            networkId +
-            ', Got: ' +
-            signedChainId,
+              networkId +
+              ', Got: ' +
+              signedChainId,
             'InvalidNetworkId'
           );
         resolve(getSignTransactionObject(tx));

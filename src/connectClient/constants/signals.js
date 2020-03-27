@@ -44,7 +44,4 @@ const signalV2 = {
   error: 'error'
 };
 
-export {
-  signalV1,
-  signalV2
-};
+export { signalV1, signalV2 };

@@ -34,7 +34,8 @@ class WSProvider {
         );
       if (
         /*!Object.is(this.wsProvider, web3.currentProvider) &&*/
-        this.lastMessage + 10 * 60 * 1000 < new Date().getTime() //wait extra 10 minutes
+        this.lastMessage + 10 * 60 * 1000 <
+        new Date().getTime() //wait extra 10 minutes
       ) {
         this.wsProvider.disconnect();
         this.oWSProvider.disconnect();
@@ -85,7 +86,7 @@ class WSProvider {
           if (argumentsList[0] === 'eth_requestAccounts') {
             return new Promise((resolve, reject) => {
               let callback = (err, response) => {
-                if(err) reject(err);
+                if (err) reject(err);
                 else resolve(response.result);
               };
               let payload = {

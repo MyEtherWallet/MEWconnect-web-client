@@ -25,7 +25,7 @@ const signals = {
   V2: signalV2
 };
 
-const versionIdentify = (ver) => {
+const versionIdentify = ver => {
   const parts = ver.toString().split('.');
   if (parts.length > 0) {
     ver = parts[0];
@@ -44,11 +44,11 @@ const versionIdentify = (ver) => {
   }
 };
 
-const signalServer = (ver) => {
+const signalServer = ver => {
   return signalUrl[versionIdentify(ver)];
 };
 
-const signal = (ver) => {
+const signal = ver => {
   return signals[versionIdentify(ver)];
 };
 

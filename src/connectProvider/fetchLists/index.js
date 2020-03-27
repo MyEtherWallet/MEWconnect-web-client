@@ -14,7 +14,7 @@ const fetchTokens = async () => {
     if (tokenList !== undefined && tokenList.length > 0) {
       for (let i = 0; i < tokenList.length; i++) {
         const tokenFile = tokenList[i];
-        if(configs.SUPPORTED_CHAINS.includes(tokenFile.name)){
+        if (configs.SUPPORTED_CHAINS.includes(tokenFile.name)) {
           const tokensCollection = await fetch(
             `${tokenFileURL + tokenFile.name}/tokens-${tokenFile.name}.json`
           )
@@ -35,9 +35,8 @@ const fetchTokens = async () => {
   }
 };
 
-
 const run = async () => {
-  await fetchTokens()
+  await fetchTokens();
 };
 
 (async () => {

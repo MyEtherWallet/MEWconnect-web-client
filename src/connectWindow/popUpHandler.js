@@ -1,6 +1,7 @@
-import {logo} from './images';
 import { notifierCSS } from './popupStyles';
 import { noticeHtml } from './popupHtml';
+import { logo } from './images/index';
+
 // import debugLogger from 'debug';
 
 // TODO add debug logging
@@ -53,18 +54,28 @@ export default class PopUpHandler {
     if (!timeoutOverride) {
       element.className = 'show';
 
-      const elementText = window.document.getElementById(`${this.elementId}-text`);
+      const elementText = window.document.getElementById(
+        `${this.elementId}-text`
+      );
       elementText.innerHTML = text;
 
-      setTimeout(function() { element.className = element.className.replace('show', ''); }, timeoutTime);
+      setTimeout(function() {
+        element.className = element.className.replace('show', '');
+      }, timeoutTime);
     } else {
       element.className = 'show-in';
 
-      const elementText = window.document.getElementById(`${this.elementId}-text`);
+      const elementText = window.document.getElementById(
+        `${this.elementId}-text`
+      );
       elementText.innerHTML = text;
 
-      setTimeout(function() { element.className = element.className.replace('show-in', 'show-out'); }, timeoutTime - 500);
-      this.timeoutTracker = setTimeout(function() { element.className = element.className.replace('show-out', ''); }, timeoutTime);
+      setTimeout(function() {
+        element.className = element.className.replace('show-in', 'show-out');
+      }, timeoutTime - 500);
+      this.timeoutTracker = setTimeout(function() {
+        element.className = element.className.replace('show-out', '');
+      }, timeoutTime);
     }
   }
 
@@ -87,19 +98,31 @@ export default class PopUpHandler {
 
     element.className = 'show-persistent';
 
-    const elementText = window.document.getElementById(`${this.elementId}-text`);
+    const elementText = window.document.getElementById(
+      `${this.elementId}-text`
+    );
     elementText.innerHTML = text;
 
-    this.timeoutTracker = setTimeout(function() { element.className = element.className.replace('show-persistent', ''); }, 10800);
+    this.timeoutTracker = setTimeout(function() {
+      element.className = element.className.replace('show-persistent', '');
+    }, 10800);
   }
 
   showNoticePersistentExit() {
     if (this.timeoutTracker) {
       clearTimeout(this.timeoutTracker);
       const element = window.document.getElementById(this.elementId);
-      element.className = element.className.replace('show-persistent', 'show-persistent-leave');
+      element.className = element.className.replace(
+        'show-persistent',
+        'show-persistent-leave'
+      );
 
-      this.timeoutTracker = setTimeout(function() { element.className = element.className.replace('show-persistent-leave', ''); }, 1800);
+      this.timeoutTracker = setTimeout(function() {
+        element.className = element.className.replace(
+          'show-persistent-leave',
+          ''
+        );
+      }, 1800);
     }
   }
 
@@ -113,14 +136,12 @@ export default class PopUpHandler {
 
     const css = document.createElement('style');
     css.type = 'text/css';
-    if ('textContent' in css)
-      css.textContent = notifierCSS(this.elementId);
-    else
-      css.innerText = notifierCSS(this.elementId);
+    if ('textContent' in css) css.textContent = notifierCSS(this.elementId);
+    else css.innerText = notifierCSS(this.elementId);
     document.body.appendChild(css);
 
     const closeEl = document.getElementById(this.elementId + '-close');
-    closeEl.addEventListener('click', (event) => {
+    closeEl.addEventListener('click', event => {
       const el = document.getElementById(this.elementId);
       if (this.timeoutTracker) {
         clearTimeout(this.timeoutTracker);
@@ -129,12 +150,10 @@ export default class PopUpHandler {
     });
   }
 
-
   hideNotifier() {
     const notify = document.getElementById('Notifications');
-    if(notify){
+    if (notify) {
       notify.className = 'hidden';
     }
   }
-
 }
