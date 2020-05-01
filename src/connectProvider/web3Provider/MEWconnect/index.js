@@ -144,6 +144,7 @@ class MEWconnectWallet {
 }
 
 const createWallet = async (state, popupCreator) => {
+  console.log(MEWconnectWallet); // todo remove dev item
   const _MEWconnectWallet = new MEWconnectWallet(state, popupCreator);
   createWallet.connectionState = _MEWconnectWallet.connectionState;
   const _tWallet = await _MEWconnectWallet.init();

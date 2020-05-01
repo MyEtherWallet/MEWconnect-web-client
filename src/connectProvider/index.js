@@ -49,7 +49,6 @@ export default class Integration {
 
   async enable() {
     // eslint-disable-next-line no-console
-    console.log(MEWconnectWallet.getConnectionState()); // todo remove dev item
     /*
     *     if (
       MEWconnectWallet.getConnectionState() === 'disconnected' &&
@@ -68,7 +67,6 @@ export default class Integration {
   }
 
   async enabler() {
-
     if (
       !state.wallet &&
       MEWconnectWallet.getConnectionState() === 'disconnected'
@@ -76,7 +74,7 @@ export default class Integration {
       MEWconnectWallet.setConnectionState('connecting');
       this.connectionState = 'connecting';
       debugConnectionState(MEWconnectWallet.getConnectionState());
-      state.wallet = await new MEWconnectWallet(state, popUpCreator);
+      state.wallet = await MEWconnectWallet(state, popUpCreator);
       this.popUpHandler.showNotice('connected', {
         border: 'rgba(5, 158, 135, 0.88) solid 2px'
       });
@@ -118,7 +116,7 @@ export default class Integration {
     return 'ETH';
   }
 
-  makeWeb3Provider(CHAIN_ID, RPC_URL) {
+  makeWeb3Provider(CHAIN_ID, RPC_URL, _noCheck = false) {
     const chain = this.identifyChain(CHAIN_ID);
     const defaultNetwork = Networks[chain][0];
     state.network = defaultNetwork;
@@ -127,14 +125,17 @@ export default class Integration {
     if (!/[wW]/.test(hostUrl.protocol)) {
       throw Error('websocket rpc endpoint required');
     }
-    if (
-      !hostUrl.hostname.includes(chain.name) &&
-      hostUrl.hostname.includes('infura.io')
-    ) {
-      throw Error(
-        `ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} d match`
-      );
+    if(!_noCheck){
+      if (
+        !hostUrl.hostname.includes(chain.name) &&
+        hostUrl.hostname.includes('infura.io')
+      ) {
+        throw Error(
+          `ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} d match`
+        );
+      }
     }
+
     // // eslint-disable-next-line
     const parsedUrl = `${hostUrl.protocol}//${hostUrl.host}${
       defaultNetwork.port ? ':' + defaultNetwork.port : ''
