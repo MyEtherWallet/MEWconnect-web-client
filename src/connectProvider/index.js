@@ -15,13 +15,15 @@ import PopUpCreator from '../connectWindow/popUpCreator';
 
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
-const state = {
+let state = {
   wallet: null
 };
+let eventHub = new EventEmitter();
 let popUpCreator = {};
-export default class Integration {
+export default class Integration extends EventEmitter {
   constructor() {
-    this.eventHub = new EventEmitter();
+    super();
+    // this.emitter = new EventEmitter();
     this.initiator = new Initiator();
     this.popUpHandler = new PopUpHandler();
     this.connectionState = false;
@@ -45,6 +47,14 @@ export default class Integration {
     this.popUpHandler.showNotice('connected', {
       border: 'rgba(5, 158, 135, 0.88) solid 2px'
     });
+  }
+
+  static get getConnectionState(){
+    return MEWconnectWallet.getConnectionState();
+  }
+
+  static get isConnected(){
+    return MEWconnectWallet.getConnectionState() !== 'disconnected'
   }
 
   async enable() {
@@ -90,9 +100,12 @@ export default class Integration {
     }
 
     if (state.web3Provider && state.wallet) {
-      state.web3Provider.accountsChanged([
-        state.wallet.getChecksumAddressString()
-      ]);
+      console.log(state.web3Provider); // todo remove dev item
+      if(state.web3Provider.accountsChanged){
+        state.web3Provider.accountsChanged([
+          state.wallet.getChecksumAddressString()
+        ]);
+      }
     }
     return [state.wallet.getChecksumAddressString()];
   }
@@ -146,8 +159,9 @@ export default class Integration {
       {
         state: state
       },
-      this.eventHub
+      eventHub
     );
+    web3Provider.close = this.disconnect.bind(this);
     state.web3Provider = web3Provider;
     state.web3 = new Web3(web3Provider);
     state.web3.currentProvider.sendAsync = state.web3.currentProvider.send;
@@ -163,6 +177,8 @@ export default class Integration {
       () => {
         this.popUpHandler.showNotice('disconnected');
         MEWconnectWallet.setConnectionState('disconnected');
+        state.wallet = null;
+        this.emit('disconnected')
       }
     );
 
@@ -171,13 +187,20 @@ export default class Integration {
       () => {
         this.popUpHandler.showNotice('disconnected');
         MEWconnectWallet.setConnectionState('disconnected');
+        state.wallet = null;
+        this.emit('disconnected')
       }
     );
   }
 
   disconnect() {
-    const connection = state.wallet.getConnection();
-    connection.disconnectRTC();
+    if(state.wallet){
+      const connection = state.wallet.getConnection();
+      connection.disconnectRTC();
+      MEWconnectWallet.setConnectionState('disconnected');
+      this.emit('disconnected')
+    }
+    state = {}
   }
 
   sign(tx) {
@@ -187,11 +210,17 @@ export default class Integration {
   }
 
   setupListeners() {
-    this.eventHub.on(EventNames.SHOW_TX_CONFIRM_MODAL, (tx, resolve) => {
+    eventHub.on(EventNames.SHOW_TX_CONFIRM_MODAL, (tx, resolve) => {
       this.responseFunction = resolve;
-      this.popUpHandler.showNoticePersistentEnter(
-        'Check your phone to sign the transaction'
-      );
+      if (!state.wallet) {
+        this.popUpHandler.showNoticePersistentEnter(
+          'Phone not connected.  Please connect your phone and try again to sign the transaction'
+        );
+      } else {
+        this.popUpHandler.showNoticePersistentEnter(
+          'Check your phone to sign the transaction'
+        );
+
       state.wallet
         .signTransaction(tx)
         .then(_response => {
@@ -202,23 +231,36 @@ export default class Integration {
           this.popUpHandler.showNoticePersistentExit();
           state.wallet.errorHandler(err);
         });
+    }
     });
 
-    this.eventHub.on(EventNames.SHOW_MSG_CONFIRM_MODAL, (msg, resolve) => {
-      this.popUpHandler.showNoticePersistentEnter(
-        'Check your phone to sign the transaction'
-      );
-      state.wallet
-        .signMessage(msg)
-        .then(result => {
-          resolve(result);
-        })
-        .catch(() => {
-          this.popUpHandler.showNoticePersistentExit();
-        });
+    eventHub.on(EventNames.SHOW_MSG_CONFIRM_MODAL, (msg, resolve) => {
+      console.log('state.wallet', state.wallet); // todo remove dev item
+      if(!state.wallet) {
+        this.popUpHandler.showNoticePersistentEnter(
+          'Phone not connected.  Please connect your phone and try again to sign the transaction'
+        );
+      } else {
+        this.popUpHandler.showNoticePersistentEnter(
+          'Check your phone to sign the message'
+        );
+        console.log('state.wallet', state.wallet); // todo remove dev item
+
+        // this.popUpHandler.showNoticePersistentEnter(
+        //   'Check your phone to sign the transaction'
+        // );
+        state.wallet
+          .signMessage(msg)
+          .then(result => {
+            resolve(result);
+          })
+          .catch(() => {
+            this.popUpHandler.showNoticePersistentExit();
+          });
+      }
     });
 
-    this.eventHub.on('showSendSignedTx', (tx, resolve) => {
+    eventHub.on('showSendSignedTx', (tx, resolve) => {
       this.popUpHandler.showNotice();
       const newTx = new Transaction(tx);
       this.responseFunction = resolve;
@@ -239,7 +281,7 @@ export default class Integration {
       };
       this.responseFunction(this.signedTxObject);
     });
-    this.eventHub.on('Hash', hash => {
+    eventHub.on('Hash', hash => {
       this.popUpHandler.showNotice(
         `Transaction sent: <a href="${state.network.type.blockExplorerTX.replace(
           '[[txHash]]',
@@ -248,10 +290,10 @@ export default class Integration {
         10000
       );
     });
-    this.eventHub.on('Receipt', () => {
+    eventHub.on('Receipt', () => {
       this.popUpHandler.showNotice('Transaction Completed');
     });
-    this.eventHub.on('Error', () => {
+    eventHub.on('Error', () => {
       this.popUpHandler.showNotice('Error');
     });
   }

@@ -83,7 +83,7 @@ class WSProvider {
     const handler = {
       apply: function(target, thisArg, argumentsList) {
         if (argumentsList.length === 1) {
-          if (argumentsList[0] === 'eth_requestAccounts') {
+          if (argumentsList[0] === 'eth_requestAccounts' || argumentsList[0] === 'eth_accounts') {
             return new Promise((resolve, reject) => {
               let callback = (err, response) => {
                 if (err) reject(err);

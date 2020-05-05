@@ -164,6 +164,11 @@ const signalerConnect = (url, mewConnect) => {
         resolve(data.address);
       });
     });
+
+    mewConnect.on('RtcDisconnectEvent', () => {
+      MEWconnectWallet.setConnectionState('disconnected');
+      mewConnect
+    });
   });
 };
 
