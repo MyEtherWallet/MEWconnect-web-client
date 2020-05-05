@@ -2,7 +2,7 @@
   "name": "@myetherwallet/mewconnect-web-client",
   "homepage": "https://github.com/myetherwallet/MEWconnect-web-client",
   "version": "2.1.0-RC.3",
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
   "module": "./src/index.js",
   "scripts": {
     "start": "vue-cli-service serve  --https example/app/src/main.js",
