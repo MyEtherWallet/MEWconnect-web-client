@@ -1,5 +1,6 @@
+/* eslint-disable */
 import QrCode from 'qrcode';
-import { logo, refresh } from './images/index';
+import { logo, refresh, spaceman, playStoreButton,  appStoreButton, camera } from './images/index';
 import {
   cssStyles,
   htmlDesign,
@@ -18,7 +19,11 @@ export default class PopUpCreator {
     this.sessionId = '';
     this.sessionId = false;
     this.logo = logo;
+    this.spaceman = spaceman;
     this.refreshIcon = refresh;
+    this.playStoreButton = playStoreButton;
+    this.appStoreButton = appStoreButton;
+    this.camera = camera;
     this.popupWindowOpen = false;
 
     window.addEventListener('beforeunload', () => {
@@ -81,13 +86,15 @@ export default class PopUpCreator {
 
     this.createWindowInformer();
 
-    const width = 320;
-    const height = 520;
+    const width = 448;
+    const height = 558;
     const left = Math.floor(window.outerWidth / 2 - width / 2 + window.screenX);
     const top = Math.floor(
       window.outerHeight / 2 - height / 2 + window.screenY
     );
     this.popupUrl = Math.random().toString();
+    // es
+    console.log('create window'); // todo remove dev item
     this.popupWindow = window.open(
       '',
       'windowName',
@@ -96,15 +103,10 @@ export default class PopUpCreator {
         `height=${height}`,
         `left=${left}`,
         `top=${top}`,
-        'location=0',
-        'menubar=0',
-        'resizable=0',
-        'status=0',
-        'titlebar=0',
-        'toolbar=0'
+        'resizable=0'
       ].join(',')
     );
-    this.popupWindow.document.write(htmlDesign(this.refreshIcon, this.logo));
+    this.popupWindow.document.write(htmlDesign(this.refreshIcon, this.spaceman, this.playStoreButton, this.appStoreButton, this.camera));
     const element = this.popupWindow.document.getElementById('canvas');
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
 

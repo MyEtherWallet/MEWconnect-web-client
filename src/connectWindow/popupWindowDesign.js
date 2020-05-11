@@ -1,120 +1,177 @@
+/* eslint-disable */
 const cssStyles = `
-    .outer-container{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      box-sizing: border-box;
-      bottom: 0;
-      color: #050f19;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      left: 0;
-      position: absolute;
-      right: 0;
-      text-align: center;
-      top: 0;
-    }
-    .container{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      text-align: center;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      flex-shrink: 0;
-      justify-content: center;
-      margin-left: auto;
-      margin-right: auto;
-      padding-bottom: 16px;
-      padding-top: 16px;
-      width: 256px;
-    }
-    .qr-code{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      text-align: center;
-      box-sizing: border-box;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-      display: inline-block;
-      padding: 16px 16px 0 16px;
-    }
-    .text-one{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      text-align: center;
-      box-sizing: border-box;
-      font-size: 20px;
-      margin-bottom: 0;
-      margin-top: 0;
-    }
-    .text-two{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      text-align: center;
-      box-sizing: border-box;
-      font-size: 13px;
-      font-weight: normal;
-      margin-bottom: 16px;
-      margin-top: 0;
-      opacity: 0.8;
-    }
-    .list-style{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      box-sizing: border-box;
-      font-size: 13px;
-      line-height: 1.5;
-      list-style-position: inside;
-      margin-bottom: 16px;
-      margin-top: 16px;
-      padding: 0;
-      text-align: left;
-    }
-    .bottom-container{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      text-align: center;
-      box-sizing: border-box;
-      flex-grow: 0;
-      flex-shrink: 0;
-      margin-bottom: 16px;
-    }
-    .bottom-container-text{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      box-sizing: border-box;
-      font-size: 13px;
-      margin: 0;
-      opacity: 0.5;
-      text-align: center;
-    }
-    .bottom-container-text-old{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      box-sizing: border-box;
-      font-size: 13px;
-      margin: 0;
-      opacity: 0.5;
-      padding: 16px;
-      text-align: center;
-    }
-    
-    .refreshIcon {
-      justify-content: center;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .hidden{
-    display: none;
-    }
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+      .outer-container {
+        font-family: 'Roboto', sans-serif;
+        box-sizing: border-box;
+        bottom: 0;
+        color: #050f19;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        left: 0;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        top: 0;
+      }
+      .container {
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        text-align: center;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        flex-shrink: 0;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+        padding-bottom: 16px;
+        padding-top: 16px;
+      }
+      .qr-code {
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        height: 210px;
+        width: 210px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        box-sizing: border-box;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+      }
+      .text-one {
+        min-width: 380px;
+        height: 30px;
+        color: rgb(0, 0, 0);
+        font-size: 24px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+        text-align: center;
+        letter-spacing: 0.3px;
+        line-height: 30px;
+        box-sizing: border-box;
+      }
+      .text-two {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        height: 16px;
+        letter-spacing: 0.17px;
+        text-align: center;
+        min-width: 265px;
+      }
+      .list-style {
+        width: 278px;
+        height: 48px;
+        color: rgb(0, 0, 0);
+        font-size: 12px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: normal;
+        letter-spacing: 0.15px;
+        line-height: 16px;
+        margin-left: 20px;
+        list-style-position: outside;
+        text-align: left;
+      }
+      .list-style li {
+        margin-left: 0;
+        padding-left: 10px;
+      }
+      .bottom-background {
+        background: rgb(249, 250, 251);
+        text-align: center;
+        padding-top: 25px;
+        padding-bottom: 15px;
+      }
+      .bottom-container {
+        position: relative;
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        text-align: center;
+        box-sizing: border-box;
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: row;
+        flex-flow: row wrap;
+        justify-content: center;
+        left: -50px;
+      }
+      .bottom-container-text {
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        box-sizing: border-box;
+        font-size: 13px;
+        margin: 0;
+        opacity: 0.5;
+        text-align: left;
+      }
+      .bottom-container-text-old {
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        box-sizing: border-box;
+        font-size: 13px;
+        margin: 0;
+        opacity: 0.5;
+        padding: 16px;
+        text-align: center;
+      }
+
+      .left {
+        margin-right: 15px;
+      }
+
+      .spaceman-background {
+        background-color: white;
+        border-radius: 10px;
+      }
+
+      .center{
+        align-items: center;
+      }
+
+      .right {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .left-img {
+        padding-right: 10px;
+      }
+
+      p {
+        margin: 0;
+        padding-bottom: 5px;
+      }
+      .bottom{
+        color: rgb(0, 0, 0);
+        font-size: 12px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: lighter;
+        letter-spacing: 0.15px;
+      }
+
+      .refreshIcon {
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 10px;
+      }
+
+      .hidden {
+        display: none;
+      }
     `;
 // <button id="refresh" style="display: none">Refresh code</button>
-const htmlDesign = (refresh, image) => {
+const htmlDesign = (refresh, image, playStore, appStore, camera) => {
   let middlePart = '';
-  const beginningPart = `
+  return `
       <html>
       <head>
         <meta charset="utf-8"/>
@@ -123,59 +180,75 @@ const htmlDesign = (refresh, image) => {
         <title>MEWconnect</title>
       </head>
 
-        <body>
-          <div class="outer-container">
-            <div class="container">
-            <h3 class="text-one">Scan QR Code</h3>
-            <h4 class="text-two">To connect mobile wallet</h4>
-            <div class="qr-code">
-              <canvas id="canvas"></canvas>
-            </div>
-            <div id="refresh-container" class="refreshIcon hidden">
-            <img id="refresh" src="${refresh}"/>
-            </div>
-            
-              <ol class="list-style">
-                <li>Open compatible wallet app</li>
-                <li>Find and open the QR scanner</li>
-                <li>Scan this QR code</li>
-              </ol>
-            </div>
-            <div class="bottom-container">
-            
-            <h5 class="bottom-container-text">Powered by</h5>
-             MEWconnect
+<body>
+    <div class="outer-container">
+      <div class="container">
+        <p class="text-one">Connect to MEW wallet app</p>
+        <p class="text-two">Scan this code to connect</p>
+        <div class="qr-code">
+          <canvas id="canvas"></canvas>
+        </div>
+        <div id="refresh-container" class="refreshIcon hidden">
+          <img id="refresh" src="${refresh}" />
+        </div>
 
-`;
-  if (!image) {
-    // eslint-disable-next-line no-console
-    console.log(image); // todo remove dev item
-    middlePart = 'MEWconnect';
-  } else {
-    middlePart = `
-             <img src="${image}" />
-`;
-  }
-
-  const endingPart = `           </div>
+        <ol class="list-style">
+          <li>Open MEW wallet app on your mobile device</li>
+          <li>Click <img src="${camera}" height="12" width="14"> icon in the top right corner</li>
+          <li>Scan this code to connect</li>
+        </ol>
+      </div>
+      <div class="bottom-background">
+        <div class="bottom-container">
+          <div class="left">
+            <img
+              class="spaceman-background"
+              src="${image}"
+              height="58"
+              width="58"
+            />
           </div>
-          <script>
-          const channel = new BroadcastChannel('refresh-channel');
-          const refreshContainer = window.document.getElementById("refresh-container")
-          const refreshButton = window.document.getElementById("refresh");
-          
-          refreshButton.addEventListener("click", () => {
-            channel.postMessage("refresh");
-          })
-          setTimeout(() => {
-            refreshContainer.className = refreshContainer.className.replace('hidden', '');
-          }, 5000)
+          <div class="center">
+            <div class="right">
+              <p>Don't have MEW wallet app?</p>
+              <img
+                class="left-img"
+                src="${appStore}"
+                height="40"
+                width="120"
+              />
+              <img
+                src="${playStore}"
+                height="40"
+                width="120"
+              />
+            </div>
+          </div>
 
-</script>
-        </body>
-      </html>`;
+        </div>
+        <div class="bottom">
+          Powered by <a href="#">MEWconnect protocol</a> <br />
+          brought to you by MyEtherWallet
+        </div>
+      </div>
+    </div>
+  <script>
+  const channel = new BroadcastChannel('refresh-channel');
+  const refreshContainer = window.document.getElementById("refresh-container")
+  const refreshButton = window.document.getElementById("refresh");
 
-  return beginningPart + middlePart + endingPart;
+  refreshButton.addEventListener("click", () => {
+    channel.postMessage("refresh");
+  })
+  setTimeout(() => {
+    refreshContainer.className = refreshContainer.className.replace('hidden', '');
+  }, 5000)
+
+  </script>
+</body>
+</html>
+
+`;
 };
 
 const noticetext = `

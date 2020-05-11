@@ -1,3 +1,4 @@
+/* eslint-disable */
 const windowInformer = `
 <div class="Notification Notificationshow NotificationExpand">
       <div class="NotificationBox">
@@ -36,19 +37,19 @@ const windowPopup = (refresh, image) => {
         <body>
           <div class="outer-container">
             <div class="container">
-            <h3 class="text-one">Scan QR Code</h3>
-            <h4 class="text-two">To connect mobile wallet</h4>
+            <h3 class="text-one">Connect to MEW Wallet</h3>
+            <h4 class="text-two">Scan this code to connect</h4>
             <div class="qr-code">
               <canvas id="canvas"></canvas>
             </div>
               <ol class="list-style">
-                <li>Open compatible wallet app</li>
-                <li>Find and open the QR scanner</li>
-                <li>Scan this QR code</li>
+                <li>Open MEW wallet app on your mobile device</li>
+                <li>Click </li>
+                <li>Scan this code to connect</li>
               </ol>
             </div>
             <div class="bottom-container">
-            
+            Don't have MEW wallet app?
             <h5 class="bottom-container-text">Powered by</h5>
              MEWconnect
            </div>
@@ -56,8 +57,9 @@ const windowPopup = (refresh, image) => {
         </body>
       </html>
 `;
-  } else {
-    return `
+  }
+
+  return `
       <html>
       <head>
         <meta charset="utf-8"/>
@@ -67,29 +69,28 @@ const windowPopup = (refresh, image) => {
       </head>
 
         <body>
-          <div id="outer-container" class="outer-container">
+          <div class="outer-container">
             <div class="container">
-            <h3 class="text-one">Scan QR Code</h3>
-            <h4 class="text-two">To connect mobile wallet</h4>
+            <h3 class="text-one">Connect to MEW Wallet</h3>
+            <h4 class="text-two">Scan this code to connect</h4>
             <div class="qr-code">
               <canvas id="canvas"></canvas>
             </div>
               <ol class="list-style">
-                <li>Open compatible wallet app</li>
-                <li>Find and open the QR scanner</li>
-                <li>Scan this QR code</li>
+                <li>Open MEW wallet app on your mobile device</li>
+                <li>Click </li>
+                <li>Scan this code to connect</li>
               </ol>
             </div>
             <div class="bottom-container">
-            
+            Don't have MEW wallet app?
             <h5 class="bottom-container-text">Powered by</h5>
-             <img src="${image}" />
+             MEWconnect
            </div>
           </div>
         </body>
       </html>
 `;
-  }
 };
 
 const noticeHtml = (elementId, imageSrc) => {
