@@ -90,17 +90,32 @@
       <button @click="animateDirect">Display popup window</button>
     </p>
     <p>
+      <button @click="animateConnectedNotifier">
+        Display connected notifier
+      </button>
+    </p>
+    <p>
       <button @click="animateNotifier">Display action notifier</button>
+      <button @click="animateNotifier(1)">Approve Transaction</button>
+      <button @click="animateNotifier(2)">Transaction Sent</button>
+      <button @click="animateNotifier(3)">Transaction Complete</button>
+      <button @click="animateNotifier(4)">User Decline</button>
+      <button @click="animateNotifier(5)">Transaction Failed</button>
+      <button @click="animateNotifier(6)">Transaction Error</button>
+      <button @click="animateNotifier(7)">Sign Message</button>
     </p>
   </div>
 </template>
 
 <script>
+/* eslint-disable */
+
 import mewConnect from '../../../src';
 
 import PopUpCreator from '../../../src/connectWindow/popUpCreator';
 import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
+import messageConstants from '../../../src/messageConstants';
 
 export default {
   name: 'app',
@@ -146,8 +161,36 @@ export default {
     animateDirect() {
       this.altPopup.showPopupWindow('sdfsdfsdf');
     },
-    animateNotifier() {
-      this.connect.showNotifier();
+    animateNotifier(type) {
+      console.log(type); // todo remove dev item
+      switch (type) {
+        case 1:
+          this.connect.showNotifier(messageConstants.approveTx);
+          break;
+        case 2:
+          this.connect.showNotifier(messageConstants.sent);
+          break;
+        case 3:
+          this.connect.showNotifier(messageConstants.complete);
+          break;
+        case 4:
+          this.connect.showNotifier(messageConstants.decline);
+          break;
+        case 5:
+          this.connect.showNotifier(messageConstants.failed);
+          break;
+        case 6:
+          this.connect.showNotifier(messageConstants.error);
+          break;
+        case 7:
+          this.connect.showNotifier(messageConstants.signMessage);
+          break;
+        default:
+          this.connect.showNotifier();
+      }
+    },
+    animateConnectedNotifier() {
+      this.connect.showConnectedNotice();
     },
     onClick() {
       this.connect.enable().then(accounts => {

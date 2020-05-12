@@ -1,6 +1,12 @@
-/* eslint-disable */
 import QrCode from 'qrcode';
-import { logo, refresh, spaceman, playStoreButton,  appStoreButton, camera } from './images/index';
+import {
+  logo,
+  refresh,
+  spaceman,
+  playStoreButton,
+  appStoreButton,
+  camera
+} from './images/index';
 import {
   cssStyles,
   htmlDesign,
@@ -54,7 +60,7 @@ export default class PopUpCreator {
     div.id = 'Notifications';
     div.className = 'hidden';
 
-    div.innerHTML = windowInformer;
+    div.innerHTML = windowInformer(spaceman);
     window.document.body.appendChild(div);
   }
 
@@ -93,8 +99,6 @@ export default class PopUpCreator {
       window.outerHeight / 2 - height / 2 + window.screenY
     );
     this.popupUrl = Math.random().toString();
-    // es
-    console.log('create window'); // todo remove dev item
     this.popupWindow = window.open(
       '',
       'windowName',
@@ -106,7 +110,15 @@ export default class PopUpCreator {
         'resizable=0'
       ].join(',')
     );
-    this.popupWindow.document.write(htmlDesign(this.refreshIcon, this.spaceman, this.playStoreButton, this.appStoreButton, this.camera));
+    this.popupWindow.document.write(
+      htmlDesign(
+        this.refreshIcon,
+        this.spaceman,
+        this.playStoreButton,
+        this.appStoreButton,
+        this.camera
+      )
+    );
     const element = this.popupWindow.document.getElementById('canvas');
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
 
