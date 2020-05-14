@@ -61,6 +61,12 @@
         <h3>{{ account }}</h3>
       </li>
       <li>
+        <input v-model="messageToSign" />
+        <button @click="signMessage">sign message</button><br/>
+        <textarea v-if="signature !== ''" v-model="signature" disabled style="margin: 0px; height: 169px; width: 454px;"></textarea>
+        <br/>
+      </li>
+      <li>
         <button @click="getBalance">balance</button>
         <h3>{{ balance }}</h3>
       </li>
@@ -136,7 +142,9 @@ export default {
       tokenDecimals: 18,
       tokenTxHash: '',
       tokenAmount: 0,
-      toAmount: 0
+      toAmount: 0,
+      signature: '',
+      messageToSign: 'sign this'
     };
   },
   mounted() {
@@ -165,28 +173,28 @@ export default {
       console.log(type); // todo remove dev item
       switch (type) {
         case 1:
-          this.connect.showNotifier(messageConstants.approveTx);
+          this.connect.showNotifierDemo(messageConstants.approveTx);
           break;
         case 2:
-          this.connect.showNotifier(messageConstants.sent);
+          this.connect.showNotifierDemo(messageConstants.sent);
           break;
         case 3:
-          this.connect.showNotifier(messageConstants.complete);
+          this.connect.showNotifierDemo(messageConstants.complete);
           break;
         case 4:
-          this.connect.showNotifier(messageConstants.decline);
+          this.connect.showNotifierDemo(messageConstants.decline);
           break;
         case 5:
-          this.connect.showNotifier(messageConstants.failed);
+          this.connect.showNotifierDemo(messageConstants.failed);
           break;
         case 6:
-          this.connect.showNotifier(messageConstants.error);
+          this.connect.showNotifierDemo(messageConstants.error);
           break;
         case 7:
-          this.connect.showNotifier(messageConstants.signMessage);
+          this.connect.showNotifierDemo(messageConstants.signMessage);
           break;
         default:
-          this.connect.showNotifier();
+          this.connect.showNotifierDemo();
       }
     },
     animateConnectedNotifier() {
@@ -240,6 +248,26 @@ export default {
             .then(txhash => console.log('THEN: ', txhash));
         });
       });
+    },
+    signMessage() {
+      this.web3.eth
+        .sign(this.messageToSign, this.userAddress)
+        .then(_signedMessage => {
+          this.signature = JSON.stringify(
+            {
+              address: this.userAddress,
+              msg: this.messageToSign,
+              sig: _signedMessage,
+              version: '3',
+              signer: 'MEWconnect'
+            },
+            null,
+            2
+          );
+        })
+        .catch(e => {
+          console.log(e);
+        });
     },
     sendToken(amount, decimals = 18) {
       const jsonInterface = [

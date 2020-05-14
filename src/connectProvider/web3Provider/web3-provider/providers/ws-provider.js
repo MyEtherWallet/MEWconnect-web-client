@@ -6,6 +6,7 @@ import {
   ethSendTransaction,
   ethSignTransaction,
   ethSign,
+  personalSign,
   ethAccounts,
   ethCoinbase,
   ethGetTransactionCount,
@@ -71,6 +72,7 @@ class WSProvider {
       middleware.use(ethSendTransaction);
       middleware.use(ethSignTransaction);
       middleware.use(ethSign);
+      middleware.use(personalSign);
       middleware.use(ethAccounts);
       middleware.use(ethGetTransactionCount);
       middleware.use(ethCoinbase);

@@ -144,6 +144,7 @@ WebsocketProvider.prototype._addResponseCallback = function(payload, callback) {
 };
 WebsocketProvider.prototype._timeout = function() {
   for (const key in this.responseCallbacks) {
+    // eslint-disable-next-line
     if (this.responseCallbacks.hasOwnProperty(key)) {
       this.responseCallbacks[key](errors.InvalidConnection('on WS'));
       delete this.responseCallbacks[key];
@@ -152,7 +153,6 @@ WebsocketProvider.prototype._timeout = function() {
 };
 WebsocketProvider.prototype.send = function(payload, callback) {
   const _this = this;
-
   if (this.connection.readyState === this.connection.CONNECTING) {
     setTimeout(function() {
       _this.send(payload, callback);

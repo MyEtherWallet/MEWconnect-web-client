@@ -8,10 +8,12 @@ import ethGetTransactionReceipt from './eth_getTransactionReceipt';
 import netVersion from './net_version';
 import ethGetBlockByNumber from './eth_getBlockByNumber';
 import ethGetBlockNumber from './eth_blockNumber';
+import personalSign from './personal_sign'
 
 export {
   ethSendTransaction,
   ethSign,
+  personalSign,
   ethAccounts,
   ethCoinbase,
   ethSignTransaction,

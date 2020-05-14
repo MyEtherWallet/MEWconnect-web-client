@@ -24,7 +24,6 @@ let popUpCreator = {};
 export default class Integration extends EventEmitter {
   constructor() {
     super();
-    // this.emitter = new EventEmitter();
     this.lastHash = null;
     this.initiator = new Initiator();
     this.popUpHandler = new PopUpHandler();
@@ -45,7 +44,7 @@ export default class Integration extends EventEmitter {
     popUpCreator = new PopUpCreator();
   }
 
-  showNotifier(details) {
+  showNotifierDemo(details) {
     if (details === 'sent') {
       this.popUpHandler.showNotice({
         type: messageConstants.sent,
@@ -71,13 +70,6 @@ export default class Integration extends EventEmitter {
   }
 
   async enable() {
-    // eslint-disable-next-line no-console
-    /*
-    *     if (
-      MEWconnectWallet.getConnectionState() === 'disconnected' &&
-      this.returnPromise === null
-    )
-    * */
     if (MEWconnectWallet.getConnectionState() === 'disconnected') {
       this.returnPromise = this.enabler();
     }
@@ -107,7 +99,6 @@ export default class Integration extends EventEmitter {
         state.wallet.getChecksumAddressString()
       );
     }
-
     if (state.web3Provider && state.wallet) {
       if (state.web3Provider.accountsChanged) {
         state.web3Provider.accountsChanged([
@@ -115,6 +106,7 @@ export default class Integration extends EventEmitter {
         ]);
       }
     }
+
     return [state.wallet.getChecksumAddressString()];
   }
 
@@ -138,43 +130,49 @@ export default class Integration extends EventEmitter {
   }
 
   makeWeb3Provider(CHAIN_ID, RPC_URL, _noCheck = false) {
-    const chain = this.identifyChain(CHAIN_ID);
-    const defaultNetwork = Networks[chain][0];
-    state.network = defaultNetwork;
-    const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
-    const options = {};
-    if (!/[wW]/.test(hostUrl.protocol)) {
-      throw Error('websocket rpc endpoint required');
-    }
-    if (!_noCheck) {
-      if (
-        !hostUrl.hostname.includes(chain.name) &&
-        hostUrl.hostname.includes('infura.io')
-      ) {
-        throw Error(
-          `ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} d match`
-        );
+    try {
+      const chain = this.identifyChain(CHAIN_ID);
+      const defaultNetwork = Networks[chain][0];
+      state.network = defaultNetwork;
+      const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
+      const options = {};
+      if (!/[wW]/.test(hostUrl.protocol)) {
+        throw Error('websocket rpc endpoint required');
       }
-    }
+      if (!_noCheck) {
+        if (
+          !hostUrl.hostname.includes(chain.name) &&
+          hostUrl.hostname.includes('infura.io')
+        ) {
+          throw Error(
+            `ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} d match`
+          );
+        }
+      }
 
-    // // eslint-disable-next-line
-    const parsedUrl = `${hostUrl.protocol}//${hostUrl.host}${
-      defaultNetwork.port ? ':' + defaultNetwork.port : ''
-    }${hostUrl.pathname}`;
-    const web3Provider = new MEWProvider(
-      parsedUrl,
-      options,
-      {
-        state: state
-      },
-      eventHub
-    );
-    web3Provider.close = this.disconnect.bind(this);
-    state.web3Provider = web3Provider;
-    state.web3 = new Web3(web3Provider);
-    state.web3.currentProvider.sendAsync = state.web3.currentProvider.send;
-    this.setupListeners();
-    return web3Provider;
+      const parsedUrl = `${hostUrl.protocol}//${hostUrl.host}${
+        defaultNetwork.port ? ':' + defaultNetwork.port : ''
+      }${hostUrl.pathname}`;
+      const web3Provider = new MEWProvider(
+        parsedUrl,
+        options,
+        {
+          state: state
+        },
+        eventHub
+      );
+
+      web3Provider.close = this.disconnect.bind(this);
+      state.web3Provider = web3Provider;
+
+      state.web3 = new Web3(web3Provider);
+      state.web3.currentProvider.sendAsync = state.web3.currentProvider.send;
+      this.setupListeners();
+      return web3Provider;
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log(e);
+    }
   }
 
   createDisconnectNotifier() {
@@ -250,9 +248,6 @@ export default class Integration extends EventEmitter {
           messageConstants.signMessage
         );
 
-        // this.popUpHandler.showNoticePersistentEnter(
-        //   'Check your phone to sign the transaction'
-        // );
         state.wallet
           .signMessage(msg)
           .then(result => {
