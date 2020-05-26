@@ -145,7 +145,7 @@ export default class Integration extends EventEmitter {
           hostUrl.hostname.includes('infura.io')
         ) {
           throw Error(
-            `ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} d match`
+            `ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} do not match`
           );
         }
       }

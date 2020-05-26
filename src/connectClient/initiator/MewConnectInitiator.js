@@ -45,6 +45,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.signalUrl = null;
       this.iceState = '';
       this.turnServers = [];
+      this.abandonedTimeout = 300000;
 
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
       this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
@@ -65,7 +66,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
         if (this.socket) {
           this.socketDisconnect();
         }
-      }, 120000);
+      }, this.abandonedTimeout);
     } catch (e) {
       debug('constructor error:', e);
     }
@@ -99,6 +100,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
   destroyOnUnload() {
     if (isBrowser) {
       try {
+        // eslint-disable-next-line no-undef
+        if(!window) return;
         // eslint-disable-next-line no-undef
         window.onunload = window.onbeforeunload = () => {
           const iceStates = [
