@@ -243,13 +243,7 @@ Keys
     if (this.socketV2Connected) {
       this.V2.socketDisconnect();
     }
-    if(!this.socketV1Connected && !this.socketV2Connected){
-      if (this.refreshTimer !== null) {
-        clearTimeout(this.refreshTimer);
-        this.refreshTimer = null;
-      }
-      return;
-    }
+
     this.generateKeys(testPrivate);
     this.displayCode(this.privateKey);
     const options = {
@@ -299,6 +293,10 @@ Keys
   socketDisconnect() {
     this.V2.socketDisconnect();
     this.V1.socketDisconnect();
+    if (this.refreshTimer !== null) {
+      clearTimeout(this.refreshTimer);
+      this.refreshTimer = null;
+    }
   }
 
   disconnectRTC() {
