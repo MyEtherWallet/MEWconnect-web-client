@@ -45,6 +45,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.signalUrl = null;
       this.iceState = '';
       this.turnServers = [];
+      this.refreshTimer = null;
+      this.refreshDelay = 20000;
       this.abandonedTimeout = 300000;
 
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
@@ -101,7 +103,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
     if (isBrowser) {
       try {
         // eslint-disable-next-line no-undef
-        if(!window) return;
+        if (!window) return;
         // eslint-disable-next-line no-undef
         window.onunload = window.onbeforeunload = () => {
           const iceStates = [
@@ -176,6 +178,10 @@ export default class MewConnectInitiator extends MewConnectCommon {
               MewConnectInitiator.setConnectionState();
               this.socketDisconnect();
               this.emit(this.lifeCycle.AuthRejected);
+              if (this.refreshTimer !== null) {
+                clearTimeout(this.refreshTimer);
+                this.refreshTimer = null;
+              }
             }
           });
         }
@@ -220,8 +226,17 @@ Keys
     debug('this.signed', this.signed);
   }
 
+  async refreshCode() {
+    this.initiatorStart();
+  }
+
   // TODO change this to use supplied urls at time point
   async initiatorStart(url, testPrivate) {
+    this.refreshTimer = setTimeout(() => {
+      // eslint-disable-next-line
+      console.log('REFRESHING'); // todo remove dev item
+      this.refreshCode();
+    }, this.refreshDelay);
     if (this.socketV1Connected) {
       this.V1.socketDisconnect();
     }
@@ -263,6 +278,10 @@ Keys
     this.webRtcCommunication.on(
       this.jsonDetails.lifeCycle.RtcConnectedEvent,
       () => {
+        if (this.refreshTimer !== null) {
+          clearTimeout(this.refreshTimer);
+          this.refreshTimer = null;
+        }
         this.connected = true;
         this.popupCreator.closePopupWindow();
         MewConnectInitiator.setConnectionState('connected');

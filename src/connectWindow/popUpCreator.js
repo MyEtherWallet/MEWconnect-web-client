@@ -86,6 +86,8 @@ export default class PopUpCreator {
       this.popupWindow.focus();
       return this.popupWindow;
     }
+    // eslint-disable-next-line
+    console.log(qrcode); // todo remove dev item
     if (!qrcode) {
       throw Error('No connection string supplied to popup window');
     }
@@ -137,6 +139,8 @@ export default class PopUpCreator {
 
     const channel = new BroadcastChannel('refresh-channel');
     channel.addEventListener('message', () => {
+      // eslint-disable-next-line
+      console.log('message'); // todo remove dev item
       this.refreshQrcode();
     });
     this.popupWindowOpen = true;
@@ -144,6 +148,8 @@ export default class PopUpCreator {
   }
 
   updateQrCode(qrcode) {
+    // eslint-disable-next-line
+    console.log(qrcode); // todo remove dev item
     const element = this.popupWindow.document.getElementById('canvas');
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
   }
