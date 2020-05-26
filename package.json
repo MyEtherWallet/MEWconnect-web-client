@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "module": "./src/index.js",
   "scripts": {
-    "start": "npx vue-cli-service serve  --https example/app/src/main.js",
+    "start": "./node_modules/.bin/vue-cli-service serve  --https example/app/src/main.js",
     "test:jest": "npx jest --detectOpenHandles --forceExit --runInBand",
     "test:browser": "npx opn ./tests/browser/browser_test.html",
     "test:old": "npm run buildBrowserTest && npm run test:jest && npm run test:browser",
