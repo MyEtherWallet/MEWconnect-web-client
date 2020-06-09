@@ -8,7 +8,7 @@ Object.keys(types).forEach(key => {
 });
 
 Object.keys(nodes).forEach(key => {
-  if (nodes[key].service === nodes['ethmewws'].service) {
+  if (nodes[key].service === nodes['infuraws'].service) {
     nodeList[nodes[key].type.name].splice(0, 0, nodes[key]);
   } else if (
     nodes[key].service === 'infura.io' &&

@@ -47,6 +47,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.turnServers = [];
       this.refreshTimer = null;
       this.refreshDelay = 20000;
+      this.refreshCount = 0;
       this.abandonedTimeout = 300000;
 
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
@@ -67,6 +68,9 @@ export default class MewConnectInitiator extends MewConnectCommon {
       setTimeout(() => {
         if (this.socket) {
           this.socketDisconnect();
+          if(this.refreshTimer){
+            clearTimeout(this.refreshTimer);
+          }
         }
       }, this.abandonedTimeout);
     } catch (e) {
@@ -174,7 +178,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
           this.popupCreator.popupWindow.addEventListener('beforeunload', () => {
             if (!this.connected) {
               // eslint-disable-next-line no-console
-              console.log('popup window closed'); // todo remove dev item
+              debug('popup window closed'); // todo remove dev item
               MewConnectInitiator.setConnectionState();
               this.socketDisconnect();
               this.emit(this.lifeCycle.AuthRejected);
@@ -233,8 +237,6 @@ Keys
   // TODO change this to use supplied urls at time point
   async initiatorStart(url, testPrivate) {
     this.refreshTimer = setTimeout(() => {
-      // eslint-disable-next-line
-      console.log('REFRESHING'); // todo remove dev item
       this.refreshCode();
     }, this.refreshDelay);
     if (this.socketV1Connected) {

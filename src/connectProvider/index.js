@@ -15,6 +15,7 @@ import debugLogger from 'debug';
 import PopUpCreator from '../connectWindow/popUpCreator';
 
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
+const debug = debugLogger('MEWconnect:stand-alone-provider');
 
 let state = {
   wallet: null
@@ -171,7 +172,7 @@ export default class Integration extends EventEmitter {
       return web3Provider;
     } catch (e) {
       // eslint-disable-next-line
-      console.log(e);
+      debug(e);
     }
   }
 

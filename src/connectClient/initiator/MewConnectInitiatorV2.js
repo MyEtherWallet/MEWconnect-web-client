@@ -87,16 +87,20 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   destroyOnUnload() {
     if (isBrowser) {
       // eslint-disable-next-line no-undef
-      window.onunload = window.onbeforeunload = () => {
-        const iceStates = [
-          this.iceStates.new,
-          this.iceStates.connecting,
-          this.iceStates.connected
-        ];
-        if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
-          this.rtcDestroy();
-        }
-      };
+      if(typeof window != 'undefined'){
+        window.onunload = window.onbeforeunload = () => {
+          const iceStates = [
+            this.iceStates.new,
+            this.iceStates.connecting,
+            this.iceStates.connected
+          ];
+          if(this.Peer){
+            if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
+              this.rtcDestroy();
+            }
+          }
+        };
+      }
     }
   }
 
@@ -601,7 +605,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
           wrtc: wrtc
         }
       };
-      console.log('turn info arrived and begin turn'); // todo remove dev item
+      debug('turn info arrived and begin turn'); // todo remove dev item
       this.initiatorStartRTC(options);
     } catch (e) {
       debugTurn('retryViaTurn error:', e);
