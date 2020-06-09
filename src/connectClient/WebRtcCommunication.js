@@ -25,6 +25,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.offersSent = -1;
     this.turnTimer = null;
     this.turnWaitTime = 5000;
+    this.turnResponseWaitTime = 100;
     this.enableTimer = true;
     this.tryingTurn = false;
     this.connected = false;
@@ -35,7 +36,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.versions = this.jsonDetails.versions;
     this.lifeCycle = this.jsonDetails.lifeCycle;
     this.iceStates = this.jsonDetails.iceConnectionState;
-
+    this.fallbackCount = 0;
     this.usingVersion = '';
     this.p = null;
     this.canSignal = false;
@@ -93,6 +94,10 @@ export default class WebRtcCommunication extends MewConnectCommon {
       } else if (this.enableTimer) {
         clearTimeout(this.turnTimer);
         this.turnTimer = setTimeout(() => {
+          debug('FALLBACK TIMER');
+          // clearTimeout(this.turnTimer);
+          this.fallbackCount++;
+          debug('fallback attempt count:', this.fallbackCount); // todo remove dev item
           this.willAttemptTurn();
         }, this.turnWaitTime);
       }
@@ -143,7 +148,10 @@ export default class WebRtcCommunication extends MewConnectCommon {
       this.answersReceived.push(plainTextOffer);
       if (this.turnTimer === null) {
         const _self = this;
-        this.turnTimer = setTimeout(this.receiveTurnAnswer.bind(_self), 1000);
+        this.turnTimer = setTimeout(
+          this.receiveTurnAnswer.bind(_self),
+          this.turnResponseWaitTime
+        );
       }
     } else if (this.tryingTurn && this.usingVersion === 'V2') {
       this.enableTimer = false;
