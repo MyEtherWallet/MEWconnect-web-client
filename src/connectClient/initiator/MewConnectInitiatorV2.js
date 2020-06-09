@@ -1,16 +1,13 @@
 import createLogger from 'logging';
 import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
-import uuid from 'uuid/v4';
 import WebSocket from '../websocketWrapper';
 import wrtc from 'wrtc';
 import MewConnectCommon from '../MewConnectCommon';
-import MewConnectCrypto from '../MewConnectCrypto';
-import WebRtcCommunication from '../WebRtcCommunication';
 
 const debug = debugLogger('MEWconnect:initiator-V2');
 const debugTurn = debugLogger('MEWconnect:turn-V2');
-const debugPeer = debugLogger('MEWconnectVerbose:peer-instances-V2');
+// const debugPeer = debugLogger('MEWconnectVerbose:peer-instances-V2');
 const debugStages = debugLogger('MEWconnect:initiator-stages-V2');
 const logger = createLogger('MewConnectInitiator-V2');
 
@@ -53,11 +50,11 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.iceStates = this.jsonDetails.iceConnectionState;
       // Socket is abandoned.  disconnect.
       this.timer = null;
-      setTimeout(() => {
-        if (this.socket) {
-          this.socketDisconnect();
-        }
-      }, 120000);
+      // setTimeout(() => {
+      //   if (this.socket) {
+      //     this.socketDisconnect();
+      //   }
+      // }, 120000);
     } catch (e) {
       debug('constructor error:', e);
     }
@@ -87,14 +84,14 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   destroyOnUnload() {
     if (isBrowser) {
       // eslint-disable-next-line no-undef
-      if(typeof window != 'undefined'){
+      if (typeof window != 'undefined') {
         window.onunload = window.onbeforeunload = () => {
           const iceStates = [
             this.iceStates.new,
             this.iceStates.connecting,
             this.iceStates.connected
           ];
-          if(this.Peer){
+          if (this.Peer) {
             if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
               this.rtcDestroy();
             }
@@ -463,20 +460,19 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
         return parsedJson;
       }
       return await this.mewCrypto.decrypt(JSON.parse(data));
-    } else {
-      if (data.type && data.data) {
-        return data;
-      }
-      return await this.mewCrypto.decrypt(JSON.parse(JSON.stringify(data)));
     }
+    if (data.type && data.data) {
+      return data;
+    }
+    return await this.mewCrypto.decrypt(JSON.parse(JSON.stringify(data)));
   }
 
   async onData(peerID, data) {
-    debug(data); // todo remove dev item
+    debug(data);
     debug('DATA RECEIVED', data.toString());
     debug('peerID', peerID);
     try {
-      let decryptedData = await this.decryptIncomming(data);
+      const decryptedData = await this.decryptIncomming(data);
 
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
@@ -605,7 +601,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
           wrtc: wrtc
         }
       };
-      debug('turn info arrived and begin turn'); // todo remove dev item
+      debug('turn info arrived and begin turn');
       this.initiatorStartRTC(options);
     } catch (e) {
       debugTurn('retryViaTurn error:', e);

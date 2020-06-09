@@ -149,7 +149,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     }
   }
 
-  receiveAnswer(plainTextOffer, peerID) {
+  receiveAnswer(plainTextOffer) {
     debug('receiveAnswer for version: ', this.usingVersion);
     this.fallbackTimer();
     if (this.tryingTurn && this.usingVersion === 'V1') {
