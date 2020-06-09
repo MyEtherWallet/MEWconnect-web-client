@@ -2,7 +2,7 @@ import createLogger from 'logging';
 import debugLogger from 'debug';
 
 import SimplePeer from 'simple-peer';
-import { isBrowser } from 'browser-or-node';
+// import { isBrowser } from 'browser-or-node';
 
 import uuid from 'uuid/v4';
 import MewConnectCommon from './MewConnectCommon';
@@ -61,7 +61,11 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   // can be used to listen to specific events, especially those that pass data
   uiCommunicator(event, data) {
-    debug(event, data);
+    if(!data){
+      debug(event);
+    } else {
+      debug(event, data);
+    }
     this.emit(event, data);
     this.emitStatus(event);
   }
@@ -71,23 +75,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.emit('status', event);
   }
 
-  // Check if a WebRTC connection exists before a window/tab is closed or refreshed
-  // Destroy the connection if one exists
-  destroyOnUnload() {
-    if (isBrowser) {
-      // eslint-disable-next-line no-undef
-      window.onunload = window.onbeforeunload = () => {
-        const iceStates = [
-          this.iceStates.new,
-          this.iceStates.connecting,
-          this.iceStates.connected
-        ];
-        if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
-          this.rtcDestroy();
-        }
-      };
-    }
-  }
 
   setActivePeerId() {
     this.activePeerId = uuid();

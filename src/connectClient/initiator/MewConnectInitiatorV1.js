@@ -46,13 +46,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
       this.lifeCycle = this.jsonDetails.lifeCycle;
       this.stunServers = options.stunServers || this.jsonDetails.stunSrvers;
       this.iceStates = this.jsonDetails.iceConnectionState;
-      // Socket is abandoned.  disconnect.
       this.timer = null;
-      // setTimeout(() => {
-      //   if (this.socket) {
-      //     this.socketDisconnect();
-      //   }
-      // }, 120000);
       debug(this.signals); // todo remove dev item
     } catch (e) {
       debug(e); // todo remove dev item
@@ -202,6 +196,12 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
 
   // ----- WebRTC Setup Methods
 
+  regenerateCodeCleanup() {
+    if(this.onConnectListener) this.webRtcCommunication.off('connect', this.onConnectListener);
+    if(this.sendOfferListener) this.webRtcCommunication.off('signal', this.sendOfferListener);
+    if(this.onDataListener) this.webRtcCommunication.off('data', this.onDataListener);
+  }
+
   // A connection pair exists, create and send WebRTC OFFER
   async beginRtcSequence(data) {
     this.emit('socketPaired');
@@ -250,9 +250,12 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     this.webRtcCommunication.start(simpleOptions);
     this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
     const peerID = this.webRtcCommunication.getActivePeerId();
-    this.webRtcCommunication.once('connect', this.onConnect.bind(this, peerID));
-    this.webRtcCommunication.once('signal', this.onSignal.bind(this));
-    this.webRtcCommunication.once('data', this.onData.bind(this, peerID));
+    this.onConnectListener = this.onConnect.bind(this, peerID);
+    this.sendOfferListener = this.onSignal.bind(this);
+    this.onDataListener = this.onData.bind(this, peerID);
+    this.webRtcCommunication.once('connect', this.onConnectListener);
+    this.webRtcCommunication.once('signal', this.sendOfferListener);
+    this.webRtcCommunication.once('data', this.onDataListener);
   }
 
   onConnect(peerID) {

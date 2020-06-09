@@ -1,3 +1,4 @@
+/* eslint-disable */
 // import createLogger from 'logging';
 import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
@@ -47,6 +48,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.turnServers = [];
       this.refreshTimer = null;
       this.refreshDelay = 20000;
+      this.socketsCreated = false;
       this.refreshCount = 0;
       this.abandonedTimeout = 300000;
 
@@ -68,7 +70,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       setTimeout(() => {
         if (this.socket) {
           this.socketDisconnect();
-          if(this.refreshTimer){
+          if (this.refreshTimer) {
             clearTimeout(this.refreshTimer);
           }
         }
@@ -236,27 +238,51 @@ Keys
 
   // TODO change this to use supplied urls at time point
   async initiatorStart(url, testPrivate) {
+    // this.refresher = (delay = this.refreshDelay) => {
+    //   if (this.refreshTimer) clearTimeout(this.refreshTimer);
+    //   this.refreshTimer = setTimeout(() => {
+    //     this.refreshCode();
+    //   }, this.refreshDelay);
+    //   return this.refreshTimer;
+    // };
+    // this.refresher();
+
     this.refreshTimer = setTimeout(() => {
       this.refreshCode();
     }, this.refreshDelay);
     if (this.socketV1Connected) {
       this.V1.socketDisconnect();
+      // eslint-disable-next-line
+      console.log('v1 disconnect'); // todo remove dev item
     }
     if (this.socketV2Connected) {
       this.V2.socketDisconnect();
+      // eslint-disable-next-line
+      console.log('v2 disconnect'); // todo remove dev item
     }
 
     this.generateKeys(testPrivate);
     this.displayCode(this.privateKey);
+
+    if (this.socketsCreated) {
+      this.V2.regenerateCodeCleanup();
+      this.V2.socketDisconnect();
+      this.V1.regenerateCodeCleanup();
+      this.V1.socketDisconnect();
+      this.webRtcCommunication.off('data', this.dataReceivedListener);
+    }
     const options = {
       stunServers: this.stunServers,
       turnTest: this.turnTest,
       version: this.optionVersion,
       uiCommunicator: this.uiCommunicator.bind(this),
       webRtcCommunication: this.webRtcCommunication,
-      crypto: this.mewCrypto
+      crypto: this.mewCrypto,
+      refreshTimer: this.refreshTimer,
+      refresher: this.refresher
     };
-    this.webRtcCommunication.on('data', this.dataReceived.bind(this));
+    this.dataReceivedListener = this.dataReceived.bind(this);
+    this.webRtcCommunication.on('data', this.dataReceivedListener);
     this.V1 = new MewConnectInitiatorV1({ url: this.v1Url, ...options });
     this.V2 = new MewConnectInitiatorV2({ url: this.v2Url, ...options });
     await this.V1.initiatorStart(this.v1Url, this.mewCrypto, {
@@ -267,7 +293,7 @@ Keys
       signed: this.signed,
       connId: this.connId
     });
-
+    this.socketsCreated = true;
     this.V1.on('socketPaired', () => {
       this.V2.socketDisconnect();
       this.socketV1Connected = true;
@@ -276,6 +302,22 @@ Keys
     this.V2.on('socketPaired', () => {
       this.V1.socketDisconnect();
       this.socketV2Connected = true;
+    });
+
+    this.V2.on('sendingOffer', () => {
+      console.log('sendingOffer'); // todo remove dev item
+      if (this.refreshTimer !== null) {
+        clearTimeout(this.refreshTimer);
+        this.refreshTimer = null;
+      }
+    });
+
+    this.V2.on('retryingViaTurn', () => {
+      console.log('retryingViaTurn'); // todo remove dev item
+      if (this.refreshTimer !== null) {
+        clearTimeout(this.refreshTimer);
+        this.refreshTimer = null;
+      }
     });
 
     this.webRtcCommunication.on(
