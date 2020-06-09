@@ -63,13 +63,10 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
         this.useFallback();
       };
 
-      this.webRtcCommunication.on('useFallback', this.fallbackListener)
-
+      this.webRtcCommunication.on('useFallback', this.fallbackListener);
     } catch (e) {
       debug('constructor error:', e);
     }
-
-
   }
 
   setResetStates() {
@@ -185,11 +182,14 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   regenerateCodeCleanup() {
-    if(this.onConnectListener) this.webRtcCommunication.off('connect', this.onConnectListener);
-    if(this.sendOfferListener) this.webRtcCommunication.off('signal', this.sendOfferListener);
-    if(this.onDataListener) this.webRtcCommunication.off('data', this.onDataListener);
-    if(this.socket) this.socket.off('answer');
-    this.webRtcCommunication.off('useFallback', this.fallbackListener)
+    if (this.onConnectListener)
+      this.webRtcCommunication.off('connect', this.onConnectListener);
+    if (this.sendOfferListener)
+      this.webRtcCommunication.off('signal', this.sendOfferListener);
+    if (this.onDataListener)
+      this.webRtcCommunication.off('data', this.onDataListener);
+    if (this.socket) this.socket.off('answer');
+    this.webRtcCommunication.off('useFallback', this.fallbackListener);
   }
 
   async useFallback() {
@@ -351,7 +351,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   async sendOffer(data) {
     debug('sendOffer');
     try {
-      this.emit('sendingOffer')
+      this.emit('sendingOffer');
       debug('SIGNAL', JSON.stringify(data));
       const encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(data));
       this.uiCommunicator(this.lifeCycle.sendOffer);
@@ -506,7 +506,9 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     debug(err.code);
     debug('error', err);
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
-      debug('WRTC ERROR - FALLBACK SEQUENCE ==================================');
+      debug(
+        'WRTC ERROR - FALLBACK SEQUENCE =================================='
+      );
       this.useFallback();
     } else {
       if (!this.isAlive()) {
@@ -574,7 +576,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
   retryViaTurn(data) {
     try {
-      this.emit('retryingViaTurn')
+      this.emit('retryingViaTurn');
       this.states = this.setResetStates();
       debugTurn('Retrying via TURN v2');
       this.iceServers = null;

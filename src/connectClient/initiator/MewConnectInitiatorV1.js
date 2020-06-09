@@ -197,9 +197,12 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
   // ----- WebRTC Setup Methods
 
   regenerateCodeCleanup() {
-    if(this.onConnectListener) this.webRtcCommunication.off('connect', this.onConnectListener);
-    if(this.sendOfferListener) this.webRtcCommunication.off('signal', this.sendOfferListener);
-    if(this.onDataListener) this.webRtcCommunication.off('data', this.onDataListener);
+    if (this.onConnectListener)
+      this.webRtcCommunication.off('connect', this.onConnectListener);
+    if (this.sendOfferListener)
+      this.webRtcCommunication.off('signal', this.sendOfferListener);
+    if (this.onDataListener)
+      this.webRtcCommunication.off('data', this.onDataListener);
   }
 
   // A connection pair exists, create and send WebRTC OFFER

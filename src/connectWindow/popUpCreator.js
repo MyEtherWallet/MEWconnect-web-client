@@ -138,7 +138,6 @@ export default class PopUpCreator {
 
     const channel = new BroadcastChannel('refresh-channel');
     channel.addEventListener('message', () => {
-
       this.refreshQrcode();
     });
     this.popupWindowOpen = true;

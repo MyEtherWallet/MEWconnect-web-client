@@ -62,7 +62,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   // can be used to listen to specific events, especially those that pass data
   uiCommunicator(event, data) {
-    if(!data){
+    if (!data) {
       debug(event);
     } else {
       debug(event, data);
@@ -75,7 +75,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
   emitStatus(event) {
     this.emit('status', event);
   }
-
 
   setActivePeerId() {
     this.activePeerId = uuid();
