@@ -15,7 +15,6 @@ import debugLogger from 'debug';
 import PopUpCreator from '../connectWindow/popUpCreator';
 
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
-const debug = debugLogger('MEWconnect:stand-alone-provider');
 
 let state = {
   wallet: null
@@ -114,18 +113,18 @@ export default class Integration extends EventEmitter {
   identifyChain(check) {
     if (typeof check === 'number') {
       const result = this.chainIdMapping.find(value => value.chainId === check);
-      if (result) return result;
+      if (result) return result.key;
     } else if (typeof check === 'string') {
       let result = this.chainIdMapping.find(value => value.chainId == check);
-      if (result) return result;
+      if (result) return result.key;
       result = this.chainIdMapping.find(
         value => value.name === check.toLowerCase()
       );
-      if (result) return result;
+      if (result) return result.key;
       result = this.chainIdMapping.find(
         value => value.key === check.toLowerCase()
       );
-      if (result) return result;
+      if (result) return result.key;
     }
     return 'ETH';
   }
@@ -133,7 +132,7 @@ export default class Integration extends EventEmitter {
   makeWeb3Provider(CHAIN_ID, RPC_URL, _noCheck = false) {
     try {
       const chain = this.identifyChain(CHAIN_ID);
-      const defaultNetwork = Networks[chain.key][0];
+      const defaultNetwork = Networks[chain][0];
       state.network = defaultNetwork;
       const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
       const options = {};
@@ -146,7 +145,7 @@ export default class Integration extends EventEmitter {
           hostUrl.hostname.includes('infura.io')
         ) {
           throw Error(
-            `ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} do not match`
+            `ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} d match`
           );
         }
       }
@@ -171,7 +170,8 @@ export default class Integration extends EventEmitter {
       this.setupListeners();
       return web3Provider;
     } catch (e) {
-      debug(e);
+      // eslint-disable-next-line
+      console.log(e);
     }
   }
 

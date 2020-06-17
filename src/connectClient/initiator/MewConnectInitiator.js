@@ -46,11 +46,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.signalUrl = null;
       this.iceState = '';
       this.turnServers = [];
-      this.refreshTimer = null;
-      this.refreshDelay = 20000;
-      this.socketsCreated = false;
-      this.refreshCount = 0;
-      this.abandonedTimeout = 300000;
 
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
       this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
@@ -70,11 +65,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
       setTimeout(() => {
         if (this.socket) {
           this.socketDisconnect();
-          if (this.refreshTimer) {
-            clearTimeout(this.refreshTimer);
-          }
         }
-      }, this.abandonedTimeout);
+      }, 120000);
     } catch (e) {
       debug('constructor error:', e);
     }
@@ -109,18 +101,14 @@ export default class MewConnectInitiator extends MewConnectCommon {
     if (isBrowser) {
       try {
         // eslint-disable-next-line no-undef
-        if (!window) return;
-        // eslint-disable-next-line no-undef
         window.onunload = window.onbeforeunload = () => {
           const iceStates = [
             this.iceStates.new,
             this.iceStates.connecting,
             this.iceStates.connected
           ];
-          if(this.Peer && this.Peer !== undefined){
-            if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
-              this.rtcDestroy();
-            }
+          if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
+            this.rtcDestroy();
           }
           this.popupCreator.closePopupWindow();
         };
@@ -182,14 +170,10 @@ export default class MewConnectInitiator extends MewConnectCommon {
           this.popupCreator.popupWindow.addEventListener('beforeunload', () => {
             if (!this.connected) {
               // eslint-disable-next-line no-console
-              debug('popup window closed'); // todo remove dev item
+              console.log('popup window closed'); // todo remove dev item
               MewConnectInitiator.setConnectionState();
               this.socketDisconnect();
               this.emit(this.lifeCycle.AuthRejected);
-              if (this.refreshTimer !== null) {
-                clearTimeout(this.refreshTimer);
-                this.refreshTimer = null;
-              }
             }
           });
         }
@@ -234,56 +218,24 @@ Keys
     debug('this.signed', this.signed);
   }
 
-  async refreshCode() {
-    this.initiatorStart();
-  }
-
   // TODO change this to use supplied urls at time point
   async initiatorStart(url, testPrivate) {
-    // this.refresher = (delay = this.refreshDelay) => {
-    //   if (this.refreshTimer) clearTimeout(this.refreshTimer);
-    //   this.refreshTimer = setTimeout(() => {
-    //     this.refreshCode();
-    //   }, this.refreshDelay);
-    //   return this.refreshTimer;
-    // };
-    // this.refresher();
-
-    this.refreshTimer = setTimeout(() => {
-      this.refreshCode();
-    }, this.refreshDelay);
     if (this.socketV1Connected) {
       this.V1.socketDisconnect();
-      // eslint-disable-next-line
-      console.log('v1 disconnect'); // todo remove dev item
     }
     if (this.socketV2Connected) {
       this.V2.socketDisconnect();
-      // eslint-disable-next-line
-      console.log('v2 disconnect'); // todo remove dev item
     }
-
     this.generateKeys(testPrivate);
     this.displayCode(this.privateKey);
-
-    if (this.socketsCreated) {
-      // this.V2.regenerateCodeCleanup();
-      this.V2.socketDisconnect();
-      // this.V1.regenerateCodeCleanup();
-      // this.V1.socketDisconnect();
-      // this.webRtcCommunication.off('data', this.dataReceivedListener);
-    }
     const options = {
       stunServers: this.stunServers,
       turnTest: this.turnTest,
       version: this.optionVersion,
       uiCommunicator: this.uiCommunicator.bind(this),
       webRtcCommunication: this.webRtcCommunication,
-      crypto: this.mewCrypto,
-      refreshTimer: this.refreshTimer,
-      refresher: this.refresher
+      crypto: this.mewCrypto
     };
-    // this.dataReceivedListener = this.dataReceived.bind(this);
     this.webRtcCommunication.on('data', this.dataReceived.bind(this));
     this.V1 = new MewConnectInitiatorV1({ url: this.v1Url, ...options });
     this.V2 = new MewConnectInitiatorV2({ url: this.v2Url, ...options });
@@ -295,7 +247,7 @@ Keys
       signed: this.signed,
       connId: this.connId
     });
-    this.socketsCreated = true;
+
     this.V1.on('socketPaired', () => {
       this.V2.socketDisconnect();
       this.socketV1Connected = true;
@@ -306,29 +258,9 @@ Keys
       this.socketV2Connected = true;
     });
 
-    this.V2.on('sendingOffer', () => {
-      console.log('sendingOffer'); // todo remove dev item
-      if (this.refreshTimer !== null) {
-        clearTimeout(this.refreshTimer);
-        this.refreshTimer = null;
-      }
-    });
-
-    this.V2.on('retryingViaTurn', () => {
-      console.log('retryingViaTurn'); // todo remove dev item
-      if (this.refreshTimer !== null) {
-        clearTimeout(this.refreshTimer);
-        this.refreshTimer = null;
-      }
-    });
-
     this.webRtcCommunication.on(
       this.jsonDetails.lifeCycle.RtcConnectedEvent,
       () => {
-        if (this.refreshTimer !== null) {
-          clearTimeout(this.refreshTimer);
-          this.refreshTimer = null;
-        }
         this.connected = true;
         this.popupCreator.closePopupWindow();
         MewConnectInitiator.setConnectionState('connected');
@@ -339,10 +271,6 @@ Keys
   socketDisconnect() {
     this.V2.socketDisconnect();
     this.V1.socketDisconnect();
-    if (this.refreshTimer !== null) {
-      clearTimeout(this.refreshTimer);
-      this.refreshTimer = null;
-    }
   }
 
   disconnectRTC() {

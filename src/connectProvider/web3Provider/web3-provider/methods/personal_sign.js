@@ -1,6 +1,6 @@
 import EventNames from '../events';
 import { toPayload } from '../jsonrpc';
-import misc from '../../helpers/misc';
+import misc from '../../helpers/misc'
 
 export default async ({ payload, eventHub }, res, next) => {
   if (payload.method !== 'personal_sign') return next();

@@ -86,7 +86,6 @@ export default class PopUpCreator {
       this.popupWindow.focus();
       return this.popupWindow;
     }
-
     if (!qrcode) {
       throw Error('No connection string supplied to popup window');
     }

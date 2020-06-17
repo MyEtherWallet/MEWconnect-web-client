@@ -1,4 +1,6 @@
+/* eslint-disable */
 import unit from 'ethjs-unit';
+
 import EthCalls from '../web3Calls';
 import { toPayload } from '../jsonrpc';
 import EventNames from '../events';
@@ -27,7 +29,6 @@ export default async (
     : tx.gasPrice;
   getSanitizedTx(tx)
     .then(_tx => {
-      // eslint-disable-next-line
       if (_tx.hasOwnProperty('generateOnly')) {
         eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
           res(null, toPayload(payload.id, _response));

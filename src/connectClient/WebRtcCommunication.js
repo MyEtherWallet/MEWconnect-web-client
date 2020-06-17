@@ -1,8 +1,9 @@
+/* eslint-disable */
 import createLogger from 'logging';
 import debugLogger from 'debug';
 
 import SimplePeer from 'simple-peer';
-// import { isBrowser } from 'browser-or-node';
+import { isBrowser } from 'browser-or-node';
 
 import uuid from 'uuid/v4';
 import MewConnectCommon from './MewConnectCommon';
@@ -25,7 +26,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.offersSent = -1;
     this.turnTimer = null;
     this.turnWaitTime = 5000;
-    this.turnResponseWaitTime = 100;
     this.enableTimer = true;
     this.tryingTurn = false;
     this.connected = false;
@@ -36,7 +36,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.versions = this.jsonDetails.versions;
     this.lifeCycle = this.jsonDetails.lifeCycle;
     this.iceStates = this.jsonDetails.iceConnectionState;
-    this.fallbackCount = 0;
+
     this.usingVersion = '';
     this.p = null;
     this.canSignal = false;
@@ -62,11 +62,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   // can be used to listen to specific events, especially those that pass data
   uiCommunicator(event, data) {
-    if (!data) {
-      debug(event);
-    } else {
-      debug(event, data);
-    }
+    debug(event, data);
     this.emit(event, data);
     this.emitStatus(event);
   }
@@ -74,6 +70,24 @@ export default class WebRtcCommunication extends MewConnectCommon {
   // special status emitter to allow simple listening of various statuses in one listener
   emitStatus(event) {
     this.emit('status', event);
+  }
+
+  // Check if a WebRTC connection exists before a window/tab is closed or refreshed
+  // Destroy the connection if one exists
+  destroyOnUnload() {
+    if (isBrowser) {
+      // eslint-disable-next-line no-undef
+      window.onunload = window.onbeforeunload = () => {
+        const iceStates = [
+          this.iceStates.new,
+          this.iceStates.connecting,
+          this.iceStates.connected
+        ];
+        if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
+          this.rtcDestroy();
+        }
+      };
+    }
   }
 
   setActivePeerId() {
@@ -93,10 +107,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
       } else if (this.enableTimer) {
         clearTimeout(this.turnTimer);
         this.turnTimer = setTimeout(() => {
-          debug('FALLBACK TIMER');
-          // clearTimeout(this.turnTimer);
-          this.fallbackCount++;
-          debug('fallback attempt count:', this.fallbackCount); // todo remove dev item
           this.willAttemptTurn();
         }, this.turnWaitTime);
       }
@@ -140,7 +150,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     }
   }
 
-  receiveAnswer(plainTextOffer) {
+  receiveAnswer(plainTextOffer, peerID) {
     debug('receiveAnswer for version: ', this.usingVersion);
     this.fallbackTimer();
     if (this.tryingTurn && this.usingVersion === 'V1') {
@@ -352,6 +362,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
   disconnectRTCClosure() {
     return () => {
       debugStages('DISCONNECT RTC Closure');
+      console.log('disconnectRTCClosure'); // todo remove dev item
       this.connected = false;
       this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
       this.rtcDestroy();
@@ -360,6 +371,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   disconnectRTC() {
+    console.log('disconnectRTCClosure'); // todo remove dev item
     debugStages('DISCONNECT RTC');
     this.connected = false;
     this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
@@ -386,9 +398,10 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   rtcDestroy() {
+    console.log('rtcDestroy'); // todo remove dev item
     if (this.isAlive()) {
       this.p.destroy();
-      debug('DESTROYED'); // todo remove dev item
+      console.log('DESTROYED'); // todo remove dev item
       this.connected = false;
       this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
     } else if (!this.p.destroyed) {
