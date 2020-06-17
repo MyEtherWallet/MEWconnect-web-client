@@ -27,6 +27,7 @@ export default async (
     : tx.gasPrice;
   getSanitizedTx(tx)
     .then(_tx => {
+      // eslint-disable-next-line
       if (_tx.hasOwnProperty('generateOnly')) {
         eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
           res(null, toPayload(payload.id, _response));
