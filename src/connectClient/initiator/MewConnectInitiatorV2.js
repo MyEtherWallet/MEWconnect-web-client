@@ -67,6 +67,11 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     } catch (e) {
       debug('constructor error:', e);
     }
+
+    this.webRtcCommunication.on('useFallback', () => {
+      debug('USING TURN FALLBACK');
+      this.useFallback();
+    });
   }
 
   setResetStates() {
@@ -182,14 +187,14 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   regenerateCodeCleanup() {
-    if (this.onConnectListener)
-      this.webRtcCommunication.off('connect', this.onConnectListener);
-    if (this.sendOfferListener)
-      this.webRtcCommunication.off('signal', this.sendOfferListener);
-    if (this.onDataListener)
-      this.webRtcCommunication.off('data', this.onDataListener);
-    if (this.socket) this.socket.off('answer');
-    this.webRtcCommunication.off('useFallback', this.fallbackListener);
+    // if (this.onConnectListener)
+    //   this.webRtcCommunication.off('connect', this.onConnectListener);
+    // if (this.sendOfferListener)
+    //   this.webRtcCommunication.off('signal', this.sendOfferListener);
+    // if (this.onDataListener)
+    //   this.webRtcCommunication.off('data', this.onDataListener);
+    // if (this.socket) this.socket.off('answer');
+    // this.webRtcCommunication.off('useFallback', this.fallbackListener);
   }
 
   async useFallback() {
@@ -425,11 +430,11 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       // this.p = new this.Peer(simpleOptions);
       const peerID = this.webRtcCommunication.getActivePeerId();
       this.setActivePeerId(peerID);
-      this.onConnectListener = this.onConnect.bind(this, peerID);
-      this.sendOfferListener = this.sendOffer.bind(this);
+      // this.onConnectListener = this.onConnect.bind(this, peerID);
+      // this.sendOfferListener = this.sendOffer.bind(this);
       this.onDataListener = this.onData.bind(this, peerID);
-      this.webRtcCommunication.on('connect', this.onConnectListener);
-      this.webRtcCommunication.on('signal', this.sendOfferListener);
+      this.webRtcCommunication.once('connect', this.onConnect.bind(this, peerID));
+      this.webRtcCommunication.once('signal', this.sendOffer.bind(this));
       this.webRtcCommunication.on('data', this.onDataListener);
     } catch (e) {
       debug('initiatorStartRTC error:', e);

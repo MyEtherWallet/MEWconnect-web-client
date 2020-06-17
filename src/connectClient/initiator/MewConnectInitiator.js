@@ -117,8 +117,10 @@ export default class MewConnectInitiator extends MewConnectCommon {
             this.iceStates.connecting,
             this.iceStates.connected
           ];
-          if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
-            this.rtcDestroy();
+          if(this.Peer && this.Peer !== undefined){
+            if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
+              this.rtcDestroy();
+            }
           }
           this.popupCreator.closePopupWindow();
         };
