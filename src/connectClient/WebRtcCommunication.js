@@ -147,10 +147,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
       this.answersReceived.push(plainTextOffer);
       if (this.turnTimer === null) {
         const _self = this;
-        this.turnTimer = setTimeout(
-          this.receiveTurnAnswer.bind(_self),
-          this.turnResponseWaitTime
-        );
+        this.turnTimer = setTimeout(this.receiveTurnAnswer.bind(_self), 1000);
       }
     } else if (this.tryingTurn && this.usingVersion === 'V2') {
       this.enableTimer = false;

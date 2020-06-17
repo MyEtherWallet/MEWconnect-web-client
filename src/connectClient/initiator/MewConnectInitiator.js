@@ -267,11 +267,11 @@ Keys
     this.displayCode(this.privateKey);
 
     if (this.socketsCreated) {
-      this.V2.regenerateCodeCleanup();
+      // this.V2.regenerateCodeCleanup();
       this.V2.socketDisconnect();
-      this.V1.regenerateCodeCleanup();
-      this.V1.socketDisconnect();
-      this.webRtcCommunication.off('data', this.dataReceivedListener);
+      // this.V1.regenerateCodeCleanup();
+      // this.V1.socketDisconnect();
+      // this.webRtcCommunication.off('data', this.dataReceivedListener);
     }
     const options = {
       stunServers: this.stunServers,
@@ -283,8 +283,8 @@ Keys
       refreshTimer: this.refreshTimer,
       refresher: this.refresher
     };
-    this.dataReceivedListener = this.dataReceived.bind(this);
-    this.webRtcCommunication.on('data', this.dataReceivedListener);
+    // this.dataReceivedListener = this.dataReceived.bind(this);
+    this.webRtcCommunication.on('data', this.dataReceived.bind(this));
     this.V1 = new MewConnectInitiatorV1({ url: this.v1Url, ...options });
     this.V2 = new MewConnectInitiatorV2({ url: this.v2Url, ...options });
     await this.V1.initiatorStart(this.v1Url, this.mewCrypto, {
