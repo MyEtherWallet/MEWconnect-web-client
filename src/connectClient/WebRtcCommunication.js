@@ -36,7 +36,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.versions = this.jsonDetails.versions;
     this.lifeCycle = this.jsonDetails.lifeCycle;
     this.iceStates = this.jsonDetails.iceConnectionState;
-
+    this.activeInitiatorId = null;
     this.usingVersion = '';
     this.p = null;
     this.canSignal = false;
@@ -58,6 +58,10 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   setConnectionVersion(version) {
     this.usingVersion = version;
+  }
+
+  setActiveInitiatorId(id){
+    this.activeInitiatorId = id;
   }
 
   // can be used to listen to specific events, especially those that pass data
@@ -238,7 +242,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   useFallback() {
     if (!this.connected) {
-      this.emit('useFallback');
+      this.emit('useFallback', this.activeInitiatorId);
     }
   }
 

@@ -46,13 +46,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
       this.lifeCycle = this.jsonDetails.lifeCycle;
       this.stunServers = options.stunServers || this.jsonDetails.stunSrvers;
       this.iceStates = this.jsonDetails.iceConnectionState;
-      // Socket is abandoned.  disconnect.
       this.timer = null;
-      setTimeout(() => {
-        if (this.socket) {
-          this.socketDisconnect();
-        }
-      }, 120000);
       debug(this.signals); // todo remove dev item
     } catch (e) {
       debug(e); // todo remove dev item
