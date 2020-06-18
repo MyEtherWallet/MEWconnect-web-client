@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "NODE_OPTIONS='--max-old-space-size=4092' vue-cli-service build",
+    "deploy": "./deploy.sh"
   },
   "dependencies": {
     "@myetherwallet/mewconnect-web-client": "^2.1.0-RC.5.3",
