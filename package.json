@@ -1,11 +1,11 @@
 {
   "name": "@myetherwallet/mewconnect-web-client",
   "homepage": "https://github.com/myetherwallet/MEWconnect-web-client",
-  "version": "2.1.0-RC.5",
+  "version": "2.1.0-RC.5.3",
   "main": "./dist/index.js",
   "module": "./src/index.js",
   "scripts": {
-    "start": "vue-cli-service serve  --https example/app/src/main.js",
+    "start": "./node_modules/.bin/vue-cli-service serve  --https example/app/src/main.js",
     "test:jest": "npx jest --detectOpenHandles --forceExit --runInBand",
     "test:browser": "npx opn ./tests/browser/browser_test.html",
     "test:old": "npm run buildBrowserTest && npm run test:jest && npm run test:browser",
@@ -54,7 +54,8 @@
     "web3-utils": "1.2.4",
     "webrtc-adapter": "^6.4.3",
     "wrtc": "^0.4.4",
-    "ws": "^7.2.1"
+    "ws": "^7.2.1",
+    "underscore": "latest"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

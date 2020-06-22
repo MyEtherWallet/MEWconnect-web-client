@@ -1,3 +1,4 @@
+/* eslint-disable */
 const platform = require('platform');
 import * as types from './types/index';
 import * as nodes from './nodes/index';

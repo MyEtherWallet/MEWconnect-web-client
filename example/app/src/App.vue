@@ -151,7 +151,7 @@ export default {
     // Initialize the provider based client
     this.connect = new mewConnect.Provider();
     // Create the MEWconnect web3 provider
-    this.ethereum = this.connect.makeWeb3Provider(1);
+    this.ethereum = this.connect.makeWeb3Provider(1)
     // Create a web3 instance using the MEWconnect web3 provider
     this.web3 = new Web3(this.ethereum);
     // See the 'onClick' method below for starting the connection sequence
@@ -170,7 +170,6 @@ export default {
       this.altPopup.showPopupWindow('sdfsdfsdf');
     },
     animateNotifier(type) {
-      console.log(type); // todo remove dev item
       switch (type) {
         case 1:
           this.connect.showNotifierDemo(messageConstants.approveTx);

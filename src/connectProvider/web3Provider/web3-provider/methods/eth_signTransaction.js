@@ -1,4 +1,6 @@
+/* eslint-disable */
 import unit from 'ethjs-unit';
+
 import EthCalls from '../web3Calls';
 import { toPayload } from '../jsonrpc';
 import EventNames from '../events';

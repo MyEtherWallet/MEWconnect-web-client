@@ -1,3 +1,4 @@
+/* eslint-disable */
 // import { Toast } from '@/helpers';
 const ERRORS = {};
 const WARNING = {};
