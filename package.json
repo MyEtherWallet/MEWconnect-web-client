@@ -17,7 +17,8 @@
     "lint": "npx eslint --fix 'src/**.js'",
     "update:lists": "node src/connectProvider/fetchLists/index.js",
     "postinstall": "npm run update:lists",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "ci": "npm install && npm run build"
   },
   "gitHooks": {
     "pre-commit": "npm run lint"
