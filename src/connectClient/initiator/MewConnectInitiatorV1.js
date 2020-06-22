@@ -47,9 +47,8 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
       this.stunServers = options.stunServers || this.jsonDetails.stunSrvers;
       this.iceStates = this.jsonDetails.iceConnectionState;
       this.timer = null;
-      debug(this.signals); // todo remove dev item
+      debug(this.signals);
     } catch (e) {
-      debug(e); // todo remove dev item
       debug('constructor error:', e);
     }
   }
@@ -199,7 +198,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
   // A connection pair exists, create and send WebRTC OFFER
   async beginRtcSequence(data) {
     this.emit('socketPaired');
-    debug(data); // todo remove dev item
+    debug(data);
     debug('sendOffer: SOCKET CONFIRMATION');
     this.emit('beginRtcSequence', 'V1');
     // this.connPath = source;
@@ -216,7 +215,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
   }
 
   initiatorStartRTC(socket, options) {
-    debug('initiatorStartRTC'); // todo remove dev item
+    debug('initiatorStartRTC');
     const webRtcConfig = options.webRtcConfig || {};
 
     const webRtcServers = webRtcConfig.servers || this.stunServers;
@@ -260,8 +259,8 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
   }
 
   async onSignal(data) {
-    debug('onSignal'); // todo remove dev item
-    debug(data); // todo remove dev item
+    debug('onSignal');
+    debug(data);
     const encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(data));
     this.uiCommunicator(this.lifeCycle.sendOffer);
     this.socketEmit(this.signals.offerSignal, {
@@ -273,7 +272,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
 
   // Handle the WebRTC ANSWER from the opposite (mobile) peer
   async recieveAnswer(data) {
-    debug('recieveAnswer', data); // todo remove dev item
+    debug('recieveAnswer', data);
     try {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
       this.webRtcCommunication.receiveAnswer(JSON.parse(plainTextOffer));

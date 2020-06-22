@@ -1,3 +1,14 @@
+### Release v2.1.0-RC.5.4
+- Remove refreshing QRcode. 
+- better error handling between V1 and V2 connection types
+
+### Release v2.1.0-RC.5.3
+- Add missing package to package.json. 
+
+### Release v2.1.0-RC.5.2
+- Modify/Improve fallback flow
+- Refresh QRcode continuously after so many seconds
+
 ### Release v2.1.0-beta.6
 - fix missing property in MewConnectInitiator [this.iceStates]
 

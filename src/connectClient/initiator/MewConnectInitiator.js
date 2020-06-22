@@ -70,9 +70,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       setTimeout(() => {
         if (this.socket) {
           this.socketDisconnect();
-          if (this.refreshTimer) {
-            clearTimeout(this.refreshTimer);
-          }
+          this.refreshCheck();
         }
       }, this.abandonedTimeout);
     } catch (e) {
@@ -117,7 +115,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
             this.iceStates.connecting,
             this.iceStates.connected
           ];
-          if(this.Peer){
+          if (this.Peer) {
             if (!this.Peer.destroyed || iceStates.includes(this.iceState)) {
               this.rtcDestroy();
             }
@@ -183,14 +181,11 @@ export default class MewConnectInitiator extends MewConnectCommon {
           this.popupCreator.popupWindow.addEventListener('beforeunload', () => {
             if (!this.connected) {
               // eslint-disable-next-line no-console
-              console.log('popup window closed'); // todo remove dev item
+              console.log('popup window closed');
               MewConnectInitiator.setConnectionState();
               this.socketDisconnect();
               this.emit(this.lifeCycle.AuthRejected);
-              if (this.refreshTimer !== null) {
-                clearTimeout(this.refreshTimer);
-                this.refreshTimer = null;
-              }
+              this.refreshCheck();
             }
           });
         }
@@ -239,20 +234,18 @@ Keys
     this.initiatorStart();
   }
 
+  refreshCheck() {
+    if (this.refreshTimer !== null) {
+      clearTimeout(this.refreshTimer);
+      this.refreshTimer = null;
+    }
+  }
+
   // TODO change this to use supplied urls at time point
   async initiatorStart(url, testPrivate) {
-    // this.refresher = (delay = this.refreshDelay) => {
-    //   if (this.refreshTimer) clearTimeout(this.refreshTimer);
-    //   this.refreshTimer = setTimeout(() => {
-    //     this.refreshCode();
-    //   }, this.refreshDelay);
-    //   return this.refreshTimer;
-    // };
-    // this.refresher();
-
-    this.refreshTimer = setTimeout(() => {
-      this.refreshCode();
-    }, this.refreshDelay);
+    // this.refreshTimer = setTimeout(() => {
+    //   this.refreshCode();
+    // }, this.refreshDelay);
     if (this.socketV1Connected) {
       this.V1.socketDisconnect();
     }
@@ -270,51 +263,59 @@ Keys
       crypto: this.mewCrypto
     };
     this.webRtcCommunication.on('data', this.dataReceived.bind(this));
-    this.V1 = new MewConnectInitiatorV1({ url: this.v1Url, ...options });
-    this.V2 = new MewConnectInitiatorV2({ url: this.v2Url, ...options });
+    try {
+      this.V2 = new MewConnectInitiatorV2({ url: this.v2Url, ...options });
+      await this.V2.initiatorStart(this.v2Url, this.mewCrypto, {
+        signed: this.signed,
+        connId: this.connId
+      });
+
+      this.V2.on('sendingOffer', () => {
+        console.log('sendingOffer'); // todo remove dev item
+        this.refreshCheck();
+      });
+
+      this.V2.on('retryingViaTurn', () => {
+        console.log('retryingViaTurn'); // todo remove dev item
+        this.refreshCheck();
+      });
+    } catch (e) {
+      // eslint-disable-next-line
+      console.error(e);
+      this.V2 = {};
+    }
+
+    try {
+      this.V1 = new MewConnectInitiatorV1({ url: this.v1Url, ...options });
+      await this.V1.initiatorStart(this.v1Url, this.mewCrypto, {
+        signed: this.signed,
+        connId: this.connId
+      });
+    } catch (e) {
+      // eslint-disable-next-line
+      console.error(e);
+      this.V1 = {};
+    }
     this.webRtcCommunication.setActiveInitiatorId(this.V2.initiatorId);
-    await this.V1.initiatorStart(this.v1Url, this.mewCrypto, {
-      signed: this.signed,
-      connId: this.connId
-    });
-    await this.V2.initiatorStart(this.v2Url, this.mewCrypto, {
-      signed: this.signed,
-      connId: this.connId
-    });
 
-    this.V1.on('socketPaired', () => {
-      this.V2.socketDisconnect();
-      this.socketV1Connected = true;
-    });
+    if (this.V1.on) {
+      this.V1.on('socketPaired', () => {
+        if (this.V2.socketDisconnect) this.V2.socketDisconnect();
+        this.socketV1Connected = true;
+      });
+    }
 
-    this.V2.on('socketPaired', () => {
-      this.V1.socketDisconnect();
-      this.socketV2Connected = true;
-    });
-
-    this.V2.on('sendingOffer', () => {
-      console.log('sendingOffer'); // todo remove dev item
-      if (this.refreshTimer !== null) {
-        clearTimeout(this.refreshTimer);
-        this.refreshTimer = null;
-      }
-    });
-
-    this.V2.on('retryingViaTurn', () => {
-      console.log('retryingViaTurn'); // todo remove dev item
-      if (this.refreshTimer !== null) {
-        clearTimeout(this.refreshTimer);
-        this.refreshTimer = null;
-      }
-    });
+    if (this.V2.on) {
+      this.V2.on('socketPaired', () => {
+        if (this.V1.socketDisconnect) this.V1.socketDisconnect();
+        this.socketV2Connected = true;
+      });
+    }
 
     this.webRtcCommunication.on(
       this.jsonDetails.lifeCycle.RtcConnectedEvent,
       () => {
-        if (this.refreshTimer !== null) {
-          clearTimeout(this.refreshTimer);
-          this.refreshTimer = null;
-        }
+        this.refreshCheck();
         this.connected = true;
         this.popupCreator.closePopupWindow();
         MewConnectInitiator.setConnectionState('connected');
@@ -325,10 +326,7 @@ Keys
   socketDisconnect() {
     this.V2.socketDisconnect();
     this.V1.socketDisconnect();
-    if (this.refreshTimer !== null) {
-      clearTimeout(this.refreshTimer);
-      this.refreshTimer = null;
-    }
+    this.refreshCheck();
   }
 
   disconnectRTC() {
