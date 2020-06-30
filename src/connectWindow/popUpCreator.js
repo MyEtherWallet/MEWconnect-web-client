@@ -31,6 +31,7 @@ export default class PopUpCreator {
     this.appStoreButton = appStoreButton;
     this.camera = camera;
     this.popupWindowOpen = false;
+    this.windowClosedListener = () => {};
 
     window.addEventListener('beforeunload', () => {
       this.closePopupWindow();
@@ -43,6 +44,14 @@ export default class PopUpCreator {
 
   get window() {
     return this.popupWindow;
+  }
+
+  setWindowClosedListener(func){
+    this.windowClosedListener = func;
+  }
+
+  removeWindowClosedListener(){
+    this.windowClosedListener = () => {}
   }
 
   hideNotifier() {
@@ -75,6 +84,7 @@ export default class PopUpCreator {
 
     const cancelButton = document.getElementById('NotificationButton2');
     cancelButton.addEventListener('click', () => {
+      this.removeWindowClosedListener();
       this.popupWindowOpen = false;
       this.hideNotifier();
       this.closePopupWindow();
@@ -131,6 +141,7 @@ export default class PopUpCreator {
     this.showWindowInformer();
     this.popupWindow.addEventListener('beforeunload', () => {
       this.hideNotifier();
+      this.windowClosedListener();
       this.popupWindowOpen = false;
       this.popupWindow = null;
     });

@@ -120,7 +120,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
               this.rtcDestroy();
             }
           }
-
+          this.popupCreator.removeWindowClosedListener();
           this.popupCreator.closePopupWindow();
         };
       } catch (e) {
@@ -181,7 +181,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
           this.popupCreator.popupWindow.addEventListener('beforeunload', () => {
             if (!this.connected) {
               // eslint-disable-next-line no-console
-              console.log('popup window closed');
+              debug('popup window closed');
+              this.uiCommunicator('popup_window_closed');
               MewConnectInitiator.setConnectionState();
               this.socketDisconnect();
               this.emit(this.lifeCycle.AuthRejected);
@@ -271,12 +272,12 @@ Keys
       });
 
       this.V2.on('sendingOffer', () => {
-        console.log('sendingOffer'); // todo remove dev item
+        debug('sendingOffer'); // todo remove dev item
         this.refreshCheck();
       });
 
       this.V2.on('retryingViaTurn', () => {
-        console.log('retryingViaTurn'); // todo remove dev item
+        debug('retryingViaTurn'); // todo remove dev item
         this.refreshCheck();
       });
     } catch (e) {
@@ -317,6 +318,7 @@ Keys
       () => {
         this.refreshCheck();
         this.connected = true;
+        this.popupCreator.removeWindowClosedListener();
         this.popupCreator.closePopupWindow();
         MewConnectInitiator.setConnectionState('connected');
       }

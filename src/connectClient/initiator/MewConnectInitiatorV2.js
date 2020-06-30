@@ -67,7 +67,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
     this.webRtcCommunication.on('useFallback', (id) => {
       debug('USING TURN FALLBACK');
-      console.log('this.initiatorId === id', this.initiatorId === id, this.initiatorId,  id); // todo remove dev item
       if(this.initiatorId === id){
         this.useFallback();
       } else {
@@ -599,7 +598,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
           wrtc: wrtc
         }
       };
-      console.log('turn info arrived and begin turn'); // todo remove dev item
+      debug('turn info arrived and begin turn'); // todo remove dev item
       this.initiatorStartRTC(options);
     } catch (e) {
       debugTurn('retryViaTurn error:', e);

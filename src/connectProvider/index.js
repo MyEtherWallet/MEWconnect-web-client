@@ -22,8 +22,9 @@ let state = {
 const eventHub = new EventEmitter();
 let popUpCreator = {};
 export default class Integration extends EventEmitter {
-  constructor() {
+  constructor(options = {}) {
     super();
+    this.windowClosedError = options.windowClosedError || false;
     this.lastHash = null;
     this.initiator = new Initiator();
     this.popUpHandler = new PopUpHandler();
@@ -79,36 +80,46 @@ export default class Integration extends EventEmitter {
     return this.returnPromise;
   }
 
-  async enabler() {
-    if (
-      !state.wallet &&
-      MEWconnectWallet.getConnectionState() === 'disconnected'
-    ) {
-      MEWconnectWallet.setConnectionState('connecting');
-      this.connectionState = 'connecting';
-      debugConnectionState(MEWconnectWallet.getConnectionState());
-      state.wallet = await MEWconnectWallet(state, popUpCreator);
-      this.popUpHandler.showConnectedNotice();
-      this.popUpHandler.hideNotifier();
-      this.createDisconnectNotifier();
-      debugConnectionState(MEWconnectWallet.getConnectionState());
-    }
+  enabler() {
+    // eslint-disable-next-line
+    return new Promise(async (resolve, reject) => {
+      if (
+        !state.wallet &&
+        MEWconnectWallet.getConnectionState() === 'disconnected'
+      ) {
+        MEWconnectWallet.setConnectionState('connecting');
+        this.connectionState = 'connecting';
+        debugConnectionState(MEWconnectWallet.getConnectionState());
+        if(this.windowClosedError){
+          popUpCreator.setWindowClosedListener(() => {
+            reject('ERROR: popup window closed');
+          });
+        }
+        state.wallet = await MEWconnectWallet(state, popUpCreator);
+        this.popUpHandler.showConnectedNotice();
+        this.popUpHandler.hideNotifier();
+        this.createDisconnectNotifier();
+        debugConnectionState(MEWconnectWallet.getConnectionState());
+      }
 
-    if (state.web3 && state.wallet) {
-      await state.web3.eth.getTransactionCount(
-        state.wallet.getChecksumAddressString()
-      );
-    }
-    if (state.web3Provider && state.wallet) {
-      if (state.web3Provider.accountsChanged) {
-        state.web3Provider.accountsChanged([
+      if (state.web3 && state.wallet) {
+        await state.web3.eth.getTransactionCount(
+          state.wallet.getChecksumAddressString()
+        );
+      }
+      if (state.web3Provider && state.wallet) {
+        if (state.web3Provider.accountsChanged) {
+          state.web3Provider.accountsChanged([
+            state.wallet.getChecksumAddressString()
+          ]);
+        }
+        eventHub.emit('accounts_available', [
           state.wallet.getChecksumAddressString()
         ]);
       }
-      eventHub.emit('accounts_available', [state.wallet.getChecksumAddressString()])
-    }
 
-    return [state.wallet.getChecksumAddressString()];
+      resolve([state.wallet.getChecksumAddressString()]);
+    });
   }
 
   identifyChain(check) {
@@ -170,7 +181,7 @@ export default class Integration extends EventEmitter {
       state.web3 = new Web3(web3Provider);
       state.web3.currentProvider.sendAsync = state.web3.currentProvider.send;
       this.setupListeners();
-      web3Provider.enable = this.enable.bind(this)
+      web3Provider.enable = this.enable.bind(this);
       return web3Provider;
     } catch (e) {
       // eslint-disable-next-line

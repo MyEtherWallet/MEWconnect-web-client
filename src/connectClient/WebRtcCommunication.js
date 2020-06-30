@@ -367,7 +367,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
   disconnectRTCClosure() {
     return () => {
       debugStages('DISCONNECT RTC Closure');
-      console.log('disconnectRTCClosure'); // todo remove dev item
       this.connected = false;
       this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
       this.rtcDestroy();
@@ -376,7 +375,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   disconnectRTC() {
-    console.log('disconnectRTCClosure'); // todo remove dev item
     debugStages('DISCONNECT RTC');
     this.connected = false;
     this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
@@ -403,10 +401,10 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   rtcDestroy() {
-    console.log('rtcDestroy'); // todo remove dev item
+    debug('rtcDestroy'); // todo remove dev item
     if (this.isAlive()) {
       this.p.destroy();
-      console.log('DESTROYED'); // todo remove dev item
+      debug('DESTROYED'); // todo remove dev item
       this.connected = false;
       this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
     } else if (!this.p.destroyed) {
