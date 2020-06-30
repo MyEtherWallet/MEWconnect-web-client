@@ -149,7 +149,7 @@ export default {
   },
   mounted() {
     // Initialize the provider based client
-    this.connect = new mewConnect.Provider();
+    this.connect = new mewConnect.Provider({windowClosedError: true});
     // Create the MEWconnect web3 provider
     this.ethereum = this.connect.makeWeb3Provider(1)
     // Create a web3 instance using the MEWconnect web3 provider
@@ -164,7 +164,9 @@ export default {
     this.ethereum.on('disconnected', () => {
       console.log(`accountsChanged User's address is DISCONNECTED`);
     });
-
+    this.connect.on('disconnected', () => {
+      console.log(`accountsChanged User's address is DISCONNECTED`);
+    });
 
 
     this.altPopup = new PopUpCreator();

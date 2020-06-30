@@ -197,10 +197,10 @@ export default class Integration extends EventEmitter {
       () => {
         this.popUpHandler.showNotice(messageConstants.disconnect);
         MEWconnectWallet.setConnectionState('disconnected');
-        state.wallet = null;
-        if (state.web3Provider.disconnected) {
+        if (state.wallet !== null && state.web3Provider.disconnected) {
           state.web3Provider.disconnected();
         }
+        state.wallet = null;
         this.emit('disconnected');
       }
     );
@@ -210,6 +210,9 @@ export default class Integration extends EventEmitter {
       () => {
         this.popUpHandler.showNotice(messageConstants.disconnect);
         MEWconnectWallet.setConnectionState('disconnected');
+        if (state.wallet !== null && state.web3Provider.disconnected) {
+          state.web3Provider.disconnected();
+        }
         state.wallet = null;
         this.emit('disconnected');
       }
