@@ -195,6 +195,9 @@ WebsocketProvider.prototype.on = function(type, callback) {
     case 'accountsChanged':
       this.accountsChanged = callback;
       break;
+    case 'disconnected':
+      this.disconnected = callback;
+      break;
   }
 };
 

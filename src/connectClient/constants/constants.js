@@ -68,7 +68,9 @@ const lifeCycle = {
   RtcErrorEvent: 'RtcErrorEvent',
   UsingFallback: 'UsingFallback',
   Failed: 'failed',
-  attemptedDisconnectedSend: 'attemptedDisconnectedSend'
+  attemptedDisconnectedSend: 'attemptedDisconnectedSend',
+  connected: 'connected',
+  disconnected: 'disconnected'
 };
 
 const communicationTypes = {

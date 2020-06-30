@@ -492,7 +492,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     if (!this.isAlive()) {
       debugStages('WRTC CLOSE', data);
       if (this.connected) {
-        this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
+        // this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
         this.connected = false;
       } else {
         this.connected = false;

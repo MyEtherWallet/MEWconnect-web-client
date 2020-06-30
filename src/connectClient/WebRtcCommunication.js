@@ -328,6 +328,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
       debugStages('WRTC CLOSE', data);
       if (this.connected) {
         this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
+        this.uiCommunicator(this.lifeCycle.disconnected);
         this.connected = false;
       } else {
         this.connected = false;
