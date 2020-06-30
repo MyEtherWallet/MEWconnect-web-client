@@ -105,6 +105,7 @@ export default class Integration extends EventEmitter {
           state.wallet.getChecksumAddressString()
         ]);
       }
+      eventHub.emit('accounts_available', [state.wallet.getChecksumAddressString()])
     }
 
     return [state.wallet.getChecksumAddressString()];
@@ -153,6 +154,7 @@ export default class Integration extends EventEmitter {
       const parsedUrl = `${hostUrl.protocol}//${hostUrl.host}${
         defaultNetwork.port ? ':' + defaultNetwork.port : ''
       }${hostUrl.pathname}`;
+      state.enable = this.enable.bind(this);
       const web3Provider = new MEWProvider(
         parsedUrl,
         options,
@@ -168,6 +170,7 @@ export default class Integration extends EventEmitter {
       state.web3 = new Web3(web3Provider);
       state.web3.currentProvider.sendAsync = state.web3.currentProvider.send;
       this.setupListeners();
+      web3Provider.enable = this.enable.bind(this)
       return web3Provider;
     } catch (e) {
       // eslint-disable-next-line

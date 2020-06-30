@@ -200,7 +200,7 @@ export default {
       this.connect.showConnectedNotice();
     },
     onClick() {
-      this.connect.enable().then(accounts => {
+      this.ethereum.enable().then(accounts => {
         console.log(`User's address is ${accounts[0]}`);
         this.userAddress = accounts[0];
       });
