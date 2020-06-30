@@ -196,7 +196,7 @@ export default class Integration extends EventEmitter {
       connection.lifeCycle.RtcDisconnectEvent,
       () => {
         this.popUpHandler.showNotice(messageConstants.disconnect);
-        MEWconnectWallet.setConnectionState('disconnected');
+        MEWconnectWallet.setConnectionState(connection.lifeCycle.disconnected);
         if (state.wallet !== null && state.web3Provider.disconnected) {
           state.web3Provider.disconnected();
         }
@@ -209,12 +209,12 @@ export default class Integration extends EventEmitter {
       connection.lifeCycle.RtcClosedEvent,
       () => {
         this.popUpHandler.showNotice(messageConstants.disconnect);
-        MEWconnectWallet.setConnectionState('disconnected');
+        MEWconnectWallet.setConnectionState(connection.lifeCycle.disconnected);
         if (state.wallet !== null && state.web3Provider.disconnected) {
           state.web3Provider.disconnected();
         }
         state.wallet = null;
-        this.emit('disconnected');
+        this.emit(connection.lifeCycle.disconnected);
       }
     );
   }
