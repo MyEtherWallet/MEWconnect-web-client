@@ -156,7 +156,6 @@ export default {
     this.web3 = new Web3(this.ethereum);
     // See the 'onClick' method below for starting the connection sequence
     // listener on the web3 provider emiting when the account changes (at the moment this is also the same as a connection being established.)
-    console.log( this.ethereum.on); // todo remove dev item
     this.ethereum.on('accountsChanged', accounts => {
       console.log(`accountsChanged User's address is ${accounts[0]}`);
     });
