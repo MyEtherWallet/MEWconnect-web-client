@@ -31,6 +31,10 @@ const cssStyles = `
         padding-bottom: 16px;
         padding-top: 16px;
       }
+      .upper-text {
+        position: relative;
+        bottom: 15px;
+      }
       .qr-code {
         font-family: 'Roboto', sans-serif;
         color: #050f19;
@@ -42,13 +46,12 @@ const cssStyles = `
         box-sizing: border-box;
         background-color: white;
         border-radius: 8px;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
         display: inline-block;
       }
       .text-one {
         min-width: 380px;
         height: 30px;
-        color: rgb(0, 0, 0);
+        color: rgba(0, 0, 0);
         font-size: 24px;
         font-family: 'Roboto', sans-serif;
         font-weight: 500;
@@ -56,20 +59,23 @@ const cssStyles = `
         letter-spacing: 0.3px;
         line-height: 30px;
         box-sizing: border-box;
+        padding-bottom: 8px;
       }
       .text-two {
         font-family: 'Roboto', sans-serif;
         font-size: 14px;
+        color: rgba(0, 0, 0, 0.55);
         font-weight: normal;
         height: 16px;
         letter-spacing: 0.17px;
         text-align: center;
         min-width: 265px;
+        padding-top: 8px;
       }
       .list-style {
         width: 278px;
         height: 48px;
-        color: rgb(0, 0, 0);
+        color: rgba(0, 0, 0, 0.55);
         font-size: 12px;
         font-family: 'Roboto', sans-serif;
         font-weight: normal;
@@ -78,6 +84,8 @@ const cssStyles = `
         margin-left: 20px;
         list-style-position: outside;
         text-align: left;
+        position: relative;
+        left: 30px
       }
       .list-style li {
         margin-left: 0;
@@ -100,7 +108,7 @@ const cssStyles = `
         flex-direction: row;
         flex-flow: row wrap;
         justify-content: center;
-        left: -50px;
+        left: -15px;
       }
       .bottom-container-text {
         font-family: 'Roboto', sans-serif;
@@ -148,25 +156,48 @@ const cssStyles = `
         margin: 0;
         padding-bottom: 5px;
       }
-      .bottom{
-        color: rgb(0, 0, 0);
+      .bottom {
+        color: rgba(0, 0, 0, 0.55);
         font-size: 12px;
         font-family: 'Roboto', sans-serif;
         font-weight: lighter;
         letter-spacing: 0.15px;
+      }
+      
+      .bottom-link {
+      text-decoration: none;
+       color: rgba(0, 0, 0, 0.55);
       }
 
       .refreshIcon {
         justify-content: center;
         margin-left: auto;
         margin-right: auto;
-        padding-top: 10px;
       }
 
       .hidden {
         display: none;
       }
+      
+      .get-text {
+        width: 265px;
+        height: 16px;
+        color: rgb(0, 0, 0);
+        font-size: 14px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: normal;
+        letter-spacing: 0.17px;
+      }
+      
+      .camera-icon {
+          opacity: 0.54;
+          position: relative;
+          bottom: -2px;
+          height: 14px;
+          width: 14px;
+        }
     `;
+
 const htmlDesign = (refresh, image, playStore, appStore, camera) => {
   return `
       <html>
@@ -180,8 +211,11 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
 <body>
     <div class="outer-container">
       <div class="container">
+      <div class="upper-text">
         <p class="text-one">Connect to MEW wallet app</p>
         <p class="text-two">Scan this code to connect</p>
+       </div>
+
         <div class="qr-code">
           <canvas id="canvas"></canvas>
         </div>
@@ -191,7 +225,7 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
 
         <ol class="list-style">
           <li>Open MEW wallet app on your mobile device</li>
-          <li>Click <img src="${camera}" height="12" width="14"> icon in the top right corner</li>
+          <li class="with-image">Click <img class="camera-icon" src="${camera}"> icon in the top right corner</li>
           <li>Scan this code to connect</li>
         </ol>
       </div>
@@ -207,7 +241,7 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
           </div>
           <div class="center">
             <div class="right">
-              <p>Don't have MEW wallet app?</p>
+              <p class="get-text">Don't have MEW wallet app?</p>
                <img
                   id="apple-link"
                   class="left-img"
@@ -220,7 +254,7 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
                   id="google-link"
                   src="${playStore}"
                   height="40"
-                  width="130"
+                  width="135"
                 />
 
 
@@ -229,7 +263,7 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
 
         </div>
         <div class="bottom">
-          Powered by <a href="#">MEWconnect protocol</a> <br />
+          Powered by <a href="#" class="bottom-link">MEWconnect protocol</a> <br />
           brought to you by MyEtherWallet
         </div>
       </div>
@@ -253,9 +287,9 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
     channel.postMessage("google-link");
   })
 
-  setTimeout(() => {
-    refreshContainer.className = refreshContainer.className.replace('hidden', '');
-  }, 5000)
+  // setTimeout(() => {
+  //   refreshContainer.className = refreshContainer.className.replace('hidden', '');
+  // }, 5000)
 
   </script>
 </body>
