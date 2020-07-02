@@ -208,17 +208,22 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
           <div class="center">
             <div class="right">
               <p>Don't have MEW wallet app?</p>
-              <img
-                class="left-img"
-                src="${appStore}"
-                height="40"
-                width="120"
-              />
-              <img
-                src="${playStore}"
-                height="40"
-                width="120"
-              />
+               <img
+                  id="apple-link"
+                  class="left-img"
+                  src="${appStore}"
+                  height="40"
+                  width="120"
+                />
+
+                <img
+                  id="google-link"
+                  src="${playStore}"
+                  height="40"
+                  width="130"
+                />
+
+
             </div>
           </div>
 
@@ -233,10 +238,21 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
   const channel = new BroadcastChannel('refresh-channel');
   const refreshContainer = window.document.getElementById("refresh-container")
   const refreshButton = window.document.getElementById("refresh");
-
+  const appleLinkButton = window.document.getElementById("apple-link");
+  const googleLinkButton = window.document.getElementById("google-link");
+  
   refreshButton.addEventListener("click", () => {
     channel.postMessage("refresh");
   })
+    
+  appleLinkButton.addEventListener("click", () => {
+    channel.postMessage("apple-link");
+  })
+  
+  googleLinkButton.addEventListener("click", () => {
+    channel.postMessage("google-link");
+  })
+
   setTimeout(() => {
     refreshContainer.className = refreshContainer.className.replace('hidden', '');
   }, 5000)

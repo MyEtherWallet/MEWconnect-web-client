@@ -46,12 +46,12 @@ export default class PopUpCreator {
     return this.popupWindow;
   }
 
-  setWindowClosedListener(func){
+  setWindowClosedListener(func) {
     this.windowClosedListener = func;
   }
 
-  removeWindowClosedListener(){
-    this.windowClosedListener = () => {}
+  removeWindowClosedListener() {
+    this.windowClosedListener = () => {};
   }
 
   hideNotifier() {
@@ -147,9 +147,18 @@ export default class PopUpCreator {
     });
 
     const channel = new BroadcastChannel('refresh-channel');
-    channel.addEventListener('message', () => {
-      this.refreshQrcode();
+    channel.addEventListener('message', val => {
+
+      if(val.data === 'google-link'){
+        window.open("https://play.google.com/store/apps/details?id=com.myetherwallet.mewwallet",'_newtab' + Date.now());
+      } else if(val.data === 'apple-link'){
+        window.open("https://apps.apple.com/app/id1464614025",'_newtab' + Date.now());
+      } else {
+        this.refreshQrcode();
+      }
+
     });
+
     this.popupWindowOpen = true;
     return this.popupWindow;
   }
