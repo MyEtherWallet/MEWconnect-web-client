@@ -95,7 +95,7 @@
     <br />
     <hr style="width: 50%" />
     <h6>
-      The two buttons below show the various windows and notification types that
+      The buttons below show the various windows and notification types that
       occur. They are for display only and use dummy data.
     </h6>
     <p>

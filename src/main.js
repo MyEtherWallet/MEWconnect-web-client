@@ -11,8 +11,8 @@ Vue.config.productionTip = false;
 
 const routes = [
   { path: '/home', component: home },
-  { path: '/foo', component: clientExample },
-  { path: '/bar', component: web3Modal }
+  { path: '/interactive', component: clientExample },
+  { path: '/web3Modal', component: web3Modal }
 ]
 
 // 3. Create the router instance and pass the `routes` option

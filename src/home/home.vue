@@ -4,11 +4,14 @@
       <!-- use router-link component for navigation. -->
       <!-- specify the link by passing the `to` prop. -->
       <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
-      <router-link to="/foo">Go to Foo</router-link>
+      <router-link to="/interactive">Interactive Demo</router-link>
 
     </p>
     <p>
-      <router-link to="/bar">Go to Bar</router-link>
+      <router-link to="/web3Modal">Web3 Modal Example</router-link>
+    </p>
+    <p>
+      <a href="https://github.com/MyEtherWallet/MEWconnect-web-client">Github</a>
     </p>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h2>MEW connect client library example</h2>
+    <h2>MEWconnect client library examples</h2>
         <!-- route outlet -->
     <!-- component matched by the route will render here -->
     <router-view></router-view>
