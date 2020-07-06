@@ -7,7 +7,7 @@
       <router-link to="/home">Go to Home</router-link>
 
     </p>
-    <button @click="setup">Click Button</button>
+    <button @click="setup">Show web3 modal popup</button>
   </div>
 </template>
 
@@ -28,6 +28,7 @@ import MewConnect from '@myetherwallet/mewconnect-web-client';
 
 export default {
   name: 'web3Modal',
+  title: 'web3 Modal Example',
   data () {
     return {
       web3: {}

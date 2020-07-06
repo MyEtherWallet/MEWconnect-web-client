@@ -22,6 +22,7 @@
 
 export default {
   name: 'home',
+  title: 'MEWconnect client demo',
   data () {
     return {
       web3: {}

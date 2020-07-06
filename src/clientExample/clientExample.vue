@@ -141,6 +141,7 @@ const messageConstants = {
 };
 export default {
   name: 'app',
+  title: 'Interactive Demo',
   data() {
     return {
       connect: {},
