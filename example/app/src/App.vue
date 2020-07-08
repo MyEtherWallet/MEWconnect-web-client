@@ -150,6 +150,7 @@ export default {
   mounted() {
     // Initialize the provider based client
     this.connect = new mewConnect.Provider({windowClosedError: true});
+    // this.connect = new mewConnect.Provider();
     // Create the MEWconnect web3 provider
     this.ethereum = this.connect.makeWeb3Provider(1)
     // Create a web3 instance using the MEWconnect web3 provider
@@ -212,7 +213,7 @@ export default {
         console.log(`User's address is ${accounts[0]}`);
         this.userAddress = accounts[0];
       })
-      .catch(console.log)
+      .catch(console.error)
     },
     disconnect() {
       this.connect.disconnect();

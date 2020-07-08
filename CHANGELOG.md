@@ -1,3 +1,10 @@
+### Release v2.1.0-RC.5.8
+- Emit error when popup is closed via closing the window or clicking cancel
+
+### Release v2.1.0-RC.5.7
+- Add option to emit error when popup is closed
+- Design modifications
+
 ### Release v2.1.0-RC.5.4
 - Remove refreshing QRcode. 
 - better error handling between V1 and V2 connection types

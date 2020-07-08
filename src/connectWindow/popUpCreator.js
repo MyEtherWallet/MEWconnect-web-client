@@ -84,9 +84,9 @@ export default class PopUpCreator {
 
     const cancelButton = document.getElementById('NotificationButton2');
     cancelButton.addEventListener('click', () => {
-      this.removeWindowClosedListener();
       this.popupWindowOpen = false;
       this.hideNotifier();
+      this.windowClosedListener();
       this.closePopupWindow();
     });
   }
@@ -174,6 +174,7 @@ export default class PopUpCreator {
       this.popupUrl = null;
       this.popupWindow = null;
     }
+    this.removeWindowClosedListener();
     window.focus();
   }
 
