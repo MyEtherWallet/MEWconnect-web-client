@@ -1,4 +1,4 @@
-<!--##### Note This Repository Nees Some Cleaning-->
+[MEWconnect Demo](https://myetherwallet.github.io/MEWconnect-web-client/#/home)
 
 
 MEWconnect Client for MEW wallet
