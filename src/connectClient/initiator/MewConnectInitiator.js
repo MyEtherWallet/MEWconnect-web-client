@@ -2,6 +2,7 @@
 // import createLogger from 'logging';
 import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
+import {V1endpoint, V2endpoint} from '../config';
 
 import MewConnectCommon from '../MewConnectCommon';
 import MewConnectCrypto from '../MewConnectCrypto';
@@ -31,8 +32,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.activePeerId = '';
       this.allPeerIds = [];
       this.peersCreated = [];
-      this.v1Url = options.v1Url || 'wss://connect.mewapi.io';
-      this.v2Url = options.v2Url || 'wss://connect2.mewapi.io/staging';
+      this.v1Url = options.v1Url || V1endpoint;
+      this.v2Url = options.v2Url || V2endpoint;
 
       this.turnTest = options.turnTest;
 
@@ -255,6 +256,7 @@ Keys
     }
     this.generateKeys(testPrivate);
     this.displayCode(this.privateKey);
+    this.webRtcCommunication.once(this.lifeCycle.disconnected, this.uiCommunicator.bind(this, this.lifeCycle.RtcClosedEvent));
     const options = {
       stunServers: this.stunServers,
       turnTest: this.turnTest,
@@ -265,19 +267,17 @@ Keys
     };
     this.webRtcCommunication.on('data', this.dataReceived.bind(this));
     try {
-      this.V2 = new MewConnectInitiatorV2({ url: this.v2Url, ...options });
-      await this.V2.initiatorStart(this.v2Url, this.mewCrypto, {
+      this.V2 = new MewConnectInitiatorV2({ url: V2endpoint, ...options });
+      await this.V2.initiatorStart(V2endpoint, this.mewCrypto, {
         signed: this.signed,
         connId: this.connId
       });
 
       this.V2.on('sendingOffer', () => {
-        debug('sendingOffer'); // todo remove dev item
         this.refreshCheck();
       });
 
       this.V2.on('retryingViaTurn', () => {
-        debug('retryingViaTurn'); // todo remove dev item
         this.refreshCheck();
       });
     } catch (e) {
@@ -287,8 +287,8 @@ Keys
     }
 
     try {
-      this.V1 = new MewConnectInitiatorV1({ url: this.v1Url, ...options });
-      await this.V1.initiatorStart(this.v1Url, this.mewCrypto, {
+      this.V1 = new MewConnectInitiatorV1({ url: V1endpoint, ...options });
+      await this.V1.initiatorStart(V1endpoint, this.mewCrypto, {
         signed: this.signed,
         connId: this.connId
       });

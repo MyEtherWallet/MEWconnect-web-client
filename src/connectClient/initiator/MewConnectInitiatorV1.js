@@ -1,5 +1,6 @@
 import createLogger from 'logging';
 import debugLogger from 'debug';
+import {V1endpoint, V2endpoint} from '../config';
 
 import wrtc from 'wrtc';
 import io from 'socket.io-client';
@@ -21,8 +22,9 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
       this.activePeerId = '';
       this.allPeerIds = [];
       this.peersCreated = [];
-      this.Url = options.url || 'wss://connect.mewapi.io';
-      this.v2Url = options.v2Url || 'wss://connect2.mewapi.io/staging';
+
+      this.Url = options.url || V1endpoint;
+      this.v2Url = options.v2Url || V2endpoint;
 
       this.turnTest = options.turnTest;
 

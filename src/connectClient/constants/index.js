@@ -14,10 +14,11 @@ import {
 } from './constants';
 
 import { signalV1, signalV2 } from './signals';
+import {V2endpoint, V1endpoint} from '../config';
 
 const signalUrl = {
-  V1: 'https://connect.mewapi.io',
-  V2: 'wss://connect2.mewapi.io/staging'
+  V1: V1endpoint,
+  V2: V2endpoint
 };
 
 const signals = {
