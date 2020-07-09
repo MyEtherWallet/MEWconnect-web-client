@@ -1,3 +1,7 @@
+### Release v2.1.0-RC.5.9
+- Fix event signaling disconnect for mew web not propagating
+- Refactor signal server url locations
+
 ### Release v2.1.0-RC.5.8
 - Emit error when popup is closed via closing the window or clicking cancel
 
