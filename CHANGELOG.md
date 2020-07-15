@@ -1,3 +1,6 @@
+### Release v2.1.0-RC.5.10
+- Fallback to getting gas price from chain if one is not supplied
+
 ### Release v2.1.0-RC.5.9
 - Fix event signaling disconnect for mew web not propagating
 - Refactor signal server url locations

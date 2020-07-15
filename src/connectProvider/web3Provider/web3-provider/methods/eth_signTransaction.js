@@ -22,10 +22,10 @@ export default async (
         store.state.wallet.getAddressString()
       )
     : tx.nonce;
-  tx.gas = !tx.gas ? await ethCalls.estimateGas(localTx) : tx.gas;
+  tx.gas = !tx.gas || tx.gas <= 0 ? await ethCalls.estimateGas(localTx) : tx.gas;
   tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
-  tx.gasPrice = !tx.gasPrice
-    ? unit.toWei(store.state.gasPrice, 'gwei').toString()
+  tx.gasPrice = !tx.gasPrice || tx.gasPrice <= 0
+    ? await store.state.web3.eth.getGasPrice()
     : tx.gasPrice;
   getSanitizedTx(tx)
     .then(_tx => {

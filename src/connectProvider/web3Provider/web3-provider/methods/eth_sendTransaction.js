@@ -35,6 +35,7 @@ export default async (
         )
       : tx.nonce;
     tx.gas = !tx.gas ? await ethCalls.estimateGas(localTx) : tx.gas;
+    tx.gasPrice = !tx.gasPrice ? await store.state.web3.eth.getGasPrice() : tx.gasPrice
   } catch (e) {
     res(e);
     return;

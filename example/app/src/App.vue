@@ -9,6 +9,7 @@
         <button @click="disconnect">Disconnect</button>
       </li>
       <li>
+        <hr/>
         <h3>Send</h3>
         <label for="toAmount">
           to amount
@@ -24,6 +25,58 @@
         {{ txHash }}
       </li>
       <li>
+        <hr/>
+        <h3>Send Detailed</h3>
+        <label for="toGasPriceDetailed">
+         Gas Price
+          <input
+            id="toGasPriceDetailed"
+            v-model="toGasPriceDetailed"
+            placeholder="amount"
+          />
+        </label>
+        <label for="toGasLimitDetailed">
+          Gas Limit
+
+          <input
+            id="toGasLimitDetailed"
+            v-model="toGasLimitDetailed"
+            placeholder="amount"
+          />
+        </label>
+
+        <label for="toDataDetailed">
+          Data
+          <input
+            id="toDataDetailed"
+            v-model="toDataDetailed"
+            placeholder="amount"
+          />
+        </label>
+        <label for="toAmountDetailed">
+          Amount
+          <input
+            id="toAmountDetailed"
+            v-model="toAmountDetailed"
+            placeholder="amount"
+          />
+        </label>
+        <label for="toNonceDetailed">
+         Nonce
+          <input
+            id="toNonceDetailed"
+            v-model="toNonceDetailed"
+            placeholder="amount"
+          />
+        </label>
+        <br />
+        <button v-show="userAddress !== ''" @click="sendTx">send</button>
+        <h6>Sends to the connected wallet address</h6>
+        <h3>Tx Hash:</h3>
+        {{ txHash }}
+      </li>
+      <li>
+        <hr/>
         <h3>Send Token</h3>
         <label for="tokenAddress">
           token address
@@ -57,32 +110,39 @@
         {{ tokenTxHash }}
       </li>
       <li>
+        <hr/>
         <button @click="getAccount">get account</button>
         <h3>{{ account }}</h3>
       </li>
       <li>
+        <hr/>
         <input v-model="messageToSign" />
         <button @click="signMessage">sign message</button><br/>
         <textarea v-if="signature !== ''" v-model="signature" disabled style="margin: 0px; height: 169px; width: 454px;"></textarea>
         <br/>
       </li>
       <li>
+        <hr/>
         <button @click="getBalance">balance</button>
         <h3>{{ balance }}</h3>
       </li>
       <li>
+        <hr/>
         <button @click="getCoinBase">getCoinBase</button>
         <h3>{{ coinBase }}</h3>
       </li>
       <li>
+        <hr/>
         <button @click="makeCall">makeCall</button>
         <h3>{{ callRes }}</h3>
       </li>
       <li>
+        <hr/>
         <button @click="getChainId">getChainId</button>
         <h3>{{ chainId }}</h3>
       </li>
       <li>
+        <hr/>
         <button @click="createSubscription">createSubscription</button>
       </li>
     </ul>
@@ -144,7 +204,12 @@ export default {
       tokenAmount: 0,
       toAmount: 0,
       signature: '',
-      messageToSign: 'sign this'
+      messageToSign: 'sign this',
+      toGasPriceDetailed: 0,
+      toGasLimitDetailed: 0,
+      toDataDetailed: '',
+      toAmountDetailed: 0,
+      toNonceDetailed: ''
     };
   },
   mounted() {
@@ -163,6 +228,7 @@ export default {
 
     this.ethereum.on('disconnected', () => {
       console.log(`accountsChanged User's address is DISCONNECTED`);
+      this.userAddress = '';
     });
     this.connect.on('disconnected', () => {
       console.log(`accountsChanged User's address is DISCONNECTED`);
@@ -257,6 +323,31 @@ export default {
             .then(txhash => console.log('THEN: ', txhash));
         });
       });
+    },
+    sendTxDetailed() {
+      // this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
+      this.web3.eth
+        .sendTransaction({
+          from: this.userAddress,
+          to: this.userAddress,
+          nonce: this.toNonceDetailed !== '' ? this.toNonceDetailed : undefined,
+          value: new BigNumber(this.toAmount)
+            .times(new BigNumber(10).pow(18))
+            .toFixed(),
+          gasPrice: this.toGasPriceDetailed,
+          gas: this.toGasLimitDetailed
+        })
+        .once('transactionHash', hash => {
+          console.log(['Hash', hash]);
+          this.tokenTxHash = hash;
+        })
+        .once('receipt', res => {
+          console.log(['Receipt', res]);
+        })
+        .on('error', err => {
+          console.log(['Error', err]);
+        })
+        .then(txhash => console.log('THEN: ', txhash));
     },
     signMessage() {
       this.web3.eth
