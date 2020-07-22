@@ -93,6 +93,10 @@ The MEWconnect.Provider can take an options object with the following fields:
  - windowClosedError (default ```false```) Indicates whether the provider should throw an error when the popup window is closed by the user. 
 
 ### Events
+```javascript
+const mewConnect = new MEWconnect.Provider()
+mewConnect.on('[event]')
+```
  - popupWindowClosed
   
     Emitted when the popup window is closed by the user
