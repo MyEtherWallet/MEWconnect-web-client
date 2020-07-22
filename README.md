@@ -85,6 +85,13 @@ ethereum.enable().then((accounts) => {
 That's it! Once the connection between the phone and the site is established, the Web3 object
 (`web3`) and the Web3 Provider (`ethereum`) are ready to be used as usual.
 
+## MEWconnect.Provider Options
+The MEWconnect.Provider can take an options object with the following fields:
+
+ - windowClosedError (default ```false```) Indicates whether the provider should throw an error when the popup window is closed by the user. 
+
+
+
 ---
 ## Example
 An example may be found in the example directory

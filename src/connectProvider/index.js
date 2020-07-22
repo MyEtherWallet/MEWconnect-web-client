@@ -224,7 +224,6 @@ export default class Integration extends EventEmitter {
       const connection = state.wallet.getConnection();
       connection.disconnectRTC();
       MEWconnectWallet.setConnectionState('disconnected');
-      // this.emit('disconnected');
     }
     state = {};
   }
