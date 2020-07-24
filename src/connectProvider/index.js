@@ -25,6 +25,7 @@ export default class Integration extends EventEmitter {
   constructor(options = {}) {
     super();
     this.windowClosedError = options.windowClosedError || false;
+    this.subscriptionNotFoundNoThrow = options || true;
     this.lastHash = null;
     this.initiator = new Initiator();
     this.popUpHandler = new PopUpHandler();
@@ -90,11 +91,13 @@ export default class Integration extends EventEmitter {
         MEWconnectWallet.setConnectionState('connecting');
         this.connectionState = 'connecting';
         debugConnectionState(MEWconnectWallet.getConnectionState());
-        if(this.windowClosedError){
-          popUpCreator.setWindowClosedListener(() => {
+        popUpCreator.setWindowClosedListener(() => {
+          if(this.windowClosedError){
             reject('ERROR: popup window closed');
-          });
-        }
+          }
+          this.emit('popupWindowClosed');
+        });
+
         state.wallet = await MEWconnectWallet(state, popUpCreator);
         this.popUpHandler.showConnectedNotice();
         this.popUpHandler.hideNotifier();
@@ -147,7 +150,9 @@ export default class Integration extends EventEmitter {
       const defaultNetwork = Networks[chain][0];
       state.network = defaultNetwork;
       const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
-      const options = {};
+      const options = {
+        subscriptionNotFoundNoThrow: this.subscriptionNotFoundNoThrow
+      };
       if (!/[wW]/.test(hostUrl.protocol)) {
         throw Error('websocket rpc endpoint required');
       }
@@ -224,7 +229,6 @@ export default class Integration extends EventEmitter {
       const connection = state.wallet.getConnection();
       connection.disconnectRTC();
       MEWconnectWallet.setConnectionState('disconnected');
-      // this.emit('disconnected');
     }
     state = {};
   }
