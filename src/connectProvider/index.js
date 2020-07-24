@@ -25,6 +25,7 @@ export default class Integration extends EventEmitter {
   constructor(options = {}) {
     super();
     this.windowClosedError = options.windowClosedError || false;
+    this.subscriptionNotFoundNoThrow = options || true;
     this.lastHash = null;
     this.initiator = new Initiator();
     this.popUpHandler = new PopUpHandler();
@@ -149,7 +150,9 @@ export default class Integration extends EventEmitter {
       const defaultNetwork = Networks[chain][0];
       state.network = defaultNetwork;
       const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
-      const options = {};
+      const options = {
+        subscriptionNotFoundNoThrow: this.subscriptionNotFoundNoThrow
+      };
       if (!/[wW]/.test(hostUrl.protocol)) {
         throw Error('websocket rpc endpoint required');
       }

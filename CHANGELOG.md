@@ -1,3 +1,8 @@
+### Release v2.1.0-RC.5.12
+- pass JSON RPC errors through to callback
+- Quietly handle 'subscription not found' error by default with settable option to return as error
+
+
 ### Release v2.1.0-RC.5.11
 - add popupWindowClosed event to provider object to inform when popup window is closed.
 

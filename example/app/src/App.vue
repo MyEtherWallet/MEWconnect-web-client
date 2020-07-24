@@ -144,6 +144,8 @@
       <li>
         <hr/>
         <button @click="createSubscription">createSubscription</button>
+        <hr/>
+        <button @click="removeSubscription">removeSubscription</button>
       </li>
     </ul>
     <br />
@@ -453,7 +455,7 @@ export default {
       this.web3.eth.getChainId().then(res => (this.chainId = res));
     },
     createSubscription() {
-      let subscription = this.web3.eth
+      this.subscription = this.web3.eth
         .subscribe('newBlockHeaders', function(error, result) {
           if (!error) {
             console.log(result);
@@ -470,6 +472,12 @@ export default {
         .on('connected', function(transaction) {
           console.log(transaction);
         });
+    },
+    removeSubscription() {
+      this.subscription.unsubscribe(function(error, success){
+        if(success)
+          console.log('Successfully unsubscribed!');
+      });
     }
   }
 };

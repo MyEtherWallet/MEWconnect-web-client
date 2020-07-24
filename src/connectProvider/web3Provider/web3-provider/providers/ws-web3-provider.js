@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use strict';
 
 const _ = require('underscore');
@@ -63,7 +64,20 @@ const WebsocketProvider = function WebsocketProvider(url, options) {
           if (_.isFunction(callback)) callback(result);
         });
       } else if (_this.responseCallbacks[id]) {
-        _this.responseCallbacks[id](null, result);
+        if(!result.error){
+          _this.responseCallbacks[id](null, result);
+        } else {
+            if (result.error.message === 'subscription not found' && options.subscriptionNotFoundNoThrow) {
+              // eslint-disable-next-line
+              console.warn('subscription not found');
+              if (!result.result) {
+                result.result = 'subscription not found';
+              }
+              _this.responseCallbacks[id](null, result);
+            } else {
+              _this.responseCallbacks[id](result);
+            }
+        }
         delete _this.responseCallbacks[id];
       }
     });
