@@ -174,7 +174,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.socketKey = privateKey;
       const separator = this.jsonDetails.connectionCodeSeparator;
       const qrCodeString =
-        this.version + separator + privateKey + separator + this.connId + separator + dapp; // turn this into an array then use join with the separator
+        this.version + separator + privateKey + separator + this.connId + ':name=' + dapp;
 
       debug(qrCodeString);
       if (this.showPopup) {

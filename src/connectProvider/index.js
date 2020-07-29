@@ -25,7 +25,7 @@ export default class Integration extends EventEmitter {
   constructor(options = {}) {
     super();
     this.windowClosedError = options.windowClosedError || false;
-    this.subscriptionNotFoundNoThrow = options || true;
+    this.subscriptionNotFoundNoThrow = options.subscriptionNotFoundNoThrow || true;
     this.lastHash = null;
     this.initiator = new Initiator();
     this.popUpHandler = new PopUpHandler();

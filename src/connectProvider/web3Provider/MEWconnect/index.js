@@ -1,5 +1,6 @@
 import MEWconnect from '../../../index';
 // import networks from '../networks/index';
+import uuid from 'uuid/v4';
 import { Transaction } from 'ethereumjs-tx';
 import WalletInterface from '../WalletInterface';
 import { MEW_CONNECT as mewConnectType } from '../bip44/index';
@@ -31,6 +32,7 @@ class MEWconnectWalletInterface extends WalletInterface {
     this.msgSigner = msgSigner;
     this.isHardware = isHardware;
     this.mewConnect = mewConnect();
+
   }
 
   getConnection() {
@@ -57,6 +59,7 @@ class MEWconnectWallet {
       popupCreator: popupCreator
     });
     this.state = state || {};
+    this.txIds = [];
   }
 
   static setConnectionState(connectionState) {
@@ -91,10 +94,12 @@ class MEWconnectWallet {
         }
       }
       const networkId = tx.chainId;
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         if (!tx.gasLimit) {
           tx.gasLimit = tx.gas;
         }
+        tx.id = uuid();
+        this.txIds.push(tx.id);
         this.mewConnect.sendRtcMessage('signTx', JSON.stringify(tx));
         this.mewConnect.once('signTx', result => {
           tx = new Transaction(sanitizeHex(result), {
@@ -110,6 +115,11 @@ class MEWconnectWallet {
               'InvalidNetworkId'
             );
           resolve(getSignTransactionObject(tx));
+        });
+        this.mewConnect.once('reject', (id) => {
+          if(this.txIds.includes(id)){
+            reject();
+          }
         });
       });
     };
