@@ -26,6 +26,7 @@ export default class Integration extends EventEmitter {
     super();
     this.windowClosedError = options.windowClosedError || false;
     this.subscriptionNotFoundNoThrow = options.subscriptionNotFoundNoThrow || true;
+    this.infuraId = `wss://mainnet.infura.io/ws/v3/${options.infuraId}` || false;
     this.lastHash = null;
     this.initiator = new Initiator();
     this.popUpHandler = new PopUpHandler();
@@ -146,9 +147,12 @@ export default class Integration extends EventEmitter {
 
   makeWeb3Provider(CHAIN_ID, RPC_URL, _noCheck = false) {
     try {
-      const chain = this.identifyChain(CHAIN_ID);
+      const chain = this.identifyChain(CHAIN_ID || 1);
       const defaultNetwork = Networks[chain][0];
       state.network = defaultNetwork;
+      if(this.infuraId){
+        RPC_URL = this.infuraId;
+      }
       const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
       const options = {
         subscriptionNotFoundNoThrow: this.subscriptionNotFoundNoThrow
@@ -156,13 +160,13 @@ export default class Integration extends EventEmitter {
       if (!/[wW]/.test(hostUrl.protocol)) {
         throw Error('websocket rpc endpoint required');
       }
-      if (!_noCheck) {
+      if (!_noCheck && !this.infuraId) {
         if (
           !hostUrl.hostname.includes(chain.name) &&
           hostUrl.hostname.includes('infura.io')
         ) {
           throw Error(
-            `ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} d match`
+            `ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} don't match`
           );
         }
       }

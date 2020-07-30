@@ -1,3 +1,6 @@
+### Release v2.1.0-RC.5.14
+- Add infuraId as an option on the Provider constructor.  If supplied, no parameters are required for the makeWeb3Provider method call.
+
 ### Release v2.1.0-RC.5.12
 - pass JSON RPC errors through to callback
 - Quietly handle 'subscription not found' error by default with settable option to return as error
