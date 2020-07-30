@@ -14,10 +14,10 @@ import { hashPersonalMessage } from 'ethereumjs-util';
 import errorHandler from './errorHandler';
 import commonGenerator from '../helpers/commonGenerator';
 import Misc from '../helpers/misc';
-// import debugLogger from 'debug';
+import debugLogger from 'debug';
 
 // TODO add debug logging
-// const debug = debugLogger('MEWconnect:popup-window');
+const debug = debugLogger('MEWconnect:wallet');
 // const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
 const V1_SIGNAL_URL = 'https://connect.mewapi.io';
@@ -117,14 +117,18 @@ class MEWconnectWallet {
           resolve(getSignTransactionObject(tx));
         });
         this.mewConnect.once('reject', (id) => {
+          debug('rejected', id);
+          console.log('rejected', id);
           if(this.txIds.includes(id)){
+            const idx = this.txIds.findIndex(item => item === id);
+            this.txIds.splice(idx, 1);
             reject();
           }
         });
       });
     };
     const msgSigner = async msg => {
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         const msgHash = hashPersonalMessage(Misc.toBuffer(msg));
         this.mewConnect.sendRtcMessage('signMessage', {
           hash: msgHash.toString('hex'),
@@ -132,6 +136,15 @@ class MEWconnectWallet {
         });
         this.mewConnect.once('signMessage', data => {
           resolve(getBufferFromHex(sanitizeHex(data.sig)));
+        });
+        this.mewConnect.once('reject', (id) => {
+          debug('rejected', id);
+          console.log('rejected', id);
+          if(this.txIds.includes(id)){
+            const idx = this.txIds.findIndex(item => item === id);
+            this.txIds.splice(idx, 1);
+            reject();
+          }
         });
       });
     };
