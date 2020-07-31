@@ -1,7 +1,7 @@
 {
   "name": "@myetherwallet/mewconnect-web-client",
   "homepage": "https://github.com/myetherwallet/MEWconnect-web-client",
-  "version": "2.1.0-RC.5.14",
+  "version": "2.1.0-RC.5.16",
   "main": "./dist/index.js",
   "module": "./src/index.js",
   "scripts": {
@@ -55,7 +55,7 @@
     "web3-core-requestmanager": "1.2.4",
     "web3-utils": "1.2.4",
     "webrtc-adapter": "^6.4.3",
-    "wrtc": "^0.4.4",
+    "wrtc": "^0.4.6",
     "ws": "^7.2.1",
     "underscore": "latest"
   },

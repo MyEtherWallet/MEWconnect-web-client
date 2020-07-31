@@ -1,6 +1,6 @@
 {
   "name": "@myetherwallet/mewconnect-web-client",
-  "version": "2.1.1-RC.1",
+  "version": "2.1.0-RC.5.16",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
@@ -21332,9 +21332,9 @@
       }
     },
     "wrtc": {
-      "version": "0.4.5",
-      "resolved": "https://registry.npmjs.org/wrtc/-/wrtc-0.4.5.tgz",
-      "integrity": "sha512-AEqbxwz8LX9bRrSI8UTn6bFiGj8/28nguYJ0RTk1905HZwM8Rx16D1oX0FfJHWmYHEg5XhODGcVa33d9ORHFyw==",
+      "version": "0.4.6",
+      "resolved": "https://registry.npmjs.org/wrtc/-/wrtc-0.4.6.tgz",
+      "integrity": "sha512-4uD+oFoY2yuo3AV9fum3cXUXR6v8YQHZlqBrKkCRGjW1BvKrVHtLNH4UaNLBLiJu9DL89WqUWmbzsQ9RxMzANw==",
       "requires": {
         "domexception": "^1.0.1",
         "node-pre-gyp": "^0.13.0"

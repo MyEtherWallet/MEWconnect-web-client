@@ -1,3 +1,9 @@
+### Release v2.1.0-RC.5.16
+- Bump wrtc version to 0.4.6
+
+### Release v2.1.0-RC.5.15
+- Add isMewConnect and name properties to the provider instance (src/connectProvider/index.js)
+
 ### Release v2.1.0-RC.5.14
 - Add infuraId as an option on the Provider constructor.  If supplied, no parameters are required for the makeWeb3Provider method call.
 

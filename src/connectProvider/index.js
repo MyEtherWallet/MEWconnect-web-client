@@ -191,6 +191,8 @@ export default class Integration extends EventEmitter {
       state.web3.currentProvider.sendAsync = state.web3.currentProvider.send;
       this.setupListeners();
       web3Provider.enable = this.enable.bind(this);
+      web3Provider.isMewConnect = true;
+      web3Provider.name = 'MewConnect';
       return web3Provider;
     } catch (e) {
       // eslint-disable-next-line
