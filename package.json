@@ -17,7 +17,7 @@
     "lint": "npx eslint --fix 'src/**.js'",
     "update:lists": "node src/connectProvider/fetchLists/index.js",
     "postinstall": "npm run update:lists",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm install && npm run build",
     "ci": "npm install && npm run build"
   },
   "gitHooks": {
@@ -39,6 +39,7 @@
     "logging": "^3.2.0",
     "mocha": "^5.2.0",
     "node-fetch": "^2.6.0",
+    "platform": "^1.3.5",
     "promise-ws": "^1.0.0-1",
     "qrcode": "^1.4.4",
     "query-string": "^6.10.1",
@@ -54,7 +55,7 @@
     "web3-core-requestmanager": "1.2.4",
     "web3-utils": "1.2.4",
     "webrtc-adapter": "^6.4.3",
-    "wrtc": "^0.4.4",
+    "wrtc": "^0.4.6",
     "ws": "^7.2.1",
     "underscore": "latest"
   },
@@ -91,7 +92,6 @@
     "nyc": "^15.0.0",
     "opn": "^5.5.0",
     "opn-cli": "^3.1.0",
-    "platform": "^1.3.5",
     "regenerator-runtime": "^0.13.3",
     "rimraf": "^2.7.1",
     "rollup": "^0.66.0",
