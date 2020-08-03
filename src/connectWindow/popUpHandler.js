@@ -84,6 +84,7 @@ export default class PopUpHandler {
       timeoutTime = overrides;
       timeoutOverride = true;
     }
+
     const element = window.document.getElementById(this.elementId);
 
     if (!timeoutOverride) {

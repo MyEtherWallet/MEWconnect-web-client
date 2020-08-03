@@ -184,6 +184,7 @@ import PopUpCreator from '../../../src/connectWindow/popUpCreator';
 import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
 import messageConstants from '../../../src/messageConstants';
+import MEWconnectWallet from '../../../src/connectProvider/web3Provider/MEWconnect';
 
 export default {
   name: 'app',
@@ -215,8 +216,9 @@ export default {
     };
   },
   mounted() {
+
     // Initialize the provider based client
-    this.connect = new mewConnect.Provider({windowClosedError: true});
+    this.connect = new mewConnect.Provider({windowClosedError: true/*, rpcUrl: 'wss://mainnet.infura.io/ws/v3/859569f6decc4446a5da1bb680e7e9cf', chainId: 1*/});
 
     this.connect.on('popupWindowClosed', () =>{
       console.log(`popup window closed EVENT`);
@@ -282,11 +284,15 @@ export default {
       this.connect.showConnectedNotice();
     },
     onClick() {
-      this.ethereum.enable().then(accounts => {
+      this.ethereum.send('eth_requestAccounts').then(accounts => {
         console.log(`User's address is ${accounts[0]}`);
-        this.userAddress = accounts[0];
-      })
-      .catch(console.error)
+      });
+      console.log(mewConnect.Provider.isConnected()); // todo remove dev item
+      // this.ethereum.enable().then(accounts => {
+      //   console.log(`User's address is ${accounts[0]}`);
+      //   this.userAddress = accounts[0];
+      // })
+      // .catch(console.error)
     },
     disconnect() {
       this.connect.disconnect();
