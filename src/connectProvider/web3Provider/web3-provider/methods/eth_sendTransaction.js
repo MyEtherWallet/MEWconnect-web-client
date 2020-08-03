@@ -44,6 +44,7 @@ export default async (
   getSanitizedTx(tx)
     .then(_tx => {
       eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
+
         const _promiObj = store.state.web3.eth.sendSignedTransaction(
           _response.rawTransaction
         );

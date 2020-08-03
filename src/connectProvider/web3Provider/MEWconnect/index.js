@@ -1,5 +1,6 @@
 import MEWconnect from '../../../index';
 // import networks from '../networks/index';
+import uuid from 'uuid/v4';
 import { Transaction } from 'ethereumjs-tx';
 import WalletInterface from '../WalletInterface';
 import { MEW_CONNECT as mewConnectType } from '../bip44/index';
@@ -13,10 +14,10 @@ import { hashPersonalMessage } from 'ethereumjs-util';
 import errorHandler from './errorHandler';
 import commonGenerator from '../helpers/commonGenerator';
 import Misc from '../helpers/misc';
-// import debugLogger from 'debug';
+import debugLogger from 'debug';
 
 // TODO add debug logging
-// const debug = debugLogger('MEWconnect:popup-window');
+const debug = debugLogger('MEWconnect:wallet');
 // const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
 const V1_SIGNAL_URL = 'https://connect.mewapi.io';
@@ -31,6 +32,7 @@ class MEWconnectWalletInterface extends WalletInterface {
     this.msgSigner = msgSigner;
     this.isHardware = isHardware;
     this.mewConnect = mewConnect();
+
   }
 
   getConnection() {
@@ -57,6 +59,7 @@ class MEWconnectWallet {
       popupCreator: popupCreator
     });
     this.state = state || {};
+    this.txIds = [];
   }
 
   static setConnectionState(connectionState) {
@@ -91,10 +94,12 @@ class MEWconnectWallet {
         }
       }
       const networkId = tx.chainId;
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         if (!tx.gasLimit) {
           tx.gasLimit = tx.gas;
         }
+        tx.id = uuid();
+        this.txIds.push(tx.id);
         this.mewConnect.sendRtcMessage('signTx', JSON.stringify(tx));
         this.mewConnect.once('signTx', result => {
           tx = new Transaction(sanitizeHex(result), {
@@ -111,10 +116,19 @@ class MEWconnectWallet {
             );
           resolve(getSignTransactionObject(tx));
         });
+        this.mewConnect.once('reject', (id) => {
+          debug('rejected', id);
+          console.log('rejected', id);
+          if(this.txIds.includes(id)){
+            const idx = this.txIds.findIndex(item => item === id);
+            this.txIds.splice(idx, 1);
+            reject();
+          }
+        });
       });
     };
     const msgSigner = async msg => {
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         const msgHash = hashPersonalMessage(Misc.toBuffer(msg));
         this.mewConnect.sendRtcMessage('signMessage', {
           hash: msgHash.toString('hex'),
@@ -122,6 +136,15 @@ class MEWconnectWallet {
         });
         this.mewConnect.once('signMessage', data => {
           resolve(getBufferFromHex(sanitizeHex(data.sig)));
+        });
+        this.mewConnect.once('reject', (id) => {
+          debug('rejected', id);
+          console.log('rejected', id);
+          if(this.txIds.includes(id)){
+            const idx = this.txIds.findIndex(item => item === id);
+            this.txIds.splice(idx, 1);
+            reject();
+          }
         });
       });
     };

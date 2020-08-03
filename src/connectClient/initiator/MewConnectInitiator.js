@@ -2,7 +2,7 @@
 // import createLogger from 'logging';
 import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
-import {V1endpoint, V2endpoint} from '../config';
+import { V1endpoint, V2endpoint } from '../config';
 
 import MewConnectCommon from '../MewConnectCommon';
 import MewConnectCrypto from '../MewConnectCrypto';
@@ -166,11 +166,15 @@ export default class MewConnectInitiator extends MewConnectCommon {
       if (privateKey instanceof Buffer) {
         privateKey = privateKey.toString('hex');
       }
+      let dapp = 'example';
+      if (typeof window !== 'undefined') {
+        dapp = window.location.hostname;
+      }
       debug('handshake', privateKey);
       this.socketKey = privateKey;
       const separator = this.jsonDetails.connectionCodeSeparator;
       const qrCodeString =
-        this.version + separator + privateKey + separator + this.connId;
+        this.version + separator + privateKey + separator + this.connId + ':name=' + dapp;
 
       debug(qrCodeString);
       if (this.showPopup) {
@@ -256,7 +260,10 @@ Keys
     }
     this.generateKeys(testPrivate);
     this.displayCode(this.privateKey);
-    this.webRtcCommunication.once(this.lifeCycle.disconnected, this.uiCommunicator.bind(this, this.lifeCycle.RtcClosedEvent));
+    this.webRtcCommunication.once(
+      this.lifeCycle.disconnected,
+      this.uiCommunicator.bind(this, this.lifeCycle.RtcClosedEvent)
+    );
     const options = {
       stunServers: this.stunServers,
       turnTest: this.turnTest,
