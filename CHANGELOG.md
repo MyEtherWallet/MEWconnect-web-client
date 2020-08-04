@@ -1,3 +1,10 @@
+### Release v2.1.1-RC.2
+- Remove hostname addition when connecting to myetherwallet.com
+
+### Release v2.1.1-RC.1
+- Add dapp hostname QRcode
+- Add Reject type as a wrtc message type
+
 ### Release v2.1.0-RC.5.16
 - Bump wrtc version to 0.4.6
 
