@@ -1,3 +1,4 @@
+/* eslint-disable*/
 import MEWconnect from '../../../index';
 // import networks from '../networks/index';
 import uuid from 'uuid/v4';
@@ -25,14 +26,13 @@ const V2_SIGNAL_URL = 'wss://connect2.mewapi.io/staging';
 const IS_HARDWARE = true;
 
 class MEWconnectWalletInterface extends WalletInterface {
-  constructor(pubkey, isHardware, identifier, txSigner, msgSigner, mewConnect) {
+  constructor(pubkey, isHardware, identifier, txSigner, msgSigner, mewConnect, popUpHandler) {
     super(pubkey, true, identifier);
-    this.errorHandler = errorHandler;
+    this.errorHandler = errorHandler(popUpHandler);
     this.txSigner = txSigner;
     this.msgSigner = msgSigner;
     this.isHardware = isHardware;
     this.mewConnect = mewConnect();
-
   }
 
   getConnection() {
@@ -49,7 +49,7 @@ class MEWconnectWalletInterface extends WalletInterface {
 }
 
 class MEWconnectWallet {
-  constructor(state, popupCreator) {
+  constructor(state, popupCreator, popUpHandler) {
     this.identifier = mewConnectType;
     this.isHardware = IS_HARDWARE;
     this.mewConnect = new MEWconnect.Initiator({
@@ -59,6 +59,7 @@ class MEWconnectWallet {
       popupCreator: popupCreator
     });
     this.state = state || {};
+    this.popUpHandler = popUpHandler;
     this.txIds = [];
   }
 
@@ -102,6 +103,7 @@ class MEWconnectWallet {
         this.txIds.push(tx.id);
         this.mewConnect.sendRtcMessage('signTx', JSON.stringify(tx));
         this.mewConnect.once('signTx', result => {
+          this.mewConnect.removeAllListeners('reject');
           tx = new Transaction(sanitizeHex(result), {
             common: commonGenerator(this.state.network.type)
           });
@@ -116,14 +118,10 @@ class MEWconnectWallet {
             );
           resolve(getSignTransactionObject(tx));
         });
-        this.mewConnect.once('reject', (id) => {
-          debug('rejected', id);
-          console.log('rejected', id);
-          if(this.txIds.includes(id)){
-            const idx = this.txIds.findIndex(item => item === id);
-            this.txIds.splice(idx, 1);
-            reject();
-          }
+        this.mewConnect.once('reject', () => {
+          debug('signTx rejected');
+          this.mewConnect.removeAllListeners('signTx');
+          reject();
         });
       });
     };
@@ -135,16 +133,13 @@ class MEWconnectWallet {
           text: msg
         });
         this.mewConnect.once('signMessage', data => {
+          this.mewConnect.removeAllListeners('reject');
           resolve(getBufferFromHex(sanitizeHex(data.sig)));
         });
-        this.mewConnect.once('reject', (id) => {
-          debug('rejected', id);
-          console.log('rejected', id);
-          if(this.txIds.includes(id)){
-            const idx = this.txIds.findIndex(item => item === id);
-            this.txIds.splice(idx, 1);
-            reject();
-          }
+        this.mewConnect.once('reject', () => {
+          debug('signMessage rejected');
+          this.mewConnect.removeAllListeners('signMessage');
+          reject();
         });
       });
     };
@@ -161,13 +156,14 @@ class MEWconnectWallet {
       this.identifier,
       txSigner,
       msgSigner,
-      mewConnect
+      mewConnect,
+      this.popUpHandler
     );
   }
 }
 
-const createWallet = async (state, popupCreator) => {
-  const _MEWconnectWallet = new MEWconnectWallet(state, popupCreator);
+const createWallet = async (state, popupCreator, popUpHandler) => {
+  const _MEWconnectWallet = new MEWconnectWallet(state, popupCreator, popUpHandler);
   createWallet.connectionState = _MEWconnectWallet.connectionState;
   const _tWallet = await _MEWconnectWallet.init();
   return _tWallet;

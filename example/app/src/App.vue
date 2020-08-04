@@ -287,6 +287,7 @@ export default {
     onClick() {
       this.ethereum.send('eth_requestAccounts').then(accounts => {
         console.log(`User's address is ${accounts[0]}`);
+        this.userAddress = accounts[0];
       });
       console.log(mewConnect.Provider.isConnected()); // todo remove dev item
       // this.ethereum.enable().then(accounts => {

@@ -25,7 +25,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.showPopup = options.showPopup || false;
     try {
       this.supportedBrowser = MewConnectCommon.checkBrowser();
-
+this.requestIds = [];
       this.V1 = {};
       this.V2 = {};
 
@@ -175,10 +175,10 @@ export default class MewConnectInitiator extends MewConnectCommon {
       const separator = this.jsonDetails.connectionCodeSeparator;
       let qrCodeString =
         this.version + separator + privateKey + separator + this.connId + ':name=' + dapp;
-      if(dapp.includes('myetherwallet')){
+      if(dapp.includes('myetherwallet.com')){
         qrCodeString =
           this.version + separator + privateKey + separator + this.connId;
-      } else if(dapp.includes('mewbuilds')){
+      } else if(dapp.includes('mewbuilds.com')){
         qrCodeString =
           this.version + separator + privateKey + separator + this.connId;
       }
@@ -359,12 +359,26 @@ Keys
   }
 
   sendRtcMessage(type, data) {
-    this.webRtcCommunication.sendRtcMessage(type, data);
+    const id = uuid();
+    this.requestIds.push(id);
+    this.webRtcCommunication.sendRtcMessage(type, data, id);
   }
 
   dataReceived(data) {
     debug('dataReceived', data);
-    this.uiCommunicator(data.type, data.data);
+    if(data.id){
+      debug('MESSAGE ID RECEIVED', data.id);
+      if (this.requestIds.includes(data.id)) {
+        this.uiCommunicator(data.type, data.data);
+        const idx = this.txIds.findIndex(item => item === id);
+        this.txIds.splice(idx, 1);
+      } else {
+        throw Error(`Message id "${data.id}" does not match a sent message`)
+      }
+    } else {
+      debug('**NO MESSAGE ID RECEIVED**');
+      this.uiCommunicator(data.type, data.data);
+    }
   }
 
   testV1Turn() {

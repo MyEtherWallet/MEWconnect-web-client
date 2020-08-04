@@ -103,7 +103,7 @@ export default class Integration extends EventEmitter {
           this.emit('popupWindowClosed');
         });
 
-        state.wallet = await MEWconnectWallet(state, popUpCreator);
+        state.wallet = await MEWconnectWallet(state, popUpCreator, this.popUpHandler);
         this.popUpHandler.showConnectedNotice();
         this.popUpHandler.hideNotifier();
         this.createDisconnectNotifier();

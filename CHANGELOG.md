@@ -1,3 +1,14 @@
+### Release v2.1.1-RC.4
+- Move id to same level as type and data in sent messages
+- Handle matching of request and response ids in client communication layer
+
+### Release v2.1.1-RC.3.2
+- Add reject message type
+- Add id to sent 
+
+### Release v2.1.1-RC.3.1
+- fix identification of mew sites
+
 ### Release v2.1.1-RC.3
 - same as v2.1.1-RC.2.1, just a version bump
 
