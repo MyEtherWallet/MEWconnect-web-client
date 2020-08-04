@@ -198,6 +198,7 @@ export default class Integration extends EventEmitter {
       this.setupListeners();
       web3Provider.enable = this.enable.bind(this);
       web3Provider.isMewConnect = true;
+      web3Provider.isMEWconnect = true;
       web3Provider.name = 'MewConnect';
       return web3Provider;
     } catch (e) {

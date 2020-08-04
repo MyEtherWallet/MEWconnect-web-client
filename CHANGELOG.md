@@ -1,3 +1,11 @@
+### Release v2.1.1-RC.4.2
+- add isMEWconnect as provider check
+
+
+### Release v2.1.1-RC.4.1
+- Fix invalid accounting for message ids
+- Remove error condition on unmatched id received
+
 ### Release v2.1.1-RC.4
 - Move id to same level as type and data in sent messages
 - Handle matching of request and response ids in client communication layer

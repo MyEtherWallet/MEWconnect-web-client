@@ -361,6 +361,7 @@ Keys
   sendRtcMessage(type, data) {
     const id = uuid();
     this.requestIds.push(id);
+    debug('MESSAGE IDS KNOWN', this.requestIds)
     this.webRtcCommunication.sendRtcMessage(type, data, id);
   }
 
@@ -370,10 +371,12 @@ Keys
       debug('MESSAGE ID RECEIVED', data.id);
       if (this.requestIds.includes(data.id)) {
         this.uiCommunicator(data.type, data.data);
-        const idx = this.txIds.findIndex(item => item === id);
-        this.txIds.splice(idx, 1);
+        const idx = this.requestIds.findIndex(item => item === id);
+        this.requestIds.splice(idx, 1);
+        debug('MESSAGE IDS KNOWN', this.requestIds)
       } else {
-        throw Error(`Message id "${data.id}" does not match a sent message`)
+        debug('**NO MESSAGE ID RECEIVED**');
+        this.uiCommunicator(data.type, data.data);
       }
     } else {
       debug('**NO MESSAGE ID RECEIVED**');
