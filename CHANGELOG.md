@@ -1,3 +1,9 @@
+### Release v2.1.1-RC.3
+- same as v2.1.1-RC.2.1, just a version bump
+
+### Release v2.1.1-RC.2.1
+- modification to check in Release v2.1.1-RC.2
+
 ### Release v2.1.1-RC.2
 - Remove hostname addition when connecting to myetherwallet.com
 

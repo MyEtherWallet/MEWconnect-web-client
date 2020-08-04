@@ -174,10 +174,13 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.socketKey = privateKey;
       const separator = this.jsonDetails.connectionCodeSeparator;
       let qrCodeString =
-        this.version + separator + privateKey + separator + this.connId;
-      if(!dapp.includes('myetherwallet') || !dapp.includes('mewbuilds')){
+        this.version + separator + privateKey + separator + this.connId + ':name=' + dapp;
+      if(dapp.includes('myetherwallet')){
         qrCodeString =
-          this.version + separator + privateKey + separator + this.connId + ':name=' + dapp;
+          this.version + separator + privateKey + separator + this.connId;
+      } else if(dapp.includes('mewbuilds')){
+        qrCodeString =
+          this.version + separator + privateKey + separator + this.connId;
       }
 
 
