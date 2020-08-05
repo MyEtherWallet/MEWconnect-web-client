@@ -68,11 +68,11 @@ export default class Integration extends EventEmitter {
     this.popUpHandler.showConnectedNotice();
   }
 
-  static getConnectionState() {
+  static get getConnectionState() {
     return MEWconnectWallet.getConnectionState();
   }
 
-  static isConnected() {
+  static get isConnected() {
     return MEWconnectWallet.getConnectionState() !== 'disconnected' && MEWconnectWallet.getConnectionState() !== 'connecting';
   }
 

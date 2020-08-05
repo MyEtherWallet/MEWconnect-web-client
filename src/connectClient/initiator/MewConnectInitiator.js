@@ -3,6 +3,7 @@
 import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
 import { V1endpoint, V2endpoint } from '../config';
+import uuid from 'uuid/v4';
 
 import MewConnectCommon from '../MewConnectCommon';
 import MewConnectCrypto from '../MewConnectCrypto';
@@ -174,7 +175,7 @@ this.requestIds = [];
       this.socketKey = privateKey;
       const separator = this.jsonDetails.connectionCodeSeparator;
       let qrCodeString =
-        this.version + separator + privateKey + separator + this.connId + ':name=' + dapp;
+        this.version + separator + privateKey + separator + this.connId + ':name=' + dapp.replace(/^www\./, '');
       if(dapp.includes('myetherwallet.com')){
         qrCodeString =
           this.version + separator + privateKey + separator + this.connId;

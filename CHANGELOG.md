@@ -1,6 +1,11 @@
+### Release v2.1.1-RC.4.4
+- Remove 'www.' from begining of hostnames used to identify dapp
+
+### Release v2.1.1-RC.4.3
+- revert Provider.isConnected and Provider.getConnectionState to getters
+
 ### Release v2.1.1-RC.4.2
 - add isMEWconnect as provider check
-
 
 ### Release v2.1.1-RC.4.1
 - Fix invalid accounting for message ids
