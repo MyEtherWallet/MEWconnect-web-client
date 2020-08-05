@@ -1,13 +1,16 @@
 <template>
   <div>
     <p>
-      <!-- use router-link component for navigation. -->
-      <!-- specify the link by passing the `to` prop. -->
-      <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
       <router-link to="/home">Go to Home</router-link>
 
     </p>
     <button @click="setup">Show web3 modal popup</button>
+    <br/>
+    <br/>
+    <br/>
+    <p>
+      <a href="https://github.com/MyEtherWallet/MEWconnect-web-client/blob/mewconnect-demo/src/web3Modal/web3Modal.vue" target="_blank">Code for this example</a>
+    </p>
   </div>
 </template>
 
@@ -17,12 +20,6 @@
 
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
-import WalletConnectProvider from '@walletconnect/web3-provider';
-// @ts-ignore
-import Fortmatic from 'fortmatic';
-import Torus from '@toruslabs/torus-embed';
-import Authereum from 'authereum';
-import UniLogin from '@unilogin/provider';
 // @ts-ignore
 import MewConnect from '@myetherwallet/mewconnect-web-client';
 
@@ -38,30 +35,7 @@ export default {
   },
   methods: {
     async setup () {
-      console.log(process.env.REACT_APP_INFURA_ID); // todo remove dev item
-      console.log(process.env.REACT_APP_INFURA_ID || '859569f6decc4446a5da1bb680e7e9cf'); // todo remove dev item
       const providerOptions = {
-        walletconnect: {
-          package: WalletConnectProvider,
-          options: {
-            infuraId: process.env.REACT_APP_INFURA_ID || '859569f6decc4446a5da1bb680e7e9cf'
-          }
-        },
-        torus: {
-          package: Torus
-        },
-        fortmatic: {
-          package: Fortmatic,
-          options: {
-            key: process.env.REACT_APP_FORTMATIC_KEY || '859569f6decc4446a5da1bb680e7e9cf'
-          }
-        },
-        authereum: {
-          package: Authereum
-        },
-        unilogin: {
-          package: UniLogin
-        },
         mewconnect: {
           package: MewConnect,
           options: {

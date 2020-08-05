@@ -1,9 +1,6 @@
 <template>
   <div>
     <p>
-      <!-- use router-link component for navigation. -->
-      <!-- specify the link by passing the `to` prop. -->
-      <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
       <router-link to="/interactive">Interactive Demo</router-link>
 
     </p>
@@ -18,7 +15,7 @@
     <br/>
     <br/>
     <p>
-      <a href="https://github.com/MyEtherWallet/MEWconnect-web-client/tree/mewconnect-demo">Code for this example</a>
+      <a href="https://github.com/MyEtherWallet/MEWconnect-web-client/tree/mewconnect-demo" target="_blank">Code for this example</a>
     </p>
     <p>
       <a href="https://github.com/MyEtherWallet/MEWconnect-web-client">Github</a>
