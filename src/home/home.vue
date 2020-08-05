@@ -10,6 +10,16 @@
     <p>
       <router-link to="/web3Modal">Web3 Modal Example</router-link>
     </p>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <p>
+      <a href="https://github.com/MyEtherWallet/MEWconnect-web-client/tree/mewconnect-demo">Code for this example</a>
+    </p>
     <p>
       <a href="https://github.com/MyEtherWallet/MEWconnect-web-client">Github</a>
     </p>

@@ -39,11 +39,12 @@ export default {
   methods: {
     async setup () {
       console.log(process.env.REACT_APP_INFURA_ID); // todo remove dev item
+      console.log(process.env.REACT_APP_INFURA_ID || '859569f6decc4446a5da1bb680e7e9cf'); // todo remove dev item
       const providerOptions = {
         walletconnect: {
           package: WalletConnectProvider,
           options: {
-            infuraId: process.env.REACT_APP_INFURA_ID
+            infuraId: process.env.REACT_APP_INFURA_ID || '859569f6decc4446a5da1bb680e7e9cf'
           }
         },
         torus: {
@@ -52,7 +53,7 @@ export default {
         fortmatic: {
           package: Fortmatic,
           options: {
-            key: process.env.REACT_APP_FORTMATIC_KEY
+            key: process.env.REACT_APP_FORTMATIC_KEY || '859569f6decc4446a5da1bb680e7e9cf'
           }
         },
         authereum: {
@@ -64,7 +65,7 @@ export default {
         mewconnect: {
           package: MewConnect,
           options: {
-            infuraId: process.env.REACT_APP_INFURA_ID
+            infuraId: process.env.REACT_APP_INFURA_ID || '859569f6decc4446a5da1bb680e7e9cf'
           }
         },
       };
