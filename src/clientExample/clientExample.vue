@@ -55,7 +55,10 @@
             placeholder="amount"
           /> </label
         ><br />
-
+        <button v-show="tokenAddress !== ''" @click="approveToken(tokenAmount)">
+          approve
+        </button>
+        <br/>
         <button v-show="tokenAddress !== ''" @click="sendToken(tokenAmount)">
           send
         </button>
@@ -166,7 +169,7 @@ export default {
   },
   mounted() {
     // Initialize the provider based client
-    this.connect = new mewConnect.Provider();
+    this.connect = new mewConnect.Provider({infuraId: '859569f6decc4446a5da1bb680e7e9cf'});
     // Create the MEWconnect web3 provider
     this.ethereum = this.connect.makeWeb3Provider(1)
     // Create a web3 instance using the MEWconnect web3 provider
@@ -285,7 +288,7 @@ export default {
           console.log(e);
         });
     },
-    sendToken(amount, decimals = 18) {
+    sendToken(amount, decimals = this.tokenDecimals) {
       const jsonInterface = [
         {
           constant: false,
@@ -303,6 +306,83 @@ export default {
       const contract = new this.web3.eth.Contract(jsonInterface);
       const data = contract.methods
         .transfer(
+          this.tokenAddress.toLowerCase(),
+          new BigNumber(amount).times(new BigNumber(10).pow(decimals)).toFixed()
+        )
+        .encodeABI();
+
+      let gasLimit = 100000;
+      this.web3.eth
+        .estimateGas({
+          from: this.userAddress,
+          to: this.tokenAddress,
+          value: 0,
+          data
+        })
+        .then(gas => {
+          console.log(gas);
+          gasLimit = gas;
+        })
+        .catch(console.error);
+
+      this.web3.eth.getGasPrice().then(gasPrice => {
+        this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
+          this.web3.eth
+            .sendTransaction({
+              from: this.userAddress,
+              to: this.tokenAddress,
+              nonce,
+              value: 0,
+              gasPrice: gasPrice,
+              gas: gasLimit,
+              data
+            })
+            .once('transactionHash', hash => {
+              console.log(['Hash', hash]);
+              this.txHash = hash;
+            })
+            .once('receipt', res => {
+              console.log(['Receipt', res]);
+            })
+            .on('error', err => {
+              console.log(['Error', err]);
+            })
+            .then(txhash => console.log('THEN: ', txhash));
+        });
+      });
+    },
+    approveToken(amount, decimals = this.tokenDecimals) {
+      const jsonInterface = [
+        {
+          "constant": false,
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "usr",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "wad",
+              "type": "uint256"
+            }
+          ],
+          "name": "approve",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "nonpayable",
+          "type": "function"
+        }
+      ];
+      const contract = new this.web3.eth.Contract(jsonInterface);
+      const data = contract.methods
+        .approve(
           this.tokenAddress.toLowerCase(),
           new BigNumber(amount).times(new BigNumber(10).pow(decimals)).toFixed()
         )
