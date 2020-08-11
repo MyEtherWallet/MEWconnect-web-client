@@ -1,7 +1,7 @@
 /* eslint-disable*/
 import MEWconnect from '../../../index';
 // import networks from '../networks/index';
-import uuid from 'uuid/v4';
+// import uuid from 'uuid/v4';
 import { Transaction } from 'ethereumjs-tx';
 import WalletInterface from '../WalletInterface';
 import { MEW_CONNECT as mewConnectType } from '../bip44/index';
@@ -26,7 +26,15 @@ const V2_SIGNAL_URL = 'wss://connect2.mewapi.io/staging';
 const IS_HARDWARE = true;
 
 class MEWconnectWalletInterface extends WalletInterface {
-  constructor(pubkey, isHardware, identifier, txSigner, msgSigner, mewConnect, popUpHandler) {
+  constructor(
+    pubkey,
+    isHardware,
+    identifier,
+    txSigner,
+    msgSigner,
+    mewConnect,
+    popUpHandler
+  ) {
     super(pubkey, true, identifier);
     this.errorHandler = errorHandler(popUpHandler);
     this.txSigner = txSigner;
@@ -82,7 +90,10 @@ class MEWconnectWallet {
     this.mewConnect.on('codeDisplay', qrcodeListener);
     const txSigner = async tx => {
       let tokenInfo;
-      if (tx.data.slice(0, 10) === '0xa9059cbb') {
+      if (
+        tx.data.slice(0, 10) === '0xa9059cbb' ||
+        tx.data.slice(0, 10) === '0x095ea7b3'
+      ) {
         tokenInfo = this.state.network.type.tokens.find(
           entry => entry.address.toLowerCase() === tx.to.toLowerCase()
         );
@@ -94,13 +105,12 @@ class MEWconnectWallet {
           };
         }
       }
+
       const networkId = tx.chainId;
       return new Promise((resolve, reject) => {
         if (!tx.gasLimit) {
           tx.gasLimit = tx.gas;
         }
-        tx.id = uuid();
-        this.txIds.push(tx.id);
         this.mewConnect.sendRtcMessage('signTx', JSON.stringify(tx));
         this.mewConnect.once('signTx', result => {
           this.mewConnect.removeAllListeners('reject');
@@ -163,7 +173,11 @@ class MEWconnectWallet {
 }
 
 const createWallet = async (state, popupCreator, popUpHandler) => {
-  const _MEWconnectWallet = new MEWconnectWallet(state, popupCreator, popUpHandler);
+  const _MEWconnectWallet = new MEWconnectWallet(
+    state,
+    popupCreator,
+    popUpHandler
+  );
   createWallet.connectionState = _MEWconnectWallet.connectionState;
   const _tWallet = await _MEWconnectWallet.init();
   return _tWallet;

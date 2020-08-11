@@ -25,8 +25,12 @@ export default class Integration extends EventEmitter {
   constructor(options = {}) {
     super();
     this.windowClosedError = options.windowClosedError || false;
-    this.subscriptionNotFoundNoThrow = options.subscriptionNotFoundNoThrow || true;
-    this.infuraId = options.infuraId ? `wss://mainnet.infura.io/ws/v3/${options.infuraId}` :  false;
+    this.subscriptionNotFoundNoThrow =
+      options.subscriptionNotFoundNoThrow || true;
+    // eslint-disable-next-line
+    this.infuraId = !!options.infuraId
+      ? `wss://mainnet.infura.io/ws/v3/${options.infuraId}`
+      : false;
 
     this.CHAIN_ID = options.chainId || 1;
     this.RPC_URL = options.rpcUrl || false;
@@ -39,7 +43,10 @@ export default class Integration extends EventEmitter {
       (acc, curr) => {
         if (Networks[curr].length === 0) return acc;
         acc.push({
-          name:  Networks[curr][0].type.name_long === "Ethereum" ? 'mainnet' : Networks[curr][0].type.name_long.toLowerCase(),
+          name:
+            Networks[curr][0].type.name_long === 'Ethereum'
+              ? 'mainnet'
+              : Networks[curr][0].type.name_long.toLowerCase(),
           chainId: Networks[curr][0].type.chainID,
           key: Networks[curr][0].type.name
         });
@@ -73,7 +80,10 @@ export default class Integration extends EventEmitter {
   }
 
   static get isConnected() {
-    return MEWconnectWallet.getConnectionState() !== 'disconnected' && MEWconnectWallet.getConnectionState() !== 'connecting';
+    return (
+      MEWconnectWallet.getConnectionState() !== 'disconnected' &&
+      MEWconnectWallet.getConnectionState() !== 'connecting'
+    );
   }
 
   async enable() {
@@ -97,13 +107,17 @@ export default class Integration extends EventEmitter {
         this.connectionState = 'connecting';
         debugConnectionState(MEWconnectWallet.getConnectionState());
         popUpCreator.setWindowClosedListener(() => {
-          if(this.windowClosedError){
+          if (this.windowClosedError) {
             reject('ERROR: popup window closed');
           }
           this.emit('popupWindowClosed');
         });
 
-        state.wallet = await MEWconnectWallet(state, popUpCreator, this.popUpHandler);
+        state.wallet = await MEWconnectWallet(
+          state,
+          popUpCreator,
+          this.popUpHandler
+        );
         this.popUpHandler.showConnectedNotice();
         this.popUpHandler.hideNotifier();
         this.createDisconnectNotifier();
@@ -149,13 +163,17 @@ export default class Integration extends EventEmitter {
     return 'ETH';
   }
 
-  makeWeb3Provider(CHAIN_ID = this.CHAIN_ID, RPC_URL = this.RPC_URL, _noCheck = this.noUrlCheck) {
+  makeWeb3Provider(
+    CHAIN_ID = this.CHAIN_ID,
+    RPC_URL = this.RPC_URL,
+    _noCheck = this.noUrlCheck
+  ) {
     let chainError = false;
     try {
       const chain = this.identifyChain(CHAIN_ID || 1);
       const defaultNetwork = Networks[chain.key][0];
       state.network = defaultNetwork;
-      if(this.infuraId){
+      if (this.infuraId) {
         RPC_URL = this.infuraId;
       }
       const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
@@ -202,7 +220,7 @@ export default class Integration extends EventEmitter {
       web3Provider.name = 'MewConnect';
       return web3Provider;
     } catch (e) {
-      if(chainError){
+      if (chainError) {
         throw e;
       } else {
         // eslint-disable-next-line
@@ -251,7 +269,7 @@ export default class Integration extends EventEmitter {
       }
       state = {};
       // eslint-disable-next-line
-      console.warn('No connected wallet found')
+      console.warn('No connected wallet found');
       return true;
     } catch (e) {
       // eslint-disable-next-line

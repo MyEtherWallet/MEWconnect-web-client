@@ -1,3 +1,10 @@
+### Release v2.1.1-RC.4.6
+- Identify approval transactions
+- Use double logical not to check for infuraId
+
+### Release v2.1.1-RC.4.5
+- Fix 'www.' removal 
+
 ### Release v2.1.1-RC.4.4
 - Remove 'www.' from begining of hostnames used to identify dapp
 
