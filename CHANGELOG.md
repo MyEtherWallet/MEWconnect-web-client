@@ -1,6 +1,7 @@
 ### Release v2.1.1-RC.4.6
 - Identify approval transactions
 - Use double logical not to check for infuraId
+- Remove redundant id in tx data
 
 ### Release v2.1.1-RC.4.5
 - Fix 'www.' removal 
