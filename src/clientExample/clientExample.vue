@@ -15,7 +15,8 @@
         <button @click="disconnect">Disconnect</button>
       </li>
       <li>
-        <h3>Send</h3>
+        <hr/>
+        <h2>Send</h2>
         <label for="toAmount">
           to amount
           <input
@@ -30,7 +31,40 @@
         {{ txHash }}
       </li>
       <li>
-        <h3>Send Token</h3>
+        <hr/>
+        <h2>Send With Data</h2>
+        <label for="toAmountData">
+          to amount
+          <input
+            id="toAmountData"
+            v-model="toAmount"
+            placeholder="amount"
+          /> </label
+        ><br />
+        <label for="toData">
+          to data
+          <input
+            id="toData"
+            v-model="toData"
+            placeholder="0x"
+          /> </label
+        ><br />
+        <label for="toAddressData">
+          to data
+          <input
+            id="toAddressData"
+            v-model="toAddressData"
+            placeholder="0x"
+          /> </label
+        ><br />
+        <button v-show="userAddress !== ''" @click="sendTxData">send</button>
+        <h6>Sends to the connected wallet address</h6>
+        <h3>Tx Hash:</h3>
+        {{ txHash }}
+      </li>
+      <li>
+        <hr/>
+        <h2>Send Token</h2>
         <label for="tokenAddress">
           token address
           <input
@@ -66,6 +100,8 @@
         {{ tokenTxHash }}
       </li>
       <li>
+        <hr/>
+        <h2>Other Actions</h2>
         <button @click="getAccount">get account</button>
         <h3>{{ account }}</h3>
       </li>
@@ -164,6 +200,8 @@ export default {
       tokenAmount: 0,
       toAmount: 0,
       signature: '',
+      toData: '0x',
+      toAddressData: '',
       messageToSign: 'sign this'
     };
   },
@@ -219,6 +257,11 @@ export default {
     animateConnectedNotifier() {
       this.connect.showConnectedNotice();
     },
+    partialReset(){
+      this.toAddressData = '';
+      this.toData = '0x';
+      this.toAmount = 0;
+    },
     onClick() {
       this.connect.enable().then(accounts => {
         console.log(`User's address is ${accounts[0]}`);
@@ -257,6 +300,7 @@ export default {
             .once('transactionHash', hash => {
               console.log(['Hash', hash]);
               this.tokenTxHash = hash;
+              this.partialReset();
             })
             .once('receipt', res => {
               console.log(['Receipt', res]);
@@ -265,6 +309,42 @@ export default {
               console.log(['Error', err]);
             })
             .then(txhash => console.log('THEN: ', txhash));
+        });
+      });
+    },
+    sendTxData() {
+      this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
+      this.web3.eth.getGasPrice().then(gasPrice => {
+        this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
+          const rawTx = {
+            from: this.userAddress,
+            to: this.toAddressData === '' ? this.userAddress : this.toAddressData,
+            nonce,
+            value: new BigNumber(this.toAmount)
+              .times(new BigNumber(10).pow(18))
+              .toFixed(),
+            gasPrice: gasPrice,
+            data: this.toData
+          }
+          this.web3.eth
+            .estimateGas(rawTx).then(gasLimit => {
+              rawTx.gas = gasLimit;
+            this.web3.eth
+              .sendTransaction(rawTx)
+              .once('transactionHash', hash => {
+                console.log(['Hash', hash]);
+                this.tokenTxHash = hash;
+                this.partialReset();
+              })
+              .once('receipt', res => {
+                console.log(['Receipt', res]);
+              })
+              .on('error', err => {
+                console.log(['Error', err]);
+              })
+              .then(txhash => console.log('THEN: ', txhash));
+          })
+
         });
       });
     },
