@@ -110,7 +110,7 @@ export default class PopUpCreator {
     );
     this.popupUrl = Math.random().toString();
     this.popupWindow = window.open(
-      '',
+      this.popupUrl,
       'windowName',
       [
         `width=${width}`,
@@ -148,19 +148,10 @@ export default class PopUpCreator {
 
     const channel = new BroadcastChannel('refresh-channel');
     channel.addEventListener('message', val => {
-      if(val.data === 'google-link'){
-        document.getElementById('playStore').click();
-      } else if(val.data === 'apple-link'){
-       document.getElementById('appStore').click();
-      } else if(val.data === 'mew-link') {
-        document.getElementById('mewWeb').click();
-      } else if(val.data === 'proto-link') {
-        document.getElementById('protocol').click();
-      } else {
-          this.refreshQrcode();
-      }
-
-    });
+          if(val.data === 'refresh'){
+            this.refreshQrcode();
+          }
+        });
 
     this.popupWindowOpen = true;
     return this.popupWindow;

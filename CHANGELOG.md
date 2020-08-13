@@ -1,27 +1,19 @@
+### Release v2.1.2
+- bump minor version
+- code cleanup 
+- No functionality change since v2.1.1-RC.4.6
+
+### Release v2.1.1-RC.4.15
+- Just use 'a' tags to open links from popup
+
 ### Release v2.1.1-RC.4.14
 - Change mechanism for opening app/play store links
 - Add popup link to MEW web and MEWconnect Protocol
 
-
-### Release v2.1.1-RC.4.13
-- Fix notice to unblock popups for app/play store links 4
-
-### Release v2.1.1-RC.4.12
-- Fix notice to unblock popups for app/play store links 3
-
-### Release v2.1.1-RC.4.11
-- Fix notice to unblock popups for app/play store links 2
-
-### Release v2.1.1-RC.4.10
+### Release v2.1.1-RC.4.8 through 4.13
 - Add logs to investigate link not working
 - Fix notice to unblock popups for app/play store links
-
-### Release v2.1.1-RC.4.9
-- Add logs to investigate link not working
-- Add notice to unblock popups for app/play store links
-
-### Release v2.1.1-RC.4.8
-- Add logs to investigate link not working
+- Investigate link blockage
 
 ### Release v2.1.1-RC.4.7
 - Fix X used for closing notifications

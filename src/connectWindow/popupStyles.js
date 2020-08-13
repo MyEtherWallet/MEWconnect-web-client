@@ -297,7 +297,7 @@ const connectedNotifierCSS = elementId => {
         color: #000000; /* White text color */
         text-align: center; /* Centered text */
         position: fixed; /* Sit on top of the screen */
-        z-index: 999999999999999; /* Add a z-index if needed */
+       /* z-index: 9999999999999;  Add a z-index if needed */
         right: 30px; /* Center the snackbar */
         top: 30px; /* 30px from the bottom */
       }
@@ -579,7 +579,7 @@ const WindowInformerCSS = `
         widows: 0;
         width: auto;
         word-spacing: normal;
-        z-index: 9999999999;
+        z-index: 999999999;
         all: initial;
         all: unset;
 

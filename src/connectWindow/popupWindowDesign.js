@@ -255,21 +255,22 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
           <div class="center">
             <div class="right">
               <p class="get-text">Don't have MEW wallet app?</p>
-              <p id="popupsBlocked" class="warn-color hidden">Please disable popup blockers to open app or play store link</p>
-               <img
+              <p id="popupsBlocked" class="warn-color"></p>
+                      <a href="https://apps.apple.com/app/id1464614025" target="_blank" id="appStore">               <img
                   id="apple-link"
                   class="left-img"
                   src="${appStore}"
                   height="40"
                   width="120"
-                />
+                /></a>
 
-                <img
+                      <a href="https://play.google.com/store/apps/details?id=com.myetherwallet.mewwallet" target="_blank" id="playStore">                <img
                   id="google-link"
                   src="${playStore}"
                   height="40"
                   width="135"
-                />
+                /></a>
+
 
 
             </div>
@@ -277,8 +278,8 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
 
         </div>
         <div class="bottom">
-          Powered by <span id="proto-link" class="bottom-link">MEWconnect protocol</span> <br />
-          brought to you by <span id="mew-link" class="bottom-link">MyEtherWallet</span>
+          Powered by <a href="https://myetherwallet.github.io/MEWconnect-Protocol-Documentation/" target="_blank" id="proto-link" class="bottom-link">MEWconnect protocol</a> <br />
+          brought to you by <a href="https://www.myetherwallet.com/" target="_blank" id="mew-link" class="bottom-link">MyEtherWallet</a>
         </div>
       </div>
     </div>
@@ -286,33 +287,9 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
   const channel = new BroadcastChannel('refresh-channel');
   const refreshContainer = window.document.getElementById("refresh-container")
   const refreshButton = window.document.getElementById("refresh");
-  const appleLinkButton = window.document.getElementById("apple-link");
-  const googleLinkButton = window.document.getElementById("google-link");
-  const mewWebLink = window.document.getElementById("mew-link");
-  const protocolLink = window.document.getElementById("proto-link");
 
   refreshButton.addEventListener("click", () => {
     channel.postMessage("refresh");
-  })
-    
-  appleLinkButton.addEventListener("click", () => {
-    channel.postMessage("apple-link");
-  })
-  
-  googleLinkButton.addEventListener("click", () => {
-    channel.postMessage("google-link");
-  })
-  
-  googleLinkButton.addEventListener("click", () => {
-    channel.postMessage("google-link");
-  })
-  
-  mewWebLink.addEventListener("click", () => {
-    channel.postMessage("mew-link");
-  })
-  
-  protocolLink.addEventListener("click", () => {
-    channel.postMessage("proto-link");
   })
 
   // setTimeout(() => {
@@ -674,10 +651,6 @@ const windowInformer = spaceman => {
             </div>
           </div>
         </div>
-        <a href="https://play.google.com/store/apps/details?id=com.myetherwallet.mewwallet" target="_blank" id="playStore"></a>
-        <a href="https://apps.apple.com/app/id1464614025" target="_blank" id="appStore"></a>
-        <a href="https://www.myetherwallet.com/" target="_blank" id="mewWeb"></a>
-        <a href="https://myetherwallet.github.io/MEWconnect-Protocol-Documentation/" target="_blank" id="protocol"></a>
       </div>
 `;
 };
