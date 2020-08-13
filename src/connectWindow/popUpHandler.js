@@ -1,6 +1,6 @@
 import { notifierCSS, connectedNotifierCSS } from './popupStyles';
 import { noticeHtml, connectedNoticeHtml } from './popupHtml';
-import { spaceman } from './images/index';
+import { spaceman, closeIconBlack, closeIconWhite } from './images/index';
 
 // import debugLogger from 'debug';
 
@@ -56,6 +56,8 @@ export default class PopUpHandler {
     this.initialcheckIfIdExists();
     this.createNotice();
     this.timeoutTracker = null;
+    this.lastActiveElement = '';
+    this.connectNoticeVisible = false;
   }
 
   initialcheckIfIdExists() {
@@ -86,7 +88,7 @@ export default class PopUpHandler {
     }
 
     const element = window.document.getElementById(this.elementId);
-
+    this.lastActiveElement = element;
     if (!timeoutOverride) {
       element.className = 'show';
 
@@ -124,21 +126,25 @@ export default class PopUpHandler {
       timeoutOverride = true;
     }
     const element = window.document.getElementById(this.connectedElementId);
-
+    this.lastActiveElement = element;
     if (!timeoutOverride) {
       element.className = 'show';
 
       setTimeout(function() {
         element.className = element.className.replace('show', '');
+        this.connectNoticeVisible = true;
       }, timeoutTime);
     } else {
       element.className = 'show-in';
 
       setTimeout(function() {
         element.className = element.className.replace('show-in', 'show-out');
+        this.connectNoticeVisible = true;
       }, timeoutTime - 500);
       this.timeoutTracker = setTimeout(function() {
         element.className = element.className.replace('show-out', '');
+        this.connectNoticeVisible = false;
+        this.lastActiveElement = null;
       }, timeoutTime);
     }
   }
@@ -187,7 +193,7 @@ export default class PopUpHandler {
 
     const div = window.document.createElement('div');
     div.id = this.elementId;
-    div.innerHTML = noticeHtml(this.elementId, spaceman);
+    div.innerHTML = noticeHtml(this.elementId, spaceman, closeIconBlack);
     window.document.body.appendChild(div);
 
     const css = document.createElement('style');
@@ -208,7 +214,7 @@ export default class PopUpHandler {
     // create connected notice
     const divConn = window.document.createElement('div');
     divConn.id = this.connectedElementId;
-    divConn.innerHTML = connectedNoticeHtml(this.connectedElementId, spaceman);
+    divConn.innerHTML = connectedNoticeHtml(this.connectedElementId, spaceman, closeIconWhite);
     window.document.body.appendChild(divConn);
 
     const cssConn = document.createElement('style');

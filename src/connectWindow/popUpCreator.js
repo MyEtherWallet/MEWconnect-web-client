@@ -148,13 +148,16 @@ export default class PopUpCreator {
 
     const channel = new BroadcastChannel('refresh-channel');
     channel.addEventListener('message', val => {
-
       if(val.data === 'google-link'){
-        window.open("https://play.google.com/store/apps/details?id=com.myetherwallet.mewwallet",'_newtab' + Date.now());
+        document.getElementById('playStore').click();
       } else if(val.data === 'apple-link'){
-        window.open("https://apps.apple.com/app/id1464614025",'_newtab' + Date.now());
+       document.getElementById('appStore').click();
+      } else if(val.data === 'mew-link') {
+        document.getElementById('mewWeb').click();
+      } else if(val.data === 'proto-link') {
+        document.getElementById('protocol').click();
       } else {
-        this.refreshQrcode();
+          this.refreshQrcode();
       }
 
     });
