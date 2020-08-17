@@ -4,7 +4,6 @@ const ERRORS = {};
 const WARNING = {};
 
 export default (popUpHandler) => {
-  console.log(popUpHandler); // todo remove dev item
   return err => {
     popUpHandler.showNotice('decline');
     console.error(err);
