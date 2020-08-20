@@ -1,7 +1,7 @@
 /* eslint-disable */
 import unit from 'ethjs-unit';
 import EthCalls from '../web3Calls';
-import { toPayload } from '../jsonrpc';
+import { toError, toPayload } from '../jsonrpc';
 import EventNames from '../events';
 import { getSanitizedTx } from './utils';
 
@@ -35,8 +35,13 @@ export default async (
   getSanitizedTx(tx)
     .then(_tx => {
       eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
+        if(_response.reject){
+          debug('USER DECLINED SIGN TRANSACTION');
+          res(toError(payload.id, 'User Rejected Request', 4001));
+          return;
+        }
         debug('broadcasting', payload.method, _response);
-        res(null, _response);
+        res(null, toPayload(payload.id, _response.rawTransaction));
       });
     })
     .catch(e => {

@@ -327,16 +327,17 @@ export default class Integration extends EventEmitter {
           .signTransaction(tx)
           .then(_response => {
             this.popUpHandler.showNoticePersistentExit();
-            // if(this.checkDoubleSentTx(_response)){
-            //
-            // }
             console.log(_response); // todo remove dev item
             resolve(_response);
 
           })
           .catch(err => {
-            debugErrors('sign transaction ERROR');
             this.popUpHandler.showNoticePersistentExit();
+            if(err.reject){
+              resolve(err);
+              return;
+            }
+            debugErrors('sign transaction ERROR');
             state.wallet.errorHandler(err);
           });
       }

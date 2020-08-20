@@ -131,7 +131,7 @@ class MEWconnectWallet {
         this.mewConnect.once('reject', () => {
           debug('signTx rejected');
           this.mewConnect.removeAllListeners('signTx');
-          reject();
+          reject({reject: true});
         });
       });
     };
@@ -149,7 +149,7 @@ class MEWconnectWallet {
         this.mewConnect.once('reject', () => {
           debug('signMessage rejected');
           this.mewConnect.removeAllListeners('signMessage');
-          reject();
+          reject({reject: true});
         });
       });
     };
