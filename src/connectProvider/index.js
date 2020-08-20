@@ -327,18 +327,21 @@ export default class Integration extends EventEmitter {
           .signTransaction(tx)
           .then(_response => {
             this.popUpHandler.showNoticePersistentExit();
-            console.log(_response); // todo remove dev item
             resolve(_response);
-
           })
           .catch(err => {
             this.popUpHandler.showNoticePersistentExit();
-            if(err.reject){
-              resolve(err);
-              return;
+
+            if (err.reject) {
+              this.popUpHandler.noShow();
+              setTimeout(() => {
+                this.popUpHandler.showNotice('decline');
+              }, 250)
+            } else {
+              debugErrors('sign transaction ERROR');
+              state.wallet.errorHandler(err);
             }
-            debugErrors('sign transaction ERROR');
-            state.wallet.errorHandler(err);
+            resolve(err);
           });
       }
     });
@@ -358,9 +361,17 @@ export default class Integration extends EventEmitter {
           .then(result => {
             resolve(result);
           })
-          .catch(() => {
-            debugErrors('sign message ERROR');
-            this.popUpHandler.showNoticePersistentExit();
+          .catch((err) => {
+            if (err.reject) {
+              this.popUpHandler.noShow();
+              setTimeout(() => {
+                this.popUpHandler.showNotice(messageConstants.declineMessage);
+              }, 250)
+            } else {
+              debugErrors('sign message ERROR');
+              state.wallet.errorHandler(err);
+            }
+            resolve(err);
           });
       }
     });

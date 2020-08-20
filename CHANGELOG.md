@@ -1,3 +1,7 @@
+### Release v2.1.3-beta.2
+- Fix notifications for rejected request
+- Moved message creation function
+
 ### Release v2.1.3-beta.1
 - Additional debugging logs under 'MEWconnectWeb3' namespace
 - Additional error logs under 'MEWconnectError' namespace

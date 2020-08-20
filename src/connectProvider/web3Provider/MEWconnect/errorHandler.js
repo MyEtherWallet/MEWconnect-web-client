@@ -5,8 +5,13 @@ const WARNING = {};
 
 export default (popUpHandler) => {
   return err => {
-    popUpHandler.showNotice('decline');
-    console.error(err);
+    if(err.reject){
+      popUpHandler.showNotice('decline');
+    } else {
+      popUpHandler.showNotice('error');
+      console.error(err);
+    }
+
   }
   // const errorValues = Object.values(ERRORS);
   // const warningValues = Object.values(WARNING);
