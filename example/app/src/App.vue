@@ -226,8 +226,8 @@ export default {
 
 
     // Initialize the provider based client
-    this.connect = new mewConnect.Provider({windowClosedError: true/*, rpcUrl: 'wss://mainnet.infura.io/ws/v3/859569f6decc4446a5da1bb680e7e9cf', chainId: 1*/});
-
+    // this.connect = new mewConnect.Provider({windowClosedError: true, rpcUrl: 'ws://127.0.0.1:8545', /*chainId: 1*/});
+    this.connect = new mewConnect.Provider({windowClosedError: true});
     this.connect.on('popupWindowClosed', () =>{
       console.log(`popup window closed EVENT`);
     })

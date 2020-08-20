@@ -1,3 +1,9 @@
+### Release v2.1.3
+- Additional debugging logs under 'MEWconnectWeb3' namespace
+- Additional error logs under 'MEWconnectError' namespace
+- Additional checks for url
+- code cleanup 
+
 ### Release v2.1.2
 - bump minor version
 - code cleanup 
