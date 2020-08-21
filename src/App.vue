@@ -1,8 +1,6 @@
 <template>
   <div id="app">
     <h2>MEWconnect client library examples</h2>
-        <!-- route outlet -->
-    <!-- component matched by the route will render here -->
     <router-view></router-view>
   </div>
 </template>
@@ -19,9 +17,6 @@ export default {
   },
   mounted() {
     this.$router.push('home')
-  },
-  methods: {
-
   }
 };
 </script>
