@@ -1,7 +1,4 @@
-/* eslint-disable*/
 import MEWconnect from '../../../index';
-// import networks from '../networks/index';
-// import uuid from 'uuid/v4';
 import { Transaction } from 'ethereumjs-tx';
 import WalletInterface from '../WalletInterface';
 import { MEW_CONNECT as mewConnectType } from '../bip44/index';

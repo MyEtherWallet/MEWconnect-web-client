@@ -1,3 +1,4 @@
+/* eslint-disable */
 import EthCalls from '../web3Calls';
 import EventNames from '../events';
 import { toPayload, toError } from '../jsonrpc';
@@ -49,7 +50,7 @@ export default async (
       eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
         if(_response.reject){
           debug('USER DECLINED SIGN TRANSACTION & SEND');
-          res(null, toError(payload.id, 'User Rejected Request', 4001));
+          res(toError(payload.id, 'User Rejected Request', 4001));
           return;
         }
         debug('broadcasting', payload.method, _response.rawTransaction)

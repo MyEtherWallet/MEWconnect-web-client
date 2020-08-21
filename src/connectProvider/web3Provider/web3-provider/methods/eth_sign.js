@@ -10,7 +10,7 @@ export default async ({ payload, eventHub }, res, next) => {
   eventHub.emit(EventNames.SHOW_MSG_CONFIRM_MODAL, msg, _response => {
     if(_response.reject){
       debug('USER DECLINED SIGN MESSAGE');
-      res(null, toError(payload.id, 'User Rejected Request', 4001));
+      res(toError(payload.id, 'User Rejected Request', 4001));
       return;
     }
     _response = misc.sanitizeHex(_response.toString('hex'));

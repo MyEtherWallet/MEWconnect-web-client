@@ -201,7 +201,6 @@ export default class Integration extends EventEmitter {
           );
         }
       }
-      console.log(hostUrl); // todo remove dev item
       const parsedUrl = `${hostUrl.protocol}//${
         hostUrl.hostname ? hostUrl.hostname : hostUrl.host
       }${hostUrl.port ? ':' + hostUrl.port : ''}${
@@ -295,23 +294,6 @@ export default class Integration extends EventEmitter {
     }
   }
 
-  checkDoubleSentTx(parsed) {
-    console.log(parsed); // todo remove dev item
-    const now = Date.now();
-    const entry = recentDataRecord.find(
-      entry => entry.tx.hash === parsed.tx.hash
-    );
-    console.log('-s-s-s-s-s-s-s-s-s-'); // todo remove dev item
-    console.log(entry); // todo remove dev item
-    console.log(now); // todo remove dev item
-    if (entry) {
-      console.log('-s-s-s-s-s-s-s-s-s-'); // todo remove dev item
-      console.log(entry); // todo remove dev item
-      console.log(now); // todo remove dev item
-    } else {
-      recentDataRecord.push({ parsed: parsed, timestamp: Date.now() });
-    }
-  }
 
   setupListeners() {
     eventHub.on(EventNames.SHOW_TX_CONFIRM_MODAL, (tx, resolve) => {

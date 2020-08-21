@@ -1,3 +1,10 @@
+### Release v2.1.3
+- Fix user reject action
+- Add user reject action to personal_sign (present on eth_sign, eth_sendTransaction, eth_signTransaction)
+
+### Release v2.1.3-beta.3
+- User reject action checks, testing, investigation
+
 ### Release v2.1.3-beta.2
 - Fix notifications for rejected request
 - Moved message creation function
