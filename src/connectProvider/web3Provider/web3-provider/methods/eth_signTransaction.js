@@ -1,10 +1,13 @@
 /* eslint-disable */
 import unit from 'ethjs-unit';
-
 import EthCalls from '../web3Calls';
-import { toPayload } from '../jsonrpc';
+import { toError, toPayload } from '../jsonrpc';
 import EventNames from '../events';
 import { getSanitizedTx } from './utils';
+
+import debugLogger from 'debug';
+const debug = debugLogger('MEWconnectWeb3');
+const debugErrors = debugLogger('MEWconnectError');
 
 export default async (
   { payload, store, requestManager, eventHub },
@@ -22,24 +25,27 @@ export default async (
         store.state.wallet.getAddressString()
       )
     : tx.nonce;
-  tx.gas = !tx.gas || tx.gas <= 0 ? await ethCalls.estimateGas(localTx) : tx.gas;
+  tx.gas =
+    !tx.gas || tx.gas <= 0 ? await ethCalls.estimateGas(localTx) : tx.gas;
   tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
-  tx.gasPrice = !tx.gasPrice || tx.gasPrice <= 0
-    ? await store.state.web3.eth.getGasPrice()
-    : tx.gasPrice;
+  tx.gasPrice =
+    !tx.gasPrice || tx.gasPrice <= 0
+      ? await store.state.web3.eth.getGasPrice()
+      : tx.gasPrice;
   getSanitizedTx(tx)
     .then(_tx => {
-      if (_tx.hasOwnProperty('generateOnly')) {
-        eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
-          res(null, toPayload(payload.id, _response));
-        });
-      } else {
-        eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
-          res(null, _response);
-        });
-      }
+      eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
+        if(_response.reject){
+          debug('USER DECLINED SIGN TRANSACTION');
+          res(toError(payload.id, 'User Rejected Request', 4001));
+          return;
+        }
+        debug('broadcasting', payload.method, _response);
+        res(null, toPayload(payload.id, _response.rawTransaction));
+      });
     })
     .catch(e => {
+      debugErrors('Error: eth_signTransaction', e);
       res(e);
     });
 };

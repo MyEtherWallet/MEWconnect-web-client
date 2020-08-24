@@ -1,3 +1,21 @@
+### Release v2.1.3
+- Fix user reject action
+- Add user reject action to personal_sign (present on eth_sign, eth_sendTransaction, eth_signTransaction)
+
+### Release v2.1.3-beta.3
+- User reject action checks, testing, investigation
+
+### Release v2.1.3-beta.2
+- Fix notifications for rejected request
+- Moved message creation function
+
+### Release v2.1.3-beta.1
+- Additional debugging logs under 'MEWconnectWeb3' namespace
+- Additional error logs under 'MEWconnectError' namespace
+- Additional checks for url
+- Fix user rejected request to pass through provider
+- code cleanup 
+
 ### Release v2.1.2
 - bump minor version
 - code cleanup 
