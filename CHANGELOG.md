@@ -1,3 +1,6 @@
+### Release v2.1.4
+- add missing personal_ecRecover method
+
 ### Release v2.1.3
 - Fix user reject action
 - Add user reject action to personal_sign (present on eth_sign, eth_sendTransaction, eth_signTransaction)
