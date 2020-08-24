@@ -64,3 +64,4 @@ typings/
 /browser/package.json
 /example/node_modules/
 /tests/fsdfds/
+/test/ganache.sh

@@ -7,6 +7,7 @@ import {
   ethSignTransaction,
   ethSign,
   personalSign,
+  ecRecover,
   ethAccounts,
   ethCoinbase,
   ethGetTransactionCount,
@@ -72,6 +73,7 @@ class WSProvider {
       middleware.use(ethSignTransaction);
       middleware.use(ethSign);
       middleware.use(personalSign);
+      middleware.use(ecRecover);
       middleware.use(ethAccounts);
       middleware.use(ethGetTransactionCount);
       middleware.use(ethCoinbase);

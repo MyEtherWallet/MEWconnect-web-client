@@ -3,13 +3,14 @@
     <h2>MEW connect client library example</h2>
     <button @click="onClick">CONNECT</button>
     <h3>{{ userAddress }}</h3>
+    <button @click="ecrecover">ecrecover</button>
 
     <ul v-show="userAddress !== ''">
       <li>
         <button @click="disconnect">Disconnect</button>
       </li>
       <li>
-        <hr/>
+        <hr />
         <h3>Send</h3>
         <label for="toAmount">
           to amount
@@ -25,10 +26,10 @@
         {{ txHash }}
       </li>
       <li>
-        <hr/>
+        <hr />
         <h3>Send Detailed</h3>
         <label for="toGasPriceDetailed">
-         Gas Price
+          Gas Price
           <input
             id="toGasPriceDetailed"
             v-model="toGasPriceDetailed"
@@ -65,7 +66,7 @@
         </label>
         <br />
         <label for="toNonceDetailed">
-         Nonce
+          Nonce
           <input
             id="toNonceDetailed"
             v-model="toNonceDetailed"
@@ -87,7 +88,7 @@
         {{ signedTx }}
       </li>
       <li>
-        <hr/>
+        <hr />
         <h3>Send Token</h3>
         <label for="tokenAddress">
           token address
@@ -117,7 +118,7 @@
         <button v-show="tokenAddress !== ''" @click="approveToken(tokenAmount)">
           approve
         </button>
-        <br/>
+        <br />
         <button v-show="tokenAddress !== ''" @click="sendToken(tokenAmount)">
           send
         </button>
@@ -125,41 +126,75 @@
         {{ tokenTxHash }}
       </li>
       <li>
-        <hr/>
+        <hr />
         <button @click="getAccount">get account</button>
         <h3>{{ account }}</h3>
       </li>
       <li>
-        <hr/>
+        <hr />
         <input v-model="messageToSign" />
-        <button @click="signMessage">sign message</button><br/>
-        <textarea v-if="signature !== ''" v-model="signature" disabled style="margin: 0px; height: 169px; width: 454px;"></textarea>
-        <br/>
+        <button @click="signMessage">sign message</button><br />
+        <textarea
+          v-if="signature !== ''"
+          v-model="signature"
+          disabled
+          style="margin: 0px; height: 169px; width: 454px;"
+        ></textarea>
+        <br />
       </li>
       <li>
-        <hr/>
+        <hr />
         <button @click="getBalance">balance</button>
         <h3>{{ balance }}</h3>
       </li>
       <li>
-        <hr/>
+        <hr />
+        <input v-model="personalMessageToSign" />
+        <button @click="personalSign">personal sign</button>
+                <h3>{{ personalSignedResult }}</h3>
+      </li>
+      <li>
+        <hr />
+        <label for="ecRecoverSig">
+          Signature
+          <input
+            id="ecRecoverSig"
+            v-model="signatureToCheck"
+            placeholder="amount"
+          /> </label
+        ><br />
+        <label for="ecMessage">
+          Message
+          <input
+            id="ecMessage"
+            v-model="signatureFromMessage"
+            placeholder="amount"
+          /> </label
+        ><br />
+        <h6>if left empty this 1234 and checks</h6>
+
+        <button @click="ecrecover">ecrecover</button>
+        <h3>{{ ecRecoverAddress }}</h3>
+      </li>
+      <li>
+        <hr />
         <button @click="getCoinBase">getCoinBase</button>
         <h3>{{ coinBase }}</h3>
       </li>
       <li>
-        <hr/>
+        <hr />
         <button @click="makeCall">makeCall</button>
         <h3>{{ callRes }}</h3>
       </li>
       <li>
-        <hr/>
+        <hr />
         <button @click="getChainId">getChainId</button>
         <h3>{{ chainId }}</h3>
       </li>
       <li>
-        <hr/>
+        <hr />
         <button @click="createSubscription">createSubscription</button>
-        <hr/>
+        <hr />
         <button @click="removeSubscription">removeSubscription</button>
       </li>
     </ul>
@@ -199,8 +234,7 @@ import PopUpCreator from '../../../src/connectWindow/popUpCreator';
 import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
 import messageConstants from '../../../src/messageConstants';
-import MEWconnectWallet from '../../../src/connectProvider/web3Provider/MEWconnect';
-import MewWalletConnector from './create'
+
 export default {
   name: 'app',
   data() {
@@ -223,29 +257,32 @@ export default {
       toAmount: 0,
       signature: '',
       messageToSign: 'sign this',
+      personalMessageToSign: '1234',
       toGasPriceDetailed: 0,
       toGasLimitDetailed: 0,
       toDataDetailed: '',
       toAmountDetailed: 0,
       toNonceDetailed: '',
-      signedTx: ''
+      signedTx: '',
+      signatureToCheck: '',
+      signatureFromMessage: '',
+      ecRecoverAddress: '',
+      personalSignedResult: ''
     };
   },
   mounted() {
-
     // const connector = new MewWalletConnector().activate()
     // .then(console.log)
 
-
     // Initialize the provider based client
     // this.connect = new mewConnect.Provider({windowClosedError: true, rpcUrl: 'ws://127.0.0.1:8545', /*chainId: 1*/});
-    this.connect = new mewConnect.Provider({windowClosedError: true});
+    this.connect = new mewConnect.Provider({windowClosedError: true, rpcUrl: 'wss://mainnet.infura.io/ws/v3/859569f6decc4446a5da1bb680e7e9cf'});
     this.connect.on('popupWindowClosed', () =>{
       console.log(`popup window closed EVENT`);
-    })
+    });
     // this.connect = new mewConnect.Provider();
     // Create the MEWconnect web3 provider
-    this.ethereum = this.connect.makeWeb3Provider(1)
+    this.ethereum = this.connect.makeWeb3Provider(1);
     // Create a web3 instance using the MEWconnect web3 provider
     this.web3 = new Web3(this.ethereum);
     // See the 'onClick' method below for starting the connection sequence
@@ -262,8 +299,6 @@ export default {
     this.connect.on('disconnected', () => {
       console.log(`accountsChanged User's address is DISCONNECTED`);
     });
-
-
 
     this.altPopup = new PopUpCreator();
   },
@@ -492,30 +527,30 @@ export default {
     approveToken(amount, decimals = 18) {
       const jsonInterface = [
         {
-          "constant": false,
-          "inputs": [
+          constant: false,
+          inputs: [
             {
-              "internalType": "address",
-              "name": "usr",
-              "type": "address"
+              internalType: 'address',
+              name: 'usr',
+              type: 'address'
             },
             {
-              "internalType": "uint256",
-              "name": "wad",
-              "type": "uint256"
+              internalType: 'uint256',
+              name: 'wad',
+              type: 'uint256'
             }
           ],
-          "name": "approve",
-          "outputs": [
+          name: 'approve',
+          outputs: [
             {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
+              internalType: 'bool',
+              name: '',
+              type: 'bool'
             }
           ],
-          "payable": false,
-          "stateMutability": "nonpayable",
-          "type": "function"
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function'
         }
       ];
       const contract = new this.web3.eth.Contract(jsonInterface);
@@ -581,6 +616,47 @@ export default {
     getChainId() {
       this.web3.eth.getChainId().then(res => (this.chainId = res));
     },
+    personalSign(){
+      this.web3.eth.personal.sign(this.personalMessageToSign, this.userAddress, '', (
+        err,
+        result
+      ) => {
+        if (!err) {
+          this.personalSignedResult = result;
+          // console.log('result:', result); // todo remove dev item
+        }
+        console.log(err);
+      });
+    },
+    async ecrecover() {
+      try {
+        const msg = '1234';
+        if(this.signatureToCheck === '' && this.signatureFromMessage === ''){
+          this.signatureFromMessage = '1234'
+          this.signatureToCheck = await this.web3.eth.personal.sign(this.signatureFromMessage, this.userAddress);
+        }
+        const res = this.web3.eth.personal.ecRecover(this.signatureFromMessage, this.signatureToCheck, (err, address) => {
+          if (!err){
+            this.ecRecoverAddress = address;
+            console.log(
+              'ecRecoverResult:',
+              address.toLowerCase() === this.userAddress.toLowerCase()
+            );
+            // todo remove dev item
+          }
+          else console.error(err);
+        })
+          .then(console.log)
+          .catch(console.error)
+        console.log('res', res); // todo remove dev item
+
+
+      } catch (e) {
+        console.error(e)
+      }
+
+
+    },
     createSubscription() {
       this.subscription = this.web3.eth
         .subscribe('newBlockHeaders', function(error, result) {
@@ -601,9 +677,8 @@ export default {
         });
     },
     removeSubscription() {
-      this.subscription.unsubscribe(function(error, success){
-        if(success)
-          console.log('Successfully unsubscribed!');
+      this.subscription.unsubscribe(function(error, success) {
+        if (success) console.log('Successfully unsubscribed!');
       });
     }
   }
