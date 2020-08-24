@@ -112,25 +112,6 @@ const validateHexString = str => {
   return utils.isHex(str);
 };
 
-// const reorderNetworks = () => {
-//   const oldObject = Object.assign({}, nodeList);
-//   delete oldObject['ETH'];
-//   delete oldObject['RIN'];
-//   delete oldObject['ROP'];
-//   const newObject = Object.assign(
-//     {},
-//     {
-//       ETH: nodeList['ETH'],
-//       ROP: nodeList['ROP'],
-//       RIN: nodeList['RIN'],
-//       ...oldObject
-//     }
-//   );
-//   for (const net in newObject) {
-//     if (newObject[net].length === 0) delete newObject[net];
-//   }
-//   return newObject;
-// };
 
 const solidityType = inputType => {
   if (!inputType) inputType = '';
@@ -210,20 +191,6 @@ const isContractArgValid = (value, solidityType) => {
   return false;
 };
 
-// const stripTags = content => {
-//   const insertToDom = new DOMParser().parseFromString(content, 'text/html');
-//   insertToDom.body.textContent.replace(/(<([^>]+)>)/gi, '') || '';
-//   const string = xss(insertToDom.body.textContent, {
-//     whitelist: [],
-//     stripIgnoreTag: true,
-//     stripIgnoreTagBody: '*'
-//   });
-//   return string;
-// };
-//
-// const isMewCx = () => {
-//   return BUILD_TYPE === MEW_CX;
-// };
 
 export default {
   isJson,
@@ -231,12 +198,10 @@ export default {
   padLeftEven,
   formatDate,
   isValidENSorEtherAddress,
-  // isValidENSAddress,
   isValidETHAddress,
   sanitizeHex,
   validateHexString,
   scrollToTop,
-  // reorderNetworks,
   isDarklisted,
   solidityType,
   isInt,
@@ -244,7 +209,5 @@ export default {
   getService,
   stringToArray,
   isContractArgValid,
-  // stripTags,
-  // isMewCx,
   toBuffer
 };

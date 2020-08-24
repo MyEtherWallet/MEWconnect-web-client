@@ -1,9 +1,13 @@
+/* eslint-disable */
 import EthCalls from '../web3Calls';
 import EventNames from '../events';
-import { toPayload } from '../jsonrpc';
+import { toPayload, toError } from '../jsonrpc';
 import { getSanitizedTx } from './utils';
 import BigNumber from 'bignumber.js';
 import Misc from '../../helpers/misc';
+import debugLogger from 'debug';
+const debug = debugLogger('MEWconnectWeb3');
+const debugErrors = debugLogger('MEWconnectError');
 
 const setEvents = (promiObj, tx, eventHub) => {
   promiObj
@@ -44,7 +48,12 @@ export default async (
   getSanitizedTx(tx)
     .then(_tx => {
       eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
-
+        if(_response.reject){
+          debug('USER DECLINED SIGN TRANSACTION & SEND');
+          res(toError(payload.id, 'User Rejected Request', 4001));
+          return;
+        }
+        debug('broadcasting', payload.method, _response.rawTransaction)
         const _promiObj = store.state.web3.eth.sendSignedTransaction(
           _response.rawTransaction
         );
@@ -63,6 +72,7 @@ export default async (
             res(null, toPayload(payload.id, hash));
           })
           .on('error', err => {
+            debugErrors('Error: eth_sendTransaction', err);
             res(err);
           });
         setEvents(_promiObj, _tx, eventHub);

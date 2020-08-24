@@ -7,7 +7,8 @@ const messages = {
   failed: 'failed',
   signMessage: 'signMessage',
   error: 'error',
-  notConnected: 'notConnected'
+  notConnected: 'notConnected',
+  declineMessage: 'declineSignMessage'
 };
 
 export default messages;

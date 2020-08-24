@@ -1,51 +1,12 @@
 import { notifierCSS, connectedNotifierCSS } from './popupStyles';
 import { noticeHtml, connectedNoticeHtml } from './popupHtml';
 import { spaceman, closeIconBlack, closeIconWhite } from './images/index';
-
+import { getMessage } from './messageCreator';
 // import debugLogger from 'debug';
 
 // TODO add debug logging
 // const debug = debugLogger('MEWconnect:popup-handler');
 
-function getMessage(text, extra) {
-  const messages = {
-    decline: 'Transmission declined in MEW wallet app',
-    approveTx: 'Check your phone to approve transaction ',
-    disconnect: 'Disconnected from MEW wallet',
-    complete: 'Transaction completed',
-    sent: 'Transaction send',
-    failed: 'Transaction failed',
-    signMessage: 'Check your phone to sign the message',
-    notConnected:
-      'Phone not connected.  Please connect your phone and try again to sign the transaction',
-    defaultMessage: 'Check your phone to continue'
-  };
-
-  if (extra) {
-    switch (extra.type) {
-      case 'sent':
-        return `${
-          messages[extra.type]
-        } <br/><a class="mew-connect-notifier-created-tx-link" href="${extra.explorerPath.replace(
-          '[[txHash]]',
-          extra.hash
-        )}" target="_blank">View details</a>`;
-      case 'failed':
-        return `${
-          messages[extra.type]
-        } <br/><a class="mew-connect-notifier-created-tx-link" href="${extra.explorerPath.replace(
-          '[[txHash]]',
-          extra.hash
-        )}" target="_blank">View details</a>`;
-    }
-  }
-
-  if (!text) {
-    return messages.defaultMessage;
-  }
-
-  return messages[text];
-}
 
 export default class PopUpHandler {
   constructor() {
@@ -188,6 +149,14 @@ export default class PopUpHandler {
     }
   }
 
+  noShow() {
+    if (this.timeoutTracker) {
+      clearTimeout(this.timeoutTracker);
+    }
+    const element = window.document.getElementById(this.elementId);
+    element.className = '';
+  }
+
   createNotice() {
     this.index++;
 
@@ -214,7 +183,11 @@ export default class PopUpHandler {
     // create connected notice
     const divConn = window.document.createElement('div');
     divConn.id = this.connectedElementId;
-    divConn.innerHTML = connectedNoticeHtml(this.connectedElementId, spaceman, closeIconWhite);
+    divConn.innerHTML = connectedNoticeHtml(
+      this.connectedElementId,
+      spaceman,
+      closeIconWhite
+    );
     window.document.body.appendChild(divConn);
 
     const cssConn = document.createElement('style');

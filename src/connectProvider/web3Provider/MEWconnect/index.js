@@ -1,7 +1,4 @@
-/* eslint-disable*/
 import MEWconnect from '../../../index';
-// import networks from '../networks/index';
-// import uuid from 'uuid/v4';
 import { Transaction } from 'ethereumjs-tx';
 import WalletInterface from '../WalletInterface';
 import { MEW_CONNECT as mewConnectType } from '../bip44/index';
@@ -131,7 +128,7 @@ class MEWconnectWallet {
         this.mewConnect.once('reject', () => {
           debug('signTx rejected');
           this.mewConnect.removeAllListeners('signTx');
-          reject();
+          reject({reject: true});
         });
       });
     };
@@ -149,7 +146,7 @@ class MEWconnectWallet {
         this.mewConnect.once('reject', () => {
           debug('signMessage rejected');
           this.mewConnect.removeAllListeners('signMessage');
-          reject();
+          reject({reject: true});
         });
       });
     };

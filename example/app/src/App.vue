@@ -35,6 +35,7 @@
             placeholder="amount"
           />
         </label>
+        <br />
         <label for="toGasLimitDetailed">
           Gas Limit
 
@@ -44,7 +45,7 @@
             placeholder="amount"
           />
         </label>
-
+        <br />
         <label for="toDataDetailed">
           Data
           <input
@@ -53,6 +54,7 @@
             placeholder="amount"
           />
         </label>
+        <br />
         <label for="toAmountDetailed">
           Amount
           <input
@@ -61,6 +63,7 @@
             placeholder="amount"
           />
         </label>
+        <br />
         <label for="toNonceDetailed">
          Nonce
           <input
@@ -74,6 +77,14 @@
         <h6>Sends to the connected wallet address</h6>
         <h3>Tx Hash:</h3>
         {{ txHash }}
+      </li>
+      <li>
+        <hr/>
+        <h3>Sign Tx</h3>
+        <button v-show="userAddress !== ''" @click="signTx">send</button>
+        <h6>Sends to the connected wallet address</h6>
+        <h3>Tx Hash:</h3>
+        {{ signedTx }}
       </li>
       <li>
         <hr/>
@@ -216,7 +227,8 @@ export default {
       toGasLimitDetailed: 0,
       toDataDetailed: '',
       toAmountDetailed: 0,
-      toNonceDetailed: ''
+      toNonceDetailed: '',
+      signedTx: ''
     };
   },
   mounted() {
@@ -226,8 +238,8 @@ export default {
 
 
     // Initialize the provider based client
-    this.connect = new mewConnect.Provider({windowClosedError: true/*, rpcUrl: 'wss://mainnet.infura.io/ws/v3/859569f6decc4446a5da1bb680e7e9cf', chainId: 1*/});
-
+    // this.connect = new mewConnect.Provider({windowClosedError: true, rpcUrl: 'ws://127.0.0.1:8545', /*chainId: 1*/});
+    this.connect = new mewConnect.Provider({windowClosedError: true});
     this.connect.on('popupWindowClosed', () =>{
       console.log(`popup window closed EVENT`);
     })
@@ -343,7 +355,8 @@ export default {
             .on('error', err => {
               console.log(['Error', err]);
             })
-            .then(txhash => console.log('THEN: ', txhash));
+            .then(txhash => console.log('THEN: ', txhash))
+          .catch(err => console.error(err));
         });
       });
     },
@@ -371,6 +384,27 @@ export default {
           console.log(['Error', err]);
         })
         .then(txhash => console.log('THEN: ', txhash));
+    },
+    signTx() {
+      this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
+      this.web3.eth.getGasPrice().then(gasPrice => {
+        this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
+          this.web3.eth
+            .signTransaction({
+              from: this.userAddress,
+              to: this.userAddress,
+              nonce,
+              value: 0,
+              gasPrice: gasPrice,
+              gas: 21000
+            })
+            .then(txhash => {
+              console.log('THEN: ', txhash);
+              this.signedTx = txhash;
+            })
+            .catch(err => console.error(err));
+        });
+      });
     },
     signMessage() {
       this.web3.eth

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import PopUpHandler from '../connectWindow/popUpHandler';
 import Initiator from '../connectClient/MewConnectInitiator';
 import Web3 from 'web3';
@@ -9,18 +10,19 @@ import EventEmitter from 'events';
 import EventNames from './web3Provider/web3-provider/events';
 import { Transaction } from 'ethereumjs-tx';
 import messageConstants from '../messageConstants';
-
 // import parseTokensData from './web3Provider/helpers/parseTokensData';
 import debugLogger from 'debug';
 import PopUpCreator from '../connectWindow/popUpCreator';
 
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
+const debugErrors = debugLogger('MEWconnectError');
 
 let state = {
   wallet: null
 };
 const eventHub = new EventEmitter();
 let popUpCreator = {};
+const recentDataRecord = [];
 export default class Integration extends EventEmitter {
   constructor(options = {}) {
     super();
@@ -39,7 +41,14 @@ export default class Integration extends EventEmitter {
     this.initiator = new Initiator();
     this.popUpHandler = new PopUpHandler();
     this.connectionState = false;
-    this.chainIdMapping = Object.keys(Networks).reduce(
+    this.chainIdMapping = this.createChainMapping();
+    this.recent;
+    this.returnPromise = null;
+    popUpCreator = new PopUpCreator();
+  }
+
+  createChainMapping() {
+    return Object.keys(Networks).reduce(
       (acc, curr) => {
         if (Networks[curr].length === 0) return acc;
         acc.push({
@@ -54,8 +63,6 @@ export default class Integration extends EventEmitter {
       },
       [{ name: 'mainnet', chainId: 1, key: 'ETH' }]
     );
-    this.returnPromise = null;
-    popUpCreator = new PopUpCreator();
   }
 
   showNotifierDemo(details) {
@@ -194,10 +201,11 @@ export default class Integration extends EventEmitter {
           );
         }
       }
-
-      const parsedUrl = `${hostUrl.protocol}//${hostUrl.host}${
-        defaultNetwork.port ? ':' + defaultNetwork.port : ''
-      }${hostUrl.pathname}`;
+      const parsedUrl = `${hostUrl.protocol}//${
+        hostUrl.hostname ? hostUrl.hostname : hostUrl.host
+      }${hostUrl.port ? ':' + hostUrl.port : ''}${
+        hostUrl.pathname ? hostUrl.pathname : ''
+      }`;
       state.enable = this.enable.bind(this);
       const web3Provider = new MEWProvider(
         parsedUrl,
@@ -220,6 +228,7 @@ export default class Integration extends EventEmitter {
       web3Provider.name = 'MewConnect';
       return web3Provider;
     } catch (e) {
+      debugErrors('makeWeb3Provider ERROR');
       if (chainError) {
         throw e;
       } else {
@@ -272,6 +281,7 @@ export default class Integration extends EventEmitter {
       console.warn('No connected wallet found');
       return true;
     } catch (e) {
+      debugErrors('disconnect ERROR');
       // eslint-disable-next-line
       console.error(e);
       return false;
@@ -283,6 +293,7 @@ export default class Integration extends EventEmitter {
       return state.wallet.signTransaction(tx);
     }
   }
+
 
   setupListeners() {
     eventHub.on(EventNames.SHOW_TX_CONFIRM_MODAL, (tx, resolve) => {
@@ -302,7 +313,17 @@ export default class Integration extends EventEmitter {
           })
           .catch(err => {
             this.popUpHandler.showNoticePersistentExit();
-            state.wallet.errorHandler(err);
+
+            if (err.reject) {
+              this.popUpHandler.noShow();
+              setTimeout(() => {
+                this.popUpHandler.showNotice('decline');
+              }, 250)
+            } else {
+              debugErrors('sign transaction ERROR');
+              state.wallet.errorHandler(err);
+            }
+            resolve(err);
           });
       }
     });
@@ -322,8 +343,17 @@ export default class Integration extends EventEmitter {
           .then(result => {
             resolve(result);
           })
-          .catch(() => {
-            this.popUpHandler.showNoticePersistentExit();
+          .catch((err) => {
+            if (err.reject) {
+              this.popUpHandler.noShow();
+              setTimeout(() => {
+                this.popUpHandler.showNotice(messageConstants.declineMessage);
+              }, 250)
+            } else {
+              debugErrors('sign message ERROR');
+              state.wallet.errorHandler(err);
+            }
+            resolve(err);
           });
       }
     });
@@ -364,7 +394,8 @@ export default class Integration extends EventEmitter {
       this.lastHash = null;
       this.popUpHandler.showNotice(messageConstants.complete);
     });
-    eventHub.on('Error', () => {
+    eventHub.on('Error', e => {
+      debugErrors('SendTx:Error ERROR');
       if (this.lastHash !== null) {
         this.popUpHandler.showNotice(
           {
