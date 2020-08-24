@@ -322,8 +322,9 @@ export default class Integration extends EventEmitter {
           .then(result => {
             resolve(result);
           })
-          .catch(() => {
+          .catch(err => {
             this.popUpHandler.showNoticePersistentExit();
+            state.wallet.errorHandler(err);
           });
       }
     });

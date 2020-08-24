@@ -9,11 +9,13 @@ import netVersion from './net_version';
 import ethGetBlockByNumber from './eth_getBlockByNumber';
 import ethGetBlockNumber from './eth_blockNumber';
 import personalSign from './personal_sign'
+import ecRecover from './personal_ecRecover'
 
 export {
   ethSendTransaction,
   ethSign,
   personalSign,
+  ecRecover,
   ethAccounts,
   ethCoinbase,
   ethSignTransaction,

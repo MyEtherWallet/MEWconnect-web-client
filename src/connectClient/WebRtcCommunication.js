@@ -361,6 +361,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   sendRtcMessage(type, msg, id) {
+    debug(msg);
     debug(`[SEND RTC MESSAGE] type:  ${type},  message:  ${msg}, id: ${id}`);
     this.rtcSend(JSON.stringify({ type, data: msg, id }));
   }

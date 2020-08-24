@@ -9,7 +9,7 @@ import { spaceman, closeIconBlack, closeIconWhite } from './images/index';
 
 function getMessage(text, extra) {
   const messages = {
-    decline: 'Transmission declined in MEW wallet app',
+    decline: 'Declined in MEW wallet app',
     approveTx: 'Check your phone to approve transaction ',
     disconnect: 'Disconnected from MEW wallet',
     complete: 'Transaction completed',
