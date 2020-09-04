@@ -579,7 +579,7 @@ export default {
         this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
           this.web3.eth
             .sendTransaction({
-              from: this.userAddress,
+              // from: this.userAddress,
               to: this.tokenAddress,
               nonce,
               value: 0,

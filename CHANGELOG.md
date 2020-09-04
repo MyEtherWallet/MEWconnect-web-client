@@ -1,3 +1,7 @@
+### Release v2.1.5-beta.1
+- add mechanism to intercept and transform requests and responses before transmission to mobile
+- add check for from value in sendTx message and add from value if missing
+
 ### Release v2.1.4
 - add missing personal_ecRecover method
 - Fix flipped parameters for persona_sign
