@@ -7,7 +7,6 @@ import { isBrowser } from 'browser-or-node';
 
 import uuid from 'uuid/v4';
 import MewConnectCommon from './MewConnectCommon';
-import Interceptor from './interceptor';
 
 const debug = debugLogger('MEWconnect:webRTC-communication');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
@@ -17,7 +16,6 @@ const logger = createLogger('WebRtcCommunication');
 export default class WebRtcCommunication extends MewConnectCommon {
   constructor(mewCrypto) {
     super();
-    this.Interceptor = new Interceptor();
     this.Peer = SimplePeer;
     this.mewCrypto = mewCrypto;
     this.peersCreated = {};
@@ -62,7 +60,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.usingVersion = version;
   }
 
-  setActiveInitiatorId(id) {
+  setActiveInitiatorId(id){
     this.activeInitiatorId = id;
   }
 
@@ -309,18 +307,12 @@ export default class WebRtcCommunication extends MewConnectCommon {
       }
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
-        this.Interceptor.InspectIncomingMessage(parsed);
-        this.emit('data', {
-          type: parsed.type,
-          data: parsed.data,
-          id: parsed.id
-        });
+        this.emit('data', { type: parsed.type, data: parsed.data, id: parsed.id });
       } else {
-        this.Interceptor.InspectIncomingMessage(decryptedData);
         this.emit('data', {
           type: decryptedData.type,
           data: decryptedData.data,
-          id: decryptedData.id
+         id: decryptedData.id
         });
       }
     } catch (e) {
@@ -371,7 +363,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
   sendRtcMessage(type, msg, id) {
     debug(msg);
     debug(`[SEND RTC MESSAGE] type:  ${type},  message:  ${msg}, id: ${id}`);
-    // const values = this.Interceptor.InspectOutgoingMessage({type, data: msg})
     this.rtcSend(JSON.stringify({ type, data: msg, id }));
   }
 
@@ -398,10 +389,8 @@ export default class WebRtcCommunication extends MewConnectCommon {
     if (this.isAlive()) {
       let encryptedSend;
       if (typeof arg === 'string') {
-        arg = this.Interceptor.InspectOutgoingMessageString(arg);
         encryptedSend = await this.mewCrypto.encrypt(arg);
       } else {
-        arg = this.Interceptor.InspectOutgoingMessage(arg);
         encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
       }
       debug('SENDING RTC');
