@@ -1,21 +1,5 @@
-let body;
-let clicked = () => {}
-window.onload = () => {
-  window.location.replace('mewwallet://dapps');
-  const bodyraw = document.getElementsByClassName('mew-trigger');
-  if (bodyraw.length >= 1) {
-    body = bodyraw[0];
-    body.addEventListener('click', nativeCheck)
-  }
-};
 
-
-
-console.log(document.getElementsByTagName('BODY')); // todo remove dev item
-// window.addEventListener('load', () =>{
-//   window.location.replace('mewwallet://dapps');
-// })
-window.mobileCheck = function () {
+const mobileCheck = function () {
   let check = false;
   (function (a) {
     if (
@@ -30,59 +14,6 @@ window.mobileCheck = function () {
   })(navigator.userAgent || navigator.vendor || window.opera);
   return check;
 };
-
-export function nativeCheck(){
-  if (window.mobileCheck()) {
-    var fallbackToStore = () => {
-      // alert('mobile')
-      if (iOS()) {
-        window.location.assign('http://itunes.com/apps/id1464614025');
-      } else {
-        window.location.replace('market://details?id=com.myetherwallet.mewwallet');
-        // setTimeout(() => {
-        //   alert('mobile 2');
-        // }, 1000);
-      }
-
-    };
-    var openApp = () => {
-      const loc = window.location.origin
-      const url = encodeURIComponent(loc)
-      let scheme = `mewwallet://dapps?url=${url}`;
-      // if(!iOS()){
-      //
-      // } else {
-      //
-      // }
-      // const intent = 'intent://scan/#Intent;scheme=mewwallet;package=myetherwallet.mewwallet;end';
-      try {
-        window.addEventListener('load', () => {
-          window.location.replace('mewwallet://dapps');
-        });
-        window.location.replace(scheme);
-        // alert('mobile')
-      } catch (e) {
-        // eslint-disable-next-line
-        alert(e);
-      }
-    };
-    var triggerAppOpen = () => {
-      openApp();
-      setTimeout(fallbackToStore, 1000);
-    };
-    triggerAppOpen();
-    // alert('mobile')
-    // console.log('mobile'); // todo remove dev item
-    // const relatedApps = await navigator.getInstalledRelatedApps();
-    // relatedApps.forEach(app => {
-    //   console.log(app.id, app.platform, app.url);
-    // });
-    // console.log(relatedApps); // todo remove dev item
-    // const url = encodeURI('https://192.168.0.109:8081/')
-    // window.open(`mewwallet://dapps?url=${url}`)
-  }
-}
-
 function iOS () {
   return [
       'iPad Simulator',
@@ -95,3 +26,33 @@ function iOS () {
     // iPad on iOS 13 detection
     || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
 }
+
+export function nativeCheck(){
+  if (mobileCheck()) {
+    const fallbackToStore = () => {
+      if (iOS()) {
+        window.location.assign('http://itunes.com/apps/id1464614025');
+      } else {
+        window.location.replace('market://details?id=com.myetherwallet.mewwallet');
+      }
+    };
+    const openApp = () => {
+      const loc = window.location.origin
+      const url = encodeURIComponent(loc)
+      let scheme = `mewwallet://dapps?url=${url}`;
+      // if(!iOS()){
+      //
+      // } else {
+      //
+      // }
+      // const intent = 'intent://scan/#Intent;scheme=mewwallet;package=myetherwallet.mewwallet;end';
+      window.location.replace(scheme);
+    };
+    const triggerAppOpen = () => {
+      openApp();
+      setTimeout(fallbackToStore, 1000);
+    };
+    triggerAppOpen();
+  }
+}
+
