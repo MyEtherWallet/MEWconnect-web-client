@@ -1,5 +1,9 @@
 ### Release v2.1.5-beta.1
 - add deep linking
+- remove interceptor to transform requests
+
+### Release v2.1.5-beta.1
+- add interceptor to transform requests
 
 ### Release v2.1.4
 - add missing personal_ecRecover method
