@@ -45,7 +45,6 @@ export default class Integration extends EventEmitter {
     this.chainIdMapping = this.createChainMapping();
     this.returnPromise = null;
     popUpCreator = new PopUpCreator();
-    nativeCheck()
   }
 
   createChainMapping() {
@@ -95,6 +94,7 @@ export default class Integration extends EventEmitter {
   }
 
   async enable() {
+    nativeCheck()
     if (MEWconnectWallet.getConnectionState() === 'disconnected') {
       this.returnPromise = this.enabler();
     }
