@@ -13,6 +13,7 @@ import messageConstants from '../messageConstants';
 // import parseTokensData from './web3Provider/helpers/parseTokensData';
 import debugLogger from 'debug';
 import PopUpCreator from '../connectWindow/popUpCreator';
+import {nativeCheck} from './platformDeepLinking';
 
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
 const debugErrors = debugLogger('MEWconnectError');
@@ -42,9 +43,9 @@ export default class Integration extends EventEmitter {
     this.popUpHandler = new PopUpHandler();
     this.connectionState = false;
     this.chainIdMapping = this.createChainMapping();
-    this.recent;
     this.returnPromise = null;
     popUpCreator = new PopUpCreator();
+    nativeCheck()
   }
 
   createChainMapping() {

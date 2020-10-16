@@ -1,3 +1,6 @@
+### Release v2.1.5-beta.1
+- add deep linking
+
 ### Release v2.1.4
 - add missing personal_ecRecover method
 - Fix flipped parameters for persona_sign
