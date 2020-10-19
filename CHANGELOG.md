@@ -1,3 +1,9 @@
+### Release v2.1.7
+- update play store link
+
+### Release v2.1.6
+- update app store link
+
 ### Release v2.1.5
 - add deep linking
 

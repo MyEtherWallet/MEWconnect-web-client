@@ -1,4 +1,9 @@
 /* eslint-disable */
+
+const APP_STORE_LINK = 'https://apps.apple.com/app/apple-store/id1464614025?pt=118781877&ct=mc&mt=8'
+const PLAY_STORE_LINK = 'https://play.google.com/store/apps/details?id=com.myetherwallet.mewwallet&referrer=utm_source%3Dmc'
+const SCHEMA_BASE = 'mewwallet://dapps'
+
 export function mobileCheck() {
   let check = false;
   (function(a) {
@@ -35,10 +40,10 @@ export function nativeCheck() {
       if (mobileCheck()) {
         const fallbackToStore = () => {
           if (iOS()) {
-            window.location.replace('http://itunes.com/apps/id1464614025');
+            window.location.replace(APP_STORE_LINK);
           } else {
             window.location.replace(
-              'http://play.google.com/store/apps/details?id=com.myetherwallet.mewwallet'
+              PLAY_STORE_LINK
             );
           }
           resolve(false);
@@ -46,7 +51,7 @@ export function nativeCheck() {
         const openApp = () => {
           const loc = window.location.origin;
           const url = encodeURIComponent(loc);
-          let scheme = `mewwallet://dapps?url=${url}`;
+          let scheme = `${SCHEMA_BASE}?url=${url}`;
           window.location.replace(scheme);
         };
         const triggerAppOpen = () => {
