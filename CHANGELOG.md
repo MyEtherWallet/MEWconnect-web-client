@@ -1,3 +1,6 @@
+### Release v2.1.5
+- add deep linking
+
 ### Release v2.1.5-beta.1
 - add deep linking
 - remove interceptor to transform requests
