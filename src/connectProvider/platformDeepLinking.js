@@ -1,7 +1,7 @@
-
-const mobileCheck = function () {
+/* eslint-disable */
+export function mobileCheck() {
   let check = false;
-  (function (a) {
+  (function(a) {
     if (
       /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(
         a
@@ -13,46 +13,52 @@ const mobileCheck = function () {
       check = true;
   })(navigator.userAgent || navigator.vendor || window.opera);
   return check;
-};
-function iOS () {
+}
+function iOS() {
   return [
-      'iPad Simulator',
-      'iPhone Simulator',
-      'iPod Simulator',
-      'iPad',
-      'iPhone',
-      'iPod'
-    ].includes(navigator.platform)
+    // 'iPad Simulator',
+    'iPhone Simulator',
+    // 'iPod Simulator',
+    // 'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(
+    navigator.platform
+  ) /*||
     // iPad on iOS 13 detection
-    || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+    (navigator.userAgent.includes('Mac') && 'ontouchend' in document)*/;
 }
 
-export function nativeCheck(){
-  if (mobileCheck()) {
-    const fallbackToStore = () => {
-      if (iOS()) {
-        window.location.assign('http://itunes.com/apps/id1464614025');
+export function nativeCheck() {
+  return new Promise((resolve, reject) => {
+    try {
+      if (mobileCheck()) {
+        const fallbackToStore = () => {
+          if (iOS()) {
+            window.location.replace('http://itunes.com/apps/id1464614025');
+          } else {
+            window.location.replace(
+              'http://play.google.com/store/apps/details?id=com.myetherwallet.mewwallet'
+            );
+          }
+          resolve(false);
+        };
+        const openApp = () => {
+          const loc = window.location.origin;
+          const url = encodeURIComponent(loc);
+          let scheme = `mewwallet://dapps?url=${url}`;
+          window.location.replace(scheme);
+        };
+        const triggerAppOpen = () => {
+          openApp();
+          setTimeout(fallbackToStore, 1000);
+        };
+        triggerAppOpen();
       } else {
-        window.location.replace('market://details?id=com.myetherwallet.mewwallet');
+        resolve(true);
       }
-    };
-    const openApp = () => {
-      const loc = window.location.origin
-      const url = encodeURIComponent(loc)
-      let scheme = `mewwallet://dapps?url=${url}`;
-      // if(!iOS()){
-      //
-      // } else {
-      //
-      // }
-      // const intent = 'intent://scan/#Intent;scheme=mewwallet;package=myetherwallet.mewwallet;end';
-      window.location.replace(scheme);
-    };
-    const triggerAppOpen = () => {
-      openApp();
-      setTimeout(fallbackToStore, 1000);
-    };
-    triggerAppOpen();
-  }
+    } catch (e) {
+      resolve(true);
+    }
+  });
 }
-

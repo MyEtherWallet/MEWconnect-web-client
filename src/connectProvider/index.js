@@ -13,7 +13,7 @@ import messageConstants from '../messageConstants';
 // import parseTokensData from './web3Provider/helpers/parseTokensData';
 import debugLogger from 'debug';
 import PopUpCreator from '../connectWindow/popUpCreator';
-import {nativeCheck} from './platformDeepLinking';
+import { nativeCheck, mobileCheck } from './platformDeepLinking';
 
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
 const debugErrors = debugLogger('MEWconnectError');
@@ -94,14 +94,19 @@ export default class Integration extends EventEmitter {
   }
 
   async enable() {
-    nativeCheck()
-    if (MEWconnectWallet.getConnectionState() === 'disconnected') {
-      this.returnPromise = this.enabler();
-    }
-    if (popUpCreator.popupWindowOpen) {
-      popUpCreator.popupWindow.focus();
-    }
-    return this.returnPromise;
+    return new Promise((resolve, reject) => {
+      nativeCheck().then(res => {
+        if(res){
+          if (MEWconnectWallet.getConnectionState() === 'disconnected') {
+            this.returnPromise = this.enabler();
+          }
+          if (popUpCreator.popupWindowOpen) {
+            popUpCreator.popupWindow.focus();
+          }
+          return resolve(this.returnPromise);
+        }
+      });
+    });
   }
 
   enabler() {
@@ -295,7 +300,6 @@ export default class Integration extends EventEmitter {
     }
   }
 
-
   setupListeners() {
     eventHub.on(EventNames.SHOW_TX_CONFIRM_MODAL, (tx, resolve) => {
       this.responseFunction = resolve;
@@ -319,7 +323,7 @@ export default class Integration extends EventEmitter {
               this.popUpHandler.noShow();
               setTimeout(() => {
                 this.popUpHandler.showNotice('decline');
-              }, 250)
+              }, 250);
             } else {
               debugErrors('sign transaction ERROR');
               state.wallet.errorHandler(err);
@@ -344,12 +348,12 @@ export default class Integration extends EventEmitter {
           .then(result => {
             resolve(result);
           })
-          .catch((err) => {
+          .catch(err => {
             if (err.reject) {
               this.popUpHandler.noShow();
               setTimeout(() => {
                 this.popUpHandler.showNotice(messageConstants.declineMessage);
-              }, 250)
+              }, 250);
             } else {
               debugErrors('sign message ERROR');
               state.wallet.errorHandler(err);
