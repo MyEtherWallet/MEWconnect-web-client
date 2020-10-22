@@ -1,3 +1,6 @@
+### Release v2.1.8
+- Change handling of infuraId to permit same id usage on testnets
+
 ### Release v2.1.7
 - update play store link
 

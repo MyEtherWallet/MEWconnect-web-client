@@ -32,7 +32,7 @@ export default class Integration extends EventEmitter {
       options.subscriptionNotFoundNoThrow || true;
     // eslint-disable-next-line
     this.infuraId = !!options.infuraId
-      ? `wss://mainnet.infura.io/ws/v3/${options.infuraId}`
+      ? options.infuraId
       : false;
 
     this.CHAIN_ID = options.chainId || 1;
@@ -186,8 +186,8 @@ export default class Integration extends EventEmitter {
       const chain = this.identifyChain(CHAIN_ID || 1);
       const defaultNetwork = Networks[chain.key][0];
       state.network = defaultNetwork;
-      if (this.infuraId) {
-        RPC_URL = this.infuraId;
+      if (this.infuraId && !this.RPC_URL) {
+        RPC_URL = `wss://${chain.name}.infura.io/ws/v3/${this.infuraId}`
       }
       const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
       const options = {
