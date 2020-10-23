@@ -213,15 +213,15 @@ const cssStyles = `
 
 const htmlDesign = (refresh, image, playStore, appStore, camera) => {
   return `
-      <html>
-      <head>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
-        <meta name="theme-color" content="#000000"/>
-        <title>MEWconnect</title>
-      </head>
+<!--      <html>-->
+<!--      <head>-->
+<!--        <meta charset="utf-8"/>-->
+<!--        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>-->
+<!--        <meta name="theme-color" content="#000000"/>-->
+<!--        <title>MEWconnect</title>-->
+<!--      </head>-->
 
-<body>
+<!--<body>-->
     <div class="outer-container">
       <div class="container">
       <div class="upper-text">
@@ -230,7 +230,7 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
        </div>
 
         <div class="qr-code">
-          <canvas id="canvas"></canvas>
+          <canvas id="canvas-for-mewconnect-qr-code"></canvas>
         </div>
         <div id="refresh-container" class="refreshIcon hidden">
           <img id="refresh" src="${refresh}" />
@@ -283,22 +283,22 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
         </div>
       </div>
     </div>
-  <script>
-  const channel = new BroadcastChannel('refresh-channel');
-  const refreshContainer = window.document.getElementById("refresh-container")
-  const refreshButton = window.document.getElementById("refresh");
+<!--  <script>-->
+<!--  const channel = new BroadcastChannel('refresh-channel');-->
+<!--  const refreshContainer = window.document.getElementById("refresh-container")-->
+<!--  const refreshButton = window.document.getElementById("refresh");-->
 
-  refreshButton.addEventListener("click", () => {
-    channel.postMessage("refresh");
-  })
+<!--  refreshButton.addEventListener("click", () => {-->
+<!--    channel.postMessage("refresh");-->
+<!--  })-->
 
-  // setTimeout(() => {
-  //   refreshContainer.className = refreshContainer.className.replace('hidden', '');
-  // }, 5000)
+<!--  // setTimeout(() => {-->
+<!--  //   refreshContainer.className = refreshContainer.className.replace('hidden', '');-->
+<!--  // }, 5000)-->
 
-  </script>
-</body>
-</html>
+<!--  </script>-->
+<!--</body>-->
+<!--</html>-->
 
 `;
 };
@@ -654,4 +654,142 @@ const windowInformer = spaceman => {
       </div>
 `;
 };
-export { cssStyles, htmlDesign, noticetext, windowInformer };
+
+const modalFrame = (innerContent) => {
+  return `
+    <div class="mew-wallet-modal is-visible" id="mew-wallet-modal"></div>
+    <div class="mew-wallet-modal-container is-visible" id="mew-wallet-modal-container">
+      <div class="modal-dialog is-visible" id="mew-mobile-modal-dialog">
+        <header class="modal-header">
+          <button class="close-modal" aria-label="close modal" data-close>
+            ✕
+          </button>
+        </header>
+        <section class="modal-content">
+        ${innerContent}
+        </section>
+      </div>
+    </div>
+        <script>
+
+      const clickAction = function(evt) {
+        console.log(evt); // todo remove dev item
+        if (
+          document
+            .querySelector('.mew-wallet-modal')
+            .classList.contains('is-visible')
+        ) {
+          document
+            .querySelector('.mew-wallet-modal')
+            .classList.remove('is-visible');
+          document
+            .querySelector('.mew-wallet-modal-container')
+            .classList.remove('is-visible');
+          document
+            .querySelector('.modal-dialog')
+            .classList.remove('is-visible');
+        } else {
+          document
+            .querySelector('.mew-wallet-modal')
+            .classList.add('is-visible');
+          document
+            .querySelector('.mew-wallet-modal-container')
+            .classList.add('is-visible');
+          document.querySelector('.modal-dialog').classList.add('is-visible');
+        }
+      };
+      const background = document.getElementById('mew-wallet-modal');
+      const background2 = document.getElementById('mew-wallet-modal-container');
+      background.addEventListener('click', clickAction);
+      background2.addEventListener('click', clickAction);
+    </script>
+`;
+};
+
+const modalCSS = (additionalCss = '') => {
+  return `
+${additionalCss}
+
+      .mew-wallet-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background: black;
+        cursor: default;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.35s ease-in;
+      }
+
+      .mew-wallet-modal.is-visible {
+        visibility: visible;
+        opacity: 0.25;
+      }
+
+      div.modal-dialog {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        min-width: 448px;
+        max-width: 448px;
+        min-height: 558px;
+        border-radius: 5px;
+        background: white;
+        overflow: auto;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .mew-wallet-modal-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background-color: transparent;
+        cursor: default;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.35s ease-in;
+      }
+
+      div.mew-wallet-modal-container.is-visible {
+        visibility: visible;
+        opacity: 1;
+        background-color: transparent;
+      }
+
+      div.modal-dialog.is-visible {
+        visibility: visible;
+        opacity: 1;
+        z-index: 2;
+      }
+
+      .modal-dialog > * {
+        padding: 1rem;
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .modal-header .close-modal {
+        font-size: 1.5rem;
+      }
+
+`
+}
+export { cssStyles, htmlDesign, noticetext, windowInformer, modalFrame, modalCSS };

@@ -1,3 +1,6 @@
+### Release v2.1.9-beta.1
+- Replace popup window with a modal
+
 ### Release v2.1.8
 - Change handling of infuraId to permit same id usage on testnets
 

@@ -100,8 +100,8 @@ export default class Integration extends EventEmitter {
           if (MEWconnectWallet.getConnectionState() === 'disconnected') {
             this.returnPromise = this.enabler();
           }
-          if (popUpCreator.popupWindowOpen) {
-            popUpCreator.popupWindow.focus();
+          if (typeof popUpCreator.popupWindowOpen === 'boolean') {
+            popUpCreator.showDialog();
           }
           return resolve(this.returnPromise);
         }

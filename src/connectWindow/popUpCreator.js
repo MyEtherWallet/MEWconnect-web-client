@@ -1,3 +1,4 @@
+/* eslint-disable */
 import QrCode from 'qrcode';
 import {
   logo,
@@ -11,7 +12,9 @@ import {
   cssStyles,
   htmlDesign,
   noticetext,
-  windowInformer
+  windowInformer,
+  modalFrame,
+  modalCSS
 } from './popupWindowDesign';
 import debugLogger from 'debug';
 
@@ -30,8 +33,15 @@ export default class PopUpCreator {
     this.playStoreButton = playStoreButton;
     this.appStoreButton = appStoreButton;
     this.camera = camera;
-    this.popupWindowOpen = false;
+    this.popupWindowOpen = null;
     this.windowClosedListener = () => {};
+
+    if(!document.getElementById('ew-Wallet-Modal')){
+      this.container = window.document.createElement('div');
+      this.container.id = 'Mew-Wallet-Modal';
+      window.document.body.appendChild(this.container);
+    }
+
 
     window.addEventListener('beforeunload', () => {
       this.closePopupWindow();
@@ -70,7 +80,7 @@ export default class PopUpCreator {
     div.className = 'hidden';
 
     div.innerHTML = windowInformer(spaceman);
-    window.document.body.appendChild(div);
+    this.container.appendChild(div);
   }
 
   showWindowInformer() {
@@ -79,48 +89,28 @@ export default class PopUpCreator {
 
     const showButton = document.getElementById('NotificationButton1');
     showButton.addEventListener('click', () => {
-      this.showPopupWindow();
+      this.showDialog();
     });
 
     const cancelButton = document.getElementById('NotificationButton2');
     cancelButton.addEventListener('click', () => {
       this.popupWindowOpen = false;
       this.hideNotifier();
-      this.windowClosedListener();
       this.closePopupWindow();
     });
   }
 
-  showPopupWindow(qrcode) {
-    if (this.popupWindow && this.popupWindow.opener) {
-      this.popupWindow.focus();
-      return this.popupWindow;
-    }
-    if (!qrcode) {
-      throw Error('No connection string supplied to popup window');
-    }
-
-    this.createWindowInformer();
-
-    const width = 448;
-    const height = 558;
-    const left = Math.floor(window.outerWidth / 2 - width / 2 + window.screenX);
-    const top = Math.floor(
-      window.outerHeight / 2 - height / 2 + window.screenY
-    );
-    this.popupUrl = Math.random().toString();
-    this.popupWindow = window.open(
-      this.popupUrl,
-      'windowName',
-      [
-        `width=${width}`,
-        `height=${height}`,
-        `left=${left}`,
-        `top=${top}`,
-        'resizable=0'
-      ].join(',')
-    );
-    this.popupWindow.document.write(
+  createQrCodeModal() {
+    this.popupWindowOpen = true;
+    const css = document.createElement('style');
+    css.type = 'text/css';
+    if ('textContent' in css) css.textContent = modalCSS(cssStyles);
+    else css.innerText = modalCSS(cssStyles);
+    document.body.appendChild(css);
+    const div = window.document.createElement('div');
+    div.id = 'Mew-Wallet-Modal';
+    // div.className = 'hidden';
+    div.innerHTML = modalFrame(
       htmlDesign(
         this.refreshIcon,
         this.spaceman,
@@ -129,32 +119,86 @@ export default class PopUpCreator {
         this.camera
       )
     );
-    const element = this.popupWindow.document.getElementById('canvas');
+    // div.innerHTML = windowInformer(spaceman);
+    this.container.appendChild(div);
+  }
+
+  hideDialog(evt) {
+    this.popupWindowOpen = false;
+    if (
+      document
+        .querySelector('.mew-wallet-modal')
+         && document
+        .querySelector('.mew-wallet-modal-container')
+    ) {
+      document
+        .querySelector('.mew-wallet-modal')
+        .classList.remove('is-visible');
+      document
+        .querySelector('.mew-wallet-modal-container')
+        .classList.remove('is-visible');
+      document
+        .querySelector('.modal-dialog')
+        .classList.remove('is-visible');
+    }
+  }
+
+  showDialog(evt) {
+    if(!(typeof this.popupWindowOpen === 'boolean')) return;
+    this.popupWindowOpen = true;
+    if (
+      document
+        .querySelector('.mew-wallet-modal')
+      && document
+        .querySelector('.mew-wallet-modal-container')
+    ) {
+      document
+        .querySelector('.mew-wallet-modal')
+        .classList.add('is-visible');
+      document
+        .querySelector('.mew-wallet-modal-container')
+        .classList.add('is-visible');
+      document
+        .querySelector('.modal-dialog')
+        .classList.add('is-visible');
+    }
+  }
+
+  showPopupWindow(qrcode) {
+    if(typeof this.popupWindowOpen === 'boolean'){
+      this.showDialog();
+      return this.container;
+    }
+    if (!qrcode) {
+      throw Error('No connection string supplied to popup window');
+    }
+
+    this.createQrCodeModal();
+    this.createWindowInformer();
+
+    const element = document.getElementById(
+      'canvas-for-mewconnect-qr-code'
+    );
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
 
-    const css = this.popupWindow.document.createElement('style');
-    css.type = 'text/css';
-    if ('textContent' in css) css.textContent = cssStyles;
-    else css.innerText = cssStyles;
-    this.popupWindow.document.body.appendChild(css);
-
-    this.showWindowInformer();
-    this.popupWindow.addEventListener('beforeunload', () => {
-      this.hideNotifier();
-      this.windowClosedListener();
-      this.popupWindowOpen = false;
-      this.popupWindow = null;
+    const background = document.getElementById('mew-wallet-modal');
+    const background2 = document.getElementById('mew-wallet-modal-container');
+    const dialog = document.getElementById('mew-mobile-modal-dialog');
+    background.addEventListener('click', (evt) => {
+      this.hideDialog();
     });
-
-    const channel = new BroadcastChannel('refresh-channel');
-    channel.addEventListener('message', val => {
-          if(val.data === 'refresh'){
-            this.refreshQrcode();
-          }
-        });
-
+    background2.addEventListener('click', (evt) => {
+      this.hideDialog(evt);
+    });
+    dialog.addEventListener('click', (evt) => {
+      if(this.popupWindowOpen) {
+        evt.stopPropagation();
+      }
+    }, false);
+    this.showWindowInformer();
+    this.popupWindow = this.container;
     this.popupWindowOpen = true;
-    return this.popupWindow;
+    return this.container;
   }
 
   updateQrCode(qrcode) {
@@ -163,16 +207,13 @@ export default class PopUpCreator {
   }
 
   closePopupWindow() {
-    if (this.popupWindow) {
-      this.popupWindow.close();
-      this.popupUrl = null;
-      this.popupWindow = null;
-    }
-    this.removeWindowClosedListener();
-    window.focus();
+    this.hideDialog();
+    this.container.dispatchEvent(new Event('mewModalClosed'))
+    this.container.replaceChildren();
+    this.popupWindowOpen = null;
   }
 
   handleBeforeUnload() {
-    this.closePopupWindow();
+    // this.closePopupWindow();
   }
 }
