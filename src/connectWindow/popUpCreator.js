@@ -6,7 +6,8 @@ import {
   spaceman,
   playStoreButton,
   appStoreButton,
-  camera
+  camera,
+  closeIconBlack
 } from './images/index';
 import {
   cssStyles,
@@ -33,6 +34,7 @@ export default class PopUpCreator {
     this.playStoreButton = playStoreButton;
     this.appStoreButton = appStoreButton;
     this.camera = camera;
+    this.closeIconBlack = closeIconBlack;
     this.popupWindowOpen = null;
     this.windowClosedListener = () => {};
 
@@ -116,7 +118,8 @@ export default class PopUpCreator {
         this.spaceman,
         this.playStoreButton,
         this.appStoreButton,
-        this.camera
+        this.camera,
+        this.closeIconBlack
       )
     );
     // div.innerHTML = windowInformer(spaceman);
@@ -184,6 +187,10 @@ export default class PopUpCreator {
     const background = document.getElementById('mew-wallet-modal');
     const background2 = document.getElementById('mew-wallet-modal-container');
     const dialog = document.getElementById('mew-mobile-modal-dialog');
+    document.getElementById('close-mew-modal').addEventListener('click', () => {
+      this.closePopupWindow();
+    });
+
     background.addEventListener('click', (evt) => {
       this.hideDialog();
     });

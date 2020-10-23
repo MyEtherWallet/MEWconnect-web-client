@@ -36,9 +36,18 @@
         padding-bottom: 16px;
         padding-top: 16px;
       }
+
       .upper-text {
         position: relative;
         bottom: 15px;
+      }
+
+      div.close-mew-modal{
+        /*justify-content: right;*/
+        position: relative;
+        padding-top: 10px;
+        left: 100%;
+        width: 20px;
       }
       .qr-code {
         font-family: 'Roboto', sans-serif;
@@ -238,6 +247,11 @@
       }
 
       div.modal-dialog {
+        background: rgb(255, 255, 255);
+        border-radius: 16px;
+        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05),
+        0px 3px 6px 0px rgba(0, 0, 0, 0.05),
+        0px 8px 16px 0px rgba(0, 0, 0, 0.05);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -245,10 +259,9 @@
         min-width: 448px;
         max-width: 448px;
         min-height: 558px;
-        border-radius: 5px;
-        background: white;
         overflow: auto;
         opacity: 0;
+        visibility: hidden;
       }
 
       .mew-wallet-modal-container {
@@ -277,7 +290,7 @@
       div.modal-dialog.is-visible {
         visibility: visible;
         opacity: 1;
-        z-index: 2;
+        /*z-index: 2;*/
       }
 
       .modal-dialog > * {
@@ -305,14 +318,15 @@
     <div class="mew-wallet-modal-container" id="mew-wallet-modal-container">
       <div class="modal-dialog">
         <header class="modal-header">
-          <button class="close-modal" aria-label="close modal" data-close>
-            ✕
-          </button>
+
         </header>
         <section class="modal-content">
           <div class="outer-container">
             <div class="container">
               <div class="upper-text">
+                <div class="close-mew-modal"  id="close-mew-modal" aria-label="close modal" data-close>
+                  <img src="./rawImages/times-solid (2).png" height="15" width="11"/>
+                </div>
                 <p class="text-one">Connect to MEW wallet app</p>
                 <p class="text-two">Scan this code to connect</p>
               </div>

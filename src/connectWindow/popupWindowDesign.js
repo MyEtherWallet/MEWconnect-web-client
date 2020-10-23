@@ -211,20 +211,14 @@ const cssStyles = `
         }
     `;
 
-const htmlDesign = (refresh, image, playStore, appStore, camera) => {
+const htmlDesign = (refresh, image, playStore, appStore, camera, iconImage) => {
   return `
-<!--      <html>-->
-<!--      <head>-->
-<!--        <meta charset="utf-8"/>-->
-<!--        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>-->
-<!--        <meta name="theme-color" content="#000000"/>-->
-<!--        <title>MEWconnect</title>-->
-<!--      </head>-->
-
-<!--<body>-->
     <div class="outer-container">
       <div class="container">
       <div class="upper-text">
+        <div class="close-mew-modal" id="close-mew-modal" aria-label="close modal" data-close>
+          <img src="${iconImage}" height="15" width="11"/>
+        </div>
         <p class="text-one">Connect to MEW wallet app</p>
         <p class="text-two">Scan this code to connect</p>
        </div>
@@ -283,22 +277,6 @@ const htmlDesign = (refresh, image, playStore, appStore, camera) => {
         </div>
       </div>
     </div>
-<!--  <script>-->
-<!--  const channel = new BroadcastChannel('refresh-channel');-->
-<!--  const refreshContainer = window.document.getElementById("refresh-container")-->
-<!--  const refreshButton = window.document.getElementById("refresh");-->
-
-<!--  refreshButton.addEventListener("click", () => {-->
-<!--    channel.postMessage("refresh");-->
-<!--  })-->
-
-<!--  // setTimeout(() => {-->
-<!--  //   refreshContainer.className = refreshContainer.className.replace('hidden', '');-->
-<!--  // }, 5000)-->
-
-<!--  </script>-->
-<!--</body>-->
-<!--</html>-->
 
 `;
 };
@@ -655,16 +633,11 @@ const windowInformer = spaceman => {
 `;
 };
 
-const modalFrame = (innerContent) => {
+const modalFrame = innerContent => {
   return `
     <div class="mew-wallet-modal is-visible" id="mew-wallet-modal"></div>
     <div class="mew-wallet-modal-container is-visible" id="mew-wallet-modal-container">
       <div class="modal-dialog is-visible" id="mew-mobile-modal-dialog">
-        <header class="modal-header">
-          <button class="close-modal" aria-label="close modal" data-close>
-            ✕
-          </button>
-        </header>
         <section class="modal-content">
         ${innerContent}
         </section>
@@ -710,6 +683,14 @@ const modalCSS = (additionalCss = '') => {
   return `
 ${additionalCss}
 
+      div.close-mew-modal{
+        position: relative;
+        padding-top: 10px;
+        left: 100%;
+        width: 20px;
+        cursor: pointer;
+      }
+      
       .mew-wallet-modal {
         position: fixed;
         top: 0;
@@ -733,6 +714,11 @@ ${additionalCss}
       }
 
       div.modal-dialog {
+        background: rgb(255, 255, 255);
+        border-radius: 16px;
+        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05),
+        0px 3px 6px 0px rgba(0, 0, 0, 0.05),
+        0px 8px 16px 0px rgba(0, 0, 0, 0.05);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -740,8 +726,6 @@ ${additionalCss}
         min-width: 448px;
         max-width: 448px;
         min-height: 558px;
-        border-radius: 5px;
-        background: white;
         overflow: auto;
         opacity: 0;
         visibility: hidden;
@@ -790,6 +774,13 @@ ${additionalCss}
         font-size: 1.5rem;
       }
 
-`
-}
-export { cssStyles, htmlDesign, noticetext, windowInformer, modalFrame, modalCSS };
+`;
+};
+export {
+  cssStyles,
+  htmlDesign,
+  noticetext,
+  windowInformer,
+  modalFrame,
+  modalCSS
+};
