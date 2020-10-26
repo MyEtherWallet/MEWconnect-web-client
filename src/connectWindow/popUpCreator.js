@@ -1,21 +1,21 @@
 /* eslint-disable */
 import QrCode from 'qrcode';
 import {
-  logo,
-  refresh,
-  spaceman,
-  playStoreButton,
   appStoreButton,
   camera,
-  closeIconBlack
+  closeIconBlack,
+  logo,
+  playStoreButton,
+  refresh,
+  spaceman
 } from './images/index';
 import {
   cssStyles,
   htmlDesign,
-  noticetext,
-  windowInformer,
+  modalCSS,
   modalFrame,
-  modalCSS
+  noticetext,
+  windowInformer
 } from './popupWindowDesign';
 import debugLogger from 'debug';
 
@@ -38,10 +38,12 @@ export default class PopUpCreator {
     this.popupWindowOpen = null;
     this.windowClosedListener = () => {};
 
-    if(!document.getElementById('ew-Wallet-Modal')){
+    if(!document.getElementById('Attach-Mew-Wallet-Modal')){
       this.container = window.document.createElement('div');
-      this.container.id = 'Mew-Wallet-Modal';
+      this.container.id = 'Attach-Mew-Wallet-Modal';
       window.document.body.appendChild(this.container);
+    } else {
+      this.container = document.getElementById('Attach-Mew-Wallet-Modal')
     }
 
 
@@ -96,10 +98,14 @@ export default class PopUpCreator {
 
     const cancelButton = document.getElementById('NotificationButton2');
     cancelButton.addEventListener('click', () => {
-      this.popupWindowOpen = false;
-      this.hideNotifier();
-      this.closePopupWindow();
+      this.cancelConnectionSetup();
     });
+  }
+
+  cancelConnectionSetup(){
+    this.popupWindowOpen = false;
+    this.hideNotifier();
+    this.closePopupWindow();
   }
 
   createQrCodeModal() {
@@ -147,7 +153,7 @@ export default class PopUpCreator {
   }
 
   showDialog(evt) {
-    if(!(typeof this.popupWindowOpen === 'boolean')) return;
+    if(typeof this.popupWindowOpen !== 'boolean') return;
     this.popupWindowOpen = true;
     if (
       document
@@ -172,6 +178,7 @@ export default class PopUpCreator {
       this.showDialog();
       return this.container;
     }
+
     if (!qrcode) {
       throw Error('No connection string supplied to popup window');
     }
@@ -188,7 +195,7 @@ export default class PopUpCreator {
     const background2 = document.getElementById('mew-wallet-modal-container');
     const dialog = document.getElementById('mew-mobile-modal-dialog');
     document.getElementById('close-mew-modal').addEventListener('click', () => {
-      this.closePopupWindow();
+      this.cancelConnectionSetup();
     });
 
     background.addEventListener('click', (evt) => {
@@ -214,10 +221,10 @@ export default class PopUpCreator {
   }
 
   closePopupWindow() {
+    this.popupWindowOpen = null;
     this.hideDialog();
     this.container.dispatchEvent(new Event('mewModalClosed'))
     this.container.replaceChildren();
-    this.popupWindowOpen = null;
   }
 
   handleBeforeUnload() {

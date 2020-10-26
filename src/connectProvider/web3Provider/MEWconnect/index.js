@@ -1,3 +1,4 @@
+/* eslint-disable */
 import MEWconnect from '../../../index';
 import { Transaction } from 'ethereumjs-tx';
 import WalletInterface from '../WalletInterface';
@@ -15,7 +16,7 @@ import Misc from '../helpers/misc';
 import debugLogger from 'debug';
 
 // TODO add debug logging
-const debug = debugLogger('MEWconnect:wallet');
+const debug = console.log //debugLogger('MEWconnect:wallet');
 // const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
 const V1_SIGNAL_URL = 'https://connect.mewapi.io';
@@ -71,9 +72,12 @@ class MEWconnectWallet {
   static setConnectionState(connectionState) {
     if (!connectionState) MEWconnect.Initiator.connectionState = 'disconnected';
     else MEWconnect.Initiator.connectionState = connectionState;
+    debug('connectionState', MEWconnect.Initiator.connectionState)
   }
 
   static getConnectionState() {
+    debug('connectionState', MEWconnect.Initiator.connectionState)
+
     if (!MEWconnect.Initiator.connectionState) return 'disconnected';
     return MEWconnect.Initiator.connectionState;
   }

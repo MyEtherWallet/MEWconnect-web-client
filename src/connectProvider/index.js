@@ -15,8 +15,8 @@ import debugLogger from 'debug';
 import PopUpCreator from '../connectWindow/popUpCreator';
 import { nativeCheck, mobileCheck } from './platformDeepLinking';
 
-const debugConnectionState = debugLogger('MEWconnect:connection-state');
-const debugErrors = debugLogger('MEWconnectError');
+const debugConnectionState = console.log; //debugLogger('MEWconnect:connection-state');
+const debugErrors = console.log; // debugLogger('MEWconnectError');
 
 let state = {
   wallet: null
@@ -31,9 +31,7 @@ export default class Integration extends EventEmitter {
     this.subscriptionNotFoundNoThrow =
       options.subscriptionNotFoundNoThrow || true;
     // eslint-disable-next-line
-    this.infuraId = !!options.infuraId
-      ? options.infuraId
-      : false;
+    this.infuraId = !!options.infuraId ? options.infuraId : false;
 
     this.CHAIN_ID = options.chainId || 1;
     this.RPC_URL = options.rpcUrl || false;
@@ -96,7 +94,11 @@ export default class Integration extends EventEmitter {
   async enable() {
     return new Promise((resolve, reject) => {
       nativeCheck().then(res => {
-        if(res){
+        if (res) {
+          console.log(
+            'getConnectionState',
+            MEWconnectWallet.getConnectionState()
+          ); // todo remove dev item
           if (MEWconnectWallet.getConnectionState() === 'disconnected') {
             this.returnPromise = this.enabler();
           }
@@ -187,7 +189,7 @@ export default class Integration extends EventEmitter {
       const defaultNetwork = Networks[chain.key][0];
       state.network = defaultNetwork;
       if (this.infuraId && !this.RPC_URL) {
-        RPC_URL = `wss://${chain.name}.infura.io/ws/v3/${this.infuraId}`
+        RPC_URL = `wss://${chain.name}.infura.io/ws/v3/${this.infuraId}`;
       }
       const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
       const options = {
