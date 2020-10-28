@@ -201,8 +201,8 @@ this.requestIds = [];
         } else {
           this.popupCreator.refreshQrcode = this.initiatorStart.bind(this);
           this.popupCreator.openPopupWindow(qrCodeString);
-          this.popupCreator.popupWindow.addEventListener('beforeunload', unloadOrClosed);
-          this.popupCreator.popupWindow.addEventListener('mewModalClosed', unloadOrClosed);
+          // this.popupCreator.container.addEventListener('beforeunload', unloadOrClosed);
+          this.popupCreator.container.addEventListener('mewModalClosed', unloadOrClosed, {once: true});
         }
       } else {
         this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);

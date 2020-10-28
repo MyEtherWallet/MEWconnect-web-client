@@ -70,13 +70,13 @@ class MEWconnectWallet {
   }
 
   static setConnectionState(connectionState) {
-    if (!connectionState) MEWconnect.Initiator.connectionState = 'disconnected';
-    else MEWconnect.Initiator.connectionState = connectionState;
-    debug('connectionState', MEWconnect.Initiator.connectionState)
+    if (!connectionState) MEWconnect.Initiator.setConnectionState('disconnected');
+    else MEWconnect.Initiator.setConnectionState(connectionState);
+    debug('setConnectionState', MEWconnect.Initiator.connectionState)
   }
 
   static getConnectionState() {
-    debug('connectionState', MEWconnect.Initiator.connectionState)
+    debug('getConnectionState', MEWconnect.Initiator.connectionState)
 
     if (!MEWconnect.Initiator.connectionState) return 'disconnected';
     return MEWconnect.Initiator.connectionState;

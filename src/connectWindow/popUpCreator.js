@@ -78,7 +78,7 @@ export default class PopUpCreator {
     css.type = 'text/css';
     if ('textContent' in css) css.textContent = noticetext;
     else css.innerText = noticetext;
-    document.body.appendChild(css);
+    this.container.appendChild(css);
     const div = window.document.createElement('div');
     div.id = 'Notifications';
     div.className = 'hidden';
@@ -103,7 +103,7 @@ export default class PopUpCreator {
   }
 
   cancelConnectionSetup(){
-    this.popupWindowOpen = false;
+    this.popupWindowOpen = null;
     this.hideNotifier();
     this.closePopupWindow();
   }
@@ -114,7 +114,7 @@ export default class PopUpCreator {
     css.type = 'text/css';
     if ('textContent' in css) css.textContent = modalCSS(cssStyles);
     else css.innerText = modalCSS(cssStyles);
-    document.body.appendChild(css);
+    this.container.appendChild(css);
     const div = window.document.createElement('div');
     div.id = 'Mew-Wallet-Modal';
     // div.className = 'hidden';
@@ -133,7 +133,6 @@ export default class PopUpCreator {
   }
 
   hideDialog(evt) {
-    this.popupWindowOpen = false;
     if (
       document
         .querySelector('.mew-wallet-modal')
@@ -221,10 +220,10 @@ export default class PopUpCreator {
   }
 
   closePopupWindow() {
-    this.popupWindowOpen = null;
-    this.hideDialog();
+    // this.hideDialog();
     this.container.dispatchEvent(new Event('mewModalClosed'))
     this.container.replaceChildren();
+    this.popupWindowOpen = null;
   }
 
   handleBeforeUnload() {

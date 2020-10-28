@@ -95,10 +95,6 @@ export default class Integration extends EventEmitter {
     return new Promise((resolve, reject) => {
       nativeCheck().then(res => {
         if (res) {
-          console.log(
-            'getConnectionState',
-            MEWconnectWallet.getConnectionState()
-          ); // todo remove dev item
           if (MEWconnectWallet.getConnectionState() === 'disconnected') {
             this.returnPromise = this.enabler();
           }
