@@ -643,39 +643,6 @@ const modalFrame = innerContent => {
         </section>
       </div>
     </div>
-        <script>
-
-      const clickAction = function(evt) {
-        console.log(evt); // todo remove dev item
-        if (
-          document
-            .querySelector('.mew-wallet-modal')
-            .classList.contains('is-visible')
-        ) {
-          document
-            .querySelector('.mew-wallet-modal')
-            .classList.remove('is-visible');
-          document
-            .querySelector('.mew-wallet-modal-container')
-            .classList.remove('is-visible');
-          document
-            .querySelector('.modal-dialog')
-            .classList.remove('is-visible');
-        } else {
-          document
-            .querySelector('.mew-wallet-modal')
-            .classList.add('is-visible');
-          document
-            .querySelector('.mew-wallet-modal-container')
-            .classList.add('is-visible');
-          document.querySelector('.modal-dialog').classList.add('is-visible');
-        }
-      };
-      const background = document.getElementById('mew-wallet-modal');
-      const background2 = document.getElementById('mew-wallet-modal-container');
-      background.addEventListener('click', clickAction);
-      background2.addEventListener('click', clickAction);
-    </script>
 `;
 };
 
@@ -711,6 +678,7 @@ ${additionalCss}
       .mew-wallet-modal.is-visible {
         visibility: visible;
         opacity: 0.25;
+        z-index: 999999;
       }
 
       div.modal-dialog {
@@ -729,6 +697,7 @@ ${additionalCss}
         overflow: auto;
         opacity: 0;
         visibility: hidden;
+        z-index: 999999;
       }
 
       .mew-wallet-modal-container {
@@ -746,6 +715,7 @@ ${additionalCss}
         visibility: hidden;
         opacity: 0;
         transition: all 0.35s ease-in;
+        z-index: 999999;
       }
 
       div.mew-wallet-modal-container.is-visible {
@@ -757,7 +727,7 @@ ${additionalCss}
       div.modal-dialog.is-visible {
         visibility: visible;
         opacity: 1;
-        z-index: 2;
+        z-index: 99999999999999;
       }
 
       .modal-dialog > * {
