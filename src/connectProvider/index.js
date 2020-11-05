@@ -15,8 +15,8 @@ import debugLogger from 'debug';
 import PopUpCreator from '../connectWindow/popUpCreator';
 import { nativeCheck, mobileCheck } from './platformDeepLinking';
 
-const debugConnectionState = console.log; //debugLogger('MEWconnect:connection-state');
-const debugErrors = console.log; // debugLogger('MEWconnectError');
+const debugConnectionState = debugLogger('MEWconnect:connection-state');
+const debugErrors = debugLogger('MEWconnectError');
 
 let state = {
   wallet: null
@@ -221,6 +221,7 @@ export default class Integration extends EventEmitter {
       );
 
       web3Provider.close = this.disconnect.bind(this);
+      web3Provider.disconnect = this.disconnect.bind(this);
       state.web3Provider = web3Provider;
 
       state.web3 = new Web3(web3Provider);

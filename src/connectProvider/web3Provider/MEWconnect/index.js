@@ -16,7 +16,7 @@ import Misc from '../helpers/misc';
 import debugLogger from 'debug';
 
 // TODO add debug logging
-const debug = console.log //debugLogger('MEWconnect:wallet');
+const debug = debugLogger('MEWconnect:wallet');
 // const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
 const V1_SIGNAL_URL = 'https://connect.mewapi.io';

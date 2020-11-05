@@ -13,9 +13,9 @@ import MewConnectInitiatorV1 from './MewConnectInitiatorV1';
 import WebRtcCommunication from '../WebRtcCommunication';
 import PopUpCreator from '../../connectWindow/popUpCreator';
 
-const debug = console.log //debugLogger('MEWconnect:initiator-base');
-const debugStages = console.log //debugLogger('MEWconnect:initiator-stages');
-const debugConnectionState = console.log //debugLogger('MEWconnect:connection-state');
+const debug = debugLogger('MEWconnect:initiator-base');
+const debugStages = debugLogger('MEWconnect:initiator-stages');
+const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
 export default class MewConnectInitiator extends MewConnectCommon {
   constructor(options = {}) {
