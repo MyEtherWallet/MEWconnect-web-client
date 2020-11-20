@@ -1,3 +1,6 @@
+### Release v2.1.12
+- remove list updating on install
+
 ### Release v2.1.11
 - Add ```.disconnect``` as a method on the provider
 - Restore debug package use

@@ -1,7 +1,7 @@
 {
   "name": "@myetherwallet/mewconnect-web-client",
   "homepage": "https://github.com/myetherwallet/MEWconnect-web-client",
-  "version": "2.1.11",
+  "version": "2.1.12",
   "main": "./dist/index.js",
   "module": "./src/index.js",
   "scripts": {
@@ -16,9 +16,8 @@
     "build:dev": "rimraf dist/ && npx rollup -c",
     "lint": "npx eslint --fix 'src/**.js'",
     "update:lists": "node src/connectProvider/fetchLists/index.js",
-    "postinstall": "npm run update:lists",
-    "prepublishOnly": "npm install && npm run build",
-    "ci": "npm install && npm run build"
+    "prepublishOnly": "npm install && npm run update:lists && npm run build",
+    "ci": "npm install && npm run update:lists && npm run build"
   },
   "gitHooks": {
     "pre-commit": "npm run lint"
