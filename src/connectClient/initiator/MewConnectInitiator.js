@@ -14,9 +14,7 @@ import WebRtcCommunication from '../WebRtcCommunication';
 import PopUpCreator from '../../connectWindow/popUpCreator';
 
 const debug = debugLogger('MEWconnect:initiator-base');
-// const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
-// const logger = createLogger('MewConnectInitiator');
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
 export default class MewConnectInitiator extends MewConnectCommon {
@@ -184,6 +182,17 @@ this.requestIds = [];
           this.version + separator + privateKey + separator + this.connId;
       }
 
+      const unloadOrClosed = () => {
+        if (!this.connected) {
+          // eslint-disable-next-line no-console
+          debug('popup window closed');
+          this.uiCommunicator('popup_window_closed');
+          MewConnectInitiator.setConnectionState();
+          this.socketDisconnect();
+          this.emit(this.lifeCycle.AuthRejected);
+          this.refreshCheck();
+        }
+      }
 
       debug(qrCodeString);
       if (this.showPopup) {
@@ -192,17 +201,8 @@ this.requestIds = [];
         } else {
           this.popupCreator.refreshQrcode = this.initiatorStart.bind(this);
           this.popupCreator.openPopupWindow(qrCodeString);
-          this.popupCreator.popupWindow.addEventListener('beforeunload', () => {
-            if (!this.connected) {
-              // eslint-disable-next-line no-console
-              debug('popup window closed');
-              this.uiCommunicator('popup_window_closed');
-              MewConnectInitiator.setConnectionState();
-              this.socketDisconnect();
-              this.emit(this.lifeCycle.AuthRejected);
-              this.refreshCheck();
-            }
-          });
+          // this.popupCreator.container.addEventListener('beforeunload', unloadOrClosed);
+          this.popupCreator.container.addEventListener('mewModalClosed', unloadOrClosed, {once: true});
         }
       } else {
         this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);

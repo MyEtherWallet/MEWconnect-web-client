@@ -31,9 +31,7 @@ export default class Integration extends EventEmitter {
     this.subscriptionNotFoundNoThrow =
       options.subscriptionNotFoundNoThrow || true;
     // eslint-disable-next-line
-    this.infuraId = !!options.infuraId
-      ? options.infuraId
-      : false;
+    this.infuraId = !!options.infuraId ? options.infuraId : false;
 
     this.CHAIN_ID = options.chainId || 1;
     this.RPC_URL = options.rpcUrl || false;
@@ -96,12 +94,12 @@ export default class Integration extends EventEmitter {
   async enable() {
     return new Promise((resolve, reject) => {
       nativeCheck().then(res => {
-        if(res){
+        if (res) {
           if (MEWconnectWallet.getConnectionState() === 'disconnected') {
             this.returnPromise = this.enabler();
           }
-          if (popUpCreator.popupWindowOpen) {
-            popUpCreator.popupWindow.focus();
+          if (typeof popUpCreator.popupWindowOpen === 'boolean') {
+            popUpCreator.showDialog();
           }
           return resolve(this.returnPromise);
         }
@@ -187,7 +185,7 @@ export default class Integration extends EventEmitter {
       const defaultNetwork = Networks[chain.key][0];
       state.network = defaultNetwork;
       if (this.infuraId && !this.RPC_URL) {
-        RPC_URL = `wss://${chain.name}.infura.io/ws/v3/${this.infuraId}`
+        RPC_URL = `wss://${chain.name}.infura.io/ws/v3/${this.infuraId}`;
       }
       const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
       const options = {
@@ -223,6 +221,7 @@ export default class Integration extends EventEmitter {
       );
 
       web3Provider.close = this.disconnect.bind(this);
+      web3Provider.disconnect = this.disconnect.bind(this);
       state.web3Provider = web3Provider;
 
       state.web3 = new Web3(web3Provider);

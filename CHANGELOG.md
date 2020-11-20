@@ -1,3 +1,19 @@
+### Release v2.1.11
+- Add ```.disconnect``` as a method on the provider
+- Restore debug package use
+
+### Release v2.1.10
+- Fix modal showing up behind web3modal
+
+### Release v2.1.10-beta.1
+- Fix value resets when modal is closed by user
+
+### Release v2.1.9
+- Replace popup window with a modal (stable)
+
+### Release v2.1.9-beta.1
+- Replace popup window with a modal
+
 ### Release v2.1.8
 - Change handling of infuraId to permit same id usage on testnets
 
