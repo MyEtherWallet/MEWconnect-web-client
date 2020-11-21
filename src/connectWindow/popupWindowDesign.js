@@ -15,6 +15,9 @@ const cssStyles = `
         right: 0;
         text-align: center;
         top: 0;
+                min-width: 448px;
+        max-width: 448px;
+        max-height: 558px;
       }
       .container {
         font-family: 'Roboto', sans-serif;
@@ -30,6 +33,8 @@ const cssStyles = `
         margin-right: auto;
         padding-bottom: 16px;
         padding-top: 16px;
+position: relative;
+top: 0;
       }
       .upper-text {
         position: relative;
@@ -92,6 +97,9 @@ const cssStyles = `
         padding-left: 10px;
       }
       .bottom-background {
+        position: relative;
+        top: 0;
+        border-radius: 0 0 16px 16px;
         background: rgb(249, 250, 251);
         text-align: center;
         padding-top: 25px;
@@ -650,6 +658,16 @@ const modalCSS = (additionalCss = '') => {
   return `
 ${additionalCss}
 
+      #mew-mobile-modal-dialog section.modal-content{
+        position: fixed;
+        min-width: 448px;
+        max-width: 448px;
+        min-height: 558px;
+        max-height: 558px;
+        width: 100%;
+        height: 100%;
+      }
+      
       div.close-mew-modal{
         position: relative;
         padding-top: 10px;
@@ -682,6 +700,7 @@ ${additionalCss}
       }
 
       div.modal-dialog {
+        position: fixed;
         background: rgb(255, 255, 255);
         border-radius: 16px;
         box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05),
@@ -694,6 +713,7 @@ ${additionalCss}
         min-width: 448px;
         max-width: 448px;
         min-height: 558px;
+        max-height: 558px;
         overflow: auto;
         opacity: 0;
         visibility: hidden;

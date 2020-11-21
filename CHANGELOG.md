@@ -1,3 +1,6 @@
+### Release v2.1.13
+- improve display of qrcode 
+
 ### Release v2.1.12
 - remove list updating on install
 
