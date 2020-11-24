@@ -1,3 +1,6 @@
+### Release v2.1.14
+- Additional improvements to display of qrcode 
+
 ### Release v2.1.13
 - improve display of qrcode 
 

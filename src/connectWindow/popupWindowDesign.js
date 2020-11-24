@@ -19,6 +19,7 @@ const cssStyles = `
         max-width: 448px;
         max-height: 558px;
       }
+      
       .container {
         font-family: 'Roboto', sans-serif;
         color: #050f19;
@@ -33,13 +34,28 @@ const cssStyles = `
         margin-right: auto;
         padding-bottom: 16px;
         padding-top: 16px;
-position: relative;
-top: 0;
+        position: relative;
+        max-width: 448px;
+        max-height: 404px;
+        width: 100%;
+        top: 0;
       }
+      
       .upper-text {
         position: relative;
+        left: 0;
         bottom: 15px;
       }
+      
+     .close-mew-modal{
+        position: absolute;
+        padding-top: 10px;
+        right: 5px;
+        top: 0;
+        width: 20px;
+        cursor: pointer;
+      }
+      
       .qr-code {
         font-family: 'Roboto', sans-serif;
         color: #050f19;
@@ -97,13 +113,14 @@ top: 0;
         padding-left: 10px;
       }
       .bottom-background {
-        position: relative;
-        top: 0;
+        position: absolute;
+        bottom: 0;
         border-radius: 0 0 16px 16px;
         background: rgb(249, 250, 251);
         text-align: center;
         padding-top: 25px;
         padding-bottom: 15px;
+        width: 100%;
       }
       .bottom-container {
         position: relative;
@@ -117,6 +134,7 @@ top: 0;
         flex-flow: row wrap;
         justify-content: center;
         left: -15px;
+        
       }
       .bottom-container-text {
         font-family: 'Roboto', sans-serif;
@@ -223,10 +241,11 @@ const htmlDesign = (refresh, image, playStore, appStore, camera, iconImage) => {
   return `
     <div class="outer-container">
       <div class="container">
-      <div class="upper-text">
-        <div class="close-mew-modal" id="close-mew-modal" aria-label="close modal" data-close>
+              <div class="close-mew-modal" id="close-mew-modal" aria-label="close modal" data-close>
           <img src="${iconImage}" height="15" width="11"/>
         </div>
+      <div class="upper-text">
+
         <p class="text-one">Connect to MEW wallet app</p>
         <p class="text-two">Scan this code to connect</p>
        </div>
@@ -667,15 +686,7 @@ ${additionalCss}
         width: 100%;
         height: 100%;
       }
-      
-      div.close-mew-modal{
-        position: relative;
-        padding-top: 10px;
-        left: 100%;
-        width: 20px;
-        cursor: pointer;
-      }
-      
+            
       .mew-wallet-modal {
         position: fixed;
         top: 0;
@@ -751,7 +762,7 @@ ${additionalCss}
       }
 
       .modal-dialog > * {
-        padding: 1rem;
+       /* padding: 1rem; */
       }
 
       .modal-header {
