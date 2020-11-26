@@ -18,12 +18,12 @@ import {
   windowInformer
 } from './popupWindowDesign';
 import debugLogger from 'debug';
+import {IOS_LINK, ANDROID_LINK} from '../config';
 
 // TODO add debug logging
 const debug = debugLogger('MEWconnect:popup-window');
 // const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
-debug;
 export default class PopUpCreator {
   constructor() {
     this.sessionId = '';
@@ -125,7 +125,9 @@ export default class PopUpCreator {
         this.playStoreButton,
         this.appStoreButton,
         this.camera,
-        this.closeIconBlack
+        this.closeIconBlack,
+        IOS_LINK,
+        ANDROID_LINK
       )
     );
     // div.innerHTML = windowInformer(spaceman);

@@ -1,7 +1,8 @@
 /* eslint-disable */
+import {IOS_LINK, ANDROID_LINK} from '@/config';
 
-const APP_STORE_LINK = 'https://apps.apple.com/app/apple-store/id1464614025?pt=118781877&ct=mc&mt=8'
-const PLAY_STORE_LINK = 'https://play.google.com/store/apps/details?id=com.myetherwallet.mewwallet&referrer=utm_source%3Dmc'
+const APP_STORE_LINK = IOS_LINK
+const PLAY_STORE_LINK = ANDROID_LINK
 const SCHEMA_BASE = 'mewwallet://dapps'
 
 export function mobileCheck() {

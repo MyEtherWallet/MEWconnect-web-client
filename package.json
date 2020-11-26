@@ -1,7 +1,7 @@
 {
   "name": "@myetherwallet/mewconnect-web-client",
   "homepage": "https://github.com/myetherwallet/MEWconnect-web-client",
-  "version": "2.1.14",
+  "version": "2.1.15",
   "main": "./dist/index.js",
   "module": "./src/index.js",
   "scripts": {

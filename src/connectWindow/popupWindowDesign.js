@@ -237,7 +237,7 @@ const cssStyles = `
         }
     `;
 
-const htmlDesign = (refresh, image, playStore, appStore, camera, iconImage) => {
+const htmlDesign = (refresh, image, playStore, appStore, camera, iconImage, iosLink, androidLink) => {
   return `
     <div class="outer-container">
       <div class="container">
@@ -277,7 +277,7 @@ const htmlDesign = (refresh, image, playStore, appStore, camera, iconImage) => {
             <div class="right">
               <p class="get-text">Don't have MEW wallet app?</p>
               <p id="popupsBlocked" class="warn-color"></p>
-                      <a href="https://apps.apple.com/app/id1464614025" target="_blank" id="appStore">               <img
+                      <a href="${iosLink}" target="_blank" id="appStore">               <img
                   id="apple-link"
                   class="left-img"
                   src="${appStore}"
@@ -285,7 +285,7 @@ const htmlDesign = (refresh, image, playStore, appStore, camera, iconImage) => {
                   width="120"
                 /></a>
 
-                      <a href="https://play.google.com/store/apps/details?id=com.myetherwallet.mewwallet" target="_blank" id="playStore">                <img
+                      <a href="${androidLink}" target="_blank" id="playStore">                <img
                   id="google-link"
                   src="${playStore}"
                   height="40"
