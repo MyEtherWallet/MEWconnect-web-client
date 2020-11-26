@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {IOS_LINK, ANDROID_LINK} from '@/config';
+import {IOS_LINK, ANDROID_LINK} from '../config';
 
 const APP_STORE_LINK = IOS_LINK
 const PLAY_STORE_LINK = ANDROID_LINK

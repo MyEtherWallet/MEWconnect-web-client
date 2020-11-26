@@ -1,3 +1,6 @@
+### Release v2.1.16
+- fix invalid import
+
 ### Release v2.1.15
 - update app store and play store links
 
@@ -203,4 +206,3 @@
 - Gracefully handle disconnect call when webrtc never initiated
 
 ### Release v0.0.1-alpha.3
-
