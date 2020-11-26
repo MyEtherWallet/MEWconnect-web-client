@@ -1,3 +1,6 @@
+### Release v2.1.15
+- update app store and play store links
+
 ### Release v2.1.14
 - Additional improvements to display of qrcode 
 
