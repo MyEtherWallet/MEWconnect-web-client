@@ -276,6 +276,7 @@ export default {
 
     // Initialize the provider based client
     // this.connect = new mewConnect.Provider({windowClosedError: true, rpcUrl: 'ws://127.0.0.1:8545', /*chainId: 1*/});
+    // 859569f6decc4446a5da1bb680e7e9cf
     this.connect = new mewConnect.Provider({windowClosedError: true, rpcUrl: 'wss://mainnet.infura.io/ws/v3/859569f6decc4446a5da1bb680e7e9cf'});
     this.connect.on('popupWindowClosed', () =>{
       console.log(`popup window closed EVENT`);
@@ -339,17 +340,21 @@ export default {
     animateConnectedNotifier() {
       this.connect.showConnectedNotice();
     },
-    onClick() {
-      this.ethereum.send('eth_requestAccounts').then(accounts => {
-        console.log(`User's address is ${accounts[0]}`);
-        this.userAddress = accounts[0];
-      });
-      console.log(mewConnect.Provider.isConnected); // todo remove dev item
-      // this.ethereum.enable().then(accounts => {
+    async onClick() {
+      try{
+       const accounts =  await this.ethereum.enable()
+          console.log(`User's address is ${accounts[0]}`);
+          this.userAddress = accounts[0];
+      } catch(e){
+        console.error(e); // todo replace with proper error
+      }
+      // this.ethereum.send('eth_requestAccounts').then(accounts => {
       //   console.log(`User's address is ${accounts[0]}`);
       //   this.userAddress = accounts[0];
       // })
       // .catch(console.error)
+      console.log(mewConnect.Provider.isConnected); // todo remove dev item
+
     },
     disconnect() {
       this.connect.disconnect();

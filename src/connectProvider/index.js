@@ -91,20 +91,21 @@ export default class Integration extends EventEmitter {
     );
   }
 
-  async enable() {
-    return new Promise((resolve, reject) => {
-      nativeCheck().then(res => {
-        if (res) {
-          if (MEWconnectWallet.getConnectionState() === 'disconnected') {
-            this.returnPromise = this.enabler();
-          }
-          if (typeof popUpCreator.popupWindowOpen === 'boolean') {
-            popUpCreator.showDialog();
-          }
-          return resolve(this.returnPromise);
+  enable() {
+    return nativeCheck().then(res => {
+      if (res) {
+        if (MEWconnectWallet.getConnectionState() === 'disconnected') {
+          this.returnPromise = this.enabler();
         }
-      });
+        if (typeof popUpCreator.popupWindowOpen === 'boolean') {
+          popUpCreator.showDialog();
+        }
+        return this.returnPromise;
+      }
     });
+    // return new Promise((resolve, reject) => {
+    //
+    // });
   }
 
   enabler() {

@@ -106,6 +106,7 @@ export default class PopUpCreator {
     this.popupWindowOpen = null;
     this.hideNotifier();
     this.closePopupWindow();
+    this.windowClosedListener();
   }
 
   createQrCodeModal() {
