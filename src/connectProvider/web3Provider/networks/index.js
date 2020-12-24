@@ -22,5 +22,4 @@ Object.keys(nodes).forEach(key => {
     nodeList[nodes[key].type.name].push(nodes[key]);
   }
 });
-
 export default nodeList;

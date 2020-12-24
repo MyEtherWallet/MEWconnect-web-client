@@ -1,3 +1,6 @@
+### Release v2.1.17
+- fix missing import related to goerli, and associated error
+
 ### Release v2.1.17-beta.1
 - fix error not getting thrown on window close, if desired behavior
 

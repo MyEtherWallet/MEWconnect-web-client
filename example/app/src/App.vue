@@ -4,6 +4,12 @@
     <button @click="onClick">CONNECT</button>
     <h3>{{ userAddress }}</h3>
     <button @click="ecrecover">ecrecover</button>
+    <div v-show="userAddress === ''">
+      <button @click="selectNetwork(1)">Mainnet</button>
+      <button @click="selectNetwork(3)">Ropsten</button>
+      <button @click="selectNetwork(5)">Goerli</button>
+      <button @click="selectNetwork(42)">Kovan</button>
+    </div>
 
     <ul v-show="userAddress !== ''">
       <li>
@@ -277,13 +283,13 @@ export default {
     // Initialize the provider based client
     // this.connect = new mewConnect.Provider({windowClosedError: true, rpcUrl: 'ws://127.0.0.1:8545', /*chainId: 1*/});
     // 859569f6decc4446a5da1bb680e7e9cf
-    this.connect = new mewConnect.Provider({windowClosedError: true, rpcUrl: 'wss://mainnet.infura.io/ws/v3/859569f6decc4446a5da1bb680e7e9cf'});
+    this.connect = new mewConnect.Provider({windowClosedError: true, chainId: 5, infuraId: '7d06294ad2bd432887eada360c5e1986', /*rpcUrl: 'wss://ropsten.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'*/});
     this.connect.on('popupWindowClosed', () =>{
       console.log(`popup window closed EVENT`);
     });
     // this.connect = new mewConnect.Provider();
     // Create the MEWconnect web3 provider
-    this.ethereum = this.connect.makeWeb3Provider(1);
+    this.ethereum = this.connect.makeWeb3Provider();
     // Create a web3 instance using the MEWconnect web3 provider
     this.web3 = new Web3(this.ethereum);
     // See the 'onClick' method below for starting the connection sequence
@@ -304,6 +310,10 @@ export default {
     this.altPopup = new PopUpCreator();
   },
   methods: {
+    selectNetwork(chainId){
+      this.connect = new mewConnect.Provider({windowClosedError: true, chainId: chainId, infuraId: '7d06294ad2bd432887eada360c5e1986', /*rpcUrl: 'wss://ropsten.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'*/});
+
+    },
     animate() {
       this.connect.showNotice();
     },
@@ -373,6 +383,7 @@ export default {
     sendTx() {
       this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
       this.web3.eth.getGasPrice().then(gasPrice => {
+        console.log(gasPrice); // todo remove dev item
         this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
           this.web3.eth
             .sendTransaction({

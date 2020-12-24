@@ -21,6 +21,10 @@ const debugErrors = debugLogger('MEWconnectError');
 let state = {
   wallet: null
 };
+
+const infuraUrlFormater = (name, infuraId) =>{
+  return `wss://${name}.infura.io/ws/v3/${infuraId}`
+}
 const eventHub = new EventEmitter();
 let popUpCreator = {};
 const recentDataRecord = [];
@@ -161,14 +165,16 @@ export default class Integration extends EventEmitter {
       const result = this.chainIdMapping.find(value => value.chainId === check);
       if (result) return result;
     } else if (typeof check === 'string') {
-      let result = this.chainIdMapping.find(value => value.chainId == check);
+      let result = this.chainIdMapping.find(value => {
+        return value.chainId.toString() == check.toLowerCase()
+      });
       if (result) return result;
       result = this.chainIdMapping.find(
-        value => value.name === check.toLowerCase()
+        value => value.name.toLowerCase() == check.toLowerCase()
       );
       if (result) return result;
       result = this.chainIdMapping.find(
-        value => value.key === check.toLowerCase()
+        value => value.key.toLowerCase() == check.toLowerCase()
       );
       if (result) return result;
     }
@@ -186,7 +192,7 @@ export default class Integration extends EventEmitter {
       const defaultNetwork = Networks[chain.key][0];
       state.network = defaultNetwork;
       if (this.infuraId && !this.RPC_URL) {
-        RPC_URL = `wss://${chain.name}.infura.io/ws/v3/${this.infuraId}`;
+        RPC_URL = infuraUrlFormater(chain.name, this.infuraId);
       }
       const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
       const options = {
