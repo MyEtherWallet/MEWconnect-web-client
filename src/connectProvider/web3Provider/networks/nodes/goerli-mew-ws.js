@@ -1,4 +1,4 @@
-import { GOERLI } from '../types';
+import { GOERLI } from '../types/index';
 export default {
   type: GOERLI,
   service: 'myetherwallet.com-ws',
