@@ -363,7 +363,10 @@ export default class WebRtcCommunication extends MewConnectCommon {
   sendRtcMessage(type, msg, id) {
     debug(msg);
     debug(`[SEND RTC MESSAGE] type:  ${type},  message:  ${msg}, id: ${id}`);
-    this.rtcSend(JSON.stringify({ type, data: msg, id }));
+    this.rtcSend(JSON.stringify({ type, data: msg, id }))
+      .catch(err =>{
+        debug(err)
+      });
   }
 
   disconnectRTCClosure() {
@@ -377,28 +380,36 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   disconnectRTC() {
-    debugStages('DISCONNECT RTC');
-    this.connected = false;
-    this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
-    this.rtcDestroy();
-    this.instance = null;
+    try {
+      debugStages('DISCONNECT RTC');
+      this.connected = false;
+      this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+      this.rtcDestroy();
+      this.instance = null;
+    } catch (e) {
+      debug(e);
+    }
   }
 
   async rtcSend(arg) {
-    debug(this.isAlive()); // todo remove dev item
-    if (this.isAlive()) {
-      let encryptedSend;
-      if (typeof arg === 'string') {
-        encryptedSend = await this.mewCrypto.encrypt(arg);
+    try {
+      debug(this.isAlive()); // todo remove dev item
+      if (this.isAlive()) {
+        let encryptedSend;
+        if (typeof arg === 'string') {
+          encryptedSend = await this.mewCrypto.encrypt(arg);
+        } else {
+          encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
+        }
+        debug('SENDING RTC');
+        this.p.send(JSON.stringify(encryptedSend));
       } else {
-        encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
+        // eslint-disable-next-line
+        this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
+        return false;
       }
-      debug('SENDING RTC');
-      this.p.send(JSON.stringify(encryptedSend));
-    } else {
-      // eslint-disable-next-line
-      this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
-      return false;
+    } catch (e) {
+      debug(e);
     }
   }
 

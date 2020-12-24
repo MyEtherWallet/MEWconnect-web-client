@@ -1,3 +1,6 @@
+### Release 2.1.18-beta.1
+- Add error catches
+
 ### Release v2.1.17
 - fix missing import related to goerli, and associated error
 
