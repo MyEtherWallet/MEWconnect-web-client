@@ -315,7 +315,7 @@ export default class Integration extends EventEmitter {
         );
       } else {
         this.popUpHandler.showNoticePersistentEnter(messageConstants.approveTx);
-
+        console.log(tx); // todo remove dev item
         state.wallet
           .signTransaction(tx)
           .then(_response => {
@@ -389,7 +389,6 @@ export default class Integration extends EventEmitter {
           s: `0x${newTx.s.toString('hex')}`
         }
       };
-      console.log(this.signedTxObject); // todo remove dev item
       this.responseFunction(this.signedTxObject);
     });
     eventHub.on('Hash', hash => {
