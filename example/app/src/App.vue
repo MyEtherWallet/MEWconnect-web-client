@@ -103,6 +103,8 @@
         <button v-show="userAddress !== ''" @click="sendTxDetailed">send</button>
         <h6>Sends to the connected wallet address</h6>
         <h3>Tx Hash:</h3>
+        <button v-show="userAddress !== ''" @click="sendTxDetailed2">sign tx</button>
+        <h3>Tx Hash:</h3>
         {{ txHash }}
       </li>
       <li>
@@ -449,18 +451,47 @@ export default {
           // gas: this.toGasLimitDetailed,
           gasLimit: this.toGasLimitDetailed
         })
-        .once('transactionHash', hash => {
-          console.log(['Hash', hash]);
-          this.tokenTxHash = hash;
-        })
-        .once('receipt', res => {
-          console.log(['Receipt', res]);
-        })
-        .on('error', err => {
-          console.log(['Error', err]);
-        })
+        // .once('transactionHash', hash => {
+        //   console.log(['Hash', hash]);
+        //   this.tokenTxHash = hash;
+        // })
+        // .once('receipt', res => {
+        //   console.log(['Receipt', res]);
+        // })
+        // .on('error', err => {
+        //   console.log(['Error', err]);
+        // })
         .then(txhash => console.log('THEN: ', txhash))
       .catch(console.error);
+    },
+    sendTxDetailed2() {
+      // this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
+      console.log('this.toGasPriceDetailed', this.toGasPriceDetailed); // todo remove dev item
+      this.web3.eth
+          .signTransaction({
+            from: this.fromAddressDetailed !== '' ? this.fromAddressDetailed : this.userAddress,
+            to: this.toAddressDetailed !== '' ? this.toAddressDetailed : this.userAddress,
+            nonce: this.toNonceDetailed !== '' ? this.toNonceDetailed : undefined,
+            value: new BigNumber(this.toAmount)
+                .times(new BigNumber(10).pow(18))
+                .toFixed(),
+            gasPrice: this.toGasPriceDetailed,
+            data: this.toDataDetailed,
+            // gas: this.toGasLimitDetailed,
+            gasLimit: this.toGasLimitDetailed
+          })
+          // .once('transactionHash', hash => {
+          //   console.log(['Hash', hash]);
+          //   this.tokenTxHash = hash;
+          // })
+          // .once('receipt', res => {
+          //   console.log(['Receipt', res]);
+          // })
+          // .on('error', err => {
+          //   console.log(['Error', err]);
+          // })
+          .then(txhash => console.log('THEN: ', txhash))
+          .catch(console.error);
     },
     signTx() {
       this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);

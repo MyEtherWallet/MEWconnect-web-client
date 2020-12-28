@@ -315,7 +315,7 @@ export default class Integration extends EventEmitter {
         );
       } else {
         this.popUpHandler.showNoticePersistentEnter(messageConstants.approveTx);
-        console.log(tx); // todo remove dev item
+
         state.wallet
           .signTransaction(tx)
           .then(_response => {

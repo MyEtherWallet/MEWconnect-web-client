@@ -1,4 +1,7 @@
-### Release 2.1.18-beta.2
+### Release 2.1.19
+- Fix estimateGas for eth_signTransaction
+
+### Release 2.1.18
 - Add additional check for gasLimit usage versus gas usage
 
 ### Release 2.1.18-beta.1

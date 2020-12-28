@@ -17,28 +17,30 @@ export default async (
 ) => {
   if (payload.method !== 'eth_signTransaction') return next();
   const tx = payload.params[0];
-  const localTx = Object.assign({}, payload);
+  const localTx = Object.assign({}, tx);
   delete localTx['gas'];
   delete localTx['nonce'];
   const ethCalls = new EthCalls(requestManager);
-  tx.nonce = !tx.nonce
-    ? await store.state.web3.eth.getTransactionCount(
+  try {
+    tx.nonce = !tx.nonce
+      ? await store.state.web3.eth.getTransactionCount(
         store.state.wallet.getAddressString()
       )
-    : tx.nonce;
-  if(tx.gasLimit && !tx.gas){
-    tx.gas = tx.gasLimit
-  }
-  console.log(new BigNumber(tx.gas).lte(0), !tx.gas || tx.gas <= 0); // todo remove dev item
+      : tx.nonce;
 
-  tx.gas =
-    !tx.gas || new BigNumber(tx.gas).lte(0) ? await ethCalls.estimateGas(localTx) : tx.gas;
-  tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
-  console.log(new BigNumber(tx.gasPrice).lte(0)); // todo remove dev item
-  tx.gasPrice =
-    !tx.gasPrice || new BigNumber(tx.gasPrice).lte(0)
-      ? await store.state.web3.eth.getGasPrice()
-      : tx.gasPrice;
+    if(tx.gasLimit && !tx.gas){
+      tx.gas = tx.gasLimit
+    } else if(!tx.gasLimit && tx.gas){
+      tx.gasLimit = tx.gas
+    }
+    tx.gas =
+      !tx.gas || new BigNumber(tx.gas).lte(0) ? await ethCalls.estimateGas(localTx) : tx.gas;
+    tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
+    tx.gasPrice =
+      !tx.gasPrice || new BigNumber(tx.gasPrice).lte(0)
+        ? await store.state.web3.eth.getGasPrice()
+        : tx.gasPrice;
+
   getSanitizedTx(tx)
     .then(_tx => {
       eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
@@ -55,4 +57,9 @@ export default async (
       debugErrors('Error: eth_signTransaction', e);
       res(e);
     });
+  } catch (e) {
+    debugErrors(e)
+    debugErrors('Error: eth_signTransaction', e);
+    res(e);
+  }
 };
