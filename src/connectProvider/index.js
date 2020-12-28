@@ -22,9 +22,9 @@ let state = {
   wallet: null
 };
 
-const infuraUrlFormater = (name, infuraId) =>{
-  return `wss://${name}.infura.io/ws/v3/${infuraId}`
-}
+const infuraUrlFormater = (name, infuraId) => {
+  return `wss://${name}.infura.io/ws/v3/${infuraId}`;
+};
 const eventHub = new EventEmitter();
 let popUpCreator = {};
 const recentDataRecord = [];
@@ -166,7 +166,7 @@ export default class Integration extends EventEmitter {
       if (result) return result;
     } else if (typeof check === 'string') {
       let result = this.chainIdMapping.find(value => {
-        return value.chainId.toString() == check.toLowerCase()
+        return value.chainId.toString() == check.toLowerCase();
       });
       if (result) return result;
       result = this.chainIdMapping.find(
@@ -368,7 +368,7 @@ export default class Integration extends EventEmitter {
           });
       }
     });
-
+    // TODO: Is this getting used?
     eventHub.on('showSendSignedTx', (tx, resolve) => {
       this.popUpHandler.showNotice(messageConstants.approveTx);
       const newTx = new Transaction(tx);
@@ -379,7 +379,8 @@ export default class Integration extends EventEmitter {
           to: `0x${newTx.to.toString('hex')}`,
           from: `0x${newTx.from.toString('hex')}`,
           value: `0x${newTx.value.toString('hex')}`,
-          gas: `0x${newTx.gasPrice.toString('hex')}`,
+          gasPrice: `0x${newTx.gasPrice.toString('hex')}`,
+          gas: `0x${newTx.gas.toString('hex')}`,
           gasLimit: `0x${newTx.gasLimit.toString('hex')}`,
           data: `0x${newTx.data.toString('hex')}`,
           nonce: `0x${newTx.nonce.toString('hex')}`,
@@ -388,6 +389,7 @@ export default class Integration extends EventEmitter {
           s: `0x${newTx.s.toString('hex')}`
         }
       };
+      console.log(this.signedTxObject); // todo remove dev item
       this.responseFunction(this.signedTxObject);
     });
     eventHub.on('Hash', hash => {

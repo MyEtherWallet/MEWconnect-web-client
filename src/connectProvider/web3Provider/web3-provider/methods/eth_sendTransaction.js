@@ -38,8 +38,14 @@ export default async (
           store.state.wallet.getAddressString()
         )
       : tx.nonce;
-    tx.gas = !tx.gas ? await ethCalls.estimateGas(localTx) : tx.gas;
-    tx.gasPrice = !tx.gasPrice ? await store.state.web3.eth.getGasPrice() : tx.gasPrice
+    if(tx.gasLimit && !tx.gas){
+      tx.gas = tx.gasLimit
+    } else if(!tx.gasLimit && tx.gas){
+      tx.gasLimit = tx.gas
+    }
+    console.log('tx.gas', tx.gas, tx.gasLimit, new BigNumber(tx.gas).lte(0)); // todo remove dev item
+    tx.gas = !tx.gas || new BigNumber(tx.gas).lte(0) ? await ethCalls.estimateGas(localTx) : tx.gas;
+    tx.gasPrice = !tx.gasPrice || new BigNumber(tx.gasPrice).lte(0) ? await store.state.web3.eth.getGasPrice() : tx.gasPrice
   } catch (e) {
     res(e);
     return;

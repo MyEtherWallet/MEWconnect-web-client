@@ -34,6 +34,26 @@
       <li>
         <hr />
         <h3>Send Detailed</h3>
+        <label for="toGasLimitDetailed">
+          From Address
+
+          <input
+              id="fromAddressDetailed"
+              v-model="fromAddressDetailed"
+              placeholder="amount"
+          />
+        </label>
+        <br />
+        <label for="toGasLimitDetailed">
+          To Address
+
+          <input
+              id="toAddressDetailed"
+              v-model="toAddressDetailed"
+              placeholder="amount"
+          />
+        </label>
+        <br />
         <label for="toGasPriceDetailed">
           Gas Price
           <input
@@ -80,7 +100,7 @@
           />
         </label>
         <br />
-        <button v-show="userAddress !== ''" @click="sendTx">send</button>
+        <button v-show="userAddress !== ''" @click="sendTxDetailed">send</button>
         <h6>Sends to the connected wallet address</h6>
         <h3>Tx Hash:</h3>
         {{ txHash }}
@@ -273,7 +293,9 @@ export default {
       signatureToCheck: '',
       signatureFromMessage: '',
       ecRecoverAddress: '',
-      personalSignedResult: ''
+      personalSignedResult: '',
+      toAddressDetailed: '',
+      fromAddressDetailed: ''
     };
   },
   mounted() {
@@ -283,7 +305,7 @@ export default {
     // Initialize the provider based client
     // this.connect = new mewConnect.Provider({windowClosedError: true, rpcUrl: 'ws://127.0.0.1:8545', /*chainId: 1*/});
     // 859569f6decc4446a5da1bb680e7e9cf
-    this.connect = new mewConnect.Provider({windowClosedError: true, chainId: 5, infuraId: '7d06294ad2bd432887eada360c5e1986', /*rpcUrl: 'wss://ropsten.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'*/});
+    this.connect = new mewConnect.Provider({windowClosedError: true, chainId: 1, rpcUrl: 'wss://ws-web3-node.1inch.exchange' /* infuraId: '7d06294ad2bd432887eada360c5e1986', *//*rpcUrl: 'wss://ropsten.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'*/});
     this.connect.on('popupWindowClosed', () =>{
       console.log(`popup window closed EVENT`);
     });
@@ -393,8 +415,8 @@ export default {
               value: new BigNumber(this.toAmount)
                 .times(new BigNumber(10).pow(18))
                 .toFixed(),
-              gasPrice: gasPrice,
-              gas: 21000
+              gasPrice: gasPrice/*,
+              gasLimit: '0xa'// 21000*/
             })
             .once('transactionHash', hash => {
               console.log(['Hash', hash]);
@@ -413,16 +435,19 @@ export default {
     },
     sendTxDetailed() {
       // this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
+      console.log('this.toGasPriceDetailed', this.toGasPriceDetailed); // todo remove dev item
       this.web3.eth
         .sendTransaction({
-          from: this.userAddress,
-          to: this.userAddress,
+          from: this.fromAddressDetailed !== '' ? this.fromAddressDetailed : this.userAddress,
+          to: this.toAddressDetailed !== '' ? this.toAddressDetailed : this.userAddress,
           nonce: this.toNonceDetailed !== '' ? this.toNonceDetailed : undefined,
           value: new BigNumber(this.toAmount)
             .times(new BigNumber(10).pow(18))
             .toFixed(),
           gasPrice: this.toGasPriceDetailed,
-          gas: this.toGasLimitDetailed
+          data: this.toDataDetailed,
+          // gas: this.toGasLimitDetailed,
+          gasLimit: this.toGasLimitDetailed
         })
         .once('transactionHash', hash => {
           console.log(['Hash', hash]);
@@ -434,7 +459,8 @@ export default {
         .on('error', err => {
           console.log(['Error', err]);
         })
-        .then(txhash => console.log('THEN: ', txhash));
+        .then(txhash => console.log('THEN: ', txhash))
+      .catch(console.error);
     },
     signTx() {
       this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
@@ -447,7 +473,8 @@ export default {
               nonce,
               value: 0,
               gasPrice: gasPrice,
-              gas: 21000
+              // gas: 21000
+              // gasLimit: 111111
             })
             .then(txhash => {
               console.log('THEN: ', txhash);

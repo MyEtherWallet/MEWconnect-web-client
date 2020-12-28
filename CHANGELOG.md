@@ -1,3 +1,6 @@
+### Release 2.1.18-beta.2
+- Add additional check for gasLimit usage versus gas usage
+
 ### Release 2.1.18-beta.1
 - Add error catches
 

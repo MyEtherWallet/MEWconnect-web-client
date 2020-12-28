@@ -6,6 +6,7 @@ import EventNames from '../events';
 import { getSanitizedTx } from './utils';
 
 import debugLogger from 'debug';
+import BigNumber from 'bignumber.js';
 const debug = debugLogger('MEWconnectWeb3');
 const debugErrors = debugLogger('MEWconnectError');
 
@@ -25,11 +26,17 @@ export default async (
         store.state.wallet.getAddressString()
       )
     : tx.nonce;
+  if(tx.gasLimit && !tx.gas){
+    tx.gas = tx.gasLimit
+  }
+  console.log(new BigNumber(tx.gas).lte(0), !tx.gas || tx.gas <= 0); // todo remove dev item
+
   tx.gas =
-    !tx.gas || tx.gas <= 0 ? await ethCalls.estimateGas(localTx) : tx.gas;
+    !tx.gas || new BigNumber(tx.gas).lte(0) ? await ethCalls.estimateGas(localTx) : tx.gas;
   tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
+  console.log(new BigNumber(tx.gasPrice).lte(0)); // todo remove dev item
   tx.gasPrice =
-    !tx.gasPrice || tx.gasPrice <= 0
+    !tx.gasPrice || new BigNumber(tx.gasPrice).lte(0)
       ? await store.state.web3.eth.getGasPrice()
       : tx.gasPrice;
   getSanitizedTx(tx)
