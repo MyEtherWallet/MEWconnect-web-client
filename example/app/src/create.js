@@ -10,7 +10,6 @@ this.provider = '';
   async activate() {
     let account;
     const { default: MewConnect } =  await import('../../../src');
-    console.log(MewConnect); // todo remove dev item
     if (!MewConnect.Provider.isConnected) {
       this.mewConnect = new MewConnect.Provider({ windowClosedError: true });
 

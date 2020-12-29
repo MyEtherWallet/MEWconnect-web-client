@@ -38,13 +38,19 @@ export default async (
           store.state.wallet.getAddressString()
         )
       : tx.nonce;
-    tx.gas = !tx.gas ? await ethCalls.estimateGas(localTx) : tx.gas;
-    tx.gasPrice = !tx.gasPrice ? await store.state.web3.eth.getGasPrice() : tx.gasPrice
+    if(tx.gasLimit && !tx.gas){
+      tx.gas = tx.gasLimit
+    } else if(!tx.gasLimit && tx.gas){
+      tx.gasLimit = tx.gas
+    }
+    tx.gas = !tx.gas || new BigNumber(tx.gas).lte(0) ? await ethCalls.estimateGas(localTx) : tx.gas;
+    tx.gasPrice = !tx.gasPrice || new BigNumber(tx.gasPrice).lte(0) ? await store.state.web3.eth.getGasPrice() : tx.gasPrice
+    tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
   } catch (e) {
+    debugErrors(e);
     res(e);
     return;
   }
-  tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
   getSanitizedTx(tx)
     .then(_tx => {
       eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
