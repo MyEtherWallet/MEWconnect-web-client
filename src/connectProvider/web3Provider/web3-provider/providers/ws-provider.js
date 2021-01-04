@@ -47,8 +47,6 @@ class WSProvider {
     const _this = this.wsProvider;
     delete this.wsProvider['send'];
     const rawSend = (payload, callback) => {
-      console.log('payload check', payload, callback); // todo remove dev item
-
       this.lastMessage = new Date().getTime();
       if (_this.connection.readyState === _this.connection.CONNECTING) {
         setTimeout(() => {
@@ -63,7 +61,6 @@ class WSProvider {
         callback(new Error('connection not open'));
         return;
       }
-
       const req = {
         payload,
         store,
@@ -104,8 +101,6 @@ class WSProvider {
               };
               target(payload, callback);
             });
-          } else if(typeof argumentsList[0] === 'string' && typeof argumentsList){
-
           }
         }
 
@@ -133,7 +128,6 @@ class WSProvider {
             });
           }
 
-        console.log(argumentsList); // todo remove dev item
         return target(argumentsList[0], argumentsList[1]);
       }
     };

@@ -15,10 +15,7 @@ export default async (
   res,
   next
 ) => {
-  console.log('sign tx MC payload 1', payload); // todo remove dev item
   if (payload.method !== 'eth_signTransaction') return next();
-  console.log('sign tx MC', payload); // todo remove dev item
-  console.log('chainId', payload.params[0].chainId); // todo remove dev item
   const tx = payload.params[0];
   const localTx = Object.assign({}, tx);
   delete localTx['gas'];

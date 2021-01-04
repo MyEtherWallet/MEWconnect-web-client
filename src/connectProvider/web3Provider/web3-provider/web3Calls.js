@@ -4,10 +4,6 @@ import { formatters } from 'web3-core-helpers';
 
 class Web3Calls {
   constructor(requestManager) {
-    const formatter = (options) =>{
-      console.log('formatter', options); // todo remove dev item
-      return formatters.inputTransactionFormatter(options)
-    }
     const ethereumCalls = [
       new Method({
         name: 'getId',
@@ -41,7 +37,7 @@ class Web3Calls {
         name: 'signTransaction',
         call: 'eth_signTransaction',
         params: 1,
-        inputFormatter: [formatter]
+        inputFormatter: [formatters.inputTransactionFormatter]
       }),
       new Method({
         name: 'sendSignedTransaction',

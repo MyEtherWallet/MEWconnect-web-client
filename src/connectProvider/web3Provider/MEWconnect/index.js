@@ -90,7 +90,6 @@ class MEWconnectWallet {
   async init(qrcodeListener = () => {}) {
     this.mewConnect.on('codeDisplay', qrcodeListener);
     const txSigner = async tx => {
-      console.log('deeper tx', tx); // todo remove dev item
       let tokenInfo;
       if (
         tx.data.slice(0, 10) === '0xa9059cbb' ||
