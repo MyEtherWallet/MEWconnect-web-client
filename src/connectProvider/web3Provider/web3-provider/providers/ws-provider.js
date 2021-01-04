@@ -47,11 +47,13 @@ class WSProvider {
     const _this = this.wsProvider;
     delete this.wsProvider['send'];
     const rawSend = (payload, callback) => {
+      console.log('payload check', payload, callback); // todo remove dev item
+
       this.lastMessage = new Date().getTime();
       if (_this.connection.readyState === _this.connection.CONNECTING) {
         setTimeout(() => {
           this.wsProvider.send(payload, callback);
-        }, 10);
+        }, 100);
         return;
       }
       if (_this.connection.readyState !== _this.connection.OPEN) {
@@ -61,6 +63,7 @@ class WSProvider {
         callback(new Error('connection not open'));
         return;
       }
+
       const req = {
         payload,
         store,
@@ -101,8 +104,36 @@ class WSProvider {
               };
               target(payload, callback);
             });
+          } else if(typeof argumentsList[0] === 'string' && typeof argumentsList){
+
           }
         }
+
+          if(typeof argumentsList[0] === 'string' && typeof argumentsList[1] !== 'function'){
+            return new Promise((resolve, reject) => {
+              const callback = (err, response) => {
+                if (err) reject(err);
+                else resolve(response.result);
+              };
+              let params = [];
+              if (argumentsList.length === 2) {
+                params = Array.isArray(argumentsList[1])
+                  ? argumentsList[1]
+                  : argumentsList[1] !== undefined
+                    ? [argumentsList[1]]
+                    : []
+              }
+              const payload = {
+                jsonrpc: "2.0",
+                id: 1,
+                method: argumentsList[0],
+                params: params
+              };
+              target(payload, callback);
+            });
+          }
+
+        console.log(argumentsList); // todo remove dev item
         return target(argumentsList[0], argumentsList[1]);
       }
     };

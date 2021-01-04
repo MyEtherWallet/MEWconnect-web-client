@@ -490,7 +490,11 @@ export default {
           // .on('error', err => {
           //   console.log(['Error', err]);
           // })
-          .then(txhash => console.log('THEN: ', txhash))
+          .then(txhash => {
+            console.log('THEN: ', txhash)
+            this.web3.eth.sendSignedTransaction(txhash)
+            .then(result => console.log('RESULT', result))
+    })
           .catch(console.error);
     },
     signTx() {
