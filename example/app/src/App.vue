@@ -4,6 +4,7 @@
     <button @click="onClick">CONNECT</button>
     <h3>{{ userAddress }}</h3>
     <button @click="ecrecover">ecrecover</button>
+    <button @click="showThing">CHECK</button>
     <div v-show="userAddress === ''">
       <button @click="selectNetwork(1)">Mainnet</button>
       <button @click="selectNetwork(3)">Ropsten</button>
@@ -44,16 +45,7 @@
           />
         </label>
         <br />
-        <label for="toGasLimitDetailed">
-          To Address
 
-          <input
-              id="toAddressDetailed"
-              v-model="toAddressDetailed"
-              placeholder="amount"
-          />
-        </label>
-        <br />
         <label for="toGasPriceDetailed">
           Gas Price
           <input
@@ -103,17 +95,31 @@
         <button v-show="userAddress !== ''" @click="sendTxDetailed">send</button>
         <h6>Sends to the connected wallet address</h6>
         <h3>Tx Hash:</h3>
-        <button v-show="userAddress !== ''" @click="sendTxDetailed2">sign tx</button>
+        <label for="toGasLimitDetailed">
+          To Address
+
+          <input
+              id="toAddressDetailed"
+              v-model="toAddressDetailed"
+              placeholder="amount"
+          />
+        </label>
+        <br />
+        <button v-show="userAddress !== ''" @click="sendTxDetailed2">send to address</button>
         <h3>Tx Hash:</h3>
         {{ txHash }}
       </li>
       <li>
         <hr/>
         <h3>Sign Tx</h3>
-        <button v-show="userAddress !== ''" @click="signTx">send</button>
-        <h6>Sends to the connected wallet address</h6>
-        <h3>Tx Hash:</h3>
+        <button v-show="userAddress !== ''" @click="signTx">sign tx</button>
         {{ signedTx }}
+      </li>
+      <li>
+        <hr/>
+        <h3>Sign Tx</h3>
+        <button v-show="userAddress !== ''" @click="signTxNonStandard">sign tx non-standard</button>
+        {{ signedTxNonStandard }}
       </li>
       <li>
         <hr />
@@ -250,6 +256,8 @@
       <button @click="animateNotifier(6)">Transaction Error</button>
       <button @click="animateNotifier(7)">Sign Message</button>
     </p>
+    <p>{{ thing }}</p>
+    <p>{{ checkOne }}</p>
   </div>
 </template>
 
@@ -263,6 +271,39 @@ import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
 import messageConstants from '../../../src/messageConstants';
 
+let web3;
+
+const signTx = () =>{
+  web3.eth.getBalance(this.userAddress).then(bal => this.balance);
+  web3.eth.getGasPrice().then(gasPrice => {
+    console.log(gasPrice); // todo remove dev item
+    web3.eth.getTransactionCount(this.userAddress).then(nonce => {
+      web3.eth
+          .sendTransaction({
+            from: this.userAddress,
+            to: this.userAddress,
+            nonce,
+            value: new BigNumber(0)
+                .times(new BigNumber(10).pow(18))
+                .toFixed(),
+            gasPrice: gasPrice/*,
+              gasLimit: '0xa'// 21000*/
+          })
+          .once('transactionHash', hash => {
+            console.log(['Hash', hash]);
+            this.tokenTxHash = hash;
+          })
+          .once('receipt', res => {
+            console.log(['Receipt', res]);
+          })
+          .on('error', err => {
+            console.log(['Error', err]);
+          })
+          .then(txhash => console.log('THEN: ', txhash))
+          .catch(err => console.error(err));
+    });
+  });
+}
 export default {
   name: 'app',
   data() {
@@ -292,18 +333,25 @@ export default {
       toAmountDetailed: 0,
       toNonceDetailed: '',
       signedTx: '',
+      signedTxNonStandard: '',
       signatureToCheck: '',
       signatureFromMessage: '',
       ecRecoverAddress: '',
       personalSignedResult: '',
       toAddressDetailed: '',
-      fromAddressDetailed: ''
+      fromAddressDetailed: '',
+      thing: false,
+      checker: false,
+      checkOne: ''
     };
   },
   mounted() {
-    // const connector = new MewWalletConnector().activate()
-    // .then(console.log)
-
+    console.log('LOADEDED'); // todo remove dev item
+    console.log(window.web3.currentProvider.isTrust); // todo remove dev item
+    // this.thing = window.web3.currentProvider.isMewConnect;
+    // // const connector = new MewWalletConnector().activate()
+    // // .then(console.log)
+    //
     // Initialize the provider based client
     // this.connect = new mewConnect.Provider({windowClosedError: true, rpcUrl: 'ws://127.0.0.1:8545', /*chainId: 1*/});
     // 859569f6decc4446a5da1bb680e7e9cf
@@ -314,8 +362,11 @@ export default {
     // this.connect = new mewConnect.Provider();
     // Create the MEWconnect web3 provider
     this.ethereum = this.connect.makeWeb3Provider();
+    // this.ethereum = window.web3.currentProvider;
     // Create a web3 instance using the MEWconnect web3 provider
     this.web3 = new Web3(this.ethereum);
+    this.web3.eth.getBalance('0x192627797720b7c5EC7b9FAAeafa41FF49f866e3').then(console.log).catch(console.error)
+    web3 = this.web3;
     // See the 'onClick' method below for starting the connection sequence
     // listener on the web3 provider emiting when the account changes (at the moment this is also the same as a connection being established.)
     console.log(this.ethereum); // todo remove dev item
@@ -332,8 +383,52 @@ export default {
     });
 
     this.altPopup = new PopUpCreator();
+    // window.alert(this.thing + '2')
+
+    this.thing = 27
+    document.getElementById('signtx').addEventListener('click', (event) => {
+    this.signTx();
+    })
   },
   methods: {
+    showThing(){
+      console.log('CONSOLE CHECK'); // todo remove dev item
+
+      // new mewConnect.Provider();
+      // this.checker = !this.checker;
+      // if(this.checker){
+      //   this.checkOne = window.web3.currentProvider
+      // } else {
+      //   this.checkOne = '';
+      // }
+      if(window.web3.currentProvider.isMewConnect || window.web3.currentProvider.isTrust){
+        this.checkOne = window.web3.currentProvider
+        const web3Provider = window.web3.currentProvider.enable()
+        .then(web3Provider =>{
+          // state.enable = this.enable.bind(this);
+          this.runningInApp = true;
+          web3Provider.send('eth_requestAccounts').then(accounts => {
+            console.log(`User's address is ${accounts[0]}`);
+            this.userAddress = accounts[0];
+          })
+          web3Provider.getAccounts()
+              .then(res =>{
+                window.alert(res)
+              })
+          // const adddress = web3Provider.postMessage('requestAccounts', 123)
+          this.userAddress = web3Provider.postMessage('requestAccounts', 123)
+          // return new Promise((resolve, reject) => {
+          state.web3Provider.on('message', (res) =>{
+            window.alert(res);
+            // resolve(res)
+          })
+        })
+
+        //   window.alert('running in app')
+        //   // return Promise.resolve(adddress)
+        // });
+      }
+    },
     selectNetwork(chainId){
       // this.connect = new mewConnect.Provider({windowClosedError: true, chainId: chainId, infuraId: '7d06294ad2bd432887eada360c5e1986', /*rpcUrl: 'wss://ropsten.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'*/});
 
@@ -377,6 +472,7 @@ export default {
     async onClick() {
       try{
        const accounts =  await this.ethereum.enable()
+        console.log('ACCOUNTS', accounts); // todo remove dev item
           console.log(`User's address is ${accounts[0]}`);
           this.userAddress = accounts[0];
       } catch(e){
@@ -388,7 +484,7 @@ export default {
       // })
       // .catch(console.error)
       console.log(mewConnect.Provider.isConnected); // todo remove dev item
-
+// window.alert(mewConnect.Provider.isConnected)
     },
     disconnect() {
       this.connect.disconnect();
@@ -400,9 +496,23 @@ export default {
       });
     },
     getBalance() {
+      console.log('this.userAddress', this.userAddress); // todo remove dev item
+      let value = 'something'
+      value = value.replace('some', '')
+      console.log(value); // todo remove dev item
+      console.log('PROVIDER this.userAddress', Object.keys(this.userAddress)); // todo remove dev item
+
+      // this.web3.request({
+      //   method: 'eth_getBalance',
+      //   params: [this.userAddress]
+      // })
+      console.log('this.userAddress', this.userAddress.replace('0x', '')); // todo remove dev item
       this.web3.eth
         .getBalance(this.userAddress)
-        .then(bal => (this.balance = bal));
+        .then(res =>{
+          console.log(res); // todo remove dev item
+          this.balance = res
+        });
     },
     sendTx() {
       this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
@@ -516,6 +626,31 @@ export default {
               this.signedTx = txhash;
             })
             .catch(err => console.error(err));
+        });
+      });
+    },
+    signTxNonStandard() {
+      this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
+      this.web3.eth.getGasPrice().then(gasPrice => {
+        this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
+          this.web3.currentProvider
+              .request({
+                method: 'signTransaction',
+                params: [{
+                  from: this.userAddress,
+                  to: this.userAddress,
+                  nonce,
+                  value: 0,
+                  gasPrice: gasPrice,
+                  // gas: 21000
+                  // gasLimit: 111111
+                }]
+              })
+              .then(txhash => {
+                console.log('THEN: ', txhash);
+                this.signedTxNonStandard = txhash;
+              })
+              .catch(err => console.error(err));
         });
       });
     },

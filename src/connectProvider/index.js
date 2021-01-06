@@ -14,6 +14,7 @@ import messageConstants from '../messageConstants';
 import debugLogger from 'debug';
 import PopUpCreator from '../connectWindow/popUpCreator';
 import { nativeCheck, mobileCheck } from './platformDeepLinking';
+import { DISCONNECTED, CONNECTING, CONNECTED } from '../config';
 
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
 const debugErrors = debugLogger('MEWconnectError');
@@ -31,6 +32,15 @@ const recentDataRecord = [];
 export default class Integration extends EventEmitter {
   constructor(options = {}) {
     super();
+    if (
+      window.web3.currentProvider.isMewConnect ||
+      window.web3.currentProvider.isTrust
+    ) {
+      this.runningInApp = true;
+      state.web3Provider = window.web3.currentProvider;
+    } else {
+      this.runningInApp = false;
+    }
     this.windowClosedError = options.windowClosedError || false;
     this.subscriptionNotFoundNoThrow =
       options.subscriptionNotFoundNoThrow || true;
@@ -90,15 +100,32 @@ export default class Integration extends EventEmitter {
 
   static get isConnected() {
     return (
-      MEWconnectWallet.getConnectionState() !== 'disconnected' &&
-      MEWconnectWallet.getConnectionState() !== 'connecting'
+      MEWconnectWallet.getConnectionState() !== DISCONNECTED &&
+      MEWconnectWallet.getConnectionState() !== CONNECTING
     );
   }
 
   enable() {
+    if (this.runningInApp) {
+      return new Promise((resolve, reject) => {
+        state.web3Provider
+          .request({
+            method: 'eth_requestAccounts',
+            params: []
+          })
+          .then(address => {
+            eventHub.emit('accountsChanged', address);
+            this.popUpHandler.showConnectedNotice();
+            MEWconnectWallet.setConnectionState(CONNECTED);
+            resolve(address);
+          })
+          .catch(console.error); // todo remove dev item
+      });
+    }
+
     return nativeCheck().then(res => {
       if (res) {
-        if (MEWconnectWallet.getConnectionState() === 'disconnected') {
+        if (MEWconnectWallet.getConnectionState() === DISCONNECTED) {
           this.returnPromise = this.enabler();
         }
         if (typeof popUpCreator.popupWindowOpen === 'boolean') {
@@ -107,9 +134,6 @@ export default class Integration extends EventEmitter {
         return this.returnPromise;
       }
     });
-    // return new Promise((resolve, reject) => {
-    //
-    // });
   }
 
   enabler() {
@@ -117,10 +141,10 @@ export default class Integration extends EventEmitter {
     return new Promise(async (resolve, reject) => {
       if (
         !state.wallet &&
-        MEWconnectWallet.getConnectionState() === 'disconnected'
+        MEWconnectWallet.getConnectionState() === DISCONNECTED
       ) {
-        MEWconnectWallet.setConnectionState('connecting');
-        this.connectionState = 'connecting';
+        MEWconnectWallet.setConnectionState(CONNECTING);
+        this.connectionState = CONNECTING;
         debugConnectionState(MEWconnectWallet.getConnectionState());
         popUpCreator.setWindowClosedListener(() => {
           if (this.windowClosedError) {
@@ -187,51 +211,66 @@ export default class Integration extends EventEmitter {
     _noCheck = this.noUrlCheck
   ) {
     let chainError = false;
+    let web3Provider;
     try {
-      const chain = this.identifyChain(CHAIN_ID || 1);
-      const defaultNetwork = Networks[chain.key][0];
-      state.network = defaultNetwork;
-      if (this.infuraId && !this.RPC_URL) {
-        RPC_URL = infuraUrlFormater(chain.name, this.infuraId);
-      }
-      const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
-      const options = {
-        subscriptionNotFoundNoThrow: this.subscriptionNotFoundNoThrow
-      };
-      if (!/[wW]/.test(hostUrl.protocol)) {
-        throw Error('websocket rpc endpoint required');
-      }
-      if (!_noCheck && !this.infuraId) {
-        if (
-          !hostUrl.hostname.includes(chain.name) &&
-          hostUrl.hostname.includes('infura.io')
-        ) {
-          chainError = true;
-          throw Error(
-            `ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} don't match`
-          );
+      if (
+        (window.web3.currentProvider.isMewConnect ||
+          window.web3.currentProvider.isTrust) &&
+        this.runningInApp
+      ) {
+        if (state.web3Provider) {
+          web3Provider = state.web3Provider;
+        } else {
+          web3Provider = window.web3.currentProvider;
         }
+      } else {
+        const chain = this.identifyChain(CHAIN_ID || 1);
+        const defaultNetwork = Networks[chain.key][0];
+        state.network = defaultNetwork;
+        if (this.infuraId && !this.RPC_URL) {
+          RPC_URL = infuraUrlFormater(chain.name, this.infuraId);
+        }
+        const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
+        const options = {
+          subscriptionNotFoundNoThrow: this.subscriptionNotFoundNoThrow
+        };
+        if (!/[wW]/.test(hostUrl.protocol)) {
+          throw Error('websocket rpc endpoint required');
+        }
+        if (!_noCheck && !this.infuraId) {
+          if (
+            !hostUrl.hostname.includes(chain.name) &&
+            hostUrl.hostname.includes('infura.io')
+          ) {
+            chainError = true;
+            throw Error(
+              `ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} don't match`
+            );
+          }
+        }
+        const parsedUrl = `${hostUrl.protocol}//${
+          hostUrl.hostname ? hostUrl.hostname : hostUrl.host
+        }${hostUrl.port ? ':' + hostUrl.port : ''}${
+          hostUrl.pathname ? hostUrl.pathname : ''
+        }`;
+        state.enable = this.enable.bind(this);
+        web3Provider = new MEWProvider(
+          parsedUrl,
+          options,
+          {
+            state: state
+          },
+          eventHub
+        );
       }
-      const parsedUrl = `${hostUrl.protocol}//${
-        hostUrl.hostname ? hostUrl.hostname : hostUrl.host
-      }${hostUrl.port ? ':' + hostUrl.port : ''}${
-        hostUrl.pathname ? hostUrl.pathname : ''
-      }`;
-      state.enable = this.enable.bind(this);
-      const web3Provider = new MEWProvider(
-        parsedUrl,
-        options,
-        {
-          state: state
-        },
-        eventHub
-      );
 
+      state.enable = this.enable.bind(this);
       web3Provider.close = this.disconnect.bind(this);
       web3Provider.disconnect = this.disconnect.bind(this);
       state.web3Provider = web3Provider;
 
       state.web3 = new Web3(web3Provider);
+
       state.web3.currentProvider.sendAsync = state.web3.currentProvider.send;
       this.setupListeners();
       web3Provider.enable = this.enable.bind(this);
@@ -262,7 +301,7 @@ export default class Integration extends EventEmitter {
           state.web3Provider.disconnected();
         }
         state.wallet = null;
-        this.emit('disconnected');
+        this.emit(DISCONNECTED);
       }
     );
 
@@ -285,7 +324,7 @@ export default class Integration extends EventEmitter {
       if (state.wallet) {
         const connection = state.wallet.getConnection();
         connection.disconnectRTC();
-        MEWconnectWallet.setConnectionState('disconnected');
+        MEWconnectWallet.setConnectionState(DISCONNECTED);
         return true;
       }
       state = {};

@@ -15,13 +15,19 @@ const fetchTokens = async () => {
       for (let i = 0; i < tokenList.length; i++) {
         const tokenFile = tokenList[i];
         if (configs.SUPPORTED_CHAINS.includes(tokenFile.name)) {
-          const tokensCollection = await fetch(
+          let tokensCollection = await fetch(
             `${tokenFileURL + tokenFile.name}/tokens-${tokenFile.name}.json`
           )
             .then(res => res.json())
             .catch(err => console.log(err));
           if (tokensCollection !== undefined) {
             console.log('Writing tokens for the network: ' + tokenFile.name);
+            tokensCollection = tokensCollection.map(item => {
+              return   {
+                "symbol": item.symbol,
+                "address": item.address,
+                "decimals": item.decimals,
+            }})
             fs.writeFileSync(
               `${configs.TOKENS_PATH}/tokens-${tokenFile.name}.json`,
               JSON.stringify(tokensCollection)
