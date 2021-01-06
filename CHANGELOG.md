@@ -1,3 +1,6 @@
+### Release 2.1.20-beta.1
+- Reduce size of tokens-eth.json file
+
 ### Release 2.1.19
 - Fix estimateGas for eth_signTransaction
 
