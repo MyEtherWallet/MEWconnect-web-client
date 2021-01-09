@@ -15,8 +15,8 @@ const cssStyles = `
         right: 0;
         text-align: center;
         top: 0;
-                min-width: 448px;
-        max-width: 448px;
+        min-width: 450px;
+        max-width: 450px;
         max-height: 558px;
       }
       
@@ -35,7 +35,7 @@ const cssStyles = `
         padding-bottom: 16px;
         padding-top: 16px;
         position: relative;
-        max-width: 448px;
+        max-width: 450px;
         max-height: 404px;
         width: 100%;
         top: 0;
@@ -50,7 +50,7 @@ const cssStyles = `
      .close-mew-modal{
         position: absolute;
         padding-top: 10px;
-        right: 5px;
+        right: 5px !important;
         top: 0;
         width: 20px;
         cursor: pointer;
@@ -115,12 +115,15 @@ const cssStyles = `
       .bottom-background {
         position: absolute;
         bottom: 0;
+        right: 64px;
         border-radius: 0 0 16px 16px;
         background: rgb(249, 250, 251);
         text-align: center;
         padding-top: 25px;
         padding-bottom: 15px;
-        width: 100%;
+        max-width: 450px;
+        margin-left: auto;
+        margin-right: auto;
       }
       .bottom-container {
         position: relative;
@@ -685,6 +688,7 @@ ${additionalCss}
         max-height: 558px;
         width: 100%;
         height: 100%;
+        border-radius: 16px;
       }
             
       .mew-wallet-modal {

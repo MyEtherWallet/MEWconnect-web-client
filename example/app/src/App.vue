@@ -362,8 +362,8 @@ export default {
     this.connect = new mewConnect.Provider({
       windowClosedError: true,
       chainId: 1,
-      rpcUrl:
-        'wss://ws-web3-node.1inch.exchange' /* infuraId: '7d06294ad2bd432887eada360c5e1986', */ /*rpcUrl: 'wss://ropsten.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'*/
+      infuraId:
+        '7d06294ad2bd432887eada360c5e1986' /*rpcUrl: 'wss://ropsten.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'*/
     });
     this.connect.on('popupWindowClosed', () => {
       console.log(`popup window closed EVENT`);
@@ -538,7 +538,7 @@ export default {
               nonce,
               value: new BigNumber(this.toAmount)
                 .times(new BigNumber(10).pow(18))
-                .toFixed(),
+                .toFixed()
               /*gasPrice: gasPrice ,
               gasLimit: '0xa'// 21000*/
             })
@@ -660,16 +660,16 @@ export default {
         this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
           console.log('NONCE', nonce); // todo remove dev item
           this.web3.eth
-              .sendTransaction({
-                from: this.userAddress,
-                to: this.userAddress,
-                nonce,
-                value: 0,
-                gasPrice: gasPrice,
-                data: '0x',
-                gas: 21000,
-                gasLimit: 21000
-              })
+            .sendTransaction({
+              from: this.userAddress,
+              to: this.userAddress,
+              nonce,
+              value: 0,
+              gasPrice: gasPrice,
+              data: '0x',
+              gas: 21000,
+              gasLimit: 21000
+            })
             .then(txhash => {
               console.log('THEN: ', txhash);
               this.signedTxNonStandard = txhash;

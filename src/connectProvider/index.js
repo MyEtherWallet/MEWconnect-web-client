@@ -31,25 +31,33 @@ const eventHub = new EventEmitter();
 let popUpCreator = {};
 const recentDataRecord = [];
 
-
 export default class Integration extends EventEmitter {
   constructor(options = {}) {
     super();
-    if (
-      window.web3.currentProvider.isMewConnect ||
-      window.web3.currentProvider.isTrust
-    ) {
-      this.runningInApp = true;
-      state.web3Provider = window.web3.currentProvider;
-      // rpcCall; 1; [object Object]",
-      // "ARGS rpcCall 4 {"jsonrpc":"2.0","id":4,"method":"eth_getBalance","params":["0x192627797720b7c5ec7b9faaeafa41ff49f866e3","latest"]}"
-      // state.web3Provider.postMessage = (arg1, arg2, arg3) => {
-      //   console.log('ARGS', arg1, arg2, JSON.stringify(arg3)); // todo remove dev item
-      //   return window.web3.currentProvider.postMessage(arg1, arg2, arg3)
-      // }
-    } else {
+    if(window.web3){
+      if(window.web3.currentProvider){
+        if (
+          window.web3.currentProvider.isMewConnect ||
+          window.web3.currentProvider.isTrust
+        ) {
+          this.runningInApp = true;
+          state.web3Provider = window.web3.currentProvider;
+          // rpcCall; 1; [object Object]",
+          // "ARGS rpcCall 4 {"jsonrpc":"2.0","id":4,"method":"eth_getBalance","params":["0x192627797720b7c5ec7b9faaeafa41ff49f866e3","latest"]}"
+          // state.web3Provider.postMessage = (arg1, arg2, arg3) => {
+          //   console.log('ARGS', arg1, arg2, JSON.stringify(arg3)); // todo remove dev item
+          //   return window.web3.currentProvider.postMessage(arg1, arg2, arg3)
+          // }
+        } else {
+          this.runningInApp = false;
+        }
+      }else {
+        this.runningInApp = false;
+      }
+    }else {
       this.runningInApp = false;
     }
+
     this.windowClosedError = options.windowClosedError || false;
     this.subscriptionNotFoundNoThrow =
       options.subscriptionNotFoundNoThrow || true;
@@ -222,11 +230,9 @@ export default class Integration extends EventEmitter {
     let chainError = false;
     let web3Provider;
     try {
-      if (
-        (window.web3.currentProvider.isMewConnect ||
-          window.web3.currentProvider.isTrust) &&
-        this.runningInApp
-      ) {
+      if (this.runningInApp) {
+        console.log('not here'); // todo remove dev item
+        console.log('not here'); // todo remove dev item
         if (state.web3Provider) {
           web3Provider = state.web3Provider;
         } else {
@@ -240,8 +246,16 @@ export default class Integration extends EventEmitter {
           },
           eventHub
         );
+        // if (
+        //   (window.web3.currentProvider.isMewConnect ||
+        //     window.web3.currentProvider.isTrust) &&
+        //   this.runningInApp
+        // ) {
+        //
+        // }
         // console.log('PROVIDER', web3Provider); // todo remove dev item
       } else {
+
         const chain = this.identifyChain(CHAIN_ID || 1);
         const defaultNetwork = Networks[chain.key][0];
         state.network = defaultNetwork;
@@ -280,7 +294,7 @@ export default class Integration extends EventEmitter {
           },
           eventHub
         );
-        state.web3.currentProvider.sendAsync = state.web3.currentProvider.send;
+
       }
 
       state.enable = this.enable.bind(this);
@@ -289,7 +303,9 @@ export default class Integration extends EventEmitter {
       state.web3Provider = web3Provider;
 
       state.web3 = new Web3(web3Provider);
-
+      if (!this.runningInApp) {
+        state.web3.currentProvider.sendAsync = state.web3.currentProvider.send;
+      }
 
       this.setupListeners();
       web3Provider.enable = this.enable.bind(this);
