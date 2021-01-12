@@ -238,14 +238,15 @@ export default class Integration extends EventEmitter {
         } else {
           web3Provider = window.web3.currentProvider;
         }
-        web3Provider = new MEWProvider(
-          window.web3.currentProvider,
-          {},
-          {
-            state: state
-          },
-          eventHub
-        );
+        // web3Provider = new MEWProvider(
+        //   window.web3.currentProvider,
+        //   {},
+        //   {
+        //     state: state
+        //   },
+        //   eventHub
+        // );
+
         // if (
         //   (window.web3.currentProvider.isMewConnect ||
         //     window.web3.currentProvider.isTrust) &&

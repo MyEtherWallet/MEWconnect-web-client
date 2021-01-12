@@ -46,6 +46,7 @@ class InAppProvider {
                 tx.gasLimit = utils.toHex(tx.gas);
               }
 
+              tx.data = !tx.data ? '0x' : tx.data;
               tx.gasPrice =
                 !tx.gasPrice || new BigNumber(tx.gasPrice).lte(0)
                   ? await store.state.web3.eth.getGasPrice()
@@ -70,7 +71,9 @@ class InAppProvider {
               else resolve(response.result);
             };
 
-
+            if (argumentsList[0].method === 'eth_signTransaction') {
+              argumentsList[0].method = 'signTransaction';
+            }
             checks(argumentsList[0]).then(payloadOuter => {
               console.log('payloadOuter', payloadOuter); // todo remove dev item
               target(payloadOuter, callback);
@@ -79,7 +82,6 @@ class InAppProvider {
             resolve(target(argumentsList[0], argumentsList[1]));
           }
         });
-
       }
     };
     provider.sendAsync = new Proxy(provider.send, handler);

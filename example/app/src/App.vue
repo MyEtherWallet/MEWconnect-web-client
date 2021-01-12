@@ -351,7 +351,7 @@ export default {
   },
   mounted() {
     console.log('LOADEDED'); // todo remove dev item
-    console.log(window.web3.currentProvider.isTrust); // todo remove dev item
+    // console.log(window.web3.currentProvider.isTrust); // todo remove dev item
     // this.thing = window.web3.currentProvider.isMewConnect;
     // // const connector = new MewWalletConnector().activate()
     // // .then(console.log)
@@ -529,8 +529,9 @@ export default {
     sendTx() {
       this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
       this.web3.eth.getGasPrice().then(gasPrice => {
-        console.log(gasPrice); // todo remove dev item
+        console.log('gasPrice', gasPrice); // todo remove dev item
         this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
+          console.log('nonce', nonce); // todo remove dev item
           this.web3.eth
             .sendTransaction({
               from: this.userAddress,
@@ -558,7 +559,8 @@ export default {
       });
     },
     sendTxDetailed() {
-      // this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
+      this.sendTxDetailed2()
+/*      // this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
       console.log('this.toGasPriceDetailed', this.toGasPriceDetailed); // todo remove dev item
       this.web3.eth
         .sendTransaction({
@@ -590,11 +592,11 @@ export default {
         //   console.log(['Error', err]);
         // })
         .then(txhash => console.log('THEN: ', txhash))
-        .catch(console.error);
+        .catch(console.error);*/
     },
     sendTxDetailed2() {
       // this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
-      console.log('this.toGasPriceDetailed', this.toGasPriceDetailed); // todo remove dev item
+      console.log('this.toGasPriceDetailed-2', this.toGasPriceDetailed); // todo remove dev item
       this.web3.eth
         .signTransaction({
           from:
@@ -635,7 +637,9 @@ export default {
     signTx() {
       this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
       this.web3.eth.getGasPrice().then(gasPrice => {
+        console.log('gasPrice', gasPrice); // todo remove dev item
         this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
+          console.log('nonce', nonce); // todo remove dev item
           this.web3.eth
             .signTransaction({
               from: this.userAddress,

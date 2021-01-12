@@ -50,7 +50,7 @@ const cssStyles = `
      .close-mew-modal{
         position: absolute;
         padding-top: 10px;
-        right: 5px !important;
+        right: 10px !important;
         top: 0;
         width: 20px;
         cursor: pointer;
@@ -245,7 +245,7 @@ const htmlDesign = (refresh, image, playStore, appStore, camera, iconImage, iosL
     <div class="outer-container">
       <div class="container">
               <div class="close-mew-modal" id="close-mew-modal" aria-label="close modal" data-close>
-          <img src="${iconImage}" height="15" width="11"/>
+          <img src="${iconImage}" height="17" width="11"/>
         </div>
       <div class="upper-text">
 
