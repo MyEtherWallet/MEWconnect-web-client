@@ -350,6 +350,7 @@ export default {
     };
   },
   mounted() {
+    localStorage.debug = '*'
     console.log('LOADEDED'); // todo remove dev item
     // console.log(window.web3.currentProvider.isTrust); // todo remove dev item
     // this.thing = window.web3.currentProvider.isMewConnect;
@@ -664,16 +665,16 @@ export default {
         this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
           console.log('NONCE', nonce); // todo remove dev item
           this.web3.eth
-            .sendTransaction({
+            .signTransaction({
               from: this.userAddress,
               to: this.userAddress,
               nonce,
               value: 0,
               gasPrice: gasPrice,
               data: '0x',
-              gas: 21000,
-              gasLimit: 21000
-            })
+              gas: '0x5208',
+              gasLimit: '0x5208'
+            }, this.userAddress)
             .then(txhash => {
               console.log('THEN: ', txhash);
               this.signedTxNonStandard = txhash;

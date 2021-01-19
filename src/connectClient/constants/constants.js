@@ -70,7 +70,8 @@ const lifeCycle = {
   Failed: 'failed',
   attemptedDisconnectedSend: 'attemptedDisconnectedSend',
   connected: 'connected',
-  disconnected: 'disconnected'
+  disconnected: 'disconnected',
+  ShowReload: 'ShowReload'
 };
 
 const communicationTypes = {

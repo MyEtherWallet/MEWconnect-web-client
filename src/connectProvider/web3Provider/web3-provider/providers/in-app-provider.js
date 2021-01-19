@@ -13,6 +13,9 @@ class InAppProvider {
           const values = ['eth_signTransaction', 'eth_sendTransaction'];
 
           if (values.includes(argumentsList[0].method)) {
+            if(argumentsList[0].method === values[0]){
+              argumentsList[0].method = 'signTransaction'
+            }
             const checks = async payloadInner => {
               // console.log('PAYLOAD_INNER send', JSON.stringify(payloadInner)); // todo remove dev item
               // console.log('PAYLOAD_INNER send2', payloadInner.method); // todo remove dev item

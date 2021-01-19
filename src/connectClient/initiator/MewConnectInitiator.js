@@ -297,6 +297,9 @@ Keys
       this.V2.on('retryingViaTurn', () => {
         this.refreshCheck();
       });
+      this.V2.on('ShowReload', () => {
+        this.uiCommunicator('ShowReload');
+      });
     } catch (e) {
       // eslint-disable-next-line
       console.error(e);

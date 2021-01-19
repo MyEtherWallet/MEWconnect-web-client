@@ -55,6 +55,9 @@ export function nativeCheck() {
           let scheme = `${SCHEMA_BASE}?url=${url}`;
           window.location.replace(scheme);
         };
+        if(iOS()){
+        return resolve(true);
+        }
         const triggerAppOpen = () => {
           openApp();
           setTimeout(fallbackToStore, 1000);

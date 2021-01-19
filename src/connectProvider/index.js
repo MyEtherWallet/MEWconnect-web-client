@@ -42,12 +42,6 @@ export default class Integration extends EventEmitter {
         ) {
           this.runningInApp = true;
           state.web3Provider = window.web3.currentProvider;
-          // rpcCall; 1; [object Object]",
-          // "ARGS rpcCall 4 {"jsonrpc":"2.0","id":4,"method":"eth_getBalance","params":["0x192627797720b7c5ec7b9faaeafa41ff49f866e3","latest"]}"
-          // state.web3Provider.postMessage = (arg1, arg2, arg3) => {
-          //   console.log('ARGS', arg1, arg2, JSON.stringify(arg3)); // todo remove dev item
-          //   return window.web3.currentProvider.postMessage(arg1, arg2, arg3)
-          // }
         } else {
           this.runningInApp = false;
         }
@@ -136,7 +130,7 @@ export default class Integration extends EventEmitter {
             MEWconnectWallet.setConnectionState(CONNECTED);
             resolve(address);
           })
-          .catch(console.error); // todo remove dev item
+          .catch(console.error);
       });
     }
 
@@ -231,30 +225,12 @@ export default class Integration extends EventEmitter {
     let web3Provider;
     try {
       if (this.runningInApp) {
-        console.log('not here'); // todo remove dev item
-        console.log('not here'); // todo remove dev item
         if (state.web3Provider) {
           web3Provider = state.web3Provider;
         } else {
           web3Provider = window.web3.currentProvider;
         }
-        // web3Provider = new MEWProvider(
-        //   window.web3.currentProvider,
-        //   {},
-        //   {
-        //     state: state
-        //   },
-        //   eventHub
-        // );
 
-        // if (
-        //   (window.web3.currentProvider.isMewConnect ||
-        //     window.web3.currentProvider.isTrust) &&
-        //   this.runningInApp
-        // ) {
-        //
-        // }
-        // console.log('PROVIDER', web3Provider); // todo remove dev item
       } else {
 
         const chain = this.identifyChain(CHAIN_ID || 1);
