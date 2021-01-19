@@ -34,6 +34,12 @@ class Web3Calls {
         outputFormatter: utils.hexToNumber
       }),
       new Method({
+        name: 'signTransaction',
+        call: 'eth_signTransaction',
+        params: 1,
+        inputFormatter: [formatters.inputTransactionFormatter]
+      }),
+      new Method({
         name: 'sendSignedTransaction',
         call: 'eth_sendRawTransaction',
         params: 1,

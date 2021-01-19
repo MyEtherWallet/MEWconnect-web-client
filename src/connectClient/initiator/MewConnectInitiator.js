@@ -12,6 +12,7 @@ import MewConnectInitiatorV1 from './MewConnectInitiatorV1';
 
 import WebRtcCommunication from '../WebRtcCommunication';
 import PopUpCreator from '../../connectWindow/popUpCreator';
+import { DISCONNECTED, CONNECTED } from '../../config';
 
 const debug = debugLogger('MEWconnect:initiator-base');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
@@ -79,12 +80,12 @@ this.requestIds = [];
   }
 
   static setConnectionState(connectionState) {
-    if (!connectionState) MewConnectInitiator.connectionState = 'disconnected';
+    if (!connectionState) MewConnectInitiator.connectionState = DISCONNECTED;
     else MewConnectInitiator.connectionState = connectionState;
   }
 
   static getConnectionState() {
-    if (!MewConnectInitiator.connectionState) return 'disconnected';
+    if (!MewConnectInitiator.connectionState) return DISCONNECTED;
     return MewConnectInitiator.connectionState;
   }
 
@@ -296,6 +297,9 @@ Keys
       this.V2.on('retryingViaTurn', () => {
         this.refreshCheck();
       });
+      this.V2.on('ShowReload', () => {
+        this.uiCommunicator('ShowReload');
+      });
     } catch (e) {
       // eslint-disable-next-line
       console.error(e);
@@ -336,7 +340,7 @@ Keys
         this.connected = true;
         this.popupCreator.removeWindowClosedListener();
         this.popupCreator.closePopupWindow();
-        MewConnectInitiator.setConnectionState('connected');
+        MewConnectInitiator.setConnectionState(CONNECTED);
       }
     );
   }
