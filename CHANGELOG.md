@@ -1,3 +1,8 @@
+### Release 2.1.20
+- Detect in-app browser and default to use it.
+- Don't redirect to open app on IOS
+- UI changes/fixes
+
 ### Release 2.1.20-beta.1
 - Reduce size of tokens-eth.json file
 
