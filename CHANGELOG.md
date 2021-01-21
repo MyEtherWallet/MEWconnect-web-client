@@ -1,4 +1,4 @@
-### Release 2.1.21-beta.1
+### Release 2.1.21-beta.2
 - Change disconnect with in app browser to not reset environment 
 
 ### Release 2.1.20
