@@ -876,12 +876,15 @@ export default {
       try {
         const msg = '1234';
         if (this.signatureToCheck === '' && this.signatureFromMessage === '') {
+          console.log(  'lklklklk',          this.signatureFromMessage,
+              this.userAddress); // todo remove dev item
           this.signatureFromMessage = '1234';
           this.signatureToCheck = await this.web3.eth.personal.sign(
             this.signatureFromMessage,
             this.userAddress
           );
         }
+        console.log('toCheck', this.signatureToCheck); // todo remove dev item
         const res = this.web3.eth.personal
           .ecRecover(
             this.signatureFromMessage,

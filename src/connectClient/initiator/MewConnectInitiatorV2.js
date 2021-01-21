@@ -509,6 +509,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.useFallback();
     } else if (!this.connected && this.tryingTurn && !this.turnDisabled) {
       this.emit('ShowReload');
+      console.log('SHOW RELOAD'); // todo remove dev item
     }
     else {
       if (!this.isAlive()) {

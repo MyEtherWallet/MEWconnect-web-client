@@ -333,6 +333,9 @@ export default class Integration extends EventEmitter {
 
   disconnect() {
     try {
+      if(this.runningInApp){
+        return true;
+      }
       if (state.wallet) {
         const connection = state.wallet.getConnection();
         connection.disconnectRTC();

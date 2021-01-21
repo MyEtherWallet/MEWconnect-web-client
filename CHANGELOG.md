@@ -1,3 +1,6 @@
+### Release 2.1.21-beta.1
+- Change disconnect with in app browser to not reset environment 
+
 ### Release 2.1.20
 - Detect in-app browser and default to use it.
 - Don't redirect to open app on IOS
