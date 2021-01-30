@@ -73,7 +73,7 @@
     "@vue/cli-plugin-eslint": "^4.2.3",
     "@vue/cli-service": "^4.1.0",
     "@vue/eslint-config-prettier": "^4.0.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^25.1.0",
