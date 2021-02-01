@@ -1,3 +1,6 @@
+### Release 2.1.22
+- Increment patch version
+
 ### Release 2.1.21-beta.2
 - Change disconnect with in app browser to not reset environment 
 

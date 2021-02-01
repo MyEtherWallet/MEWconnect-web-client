@@ -1,3 +1,4 @@
+/* eslint-disable */
 import misc from '../../helpers/misc';
 import { toError, toPayload } from '../jsonrpc';
 import utils from 'ethereumjs-util';
@@ -25,5 +26,6 @@ export default async ({ payload }, res, next) => {
     parts.s
   );
   const addressBuffer = utils.pubToAddress(recovered);
+
   res(null, toPayload(payload.id, '0x' + addressBuffer.toString('hex')));
 };
