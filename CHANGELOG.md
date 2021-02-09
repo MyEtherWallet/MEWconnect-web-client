@@ -1,3 +1,6 @@
+### Release 2.1.23-beta.1
+- Allow http rpc url's 
+
 ### Release 2.1.22
 - Increment patch version
 

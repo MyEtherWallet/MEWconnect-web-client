@@ -243,8 +243,8 @@ export default class Integration extends EventEmitter {
         const options = {
           subscriptionNotFoundNoThrow: this.subscriptionNotFoundNoThrow
         };
-        if (!/[wW]/.test(hostUrl.protocol)) {
-          throw Error('websocket rpc endpoint required');
+        if (!/[wW]/.test(hostUrl.protocol) && !/[htpHTP]/.test(hostUrl.protocol) ) {
+          throw Error('Invalid rpc endpoint');
         }
         if (!_noCheck && !this.infuraId) {
           if (
