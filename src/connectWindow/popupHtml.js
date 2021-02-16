@@ -5,7 +5,7 @@ const noticeHtml = (elementId, imageSrc, iconImage) => {
       <img src="${iconImage}" height="15" width="11" />
     </div>
     <img id="${elementId + '-img'}" src="${imageSrc}"/>
-    <span id="${elementId + '-label-text'}">MEW wallet</span>
+    <span id="${elementId + '-label-text'}">MEW&nbsp;wallet</span>
   </div>
   
   <div id="${elementId + '-text'}">

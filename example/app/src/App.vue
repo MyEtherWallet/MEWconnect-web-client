@@ -363,9 +363,10 @@ export default {
     this.connect = new mewConnect.Provider({
       windowClosedError: true,
       chainId: 1,
-      rpcUrl: 'HTTP://127.0.0.1:7545'
+      rpcUrl: 'wss://mainnet.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'
+      // rpcUrl: 'HTTP://127.0.0.1:7545'
       // infuraId:
-      //   '7d06294ad2bd432887eada360c5e1986' /*rpcUrl: 'wss://ropsten.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'*/
+      //   '7d06294ad2bd432887eada360c5e1986'
     });
     this.connect.on('popupWindowClosed', () => {
       console.log(`popup window closed EVENT`);
