@@ -7,7 +7,6 @@ import { getMessage } from './messageCreator';
 // TODO add debug logging
 // const debug = debugLogger('MEWconnect:popup-handler');
 
-
 export default class PopUpHandler {
   constructor() {
     this.index = 0;

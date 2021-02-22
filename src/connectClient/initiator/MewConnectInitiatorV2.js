@@ -65,9 +65,9 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       debug('constructor error:', e);
     }
 
-    this.webRtcCommunication.on('useFallback', (id) => {
+    this.webRtcCommunication.on('useFallback', id => {
       debug('USING TURN FALLBACK');
-      if(this.initiatorId === id){
+      if (this.initiatorId === id) {
         this.useFallback();
       } else {
         this.socketDisconnect();
@@ -346,7 +346,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   async sendOffer(data) {
-    if(!this.isActiveInstance) return;
+    if (!this.isActiveInstance) return;
     debug('sendOffer');
     try {
       this.emit('sendingOffer');
@@ -366,7 +366,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
   // Handle the WebRTC ANSWER from the opposite (mobile) peer
   async recieveAnswer(data) {
-    if(!this.isActiveInstance) return;
+    if (!this.isActiveInstance) return;
     debug('received answer');
     try {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
@@ -424,7 +424,10 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       // this.p = new this.Peer(simpleOptions);
       const peerID = this.webRtcCommunication.getActivePeerId();
       this.setActivePeerId(peerID);
-      this.webRtcCommunication.once('connect', this.onConnect.bind(this, peerID));
+      this.webRtcCommunication.once(
+        'connect',
+        this.onConnect.bind(this, peerID)
+      );
       this.webRtcCommunication.once('signal', this.sendOffer.bind(this));
       this.webRtcCommunication.once('data', this.onData.bind(this, peerID));
     } catch (e) {
@@ -433,7 +436,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   onConnect(peerID) {
-    if(!this.isActiveInstance) return;
+    if (!this.isActiveInstance) return;
     try {
       debugStages('RTC CONNECT', 'ok');
       debug('peerID', peerID);
@@ -510,8 +513,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     } else if (!this.connected && this.tryingTurn && !this.turnDisabled) {
       this.emit('ShowReload');
       console.log('SHOW RELOAD'); // todo remove dev item
-    }
-    else {
+    } else {
       if (!this.isAlive()) {
         this.uiCommunicator(this.lifeCycle.RtcErrorEvent);
       }

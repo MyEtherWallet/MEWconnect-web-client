@@ -1,9 +1,9 @@
 /* eslint-disable */
-import {IOS_LINK, ANDROID_LINK} from '../config';
+import { IOS_LINK, ANDROID_LINK } from '../config';
 
-const APP_STORE_LINK = IOS_LINK
-const PLAY_STORE_LINK = ANDROID_LINK
-const SCHEMA_BASE = 'mewwallet://dapps'
+const APP_STORE_LINK = IOS_LINK;
+const PLAY_STORE_LINK = ANDROID_LINK;
+const SCHEMA_BASE = 'mewwallet://dapps';
 
 export function mobileCheck() {
   let check = false;
@@ -43,9 +43,7 @@ export function nativeCheck() {
           if (iOS()) {
             window.location.replace(APP_STORE_LINK);
           } else {
-            window.location.replace(
-              PLAY_STORE_LINK
-            );
+            window.location.replace(PLAY_STORE_LINK);
           }
           resolve(false);
         };
@@ -55,8 +53,8 @@ export function nativeCheck() {
           let scheme = `${SCHEMA_BASE}?url=${url}`;
           window.location.replace(scheme);
         };
-        if(iOS()){
-        return resolve(true);
+        if (iOS()) {
+          return resolve(true);
         }
         const triggerAppOpen = () => {
           openApp();

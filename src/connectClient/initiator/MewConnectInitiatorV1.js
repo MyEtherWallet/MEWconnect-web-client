@@ -1,6 +1,6 @@
 import createLogger from 'logging';
 import debugLogger from 'debug';
-import {V1endpoint, V2endpoint} from '../config';
+import { V1endpoint, V2endpoint } from '../config';
 
 import wrtc from 'wrtc';
 import io from 'socket.io-client';

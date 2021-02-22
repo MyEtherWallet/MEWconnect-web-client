@@ -25,7 +25,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.showPopup = options.showPopup || false;
     try {
       this.supportedBrowser = MewConnectCommon.checkBrowser();
-this.requestIds = [];
+      this.requestIds = [];
       this.V1 = {};
       this.V2 = {};
 
@@ -174,11 +174,17 @@ this.requestIds = [];
       this.socketKey = privateKey;
       const separator = this.jsonDetails.connectionCodeSeparator;
       let qrCodeString =
-        this.version + separator + privateKey + separator + this.connId + ':name=' + dapp.replace(/^www\./, '');
-      if(dapp.includes('myetherwallet.com')){
+        this.version +
+        separator +
+        privateKey +
+        separator +
+        this.connId +
+        ':name=' +
+        dapp.replace(/^www\./, '');
+      if (dapp.includes('myetherwallet.com')) {
         qrCodeString =
           this.version + separator + privateKey + separator + this.connId;
-      } else if(dapp.includes('mewbuilds.com')){
+      } else if (dapp.includes('mewbuilds.com')) {
         qrCodeString =
           this.version + separator + privateKey + separator + this.connId;
       }
@@ -193,7 +199,7 @@ this.requestIds = [];
           this.emit(this.lifeCycle.AuthRejected);
           this.refreshCheck();
         }
-      }
+      };
 
       debug(qrCodeString);
       if (this.showPopup) {
@@ -203,7 +209,11 @@ this.requestIds = [];
           this.popupCreator.refreshQrcode = this.initiatorStart.bind(this);
           this.popupCreator.openPopupWindow(qrCodeString);
           // this.popupCreator.container.addEventListener('beforeunload', unloadOrClosed);
-          this.popupCreator.container.addEventListener('mewModalClosed', unloadOrClosed, {once: true});
+          this.popupCreator.container.addEventListener(
+            'mewModalClosed',
+            unloadOrClosed,
+            { once: true }
+          );
         }
       } else {
         this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
@@ -366,19 +376,19 @@ Keys
   sendRtcMessage(type, data) {
     const id = uuid();
     this.requestIds.push(id);
-    debug('MESSAGE IDS KNOWN', this.requestIds)
+    debug('MESSAGE IDS KNOWN', this.requestIds);
     this.webRtcCommunication.sendRtcMessage(type, data, id);
   }
 
   dataReceived(data) {
     debug('dataReceived', data);
-    if(data.id){
+    if (data.id) {
       debug('MESSAGE ID RECEIVED', data.id);
       if (this.requestIds.includes(data.id)) {
         this.uiCommunicator(data.type, data.data);
         const idx = this.requestIds.findIndex(item => item === id);
         this.requestIds.splice(idx, 1);
-        debug('MESSAGE IDS KNOWN', this.requestIds)
+        debug('MESSAGE IDS KNOWN', this.requestIds);
       } else {
         debug('**NO MESSAGE ID RECEIVED : field present**');
         this.uiCommunicator(data.type, data.data);

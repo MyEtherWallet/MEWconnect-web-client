@@ -60,7 +60,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.usingVersion = version;
   }
 
-  setActiveInitiatorId(id){
+  setActiveInitiatorId(id) {
     this.activeInitiatorId = id;
   }
 
@@ -307,12 +307,16 @@ export default class WebRtcCommunication extends MewConnectCommon {
       }
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
-        this.emit('data', { type: parsed.type, data: parsed.data, id: parsed.id });
+        this.emit('data', {
+          type: parsed.type,
+          data: parsed.data,
+          id: parsed.id
+        });
       } else {
         this.emit('data', {
           type: decryptedData.type,
           data: decryptedData.data,
-         id: decryptedData.id
+          id: decryptedData.id
         });
       }
     } catch (e) {
@@ -363,10 +367,9 @@ export default class WebRtcCommunication extends MewConnectCommon {
   sendRtcMessage(type, msg, id) {
     debug(msg);
     debug(`[SEND RTC MESSAGE] type:  ${type},  message:  ${msg}, id: ${id}`);
-    this.rtcSend(JSON.stringify({ type, data: msg, id }))
-      .catch(err =>{
-        debug(err)
-      });
+    this.rtcSend(JSON.stringify({ type, data: msg, id })).catch(err => {
+      debug(err);
+    });
   }
 
   disconnectRTCClosure() {

@@ -18,7 +18,7 @@ import {
   windowInformer
 } from './popupWindowDesign';
 import debugLogger from 'debug';
-import {IOS_LINK, ANDROID_LINK} from '../config';
+import { IOS_LINK, ANDROID_LINK } from '../config';
 
 // TODO add debug logging
 const debug = debugLogger('MEWconnect:popup-window');
@@ -38,14 +38,13 @@ export default class PopUpCreator {
     this.popupWindowOpen = null;
     this.windowClosedListener = () => {};
 
-    if(!document.getElementById('Attach-Mew-Wallet-Modal')){
+    if (!document.getElementById('Attach-Mew-Wallet-Modal')) {
       this.container = window.document.createElement('div');
       this.container.id = 'Attach-Mew-Wallet-Modal';
       window.document.body.appendChild(this.container);
     } else {
-      this.container = document.getElementById('Attach-Mew-Wallet-Modal')
+      this.container = document.getElementById('Attach-Mew-Wallet-Modal');
     }
-
 
     window.addEventListener('beforeunload', () => {
       this.closePopupWindow();
@@ -102,7 +101,7 @@ export default class PopUpCreator {
     });
   }
 
-  cancelConnectionSetup(){
+  cancelConnectionSetup() {
     this.popupWindowOpen = null;
     this.hideNotifier();
     this.closePopupWindow();
@@ -137,10 +136,8 @@ export default class PopUpCreator {
 
   hideDialog(evt) {
     if (
-      document
-        .querySelector('.mew-wallet-modal')
-         && document
-        .querySelector('.mew-wallet-modal-container')
+      document.querySelector('.mew-wallet-modal') &&
+      document.querySelector('.mew-wallet-modal-container')
     ) {
       document
         .querySelector('.mew-wallet-modal')
@@ -148,35 +145,27 @@ export default class PopUpCreator {
       document
         .querySelector('.mew-wallet-modal-container')
         .classList.remove('is-visible');
-      document
-        .querySelector('.modal-dialog')
-        .classList.remove('is-visible');
+      document.querySelector('.modal-dialog').classList.remove('is-visible');
     }
   }
 
   showDialog(evt) {
-    if(typeof this.popupWindowOpen !== 'boolean') return;
+    if (typeof this.popupWindowOpen !== 'boolean') return;
     this.popupWindowOpen = true;
     if (
-      document
-        .querySelector('.mew-wallet-modal')
-      && document
-        .querySelector('.mew-wallet-modal-container')
+      document.querySelector('.mew-wallet-modal') &&
+      document.querySelector('.mew-wallet-modal-container')
     ) {
-      document
-        .querySelector('.mew-wallet-modal')
-        .classList.add('is-visible');
+      document.querySelector('.mew-wallet-modal').classList.add('is-visible');
       document
         .querySelector('.mew-wallet-modal-container')
         .classList.add('is-visible');
-      document
-        .querySelector('.modal-dialog')
-        .classList.add('is-visible');
+      document.querySelector('.modal-dialog').classList.add('is-visible');
     }
   }
 
   showPopupWindow(qrcode) {
-    if(typeof this.popupWindowOpen === 'boolean'){
+    if (typeof this.popupWindowOpen === 'boolean') {
       this.showDialog();
       return this.container;
     }
@@ -188,9 +177,7 @@ export default class PopUpCreator {
     this.createQrCodeModal();
     this.createWindowInformer();
 
-    const element = document.getElementById(
-      'canvas-for-mewconnect-qr-code'
-    );
+    const element = document.getElementById('canvas-for-mewconnect-qr-code');
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
 
     const background = document.getElementById('mew-wallet-modal');
@@ -200,17 +187,21 @@ export default class PopUpCreator {
       this.cancelConnectionSetup();
     });
 
-    background.addEventListener('click', (evt) => {
+    background.addEventListener('click', evt => {
       this.hideDialog();
     });
-    background2.addEventListener('click', (evt) => {
+    background2.addEventListener('click', evt => {
       this.hideDialog(evt);
     });
-    dialog.addEventListener('click', (evt) => {
-      if(this.popupWindowOpen) {
-        evt.stopPropagation();
-      }
-    }, false);
+    dialog.addEventListener(
+      'click',
+      evt => {
+        if (this.popupWindowOpen) {
+          evt.stopPropagation();
+        }
+      },
+      false
+    );
     this.showWindowInformer();
     this.popupWindow = this.container;
     this.popupWindowOpen = true;
@@ -224,7 +215,7 @@ export default class PopUpCreator {
 
   closePopupWindow() {
     // this.hideDialog();
-    this.container.dispatchEvent(new Event('mewModalClosed'))
+    this.container.dispatchEvent(new Event('mewModalClosed'));
     this.container.replaceChildren();
     this.popupWindowOpen = null;
   }

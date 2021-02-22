@@ -101,9 +101,9 @@ class WalletInterface {
     if (this.isPubOnly && typeof signer !== 'function')
       throw new Error('public key only wallets needs a signer');
     return new Promise((resolve, reject) => {
-        signer(txParams)
-          .then(resolve)
-          .catch(reject);
+      signer(txParams)
+        .then(resolve)
+        .catch(reject);
       // }
     });
   }

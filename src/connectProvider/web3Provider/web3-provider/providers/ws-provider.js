@@ -106,29 +106,32 @@ class WSProvider {
           }
         }
 
-          if(typeof argumentsList[0] === 'string' && typeof argumentsList[1] !== 'function'){
-            return new Promise((resolve, reject) => {
-              const callback = (err, response) => {
-                if (err) reject(err);
-                else resolve(response.result);
-              };
-              let params = [];
-              if (argumentsList.length === 2) {
-                params = Array.isArray(argumentsList[1])
-                  ? argumentsList[1]
-                  : argumentsList[1] !== undefined
-                    ? [argumentsList[1]]
-                    : []
-              }
-              const payload = {
-                jsonrpc: "2.0",
-                id: 1,
-                method: argumentsList[0],
-                params: params
-              };
-              target(payload, callback);
-            });
-          }
+        if (
+          typeof argumentsList[0] === 'string' &&
+          typeof argumentsList[1] !== 'function'
+        ) {
+          return new Promise((resolve, reject) => {
+            const callback = (err, response) => {
+              if (err) reject(err);
+              else resolve(response.result);
+            };
+            let params = [];
+            if (argumentsList.length === 2) {
+              params = Array.isArray(argumentsList[1])
+                ? argumentsList[1]
+                : argumentsList[1] !== undefined
+                ? [argumentsList[1]]
+                : [];
+            }
+            const payload = {
+              jsonrpc: '2.0',
+              id: 1,
+              method: argumentsList[0],
+              params: params
+            };
+            target(payload, callback);
+          });
+        }
 
         return target(argumentsList[0], argumentsList[1]);
       }

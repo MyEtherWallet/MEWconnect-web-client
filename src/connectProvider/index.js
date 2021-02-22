@@ -34,8 +34,8 @@ const recentDataRecord = [];
 export default class Integration extends EventEmitter {
   constructor(options = {}) {
     super();
-    if(window.web3){
-      if(window.web3.currentProvider){
+    if (window.web3) {
+      if (window.web3.currentProvider) {
         if (
           window.web3.currentProvider.isMewConnect ||
           window.web3.currentProvider.isTrust
@@ -45,10 +45,10 @@ export default class Integration extends EventEmitter {
         } else {
           this.runningInApp = false;
         }
-      }else {
+      } else {
         this.runningInApp = false;
       }
-    }else {
+    } else {
       this.runningInApp = false;
     }
 
@@ -230,9 +230,7 @@ export default class Integration extends EventEmitter {
         } else {
           web3Provider = window.web3.currentProvider;
         }
-
       } else {
-
         const chain = this.identifyChain(CHAIN_ID || 1);
         const defaultNetwork = Networks[chain.key][0];
         state.network = defaultNetwork;
@@ -243,7 +241,10 @@ export default class Integration extends EventEmitter {
         const options = {
           subscriptionNotFoundNoThrow: this.subscriptionNotFoundNoThrow
         };
-        if (!/[wW]/.test(hostUrl.protocol) && !/[htpHTP]/.test(hostUrl.protocol) ) {
+        if (
+          !/[wW]/.test(hostUrl.protocol) &&
+          !/[htpHTP]/.test(hostUrl.protocol)
+        ) {
           throw Error('Invalid rpc endpoint');
         }
         if (!_noCheck && !this.infuraId) {
@@ -271,7 +272,6 @@ export default class Integration extends EventEmitter {
           },
           eventHub
         );
-
       }
 
       state.enable = this.enable.bind(this);
@@ -333,7 +333,7 @@ export default class Integration extends EventEmitter {
 
   disconnect() {
     try {
-      if(this.runningInApp){
+      if (this.runningInApp) {
         return true;
       }
       if (state.wallet) {
@@ -390,6 +390,14 @@ export default class Integration extends EventEmitter {
             }
             resolve(err);
           });
+      }
+    });
+
+    eventHub.on(EventNames.WALLET_NOT_CONNECTED, () => {
+      if (!state.wallet) {
+        this.popUpHandler.showNoticePersistentEnter(
+          messageConstants.notConnected
+        );
       }
     });
 

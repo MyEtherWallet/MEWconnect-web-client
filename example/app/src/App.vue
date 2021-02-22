@@ -12,7 +12,8 @@
       <button @click="selectNetwork(42)">Kovan</button>
     </div>
 
-    <ul v-show="userAddress !== ''">
+<!--    <ul v-show="userAddress !== ''">-->
+      <ul>
       <li>
         <button @click="disconnect">Disconnect</button>
       </li>
@@ -35,7 +36,8 @@
             placeholder="amount"
           /> </label
         ><br />
-        <button v-show="userAddress !== ''" @click="sendTx">send</button>
+<!--        <button v-show="userAddress !== ''" @click="sendTx">send</button>-->
+        <button  @click="sendTx">send</button>
         <h6>Sends to the connected wallet address</h6>
         <h3>Tx Hash:</h3>
         {{ txHash }}
@@ -100,7 +102,10 @@
           />
         </label>
         <br />
-        <button v-show="userAddress !== ''" @click="sendTxDetailed">
+<!--        <button v-show="userAddress !== ''" @click="sendTxDetailed">-->
+<!--          send-->
+<!--        </button>-->
+        <button @click="sendTxDetailed">
           send
         </button>
         <h6>Sends to the connected wallet address</h6>
@@ -363,7 +368,7 @@ export default {
     this.connect = new mewConnect.Provider({
       windowClosedError: true,
       chainId: 1,
-      rpcUrl: 'wss://mainnet.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'
+      rpcUrl: 'https://mainnet.infura.io/v3/859569f6decc4446a5da1bb680e7e9cf' //'wss://mainnet.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'
       // rpcUrl: 'HTTP://127.0.0.1:7545'
       // infuraId:
       //   '7d06294ad2bd432887eada360c5e1986'
@@ -508,6 +513,7 @@ export default {
       this.userAddress = '';
     },
     getAccount() {
+      console.log(this.ethereum); // todo remove dev item
       this.ethereum.send('eth_requestAccounts').then(accounts => {
         console.log(`User's address is ${accounts[0]}`);
       });

@@ -240,7 +240,16 @@ const cssStyles = `
         }
     `;
 
-const htmlDesign = (refresh, image, playStore, appStore, camera, iconImage, iosLink, androidLink) => {
+const htmlDesign = (
+  refresh,
+  image,
+  playStore,
+  appStore,
+  camera,
+  iconImage,
+  iosLink,
+  androidLink
+) => {
   return `
     <div class="outer-container">
       <div class="container">

@@ -9,7 +9,7 @@ export function getMessage(text, extra) {
     signMessage: 'Check your phone to sign the message',
     declineSignMessage: 'User declined message signing',
     notConnected:
-      'Phone not connected.  Please connect your phone and try again to sign the transaction',
+      'Phone not connected.  Please connect your phone and try again',
     defaultMessage: 'Check your phone to continue',
     error: 'An error occurred while preparing the last action'
   };

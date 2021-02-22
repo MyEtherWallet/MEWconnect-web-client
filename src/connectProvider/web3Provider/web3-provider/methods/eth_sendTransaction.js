@@ -33,18 +33,30 @@ export default async (
   delete localTx['nonce'];
   const ethCalls = new EthCalls(requestManager);
   try {
+    if (!store.state.wallet) {
+      eventHub.emit(EventNames.WALLET_NOT_CONNECTED);
+      debug('NOT ACTIVE WALLET IDENTIFIED');
+      res(toError(payload.id, 'No active wallet: eth_sendTransaction', 4002));
+      return;
+    }
     tx.nonce = !tx.nonce
       ? await store.state.web3.eth.getTransactionCount(
           store.state.wallet.getAddressString()
         )
       : tx.nonce;
-    if(tx.gasLimit && !tx.gas){
-      tx.gas = tx.gasLimit
-    } else if(!tx.gasLimit && tx.gas){
-      tx.gasLimit = tx.gas
+    if (tx.gasLimit && !tx.gas) {
+      tx.gas = tx.gasLimit;
+    } else if (!tx.gasLimit && tx.gas) {
+      tx.gasLimit = tx.gas;
     }
-    tx.gas = !tx.gas || new BigNumber(tx.gas).lte(0) ? await ethCalls.estimateGas(localTx) : tx.gas;
-    tx.gasPrice = !tx.gasPrice || new BigNumber(tx.gasPrice).lte(0) ? await store.state.web3.eth.getGasPrice() : tx.gasPrice
+    tx.gas =
+      !tx.gas || new BigNumber(tx.gas).lte(0)
+        ? await ethCalls.estimateGas(localTx)
+        : tx.gas;
+    tx.gasPrice =
+      !tx.gasPrice || new BigNumber(tx.gasPrice).lte(0)
+        ? await store.state.web3.eth.getGasPrice()
+        : tx.gasPrice;
     tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
   } catch (e) {
     debugErrors(e);
@@ -54,12 +66,12 @@ export default async (
   getSanitizedTx(tx)
     .then(_tx => {
       eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
-        if(_response.reject){
+        if (_response.reject) {
           debug('USER DECLINED SIGN TRANSACTION & SEND');
           res(toError(payload.id, 'User Rejected Request', 4001));
           return;
         }
-        debug('broadcasting', payload.method, _response.rawTransaction)
+        debug('broadcasting', payload.method, _response.rawTransaction);
         const _promiObj = store.state.web3.eth.sendSignedTransaction(
           _response.rawTransaction
         );

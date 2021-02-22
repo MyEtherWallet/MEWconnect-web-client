@@ -112,7 +112,6 @@ const validateHexString = str => {
   return utils.isHex(str);
 };
 
-
 const solidityType = inputType => {
   if (!inputType) inputType = '';
   if (inputType.includes('[') && inputType.includes(']')) {
@@ -190,7 +189,6 @@ const isContractArgValid = (value, solidityType) => {
     return typeof value === typeof true || value === '';
   return false;
 };
-
 
 export default {
   isJson,
