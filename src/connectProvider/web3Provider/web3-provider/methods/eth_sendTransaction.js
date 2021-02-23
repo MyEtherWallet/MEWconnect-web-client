@@ -65,6 +65,7 @@ export default async (
   }
   getSanitizedTx(tx)
     .then(_tx => {
+      console.log('TX', _tx); // todo remove dev item
       eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
         if (_response.reject) {
           debug('USER DECLINED SIGN TRANSACTION & SEND');

@@ -368,8 +368,8 @@ export default {
     this.connect = new mewConnect.Provider({
       windowClosedError: true,
       chainId: 1,
-      rpcUrl: 'https://mainnet.infura.io/v3/859569f6decc4446a5da1bb680e7e9cf' //'wss://mainnet.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'
-      // rpcUrl: 'HTTP://127.0.0.1:7545'
+     // rpcUrl: 'https://mainnet.infura.io/v3/859569f6decc4446a5da1bb680e7e9cf' //'wss://mainnet.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'
+      rpcUrl: 'HTTP://127.0.0.1:7545'
       // infuraId:
       //   '7d06294ad2bd432887eada360c5e1986'
     });

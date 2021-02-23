@@ -245,7 +245,7 @@ export default class Integration extends EventEmitter {
           !/[wW]/.test(hostUrl.protocol) &&
           !/[htpHTP]/.test(hostUrl.protocol)
         ) {
-          throw Error('Invalid rpc endpoint');
+          throw Error('Invalid rpc endpoint supplied to MEWconnect during setup');
         }
         if (!_noCheck && !this.infuraId) {
           if (
