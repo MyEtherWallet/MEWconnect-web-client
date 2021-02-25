@@ -213,7 +213,10 @@ WebsocketProvider.prototype.on = function(type, callback) {
       this.accountsChanged = callback;
       break;
     case 'disconnected':
-      this.disconnected = callback;
+      this.disconnectedCallback = callback;
+      break;
+    case 'disconnect':
+      this.disconnectCallback = callback;
       break;
   }
 };

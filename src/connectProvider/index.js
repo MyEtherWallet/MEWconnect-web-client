@@ -67,6 +67,7 @@ export default class Integration extends EventEmitter {
     this.connectionState = false;
     this.chainIdMapping = this.createChainMapping();
     this.returnPromise = null;
+    this.disconnectComplete = false;
     popUpCreator = new PopUpCreator();
   }
 
@@ -309,8 +310,9 @@ export default class Integration extends EventEmitter {
       () => {
         this.popUpHandler.showNotice(messageConstants.disconnect);
         MEWconnectWallet.setConnectionState(connection.lifeCycle.disconnected);
-        if (state.wallet !== null && state.web3Provider.disconnected) {
-          state.web3Provider.disconnected();
+        if (state.wallet !== null && state.web3Provider.disconnectCallback) {
+          state.web3Provider.disconnectCallback();
+          this.emit('disconnect')
         }
         state.wallet = null;
         this.emit(DISCONNECTED);
@@ -322,8 +324,9 @@ export default class Integration extends EventEmitter {
       () => {
         this.popUpHandler.showNotice(messageConstants.disconnect);
         MEWconnectWallet.setConnectionState(connection.lifeCycle.disconnected);
-        if (state.wallet !== null && state.web3Provider.disconnected) {
-          state.web3Provider.disconnected();
+        if (state.wallet !== null && state.web3Provider.disconnectCallback) {
+          state.web3Provider.disconnectCallback();
+          this.emit('disconnect')
         }
         state.wallet = null;
         this.emit(connection.lifeCycle.disconnected);

@@ -369,9 +369,9 @@ export default {
       windowClosedError: true,
       chainId: 1,
      // rpcUrl: 'https://mainnet.infura.io/v3/859569f6decc4446a5da1bb680e7e9cf' //'wss://mainnet.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'
-      rpcUrl: 'HTTP://127.0.0.1:7545'
-      // infuraId:
-      //   '7d06294ad2bd432887eada360c5e1986'
+     //  rpcUrl: 'https://node-mainnet.rarible.com' //HTTP://127.0.0.1:7545'
+      infuraId:
+        '7d06294ad2bd432887eada360c5e1986'
     });
     this.connect.on('popupWindowClosed', () => {
       console.log(`popup window closed EVENT`);
@@ -389,21 +389,41 @@ export default {
     web3 = this.web3;
     // See the 'onClick' method below for starting the connection sequence
     // listener on the web3 provider emiting when the account changes (at the moment this is also the same as a connection being established.)
-    console.log(this.ethereum); // todo remove dev item
     this.ethereum.on('accountsChanged', accounts => {
       console.log(`accountsChanged User's address is ${accounts[0]}`);
     });
 
     this.ethereum.on('disconnected', () => {
+
       console.log(`accountsChanged User's address is DISCONNECTED`);
+      console.log("Provider");
       this.userAddress = '';
     });
     this.connect.on('disconnected', () => {
       console.log(`accountsChanged User's address is DISCONNECTED`);
+      console.log("Wallet Core");
+    });
+    console.log(this.ethereum.on); // todo remove dev item
+    this.ethereum.on('disconnect', () => {
+      console.log("Provider: disconnect");
+      this.userAddress = '';
+    });
+    this.connect.on('disconnect', () => {
+      console.log("Wallet Core: disconnect");
+      this.userAddress = '';
+    });
+
+    this.ethereum.on("connect", () => {
+      console.log("Provider: connect");
+    });
+
+    this.connect.on("connect", () => {
+      console.log("Wallet Core: connect");
     });
 
     this.altPopup = new PopUpCreator();
     // window.alert(this.thing + '2')
+    console.log(this.ethereum); // todo remove dev item
 
     this.thing = 27;
     // document.getElementById('signtx').addEventListener('click', (event) => {

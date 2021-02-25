@@ -68,7 +68,10 @@ class HttpProvider {
             this.accountsChanged = callback;
             break;
           case 'disconnected':
-            this.disconnected = callback;
+            this.httpProvider.disconnectedCallback = callback;
+            break;
+          case 'disconnect':
+            this.httpProvider.disconnectCallback = callback;
             break;
         }
       }
