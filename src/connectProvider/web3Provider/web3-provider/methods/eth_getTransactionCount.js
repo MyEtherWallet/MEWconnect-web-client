@@ -17,7 +17,7 @@ export default async ({ payload, store, requestManager }, res, next) => {
     cached = store.nonceCache;
   }
   const timeDiff =
-    Math.round((new Date().getTime() - cached.timestamp) / 1000) / 20;
+    Math.round((new Date().getTime() - cached.timestamp) / 1000) / 30;
   if (timeDiff > 1) {
     const liveNonce = await ethCalls.getTransactionCount(addr);
     const liveNonceBN = new BigNumber(liveNonce);

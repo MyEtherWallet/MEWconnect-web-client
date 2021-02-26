@@ -1,4 +1,3 @@
-/* eslint-disable */
 import EthCalls from '../web3Calls';
 import EventNames from '../events';
 import { toPayload, toError } from '../jsonrpc';
@@ -26,7 +25,6 @@ export default async (
   res,
   next
 ) => {
-  console.log(payload); // todo remove dev item
   if (payload.method !== 'eth_sendTransaction') return next();
   const tx = Object.assign({}, payload.params[0]);
   const localTx = Object.assign({}, tx);
@@ -66,7 +64,7 @@ export default async (
   }
   getSanitizedTx(tx)
     .then(_tx => {
-      debug('TX', _tx); // todo remove dev item
+      debug('TX', _tx);
       eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
         if (_response.reject) {
           debug('USER DECLINED SIGN TRANSACTION & SEND');
@@ -88,15 +86,17 @@ export default async (
                 ),
                 timestamp: localStoredObj.timestamp
               };
-              if(store.noSubs){
+              if (store.noSubs) {
                 const txHash = hash;
-                let interval = setInterval(() => {
-                  store.state.web3.eth.getTransactionReceipt(txHash).then(result => {
-                    if(result !== null){
-                      clearInterval(interval)
-                      _promiObj.emit('receipt', res)
-                    }
-                  });
+                const interval = setInterval(() => {
+                  store.state.web3.eth
+                    .getTransactionReceipt(txHash)
+                    .then(result => {
+                      if (result !== null) {
+                        clearInterval(interval);
+                        _promiObj.emit('receipt', res);
+                      }
+                    });
                 }, 1000);
               }
             }
