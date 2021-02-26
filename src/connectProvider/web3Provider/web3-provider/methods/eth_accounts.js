@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { toPayload } from '../jsonrpc';
 
 export default async ({ payload, store }, res, next) => {

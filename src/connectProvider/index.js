@@ -16,6 +16,7 @@ import PopUpCreator from '../connectWindow/popUpCreator';
 import { nativeCheck, mobileCheck } from './platformDeepLinking';
 import { DISCONNECTED, CONNECTING, CONNECTED } from '../config';
 import BigNumber from 'bignumber.js';
+import packageJson from '../../package.json'
 
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
 const debugErrors = debugLogger('MEWconnectError');
@@ -170,6 +171,7 @@ export default class Integration extends EventEmitter {
           popUpCreator,
           this.popUpHandler
         );
+        console.log(`Using MEWconnect v${packageJson.version}`); // todo remove dev item
         this.popUpHandler.showConnectedNotice();
         this.popUpHandler.hideNotifier();
         this.createDisconnectNotifier();

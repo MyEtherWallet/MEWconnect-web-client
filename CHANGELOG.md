@@ -1,3 +1,8 @@
+### Release 2.1.23-beta.3
+- Fix EIP-1193 disconnect event name typo (disconnected -> disconnect)
+- Add wallet connected checks for eth_signTransaction, eth_sendTransaction
+- Temporary fix for calls to eth_subscribe with a http rpc url 
+
 ### Release 2.1.23-beta.2
 - Fix line breaking in popup
 

@@ -404,8 +404,8 @@ export default class WebRtcCommunication extends MewConnectCommon {
         } else {
           encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
         }
-        debug('SENDING RTC');
         this.p.send(JSON.stringify(encryptedSend));
+        debug('SENDING RTC');
       } else {
         // eslint-disable-next-line
         this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);

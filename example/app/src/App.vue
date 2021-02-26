@@ -12,8 +12,8 @@
       <button @click="selectNetwork(42)">Kovan</button>
     </div>
 
-<!--    <ul v-show="userAddress !== ''">-->
-      <ul>
+    <ul v-show="userAddress !== ''">
+<!--      <ul>-->
       <li>
         <button @click="disconnect">Disconnect</button>
       </li>
@@ -368,10 +368,11 @@ export default {
     this.connect = new mewConnect.Provider({
       windowClosedError: true,
       chainId: 1,
+      // chainId: 3,
      // rpcUrl: 'https://mainnet.infura.io/v3/859569f6decc4446a5da1bb680e7e9cf' //'wss://mainnet.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'
-     //  rpcUrl: 'https://node-mainnet.rarible.com' //HTTP://127.0.0.1:7545'
-      infuraId:
-        '7d06294ad2bd432887eada360c5e1986'
+      rpcUrl: 'HTTP://127.0.0.1:7545'
+     //  rpcUrl: 'ws://127.0.0.1:8545'
+     //  infuraId: '7d06294ad2bd432887eada360c5e1986'
     });
     this.connect.on('popupWindowClosed', () => {
       console.log(`popup window closed EVENT`);
@@ -574,7 +575,7 @@ export default {
             })
             .once('transactionHash', hash => {
               console.log(['Hash', hash]);
-              this.tokenTxHash = hash;
+              this.txHash = hash;
             })
             .once('receipt', res => {
               console.log(['Receipt', res]);

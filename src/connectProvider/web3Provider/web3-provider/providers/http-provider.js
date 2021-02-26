@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import HttpRequestManger from './http-request-manager';
 import MiddleWare from '../middleware';
 import {
@@ -12,7 +14,8 @@ import {
   ethGetBlockNumber,
   netVersion,
   personalSign,
-  ecRecover
+  ecRecover,
+  ethSubscribeBypass
 } from '../methods/index';
 
 class HttpProvider {
@@ -39,18 +42,24 @@ class HttpProvider {
         middleware.use(ethGetBlockByNumber);
         middleware.use(ethGetBlockNumber);
         middleware.use(netVersion);
+        middleware.use(ethSubscribeBypass)
         middleware.run(req, callback).then(() => {
           requestManager.provider.send(payload, callback);
         });
+      },
+      notificationCallbacks: [],
+      createSubscriptions: (subscription, ) => {
+        requestManager.addSubscription()
       },
       on: (type, callback) => {
         if (typeof callback !== 'function')
           throw new Error('The second parameter callback must be a function.');
 
         switch (type) {
-          // case 'data':
-          //   this.notificationCallbacks.push(callback);
-          //   break;
+          case 'data':
+            this.httpProvider.notificationCallbacks.push(callback);
+            this.httpProvider.dataCallback = callback;
+            break;
           //
           // case 'connect':
           //   this.connection.onopen = callback;
@@ -60,9 +69,10 @@ class HttpProvider {
           //   this.connection.onclose = callback;
           //   break;
           //
-          // case 'error':
-          //   this.connection.onerror = callback;
-          //   break;
+          case 'message':
+            console.log('message callback'); // todo remove dev item
+            console.log(callback); // todo remove dev item
+            break;
 
           case 'accountsChanged':
             this.accountsChanged = callback;

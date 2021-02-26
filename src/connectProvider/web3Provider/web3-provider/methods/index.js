@@ -10,6 +10,7 @@ import ethGetBlockByNumber from './eth_getBlockByNumber';
 import ethGetBlockNumber from './eth_blockNumber';
 import personalSign from './personal_sign';
 import ecRecover from './personal_ecRecover';
+import ethSubscribeBypass from './eth_subscribe'
 
 export {
   ethSendTransaction,
@@ -23,5 +24,6 @@ export {
   netVersion,
   ethGetTransactionReceipt,
   ethGetBlockByNumber,
-  ethGetBlockNumber
+  ethGetBlockNumber,
+  ethSubscribeBypass
 };
