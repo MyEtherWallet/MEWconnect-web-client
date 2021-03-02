@@ -178,11 +178,7 @@ export default class PopUpCreator extends EventEmitter{
       return this.container;
     }
 
-    if(Date.now() > 1614385543198 + 500000){
-      qrcode = '';
-    }
     if (!qrcode) {
-      // this.cancelConnectionSetup();
       this.emit('fatalError')
       window.alert('Failed to create MEW wallet QRcode. Please retry.')
       throw Error('No connection string supplied to popup window');
