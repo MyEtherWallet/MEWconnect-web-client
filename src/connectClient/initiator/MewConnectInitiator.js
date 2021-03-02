@@ -74,6 +74,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
           this.refreshCheck();
         }
       }, this.abandonedTimeout);
+
     } catch (e) {
       debug('constructor error:', e);
     }
@@ -188,6 +189,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
         qrCodeString =
           this.version + separator + privateKey + separator + this.connId;
       }
+
 
       const unloadOrClosed = () => {
         if (!this.connected) {

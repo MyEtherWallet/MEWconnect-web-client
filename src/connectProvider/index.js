@@ -118,7 +118,16 @@ export default class Integration extends EventEmitter {
     );
   }
 
+  get getWalletOnly(){
+    if(state.wallet){
+      return state.wallet
+    }
+  }
+
   enable() {
+    popUpCreator.on('fatalError', () => {
+      MEWconnectWallet.setConnectionState(DISCONNECTED);
+    })
     if (this.runningInApp) {
       return new Promise((resolve, reject) => {
         state.web3Provider
@@ -138,11 +147,11 @@ export default class Integration extends EventEmitter {
 
     return nativeCheck().then(res => {
       if (res) {
-        if (MEWconnectWallet.getConnectionState() === DISCONNECTED) {
-          this.returnPromise = this.enabler();
-        }
         if (typeof popUpCreator.popupWindowOpen === 'boolean') {
           popUpCreator.showDialog();
+        }
+        if (MEWconnectWallet.getConnectionState() === DISCONNECTED) {
+          this.returnPromise = this.enabler();
         }
         return this.returnPromise;
       }

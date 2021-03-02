@@ -19,13 +19,15 @@ import {
 } from './popupWindowDesign';
 import debugLogger from 'debug';
 import { IOS_LINK, ANDROID_LINK } from '../config';
+import EventEmitter from 'rollup-plugin-node-builtins/src/es6/events';
 
 // TODO add debug logging
 const debug = debugLogger('MEWconnect:popup-window');
 // const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
-export default class PopUpCreator {
+export default class PopUpCreator extends EventEmitter{
   constructor() {
+    super();
     this.sessionId = '';
     this.sessionId = false;
     this.logo = logo;
@@ -108,6 +110,12 @@ export default class PopUpCreator {
     this.windowClosedListener();
   }
 
+  showQrError() {
+    const notify = document.getElementById('');
+    document.querySelector('#qrcodeError').classList.remove('is-visible');
+    notify.className = 'hidden';
+  }
+
   createQrCodeModal() {
     this.popupWindowOpen = true;
     const css = document.createElement('style');
@@ -170,7 +178,13 @@ export default class PopUpCreator {
       return this.container;
     }
 
+    if(Date.now() > 1614385543198 + 500000){
+      qrcode = '';
+    }
     if (!qrcode) {
+      // this.cancelConnectionSetup();
+      this.emit('fatalError')
+      window.alert('Failed to create MEW wallet QRcode. Please retry.')
       throw Error('No connection string supplied to popup window');
     }
 
@@ -205,6 +219,10 @@ export default class PopUpCreator {
     this.showWindowInformer();
     this.popupWindow = this.container;
     this.popupWindowOpen = true;
+
+    if(qrcode === ''){
+      this.showQrError();
+    }
     return this.container;
   }
 

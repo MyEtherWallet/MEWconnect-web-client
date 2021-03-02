@@ -258,7 +258,7 @@ const htmlDesign = (
         </div>
       <div class="upper-text">
 
-        <p class="text-one">Connect to MEW wallet app</p>
+        <p class="text-one">Connect to MEW&nbsp;wallet app</p>
         <p class="text-two">Scan this code to connect</p>
        </div>
 
@@ -287,7 +287,7 @@ const htmlDesign = (
           </div>
           <div class="center">
             <div class="right">
-              <p class="get-text">Don't have MEW wallet app?</p>
+              <p class="get-text">Don't have MEW&nbsp;wallet app?</p>
               <p id="popupsBlocked" class="warn-color"></p>
                       <a href="${iosLink}" target="_blank" id="appStore">               <img
                   id="apple-link"
@@ -329,9 +329,17 @@ const noticetext = `
       div#Notifications.hidden {
         visibility: hidden;
       }
+      
+      div#Notifications.hidden {
+        visibility: hidden;
+      }
 
-      div#Notifications.shown {
+      div#qrcodeError.shown {
         visibility: visible;
+      }
+      
+      div#qrcodeError.hidden {
+        visibility: hidden;
       }
 
       #Notifications,
@@ -665,6 +673,9 @@ const windowInformer = spaceman => {
               class="NotificationButtonInfo NotificationButtonInfo2">Made a mistake?</span>
               <button id="NotificationButton2" class="NotificationButton NotificationButton2">Cancel
               </button>
+            </div>
+              <div id="qrcodeError" class="NotificationError hidden"><span
+              class="NotificationButtonInfo NotificationButtonInfo2">Failed to generate QR code. Please cancel and retry.</span>
             </div>
           </div>
         </div>

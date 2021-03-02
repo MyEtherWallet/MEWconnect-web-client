@@ -4,7 +4,7 @@ export function getMessage(text, extra) {
     approveTx: 'Check your phone to approve transaction ',
     disconnect: 'Disconnected from MEW wallet',
     complete: 'Transaction completed',
-    sent: 'Transaction send',
+    sent: 'Transaction sent',
     failed: 'Transaction failed',
     signMessage: 'Check your phone to sign the message',
     declineSignMessage: 'User declined message signing',
