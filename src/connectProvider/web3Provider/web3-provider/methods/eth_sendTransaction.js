@@ -96,7 +96,10 @@ export default async (
                         clearInterval(interval);
                         _promiObj.emit('receipt', res);
                       }
-                    });
+                    })
+                    .catch(err => {
+                      _promiObj.emit('error', err);
+                    })
                 }, 1000);
               }
             }
