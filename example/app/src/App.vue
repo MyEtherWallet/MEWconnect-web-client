@@ -369,7 +369,7 @@ export default {
       windowClosedError: true,
       chainId: 1,
       // chainId: 3,
-     // rpcUrl: 'https://mainnet.infura.io/v3/859569f6decc4446a5da1bb680e7e9cf' //'wss://mainnet.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'
+     // rpcUrl: 'https://mainnet.infura.io/v3/' //'wss://mainnet.infura.io/ws/v3/'
       rpcUrl: 'HTTP://127.0.0.1:7545'
      //  rpcUrl: 'ws://127.0.0.1:8545'
      //  infuraId: '7d06294ad2bd432887eada360c5e1986'
@@ -474,7 +474,7 @@ export default {
       }
     },
     selectNetwork(chainId) {
-      // this.connect = new mewConnect.Provider({windowClosedError: true, chainId: chainId, infuraId: '7d06294ad2bd432887eada360c5e1986', /*rpcUrl: 'wss://ropsten.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'*/});
+      // this.connect = new mewConnect.Provider({windowClosedError: true, chainId: chainId, infuraId: '', /*rpcUrl: 'wss://ropsten.infura.io/ws/v3/'*/});
     },
     animate() {
       this.connect.showNotice();
