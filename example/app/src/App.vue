@@ -28,6 +28,23 @@
       <li>
         <hr />
         <h3>Send</h3>
+        <label for="toAmount1">
+          to amount
+          <input
+              id="toAmount1"
+              v-model="toAmount"
+              placeholder="amount"
+          /> </label
+        ><br />
+        <!--        <button v-show="userAddress !== ''" @click="sendTx">send</button>-->
+        <button  @click="sendTx">send</button>
+        <h6>Sends to the connected wallet address</h6>
+        <h3>Tx Hash:</h3>
+        {{ txHash }}
+      </li>
+      <li>
+        <hr />
+        <h3>Send</h3>
         <label for="toAmount">
           to amount
           <input
@@ -35,9 +52,25 @@
             v-model="toAmount"
             placeholder="amount"
           /> </label
+        >
+        <label for="altNonce">
+         alt nonce
+          <input
+              id="altNonce"
+              v-model="altNonce"
+              placeholder="altNonce"
+          /> </label
+        >
+        <label for="altGasPrice">
+          altGasPrice
+          <input
+              id="altGasPrice"
+              v-model="altGasPrice"
+              placeholder="altGasPrice"
+          /> </label
         ><br />
 <!--        <button v-show="userAddress !== ''" @click="sendTx">send</button>-->
-        <button  @click="sendTx">send</button>
+        <button  @click="sendTx2">send alt-nonce</button>
         <h6>Sends to the connected wallet address</h6>
         <h3>Tx Hash:</h3>
         {{ txHash }}
@@ -351,7 +384,9 @@ export default {
       fromAddressDetailed: '',
       thing: false,
       checker: false,
-      checkOne: ''
+      checkOne: '',
+      altNonce: '',
+      altGasPrice: ''
     };
   },
   mounted() {
@@ -367,10 +402,11 @@ export default {
     // 859569f6decc4446a5da1bb680e7e9cf
     this.connect = new mewConnect.Provider({
       windowClosedError: true,
-      chainId: 1,
-      // chainId: 3,
+      // chainId: 1,
+      chainId: 3,
      // rpcUrl: 'https://mainnet.infura.io/v3/' //'wss://mainnet.infura.io/ws/v3/'
-      rpcUrl: 'HTTP://127.0.0.1:7545'
+     //  rpcUrl: 'HTTP://127.0.0.1:7545'
+      rpcUrl: 'https://ropsten.infura.io/v3/c9b249497d074ab59c47a97bdfe6b401'
      //  rpcUrl: 'ws://127.0.0.1:8545'
      //  infuraId: '7d06294ad2bd432887eada360c5e1986'
     });
@@ -585,6 +621,44 @@ export default {
             })
             .then(txhash => console.log('THEN: ', txhash))
             .catch(err => console.error(err));
+        });
+      });
+    },
+    sendTx2() {
+      this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
+      this.web3.eth.getGasPrice().then(gasPrice => {
+        if(this.altGasPrice !== '' ){
+          gasPrice = this.altGasPrice
+        }
+        console.log('gasPrice', gasPrice); // todo remove dev item
+        this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
+          if(this.altNonce !== '' ){
+            nonce = this.altNonce
+          }
+          console.log('nonce', nonce); // todo remove dev item
+          this.web3.eth
+              .sendTransaction({
+                from: this.userAddress,
+                to: this.userAddress,
+                nonce,
+                value: new BigNumber(this.toAmount)
+                    .times(new BigNumber(10).pow(18))
+                    .toFixed()
+                /*gasPrice: gasPrice ,
+                gasLimit: '0xa'// 21000*/
+              })
+              .once('transactionHash', hash => {
+                console.log(['Hash', hash]);
+                this.txHash = hash;
+              })
+              .once('receipt', res => {
+                console.log(['Receipt', res]);
+              })
+              .on('error', err => {
+                console.log(['Error', err]);
+              })
+              .then(txhash => console.log('THEN: ', txhash))
+              .catch(err => console.error(err));
         });
       });
     },

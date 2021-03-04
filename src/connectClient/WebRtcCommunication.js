@@ -320,6 +320,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
         });
       }
     } catch (e) {
+      this.uiCommunicator(this.lifeCycle.decryptError);
       logger.error(e);
       debug('onData ERROR: data=', data);
       debug('onData ERROR: data.toString()=', data.toString());

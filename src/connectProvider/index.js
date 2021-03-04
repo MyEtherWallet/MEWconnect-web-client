@@ -184,6 +184,7 @@ export default class Integration extends EventEmitter {
         this.popUpHandler.showConnectedNotice();
         this.popUpHandler.hideNotifier();
         this.createDisconnectNotifier();
+        this.createCommunicationError();
         debugConnectionState(MEWconnectWallet.getConnectionState());
       }
 
@@ -345,6 +346,18 @@ export default class Integration extends EventEmitter {
     );
   }
 
+  createCommunicationError(){
+    const connection = state.wallet.getConnection();
+    connection.webRtcCommunication.on(
+      connection.lifeCycle.decryptError,
+      () => {
+        this.popUpHandler.showNoticePersistentEnter(
+          messageConstants.communicationError
+        );
+      }
+    );
+  }
+
   disconnect() {
     try {
       if (this.runningInApp) {
@@ -375,6 +388,7 @@ export default class Integration extends EventEmitter {
   }
 
   setupListeners() {
+    const transactionCache = [];
     eventHub.on(EventNames.SHOW_TX_CONFIRM_MODAL, (tx, resolve) => {
       this.responseFunction = resolve;
       if (!state.wallet) {
@@ -387,8 +401,13 @@ export default class Integration extends EventEmitter {
         state.wallet
           .signTransaction(tx)
           .then(_response => {
+
+            if(!transactionCache.includes(_response.tx.hash)){
+              transactionCache.push(_response.tx.hash)
+
             this.popUpHandler.showNoticePersistentExit();
             resolve(_response);
+            }
           })
           .catch(err => {
             this.popUpHandler.showNoticePersistentExit();

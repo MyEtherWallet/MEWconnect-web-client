@@ -1,3 +1,9 @@
+### Release 2.1.23-beta.4
+- Add a current instance cache for transaction hashes to prevent multiple send attempts 
+- Add notice when malformed response is received from mobile
+- Add a current instance timer to stop checking for transaction hash after 60 minutes
+
+
 ### Release 2.1.23-beta.3
 - Fix EIP-1193 disconnect event name typo (disconnected -> disconnect)
 - Add wallet connected checks for eth_signTransaction, eth_sendTransaction

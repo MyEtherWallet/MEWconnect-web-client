@@ -62,6 +62,7 @@ export default async (
     res(e);
     return;
   }
+  debug('RAW TX', tx);
   getSanitizedTx(tx)
     .then(_tx => {
       debug('TX', _tx);
@@ -88,6 +89,7 @@ export default async (
               };
               if (store.noSubs) {
                 const txHash = hash;
+                const start = Date.now();
                 const interval = setInterval(() => {
                   store.state.web3.eth
                     .getTransactionReceipt(txHash)
@@ -95,11 +97,17 @@ export default async (
                       if (result !== null) {
                         clearInterval(interval);
                         _promiObj.emit('receipt', res);
+                        return;
+                      }
+                      const cancelInterval =
+                        (Date.now() - start) / 1000 > 60 * 60;
+                      if (cancelInterval) {
+                        clearInterval(interval);
                       }
                     })
                     .catch(err => {
                       _promiObj.emit('error', err);
-                    })
+                    });
                 }, 1000);
               }
             }
