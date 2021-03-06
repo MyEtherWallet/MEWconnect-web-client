@@ -18,7 +18,7 @@ import {
   windowInformer
 } from './popupWindowDesign';
 import debugLogger from 'debug';
-import { IOS_LINK, ANDROID_LINK } from '../config';
+import { ANDROID_LINK, IOS_LINK } from '../config';
 import EventEmitter from 'rollup-plugin-node-builtins/src/es6/events';
 
 // TODO add debug logging
@@ -111,9 +111,36 @@ export default class PopUpCreator extends EventEmitter{
   }
 
   showQrError() {
-    const notify = document.getElementById('');
+    const notify = document.getElementById('qr-failure');
     document.querySelector('#qrcodeError').classList.remove('is-visible');
     notify.className = 'hidden';
+  }
+
+  showConnecting(){
+    document.querySelector('#qr-code-display-container-mew').classList.add('hidden');
+    document.querySelector('#qr-code-connecting-mew').classList.remove('hidden');
+  }
+
+  hideConnecting(){
+    document.querySelector('#qr-code-display-container-mew').classList.remove('hidden');
+    document.querySelector('#qr-code-connecting-mew').classList.add('hidden');
+  }
+
+  showRetry(callback){
+    console.log('SHOW RETRY'); // todo remove dev item
+    const retry = document.getElementById('retry-button-mew');
+    document.querySelector('#retry-button-mew').classList.remove('hidden');
+    retry.addEventListener(
+      'click',
+      evt => {
+        document.querySelector('#qr-code-display-container-mew').classList.remove('hidden');
+        document.querySelector('#qr-code-connecting-mew').classList.add('hidden');
+        callback();
+        // this.refreshQrcode()
+        evt.stopPropagation();
+      },
+      false
+    );
   }
 
   createQrCodeModal() {
@@ -173,16 +200,20 @@ export default class PopUpCreator extends EventEmitter{
   }
 
   showPopupWindow(qrcode) {
-    if (typeof this.popupWindowOpen === 'boolean') {
-      this.showDialog();
-      return this.container;
-    }
+    try {
+      if (typeof this.popupWindowOpen === 'boolean') {
+        this.showDialog();
+        return this.container;
+      }
 
-    if (!qrcode) {
-      this.emit('fatalError')
-      window.alert('Failed to create MEW wallet QRcode. Please retry.')
-      throw Error('No connection string supplied to popup window');
-    }
+      if (!qrcode) {
+        const QRfailedMessage = document.getElementById('qr-failure');
+        QRfailedMessage.innerText = 'Error: Please start connection again.';
+        // todo Instead of not showing. present a notice and ask the user to retry.
+        // this.emit('fatalError');
+        // window.alert('Failed to create MEW wallet QRcode. Please retry.');
+        // throw Error('No connection string supplied to popup window');
+      }
 
     this.createQrCodeModal();
     this.createWindowInformer();
@@ -216,14 +247,26 @@ export default class PopUpCreator extends EventEmitter{
     this.popupWindow = this.container;
     this.popupWindowOpen = true;
 
-    if(qrcode === ''){
-      this.showQrError();
+      if (qrcode === '') {
+        this.showQrError();
+      }
+      if (!qrcode) {
+        const QRfailedMessage = document.getElementById('qr-failure');
+        QRfailedMessage.innerText = 'Error: Please start connection again.';
+        // todo Instead of not showing. present a notice and ask the user to retry.
+        this.emit('fatalError');
+        window.alert('Failed to create MEW wallet QRcode. Please retry.');
+        throw Error('No connection string supplied to popup window');
+      }
+      return this.container;
+    } catch (e) {
+      // todo Instead of not showing. present a notice and ask the user to retry.
+      throw Error(e);
     }
-    return this.container;
   }
 
   updateQrCode(qrcode) {
-    const element = this.popupWindow.document.getElementById('canvas');
+    const element = document.getElementById('canvas-for-mewconnect-qr-code');
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
   }
 

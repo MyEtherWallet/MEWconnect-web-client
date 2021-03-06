@@ -52,6 +52,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.socketsCreated = false;
       this.refreshCount = 0;
       this.abandonedTimeout = 300000;
+      this.showingRefresh = false
 
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
       this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
@@ -259,6 +260,9 @@ Keys
   }
 
   async refreshCode() {
+    this.showingRefresh = false;
+    this.popupCreator.popupWindowOpen = true;
+    this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
     this.initiatorStart();
   }
 
@@ -303,15 +307,28 @@ Keys
       });
 
       this.V2.on('sendingOffer', () => {
+        this.popupCreator.showConnecting();
         this.refreshCheck();
       });
 
       this.V2.on('retryingViaTurn', () => {
         this.refreshCheck();
       });
+      const regenerateQRcodeOnClick = () => {
+        console.log('REGENERATE'); // todo remove dev item
+        this.refreshCode();
+      }
       this.V2.on('ShowReload', () => {
         this.uiCommunicator('ShowReload');
       });
+      this.webRtcCommunication.on('showRefresh', () => {
+        if(!this.showingRefresh){
+          this.showingRefresh = true;
+          console.log('SHOW REFRESH BUTTON'); // todo remove dev item
+          this.popupCreator.showRetry(regenerateQRcodeOnClick)
+        }
+
+        })
     } catch (e) {
       // eslint-disable-next-line
       console.error(e);

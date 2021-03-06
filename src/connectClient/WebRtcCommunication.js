@@ -29,6 +29,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.enableTimer = true;
     this.tryingTurn = false;
     this.connected = false;
+    this.refreshEnabled = false;
 
     this.signals = this.jsonDetails.signals;
     this.rtcEvents = this.jsonDetails.rtc;
@@ -220,6 +221,10 @@ export default class WebRtcCommunication extends MewConnectCommon {
   willAttemptTurn() {
     debugStages('TRY TURN CONNECTION');
     this.uiCommunicator(this.lifeCycle.UsingFallback);
+    if(!this.connected && this.tryingTurn && this.usingVersion === 'V2'){
+      this.refreshQrTimer();
+      this.refreshEnabled = false;
+    }
     if (!this.tryingTurn && this.usingVersion === 'V2') {
       debugStages(' TRY TURN V2');
       this.tryingTurn = true;
@@ -232,6 +237,17 @@ export default class WebRtcCommunication extends MewConnectCommon {
       }
     }
     this.tryingTurn = true;
+  }
+
+  refreshQrTimer(){
+    setTimeout(() => {
+      if(!this.connected && !this.refreshEnabled) {
+        this.tryingTurn = false;
+        this.refreshEnabled = true;
+        this.emit('showRefresh')
+        this.uiCommunicator('showRefresh');
+      }
+    },10000)
   }
 
   turnReset(peerId) {
@@ -248,10 +264,11 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   // Handle Socket event to initiate turn connection
   // Handle Receipt of TURN server details, and begin a WebRTC connection attempt using TURN
-  beginTurn(data) {
-    this.tryingTurn = true;
-    this.retryViaTurn(data);
-  }
+  // beginTurn(data) {
+  //   console.log('TRYING TURN VALUE SET 3'); // todo remove dev item
+  //   this.tryingTurn = true;
+  //   this.retryViaTurn(data);
+  // }
 
   // ----- Failure Handlers
 

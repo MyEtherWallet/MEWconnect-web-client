@@ -238,6 +238,48 @@ const cssStyles = `
         .warn-color {
         color: orange;
         }
+        
+        .loader-mew,
+        .loader-mew:after {
+          border-radius: 50%;
+          width: 10em;
+          height: 10em;
+        }
+        .loader-mew {
+          margin: 30px auto;
+          font-size: 10px;
+          position: relative;
+          text-indent: -9999em;
+          border-top: 1em solid rgba(166,183,183, 0.2);
+          border-right: 1em solid rgba(166,183,183, 0.2);
+          border-bottom: 1em solid rgba(166,183,183, 0.2);
+          border-left: 1em solid rgba(8, 165, 178, 1);
+          -webkit-transform: translateZ(0);
+          -ms-transform: translateZ(0);
+          transform: translateZ(0);
+          -webkit-animation: load8 1.1s infinite linear;
+          animation: load8 1.1s infinite linear;
+        }
+        @-webkit-keyframes load8 {
+          0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+          }
+          100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+          }
+        }
+        @keyframes load8 {
+          0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+          }
+          100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+          }
+        }
     `;
 
 const htmlDesign = (
@@ -261,8 +303,9 @@ const htmlDesign = (
         <p class="text-one">Connect to MEW&nbsp;wallet app</p>
         <p class="text-two">Scan this code to connect</p>
        </div>
-
-        <div class="qr-code">
+        <div id="qr-failure"></div>
+        <div id="qr-code-connecting-mew" class="hidden"><div class="loader-mew"></div><h4>Connecting...</h4> Creating encrypted peer-to-peer connection </div>
+        <div id="qr-code-display-container-mew" class="qr-code">
           <canvas id="canvas-for-mewconnect-qr-code"></canvas>
         </div>
         <div id="refresh-container" class="refreshIcon hidden">
@@ -340,6 +383,9 @@ const noticetext = `
       
       div#qrcodeError.hidden {
         visibility: hidden;
+      }
+      div#retry-button-mew.hidden {
+        display: none;
       }
 
       #Notifications,
@@ -545,10 +591,10 @@ const noticetext = `
           rgba(22, 82, 240, 0) 0%,
           rgba(51, 199, 176, 1) 100%
         );
-        animation: WalletLinkNotificationProgressBar 2s linear infinite;
+        animation: MewNotificationProgressBar 2s linear infinite;
       }
 
-      @keyframes WalletLinkNotificationProgressBar {
+      @keyframes MewNotificationProgressBar {
         0% {
           left: 0;
           width: 0%;
@@ -672,6 +718,11 @@ const windowInformer = spaceman => {
             <div class="NotificationAction"><span
               class="NotificationButtonInfo NotificationButtonInfo2">Made a mistake?</span>
               <button id="NotificationButton2" class="NotificationButton NotificationButton2">Cancel
+              </button>
+            </div>
+            <div id="retry-button-mew" class="NotificationAction hidden"><span
+              class="NotificationButtonInfo NotificationButtonInfo2">Refresh QRcode and </span>
+              <button id="NotificationButton3" class="NotificationButton NotificationButton2">Try Again
               </button>
             </div>
               <div id="qrcodeError" class="NotificationError hidden"><span
