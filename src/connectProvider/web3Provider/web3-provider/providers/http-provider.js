@@ -69,10 +69,10 @@ class HttpProvider {
           //   this.connection.onclose = callback;
           //   break;
           //
-          case 'message':
-            console.log('message callback'); // todo remove dev item
-            console.log(callback); // todo remove dev item
-            break;
+          // case 'message':
+          //   console.log('message callback'); // todo remove dev item
+          //   console.log(callback); // todo remove dev item
+          //   break;
 
           case 'accountsChanged':
             this.accountsChanged = callback;

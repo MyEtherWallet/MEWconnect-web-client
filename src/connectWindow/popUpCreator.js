@@ -127,7 +127,6 @@ export default class PopUpCreator extends EventEmitter{
   }
 
   showRetry(callback){
-    console.log('SHOW RETRY'); // todo remove dev item
     const retry = document.getElementById('retry-button-mew');
     document.querySelector('#retry-button-mew').classList.remove('hidden');
     retry.addEventListener(

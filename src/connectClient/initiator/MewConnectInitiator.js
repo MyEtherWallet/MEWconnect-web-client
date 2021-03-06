@@ -315,7 +315,7 @@ Keys
         this.refreshCheck();
       });
       const regenerateQRcodeOnClick = () => {
-        console.log('REGENERATE'); // todo remove dev item
+        debug('REGENERATE'); // todo remove dev item
         this.refreshCode();
       }
       this.V2.on('ShowReload', () => {
@@ -324,7 +324,6 @@ Keys
       this.webRtcCommunication.on('showRefresh', () => {
         if(!this.showingRefresh){
           this.showingRefresh = true;
-          console.log('SHOW REFRESH BUTTON'); // todo remove dev item
           this.popupCreator.showRetry(regenerateQRcodeOnClick)
         }
 

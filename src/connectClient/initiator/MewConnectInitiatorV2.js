@@ -508,11 +508,9 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     debug(err.code);
     debug('error', err);
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
-      console.log('USING FALLBACK'); // todo remove dev item
       this.useFallback();
     } else if (!this.connected && this.tryingTurn && !this.turnDisabled) {
       this.emit('ShowReload');
-      console.log('SHOW RELOAD'); // todo remove dev item
     } else {
       if (!this.isAlive()) {
         this.uiCommunicator(this.lifeCycle.RtcErrorEvent);
