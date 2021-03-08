@@ -1,3 +1,7 @@
+### Release 2.1.23-beta.5
+- Add connecting loader 
+- Add retry buttons to regenerate qrcode
+
 ### Release 2.1.23-beta.4
 - Add a current instance cache for transaction hashes to prevent multiple send attempts 
 - Add notice when malformed response is received from mobile

@@ -128,17 +128,39 @@ export default class PopUpCreator extends EventEmitter{
 
   showRetry(callback){
     const retry = document.getElementById('retry-button-mew');
+    const retryOnModal = document.getElementById('refresh-container')
+    document.querySelector('#refresh-container').classList.remove('hidden');
     document.querySelector('#retry-button-mew').classList.remove('hidden');
+    const eventHandler = evt => {
+      document.querySelector('#qr-code-display-container-mew').classList.remove('hidden');
+      document.querySelector('#qr-code-connecting-mew').classList.add('hidden');
+      document.querySelector('#retry-button-mew').classList.add('hidden');
+      document.querySelector('#refresh-container').classList.add('hidden');
+      retry.removeEventListener(
+        'click',
+        eventHandler,
+        {passive : false,
+          once: true}
+      );
+      retryOnModal.removeEventListener(
+        'click',
+        eventHandler,
+        {passive : false,
+          once: true}
+      );
+      callback();
+    }
     retry.addEventListener(
       'click',
-      evt => {
-        document.querySelector('#qr-code-display-container-mew').classList.remove('hidden');
-        document.querySelector('#qr-code-connecting-mew').classList.add('hidden');
-        callback();
-        // this.refreshQrcode()
-        evt.stopPropagation();
-      },
-      false
+      eventHandler,
+      {passive : false,
+        once: true}
+    );
+    retryOnModal.addEventListener(
+      'click',
+      eventHandler,
+      {passive : false,
+        once: true}
     );
   }
 

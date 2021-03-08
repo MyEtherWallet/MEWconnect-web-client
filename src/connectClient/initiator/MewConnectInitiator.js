@@ -260,7 +260,7 @@ Keys
   }
 
   async refreshCode() {
-    this.showingRefresh = false;
+    // this.showingRefresh = false;
     this.popupCreator.popupWindowOpen = true;
     this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
     this.initiatorStart();
@@ -312,6 +312,7 @@ Keys
       });
 
       this.V2.on('retryingViaTurn', () => {
+        this.showingRefresh = false;
         this.refreshCheck();
       });
       const regenerateQRcodeOnClick = () => {

@@ -54,7 +54,6 @@ export default (() => {
    * @return {String} - Signed message
    */
   const signMessage = (msg, privateKey) => {
-    console.log(msg, privateKey); // todo remove dev item
     let hashedMsg = ethUtils.hashPersonalMessage(ethUtils.toBuffer(bufferToString(msg)))
     let signed = ethUtils.ecsign(
       Buffer.from(hashedMsg),

@@ -54,6 +54,7 @@ const cssStyles = `
         top: 0;
         width: 20px;
         cursor: pointer;
+        z-index: 10;
       }
       
       .qr-code {
@@ -198,11 +199,24 @@ const cssStyles = `
        color: rgba(5, 192, 165);
        cursor: pointer;
       }
+      
+      #refresh-container {
+      background: #33c7b0;
+      border-radius: 5px;
+      padding: 5px;
+      }
+      
+      #refresh-container:hover {
+      background: #238677;
+      }
 
       .refreshIcon {
+        padding-top: 5px;
         justify-content: center;
         margin-left: auto;
         margin-right: auto;
+        cursor: pointer;
+        color: #fffff;
       }
 
       .hidden {
@@ -246,7 +260,7 @@ const cssStyles = `
           height: 10em;
         }
         .loader-mew {
-          margin: 30px auto;
+          margin: 20px auto;
           font-size: 10px;
           position: relative;
           text-indent: -9999em;
@@ -309,7 +323,7 @@ const htmlDesign = (
           <canvas id="canvas-for-mewconnect-qr-code"></canvas>
         </div>
         <div id="refresh-container" class="refreshIcon hidden">
-          <img id="refresh" src="${refresh}" />
+          Try Again <img id="refresh" src="${refresh}" />
         </div>
 
         <ol class="list-style">
