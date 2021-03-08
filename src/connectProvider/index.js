@@ -433,7 +433,11 @@ export default class Integration extends EventEmitter {
         );
       }
     });
-
+    eventHub.on(EventNames.ERROR_NOTIFY, err => {
+      if(err && err.message){
+        this.popUpHandler.showNotice(err.message);
+      }
+    })
     eventHub.on(EventNames.SHOW_MSG_CONFIRM_MODAL, (msg, resolve) => {
       if (!state.wallet) {
         this.popUpHandler.showNoticePersistentEnter(

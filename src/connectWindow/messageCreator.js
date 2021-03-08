@@ -34,6 +34,11 @@ export function getMessage(text, extra) {
     }
   }
 
+  const regEx = new RegExp(/^Returned error:/)
+  if(regEx.test(text)){
+    return text;
+  }
+
   if (!text) {
     return messages.defaultMessage;
   }

@@ -61,6 +61,7 @@ export default async (
         });
       })
       .catch(e => {
+        eventHub.emit(EventNames.ERROR_NOTIFY, e)
         debugErrors('Error: eth_signTransaction', e);
         res(e);
       });

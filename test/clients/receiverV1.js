@@ -108,12 +108,10 @@ export default class MewConnectReceiver extends EventEmitter {
   }
 
   async setKeys(publicKey, privateKey, connId) {
-    console.log(privateKey); // todo remove dev item
     this.publicKey = publicKey
     this.privateKey = privateKey
     this.connId = connId
     this.signed = CryptoUtils.signMessage(this.privateKey, this.privateKey)
-    console.log(this.signed); // todo remove dev item
   }
 
   isJSON(arg) {

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import EthCalls from '../web3Calls';
 import EventNames from '../events';
 import { toPayload, toError } from '../jsonrpc';
@@ -58,6 +59,7 @@ export default async (
         : tx.gasPrice;
     tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
   } catch (e) {
+    eventHub.emit(EventNames.ERROR_NOTIFY, e)
     debugErrors(e);
     res(e);
     return;
@@ -106,6 +108,7 @@ export default async (
                       }
                     })
                     .catch(err => {
+                      eventHub.emit(EventNames.ERROR_NOTIFY, err)
                       _promiObj.emit('error', err);
                     });
                 }, 1000);
@@ -114,6 +117,7 @@ export default async (
             res(null, toPayload(payload.id, hash));
           })
           .on('error', err => {
+            eventHub.emit(EventNames.ERROR_NOTIFY, err)
             debugErrors('Error: eth_sendTransaction', err);
             res(err);
           });

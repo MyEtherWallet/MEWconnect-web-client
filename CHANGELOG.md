@@ -2,6 +2,7 @@
 - Add a current instance cache for transaction hashes to prevent multiple send attempts 
 - Add notice when malformed response is received from mobile
 - Add a current instance timer to stop checking for transaction hash after 60 minutes
+- Add user notice of errors originating from a transaction
 
 
 ### Release 2.1.23-beta.3
