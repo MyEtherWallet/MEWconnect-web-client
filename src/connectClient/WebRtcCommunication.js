@@ -30,6 +30,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.tryingTurn = false;
     this.connected = false;
     this.refreshEnabled = false;
+    this.sentMessageIds = []
 
     this.signals = this.jsonDetails.signals;
     this.rtcEvents = this.jsonDetails.rtc;
@@ -137,12 +138,19 @@ export default class WebRtcCommunication extends MewConnectCommon {
       'iceconnectionstatechange',
       this.stateChangeListener.bind(this, peerID)
     );
+    this.p._pc.addEventListener(
+      'icecandidateerror',
+      event => {
+        console.log('ICE CANIDATE ERROR', event); // todo remove dev item
+      }
+    );
   }
 
   onConnect(peerID) {
     debug('onConnect', peerID);
     this.connected = true;
-    this.emit('connect', peerID);
+    // this.emit('connect', peerID);
+    this.emit(this.jsonDetails.lifeCycle.RtcConnectedEvent, peerID)
     this.clearExtraOnConnection();
   }
 
@@ -288,7 +296,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
         }
         if (!this.connected) {
           this.connected = true;
-          this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+          // this.emit(this.lifeCycle.RtcConnectedEvent, this.p.peerInstanceId);
         }
       }
       if (
@@ -310,7 +318,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     debugPeer('peerID', peerID);
     this.fallbackTimer();
 
-    this.emit('data', data);
+    this.emit('appData', data);
     try {
       let decryptedData;
       if (this.isJSON(data)) {
@@ -324,13 +332,13 @@ export default class WebRtcCommunication extends MewConnectCommon {
       }
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
-        this.emit('data', {
+        this.emit('appData', {
           type: parsed.type,
           data: parsed.data,
           id: parsed.id
         });
       } else {
-        this.emit('data', {
+        this.emit('appData', {
           type: decryptedData.type,
           data: decryptedData.data,
           id: decryptedData.id
@@ -377,14 +385,14 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   sendRtcMessageClosure(type, msg, id) {
     return () => {
-      debug(`[SEND RTC MESSAGE Closure] type:  ${type},  message:  ${msg}`);
+      debug(`[WebRTC Comm - SEND RTC MESSAGE Closure] type:  ${type},  message:  ${msg}`);
       this.rtcSend(JSON.stringify({ type, data: msg, id }));
     };
   }
 
   sendRtcMessage(type, msg, id) {
     debug(msg);
-    debug(`[SEND RTC MESSAGE] type:  ${type},  message:  ${msg}, id: ${id}`);
+    debug(`[WebRTC Comm - SEND RTC MESSAGE] type:  ${type},  message:  ${msg}, id: ${id}`);
     this.rtcSend(JSON.stringify({ type, data: msg, id })).catch(err => {
       debug(err);
     });
@@ -416,6 +424,12 @@ export default class WebRtcCommunication extends MewConnectCommon {
     try {
       debug(this.isAlive()); // todo remove dev item
       if (this.isAlive()) {
+        // if(!this.sentMessageIds.includes(arg.id)){
+        //   this.sentMessageIds.push(arg.id)
+        // } else {
+        //   console.log('known id'); // todo remove dev item
+        //   return;
+        // }
         let encryptedSend;
         if (typeof arg === 'string') {
           encryptedSend = await this.mewCrypto.encrypt(arg);

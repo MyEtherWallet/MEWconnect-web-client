@@ -425,7 +425,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       const peerID = this.webRtcCommunication.getActivePeerId();
       this.setActivePeerId(peerID);
       this.webRtcCommunication.once(
-        'connect',
+        this.jsonDetails.lifeCycle.RtcConnectedEvent,
         this.onConnect.bind(this, peerID)
       );
       this.webRtcCommunication.once('signal', this.sendOffer.bind(this));
@@ -442,10 +442,10 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       debug('peerID', peerID);
       this.connected = true;
       this.turnDisabled = true;
-      this.webRtcCommunication.on('data', this.onData.bind(this, peerID));
+      // this.webRtcCommunication.on('data', this.onData.bind(this, peerID));
       this.socketEmit(this.signals.rtcConnected, this.socketKey);
       this.socketDisconnect();
-      this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
+      // this.uiCommunicator(this.lifeCycle.RtcConnectedEvent);
     } catch (e) {
       debug('onConnect error:', e);
     }
@@ -470,22 +470,22 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     debug(data); // todo remove dev item
     debug('DATA RECEIVED', data.toString());
     debug('peerID', peerID);
-    try {
-      let decryptedData = await this.decryptIncomming(data);
-
-      if (this.isJSON(decryptedData)) {
-        const parsed = JSON.parse(decryptedData);
-        debug('DECRYPTED DATA RECEIVED 1', parsed);
-        this.emit(parsed.type, parsed.data);
-      } else {
-        debug('DECRYPTED DATA RECEIVED 2', decryptedData);
-        this.emit(decryptedData.type, decryptedData.data);
-      }
-    } catch (e) {
-      logger.error(e);
-      debug('onData ERROR: data=', data);
-      debug('onData ERROR: data.toString()=', data.toString());
-    }
+    // try {
+    //   let decryptedData = await this.decryptIncomming(data);
+    //
+    //   if (this.isJSON(decryptedData)) {
+    //     const parsed = JSON.parse(decryptedData);
+    //     debug('DECRYPTED DATA RECEIVED 1', parsed);
+    //     this.emit(parsed.type, parsed.data);
+    //   } else {
+    //     debug('DECRYPTED DATA RECEIVED 2', decryptedData);
+    //     this.emit(decryptedData.type, decryptedData.data);
+    //   }
+    // } catch (e) {
+    //   logger.error(e);
+    //   debug('onData ERROR: data=', data);
+    //   debug('onData ERROR: data.toString()=', data.toString());
+    // }
   }
 
   onClose(peerID, data) {
@@ -533,20 +533,20 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   async rtcSend(arg) {
-    if (this.isAlive()) {
-      let encryptedSend;
-      if (typeof arg === 'string') {
-        encryptedSend = await this.mewCrypto.encrypt(arg);
-      } else {
-        encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
-      }
-      debug('SENDING RTC');
-      this.p.send(JSON.stringify(encryptedSend));
-    } else {
-      // eslint-disable-next-line
-      this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
-      return false;
-    }
+    // if (this.isAlive()) {
+    //   let encryptedSend;
+    //   if (typeof arg === 'string') {
+    //     encryptedSend = await this.mewCrypto.encrypt(arg);
+    //   } else {
+    //     encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
+    //   }
+    //   debug('SENDING RTC');
+    //   this.p.send(JSON.stringify(encryptedSend));
+    // } else {
+    //   // eslint-disable-next-line
+    //   this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
+    //   return false;
+    // }
   }
 
   rtcDestroy() {

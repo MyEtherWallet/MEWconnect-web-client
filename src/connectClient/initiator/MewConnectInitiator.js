@@ -47,7 +47,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.signalUrl = null;
       this.iceState = '';
       this.turnServers = [];
-      this.refreshTimer = null;
       this.refreshDelay = 20000;
       this.socketsCreated = false;
       this.refreshCount = 0;
@@ -266,18 +265,11 @@ Keys
     this.initiatorStart();
   }
 
-  refreshCheck() {
-    if (this.refreshTimer !== null) {
-      clearTimeout(this.refreshTimer);
-      this.refreshTimer = null;
-    }
-  }
+
 
   // TODO change this to use supplied urls at time point
   async initiatorStart(url, testPrivate) {
-    // this.refreshTimer = setTimeout(() => {
-    //   this.refreshCode();
-    // }, this.refreshDelay);
+
     if (this.socketV1Connected) {
       this.V1.socketDisconnect();
     }
@@ -308,12 +300,10 @@ Keys
 
       this.V2.on('sendingOffer', () => {
         this.popupCreator.showConnecting();
-        this.refreshCheck();
       });
 
       this.V2.on('retryingViaTurn', () => {
         this.showingRefresh = false;
-        this.refreshCheck();
       });
       const regenerateQRcodeOnClick = () => {
         debug('REGENERATE'); // todo remove dev item
@@ -362,10 +352,14 @@ Keys
       });
     }
 
-    this.webRtcCommunication.on(
+    this.webRtcCommunication.once(
       this.jsonDetails.lifeCycle.RtcConnectedEvent,
-      () => {
-        this.refreshCheck();
+      (peerid) => {
+        console.log(peerid); // todo remove dev item
+        this.webRtcCommunication.removeAllListeners(this.jsonDetails.lifeCycle.RtcConnectedEvent)
+        console.log('RTC CONNECTED ENVIRONMENT SETUP'); // todo remove dev item
+        this.emit(this.lifeCycle.RtcConnectedEvent);
+        this.webRtcCommunication.on('appData', this.dataReceived.bind(this));
         this.connected = true;
         this.popupCreator.removeWindowClosedListener();
         this.popupCreator.closePopupWindow();
@@ -377,7 +371,6 @@ Keys
   socketDisconnect() {
     this.V2.socketDisconnect();
     this.V1.socketDisconnect();
-    this.refreshCheck();
   }
 
   disconnectRTC() {
@@ -401,6 +394,7 @@ Keys
 
   dataReceived(data) {
     debug('dataReceived', data);
+    // this.webRtcCommunication.once('appData', this.dataReceived.bind(this));
     if (data.id) {
       debug('MESSAGE ID RECEIVED', data.id);
       if (this.requestIds.includes(data.id)) {
