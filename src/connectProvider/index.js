@@ -169,6 +169,7 @@ export default class Integration extends EventEmitter {
         this.connectionState = CONNECTING;
         debugConnectionState(MEWconnectWallet.getConnectionState());
         popUpCreator.setWindowClosedListener(() => {
+          popUpCreator.popupWindowOpen = null;
           if (this.windowClosedError) {
             reject('ERROR: popup window closed');
           }
@@ -186,6 +187,7 @@ export default class Integration extends EventEmitter {
         this.createDisconnectNotifier();
         this.createCommunicationError();
         debugConnectionState(MEWconnectWallet.getConnectionState());
+        popUpCreator.popupWindowOpen = null;
       }
 
       if (state.web3 && state.wallet) {

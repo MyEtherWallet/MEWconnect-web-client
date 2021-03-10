@@ -227,7 +227,7 @@ export default class PopUpCreator extends EventEmitter{
         return this.container;
       }
 
-      if (!qrcode) {
+      if (!qrcode || qrcode === '') {
         const QRfailedMessage = document.getElementById('qr-failure');
         QRfailedMessage.innerText = 'Error: Please start connection again.';
         // todo Instead of not showing. present a notice and ask the user to retry.

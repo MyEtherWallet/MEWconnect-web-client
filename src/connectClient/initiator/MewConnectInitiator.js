@@ -55,7 +55,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
       this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
-      this.popupCreator = options.popupCreator || new PopUpCreator();
+      this.popupCreator = options.popupCreator // || new PopUpCreator();
 
       debugConnectionState(
         'Initial Connection State:',
