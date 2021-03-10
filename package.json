@@ -23,6 +23,7 @@
     "pre-commit": "npm run lint"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "bignumber.js": "^9.0.0",
     "browser-or-node": "^1.2.1",
     "core-js": "^3.4.4",
@@ -73,7 +74,6 @@
     "@vue/cli-plugin-eslint": "^4.2.3",
     "@vue/cli-service": "^4.1.0",
     "@vue/eslint-config-prettier": "^4.0.1",
-    "axios": "^0.19.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^25.1.0",
