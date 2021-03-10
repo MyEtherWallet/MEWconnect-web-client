@@ -107,6 +107,12 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   fallbackTimer(clear) {
+    if(this.connected && this.turnTimer !== null){
+      clearTimeout(this.turnTimer);
+      this.turnTimer = null;
+    } else if (this.connected){
+      return;
+    }
     if (this.usingVersion === 'V2') {
       if (clear) {
         clearTimeout(this.turnTimer);
@@ -192,6 +198,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
       try {
         this.answerReceived[this.p.peerInstanceId] = true;
         this.p.signal(plainTextOffer);
+        this.p.getStats(console.log)
         debug('webRTC answer received and processed');
       } catch (e) {
         // eslint-disable-next-line
@@ -316,10 +323,15 @@ export default class WebRtcCommunication extends MewConnectCommon {
   async onData(peerID, data) {
     debug('DATA RECEIVED');
     debugPeer('peerID', peerID);
-    this.fallbackTimer();
+    if(!this.connected){
+      this.fallbackTimer();
+    }
 
-    this.emit('appData', data);
+
+    // this.emit('appData', data);
     try {
+      console.log('DATA', data); // todo remove dev item
+
       let decryptedData;
       if (this.isJSON(data)) {
         decryptedData = await this.mewCrypto.decrypt(

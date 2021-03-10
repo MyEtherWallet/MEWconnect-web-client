@@ -19,7 +19,7 @@ import {
 } from './popupWindowDesign';
 import debugLogger from 'debug';
 import { ANDROID_LINK, IOS_LINK } from '../config';
-import EventEmitter from 'rollup-plugin-node-builtins/src/es6/events';
+import EventEmitter from 'events';
 
 // TODO add debug logging
 const debug = debugLogger('MEWconnect:popup-window');

@@ -61,6 +61,10 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       //     this.socketDisconnect();
       //   }
       // }, 120000);
+
+      // WebRTC options
+      this.iceTransportPolicy = 'all'
+      this.trickle = true;
     } catch (e) {
       debug('constructor error:', e);
     }
@@ -330,8 +334,8 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
         servers: this.stunServers,
         webRtcConfig: {
           initiator: true,
-          trickle: false,
-          iceTransportPolicy: 'relay',
+          trickle: this.trickle,
+          iceTransportPolicy: this.iceTransportPolicy,
           config: {
             iceServers: this.stunServers
           },
@@ -401,9 +405,9 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
       this.iceServers = null;
       const defaultOptions = {
-        initiator: true,
-        trickle: false,
-        iceTransportPolicy: 'relay',
+        initiator: this.trickle,
+        trickle: this.trickle,
+        // iceTransportPolicy: 'all', //'relay',
         config: {
           iceServers: webRtcServers
         },
