@@ -17,7 +17,7 @@ import { DISCONNECTED, CONNECTED } from '../../config';
 const debug = debugLogger('MEWconnect:initiator-base');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
-
+let qrString;
 export default class MewConnectInitiator extends MewConnectCommon {
   constructor(options = {}) {
     super(options.version);
@@ -71,7 +71,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
       setTimeout(() => {
         if (this.socket) {
           this.socketDisconnect();
-          this.refreshCheck();
         }
       }, this.abandonedTimeout);
 
@@ -122,8 +121,11 @@ export default class MewConnectInitiator extends MewConnectCommon {
               this.rtcDestroy();
             }
           }
-          this.popupCreator.removeWindowClosedListener();
-          this.popupCreator.closePopupWindow();
+          if(this.popupCreator){
+            this.popupCreator.removeWindowClosedListener();
+            this.popupCreator.closePopupWindow();
+          }
+
         };
       } catch (e) {
         debug(e);
@@ -190,6 +192,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
           this.version + separator + privateKey + separator + this.connId;
       }
 
+      qrString = qrCodeString
 
       const unloadOrClosed = () => {
         if (!this.connected) {
@@ -199,32 +202,66 @@ export default class MewConnectInitiator extends MewConnectCommon {
           MewConnectInitiator.setConnectionState();
           this.socketDisconnect();
           this.emit(this.lifeCycle.AuthRejected);
-          this.refreshCheck();
         }
       };
 
       debug(qrCodeString);
-      if (this.showPopup) {
-        if (this.popupCreator.popupWindowOpen) {
-          this.popupCreator.updateQrCode(qrCodeString);
-        } else {
-          this.popupCreator.refreshQrcode = this.initiatorStart.bind(this);
-          this.popupCreator.openPopupWindow(qrCodeString);
-          // this.popupCreator.container.addEventListener('beforeunload', unloadOrClosed);
-          this.popupCreator.container.addEventListener(
-            'mewModalClosed',
-            unloadOrClosed,
-            { once: true }
-          );
-        }
-      } else {
-        this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
-        this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
-        this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
-      }
+      // if (this.showPopup) {
+      //   if (this.popupCreator.popupWindowOpen) {
+      //     this.popupCreator.updateQrCode(qrCodeString);
+      //   } else {
+      //     this.popupCreator.refreshQrcode = this.initiatorStart.bind(this);
+      //     this.popupCreator.openPopupWindow(qrCodeString);
+      //     // this.popupCreator.container.addEventListener('beforeunload', unloadOrClosed);
+      //     this.popupCreator.container.addEventListener(
+      //       'mewModalClosed',
+      //       unloadOrClosed,
+      //       { once: true }
+      //     );
+      //   }
+      // } else {
+      //   this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
+      //   this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
+      //   this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
+      // }
     } catch (e) {
       debug('displayCode error:', e);
     }
+  }
+
+
+  ShowQr(qrCodeString){
+    const unloadOrClosed = () => {
+      if (!this.connected) {
+        // eslint-disable-next-line no-console
+        debug('popup window closed');
+        this.uiCommunicator('popup_window_closed');
+        MewConnectInitiator.setConnectionState();
+        this.socketDisconnect();
+        this.emit(this.lifeCycle.AuthRejected);
+      }
+    };
+
+    debug(qrCodeString);
+    if (this.showPopup) {
+      if (this.popupCreator.popupWindowOpen) {
+        this.popupCreator.updateQrCode(qrCodeString);
+      } else {
+        this.popupCreator.refreshQrcode = this.initiatorStart.bind(this);
+        this.popupCreator.openPopupWindow(qrCodeString);
+        // this.popupCreator.container.addEventListener('beforeunload', unloadOrClosed);
+        this.popupCreator.container.addEventListener(
+          'mewModalClosed',
+          unloadOrClosed,
+          { once: true }
+        );
+      }
+    } else {
+      this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
+      this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
+      this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
+    }
+
   }
 
   /*
@@ -336,6 +373,7 @@ Keys
       console.error(e);
       this.V1 = {};
     }
+    this.ShowQr(qrString);
     this.webRtcCommunication.setActiveInitiatorId(this.V2.initiatorId);
 
     if (this.V1.on) {

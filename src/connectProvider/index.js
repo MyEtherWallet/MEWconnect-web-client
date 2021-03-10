@@ -169,11 +169,11 @@ export default class Integration extends EventEmitter {
         this.connectionState = CONNECTING;
         debugConnectionState(MEWconnectWallet.getConnectionState());
         popUpCreator.setWindowClosedListener(() => {
-          popUpCreator.popupWindowOpen = null;
           if (this.windowClosedError) {
             reject('ERROR: popup window closed');
           }
           this.emit('popupWindowClosed');
+          popUpCreator.popupWindowOpen = null;
         });
 
         state.wallet = await MEWconnectWallet(
@@ -186,8 +186,8 @@ export default class Integration extends EventEmitter {
         this.popUpHandler.hideNotifier();
         this.createDisconnectNotifier();
         this.createCommunicationError();
-        debugConnectionState(MEWconnectWallet.getConnectionState());
         popUpCreator.popupWindowOpen = null;
+        debugConnectionState(MEWconnectWallet.getConnectionState());
       }
 
       if (state.web3 && state.wallet) {

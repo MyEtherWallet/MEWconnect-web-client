@@ -38,7 +38,6 @@ export default class PopUpCreator extends EventEmitter{
     this.camera = camera;
     this.closeIconBlack = closeIconBlack;
     this.popupWindowOpen = null;
-    this.qrFailure = false;
     this.windowClosedListener = () => {};
 
     if (!document.getElementById('Attach-Mew-Wallet-Modal')) {
@@ -111,23 +110,14 @@ export default class PopUpCreator extends EventEmitter{
     this.windowClosedListener();
   }
 
-  hideQrError() {
-    document.querySelector('#qrcodeError').classList.remove('is-visible');
-    document.querySelector('#qr-failure').classList.remove('is-visible');
-    document.querySelector('#qrcodeError').classList.add('hidden');
-    document.querySelector('#qr-failure').classList.add('hidden');
-  }
-
   showQrError() {
-    const QRfailedMessage = document.getElementById('qr-failure');
-    QRfailedMessage.innerText = 'Error: Please start connection again.';
     const notify = document.getElementById('qr-failure');
-    document.querySelector('#qrcodeError').classList.add('is-visible');
-    document.querySelector('#qr-failure').classList.add('is-visible');
-    // notify.className = 'hidden';
+    document.querySelector('#qrcodeError').classList.remove('is-visible');
+    notify.className = 'hidden';
   }
 
   showConnecting(){
+    // todo: add existance checks because these are destroyed on a good connection
     document.querySelector('#qr-code-display-container-mew').classList.add('hidden');
     document.querySelector('#qr-code-connecting-mew').classList.remove('hidden');
   }
@@ -140,8 +130,8 @@ export default class PopUpCreator extends EventEmitter{
   showRetry(callback){
     const retry = document.getElementById('retry-button-mew');
     const retryOnModal = document.getElementById('refresh-container')
-    document.querySelector('#refresh-container').classList.remove('hidden');
-    document.querySelector('#retry-button-mew').classList.remove('hidden');
+    if(document.querySelector('#refresh-container')) document.querySelector('#refresh-container').classList.remove('hidden');
+    if(document.querySelector('#retry-button-mew'))  document.querySelector('#retry-button-mew').classList.remove('hidden');
     const eventHandler = evt => {
       document.querySelector('#qr-code-display-container-mew').classList.remove('hidden');
       document.querySelector('#qr-code-connecting-mew').classList.add('hidden');
@@ -176,7 +166,7 @@ export default class PopUpCreator extends EventEmitter{
   }
 
   createQrCodeModal() {
-    this.popupWindowOpen = true;
+    // this.popupWindowOpen = true;
     const css = document.createElement('style');
     css.type = 'text/css';
     if ('textContent' in css) css.textContent = modalCSS(cssStyles);
@@ -233,20 +223,14 @@ export default class PopUpCreator extends EventEmitter{
 
   showPopupWindow(qrcode) {
     try {
-      if(this.qrFailure && qrcode && qrcode !== ''){
-        this.popupWindowOpen = null;
-        this.hideQrError()
-      }
       if (typeof this.popupWindowOpen === 'boolean') {
         this.showDialog();
         return this.container;
       }
 
-      if (!qrcode || qrcode === '') {
-        this.qrFailure = true;
-        this.showQrError()
-        // const QRfailedMessage = document.getElementById('qr-failure');
-        // QRfailedMessage.innerText = 'Error: Please start connection again.';
+      if (!qrcode) {
+        const QRfailedMessage = document.getElementById('qr-failure');
+        QRfailedMessage.innerText = 'Error: Please start connection again.';
         // todo Instead of not showing. present a notice and ask the user to retry.
         // this.emit('fatalError');
         // window.alert('Failed to create MEW wallet QRcode. Please retry.');
@@ -288,14 +272,14 @@ export default class PopUpCreator extends EventEmitter{
       if (qrcode === '') {
         this.showQrError();
       }
-      // if (!qrcode) {
-      //   const QRfailedMessage = document.getElementById('qr-failure');
-      //   QRfailedMessage.innerText = 'Error: Please start connection again.';
-      //   // todo Instead of not showing. present a notice and ask the user to retry.
-      //   this.emit('fatalError');
-      //   window.alert('Failed to create MEW wallet QRcode. Please retry.');
-      //   throw Error('No connection string supplied to popup window');
-      // }
+      if (!qrcode) {
+        const QRfailedMessage = document.getElementById('qr-failure');
+        QRfailedMessage.innerText = 'Error: Please start connection again.';
+        // todo Instead of not showing. present a notice and ask the user to retry.
+        this.emit('fatalError');
+        window.alert('Failed to create MEW wallet QRcode. Please retry.');
+        throw Error('No connection string supplied to popup window');
+      }
       return this.container;
     } catch (e) {
       // todo Instead of not showing. present a notice and ask the user to retry.
@@ -311,7 +295,7 @@ export default class PopUpCreator extends EventEmitter{
   closePopupWindow() {
     // this.hideDialog();
     this.container.dispatchEvent(new Event('mewModalClosed'));
-    // this.container.replaceChildren();
+    this.container.replaceChildren();
     this.popupWindowOpen = null;
   }
 
