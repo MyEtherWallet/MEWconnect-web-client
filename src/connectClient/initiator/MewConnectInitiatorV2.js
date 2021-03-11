@@ -8,6 +8,7 @@ import wrtc from 'wrtc';
 import MewConnectCommon from '../MewConnectCommon';
 import MewConnectCrypto from '../MewConnectCrypto';
 import WebRtcCommunication from '../WebRtcCommunication';
+import { stunServers } from '../config';
 
 const debug = debugLogger('MEWconnect:initiator-V2');
 const debugTurn = debugLogger('MEWconnect:turn-V2');
@@ -63,7 +64,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       // }, 120000);
 
       // WebRTC options
-      this.iceTransportPolicy = 'all'
+      this.iceTransportPolicy = 'all';
       this.trickle = true;
     } catch (e) {
       debug('constructor error:', e);
@@ -236,10 +237,9 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       });
 
       this.socketOn(this.signals.initiated, this.initiated.bind(this)); // response
-      this.socketOn(
-        this.signals.confirmation,
-        this.beginRtcSequence.bind(this, '')
-      ); // response
+      this.socketOn(this.signals.confirmation, data => {
+        this.beginRtcSequence(stunServers);
+      }); // response
       // this.signals.answer
       this.socketOn('answer', this.recieveAnswer.bind(this));
       this.socketOn(
@@ -323,13 +323,14 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     debug('initiator', this.signals.initiated, data);
   }
 
-  beginRtcSequence(data) {
+  beginRtcSequence(stunServers) {
     this.emit('socketPaired');
     this.emit('beginRtcSequence', 'V2');
     try {
       debug('beginRtcSequence ');
-      debug('sendOffer', data);
+      debug('sendOffer', stunServers);
       this.iceServers = null;
+      this.stunServers = stunServers;
       const options = {
         servers: this.stunServers,
         webRtcConfig: {

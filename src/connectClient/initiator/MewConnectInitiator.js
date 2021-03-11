@@ -378,6 +378,7 @@ Keys
 
     if (this.V1.on) {
       this.V1.on('socketPaired', () => {
+        console.log('socket 1 CONNECTED'); // todo remove dev item
         if (this.V2.socketDisconnect) this.V2.socketDisconnect();
         this.socketV1Connected = true;
       });
