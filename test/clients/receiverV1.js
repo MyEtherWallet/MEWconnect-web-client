@@ -3,7 +3,7 @@ import CryptoUtils from '../utils/crypto-utils';
 const debugLogger = require('debug');
 const io = require('socket.io-client');
 const EventEmitter = require('events').EventEmitter;
-const MewConnectCrypto = require('../../dist/index.js').Crypto;
+const MewConnectCrypto = require('../../src/connectClient/MewConnectCrypto').default;
 const SimplePeer = require('simple-peer');
 const wrtc = require('wrtc');
 

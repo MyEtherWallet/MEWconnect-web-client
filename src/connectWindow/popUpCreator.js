@@ -293,13 +293,26 @@ export default class PopUpCreator extends EventEmitter{
   }
 
   closePopupWindow() {
-    // this.hideDialog();
-    this.container.dispatchEvent(new Event('mewModalClosed'));
-    this.container.replaceChildren();
-    this.popupWindowOpen = null;
+    try { // this.hideDialog();
+      this.popupWindowOpen = null;
+      document.querySelector('#Attach-Mew-Wallet-Modal').dispatchEvent(new Event('mewModalClosed'));
+      document.querySelector('#Attach-Mew-Wallet-Modal').replaceChildren();
+
+      // document.querySelector('#Attach-Mew-Wallet-Modal').classList.add('hidden');
+    } catch (e) {
+      this.popupWindowOpen = null;
+      document.querySelector('#Attach-Mew-Wallet-Modal').innerHTML = '';
+    }
   }
 
   handleBeforeUnload() {
     // this.closePopupWindow();
+  }
+  resetSetup() {
+    this.popupWindowOpen = null;
+    this.hideNotifier();
+    this.closePopupWindow();
+    // document.getElementById('Attach-Mew-Wallet-Modal');
+
   }
 }

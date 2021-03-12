@@ -48,6 +48,8 @@ class HttpProvider {
         });
       },
       notificationCallbacks: [],
+      disconnectCallbacks: [],
+      closeCallbacks: [],
       createSubscriptions: (subscription, ) => {
         requestManager.addSubscription()
       },
@@ -81,7 +83,36 @@ class HttpProvider {
             this.httpProvider.disconnectedCallback = callback;
             break;
           case 'disconnect':
+            this.httpProvider.disconnectCallbacks.push(callback)
             this.httpProvider.disconnectCallback = callback;
+            break;
+          case 'close':
+            this.httpProvider.closeCallbacks.push(callback)
+            this.httpProvider.closeCallback = callback;
+            break;
+        }
+      },
+      emit:(type, data) => {
+        if (typeof type !== 'string')
+          throw new Error('The first parameter type must be a function.');
+
+        switch (type) {
+
+          // case 'accountsChanged':
+          //   this.accountsChanged = callback;
+          //   break;
+          // case 'disconnected':
+          //   this.disconnectedCallback = callback;
+          //   break;
+          case 'disconnect':
+            this.httpProvider.disconnectCallbacks.forEach(function(callback) {
+              if (typeof callback === 'function') callback(data);
+            });
+            break;
+          case 'close':
+            this.httpProvider.closeCallbacks.forEach(function(callback) {
+              if (typeof callback === 'function') callback(data);
+            });
             break;
         }
       }

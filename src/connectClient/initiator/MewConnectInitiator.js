@@ -258,7 +258,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       }
     } else {
       this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
-      this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
+      // this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
       this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
     }
 
@@ -394,9 +394,8 @@ Keys
     this.webRtcCommunication.once(
       this.jsonDetails.lifeCycle.RtcConnectedEvent,
       (peerid) => {
-        console.log(peerid); // todo remove dev item
         this.webRtcCommunication.removeAllListeners(this.jsonDetails.lifeCycle.RtcConnectedEvent)
-        console.log('RTC CONNECTED ENVIRONMENT SETUP'); // todo remove dev item
+        debug('RTC CONNECTED ENVIRONMENT SETUP'); // todo remove dev item
         this.emit(this.lifeCycle.RtcConnectedEvent);
         this.webRtcCommunication.on('appData', this.dataReceived.bind(this));
         this.connected = true;

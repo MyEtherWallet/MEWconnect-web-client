@@ -4,7 +4,7 @@
     <button @click="onClick">CONNECT</button>
     <h3>{{ userAddress }}</h3>
     <button @click="ecrecover">ecrecover</button>
-    <button @click="showThing">CHECK</button>
+    <button @click="doThing">CHECK</button>
     <div v-show="userAddress === ''">
       <button @click="selectNetwork(1)">Mainnet</button>
       <button @click="selectNetwork(3)">Ropsten</button>
@@ -468,6 +468,9 @@ export default {
     // })
   },
   methods: {
+    doThing(){
+
+    },
     showThing() {
       console.log('CONSOLE CHECK'); // todo remove dev item
 

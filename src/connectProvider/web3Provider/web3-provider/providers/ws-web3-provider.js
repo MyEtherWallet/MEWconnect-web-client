@@ -19,6 +19,8 @@ const WebsocketProvider = function WebsocketProvider(url, options) {
   const _this = this;
   this.responseCallbacks = {};
   this.notificationCallbacks = [];
+  this.closeCallbacks = [];
+  this.disconnectCallbacks = []
 
   options = options || {};
   this._customTimeout = options.timeout;
@@ -191,6 +193,7 @@ WebsocketProvider.prototype.send = function(payload, callback) {
 WebsocketProvider.prototype.on = function(type, callback) {
   if (typeof callback !== 'function')
     throw new Error('The second parameter callback must be a function.');
+  console.log('set callback'); // todo remove dev item
 
   switch (type) {
     case 'data':
@@ -216,7 +219,38 @@ WebsocketProvider.prototype.on = function(type, callback) {
       this.disconnectedCallback = callback;
       break;
     case 'disconnect':
+      this.disconnectCallbacks.push(callback)
       this.disconnectCallback = callback;
+      break;
+    case 'close':
+      this.closeCallbacks.push(callback)
+      console.log('set close callback'); // todo remove dev item
+      this.closeCallback = callback;
+      break;
+  }
+};
+
+WebsocketProvider.prototype.emit = function(type, data) {
+  if (typeof type !== 'string')
+    throw new Error('The first parameter type must be a function.');
+
+  switch (type) {
+
+    // case 'accountsChanged':
+    //   this.accountsChanged = callback;
+    //   break;
+    // case 'disconnected':
+    //   this.disconnectedCallback = callback;
+    //   break;
+    case 'disconnect':
+      this.disconnectCallbacks.forEach(function(callback) {
+        if (_.isFunction(callback)) callback(data);
+      });
+      break;
+    case 'close':
+      this.closeCallbacks.forEach(function(callback) {
+      if (_.isFunction(callback)) callback(data);
+    });
       break;
   }
 };
@@ -228,6 +262,22 @@ WebsocketProvider.prototype.removeListener = function(type, callback) {
     case 'data':
       this.notificationCallbacks.forEach(function(cb, index) {
         if (cb === callback) _this.notificationCallbacks.splice(index, 1);
+      });
+      break;
+    // case 'accountsChanged':
+    //   this.accountsChanged = callback;
+    //   break;
+    // case 'disconnected':
+    //   this.disconnectedCallback = callback;
+    //   break;
+    case 'disconnect':
+      this.disconnectCallbacks.forEach(function(cb, index) {
+        if (cb === callback) _this.disconnectCallbacks.splice(index, 1);
+      });
+      break;
+    case 'close':
+      this.closeCallbacks.forEach(function(cb, index) {
+        if (cb === callback) _this.closeCallbacks.splice(index, 1);
       });
       break;
   }

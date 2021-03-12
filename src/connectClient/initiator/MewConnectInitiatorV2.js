@@ -236,10 +236,22 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
         this.socketConnected = true;
       });
 
+      this.socket.on('onClose', () => {
+        debugStages('SOCKET DISCONNECTED');
+        this.socketConnected = false;
+        if (!this.connected) {
+          // show new QRcode
+        }
+      });
+
       this.socketOn(this.signals.initiated, this.initiated.bind(this)); // response
+      this.socketOn(this.signals.disconnected, data => {
+        // this.beginRtcSequence(stunServers);
+      }); // response
+
       this.socketOn(this.signals.confirmation, data => {
         this.beginRtcSequence(stunServers);
-      }); // response
+      });
       // this.signals.answer
       this.socketOn('answer', this.recieveAnswer.bind(this));
       this.socketOn(

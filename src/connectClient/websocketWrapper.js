@@ -132,7 +132,6 @@ export default class WebsocketConnection {
       }
 
       if(parsedMessage.signal === 'ping' || parsedMessage.signal === 'pong') {
-        console.log(parsedMessage); // todo remove dev item
         return;
       }
       const signal = parsedMessage.signal;
@@ -156,6 +155,9 @@ export default class WebsocketConnection {
 
   onClose() {
     debug(`websocket onClose = ${this.getSocketState()}`);
+    if(this.listeners['onClose']){
+      this.listeners['onClose'].call(this);
+    }
   }
 
   /**

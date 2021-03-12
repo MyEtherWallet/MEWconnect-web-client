@@ -365,8 +365,10 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   onClose(peerID, data) {
+    console.log('1'); // todo remove dev item
     debugStages('WRTC onClose event');
     debug('peerID', peerID);
+    console.log('onClose', this.connected); // todo remove dev item
     if (!this.isAlive()) {
       debugStages('WRTC CLOSE', data);
       if (this.connected) {
@@ -376,6 +378,11 @@ export default class WebRtcCommunication extends MewConnectCommon {
       } else {
         this.connected = false;
       }
+    }
+    if (this.connected) {
+      this.emit(this.lifeCycle.RtcClosedEvent);
+      this.uiCommunicator(this.lifeCycle.disconnected);
+      this.connected = false;
     }
   }
 
