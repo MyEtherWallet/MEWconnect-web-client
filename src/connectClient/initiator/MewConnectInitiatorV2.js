@@ -66,7 +66,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     }
 
     this.webRtcCommunication.on(this.lifeCycle.UsingFallback, id => {
-      debug('USING TURN FALLBACK');
+      debug('USING TURN FALLBACK', id, this.initiatorId);
       if (this.initiatorId === id) {
         this.useFallback();
       } else {
@@ -558,7 +558,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     this.rtcSend(JSON.stringify({ type, data: msg }));
   }
 
-/*  async rtcSend(arg) {
+  async rtcSend(arg) {
     // if (this.isAlive()) {
     //   let encryptedSend;
     //   if (typeof arg === 'string') {
@@ -573,7 +573,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     //   this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
     //   return false;
     // }
-  }*/
+  }
 
   rtcDestroy() {
     if (this.active) {

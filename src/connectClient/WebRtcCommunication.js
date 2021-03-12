@@ -234,7 +234,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
   // Provide Notice that initial WebRTC connection failed and the fallback method will be used
   willAttemptTurn() {
 
-    this.uiCommunicator(this.lifeCycle.UsingFallback);
+    this.uiCommunicator(this.lifeCycle.UsingFallback, this.activeInitiatorId);
     if(!this.connected && this.tryingTurn && this.usingVersion === 'V2'){
       this.refreshQrTimer();
       this.refreshEnabled = false;
@@ -420,11 +420,13 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   disconnectRTC() {
     try {
-      debugStages('DISCONNECT RTC');
-      this.connected = false;
-      this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
-      this.rtcDestroy();
-      this.instance = null;
+      if(this.connected){
+        debugStages('DISCONNECT RTC');
+        this.connected = false;
+        this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+        this.rtcDestroy();
+        this.instance = null;
+      }
     } catch (e) {
       debug(e);
     }
@@ -446,6 +448,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
         } else {
           encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
         }
+        console.log(this.p); // todo remove dev item
         this.p.send(JSON.stringify(encryptedSend));
         debug('SENDING RTC');
       } else {

@@ -415,7 +415,9 @@ export default class Integration extends EventEmitter {
       return true;
     } catch (e) {
       debugErrors('disconnect ERROR');
-      this.popUpHandler.showNotice(messageConstants.disconnectError);
+      if(this.popUpHandler){
+        this.popUpHandler.showNotice(messageConstants.disconnectError);
+      }
       // eslint-disable-next-line
       console.error(e);
       return false;

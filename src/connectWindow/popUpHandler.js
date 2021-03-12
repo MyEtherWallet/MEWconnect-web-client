@@ -209,7 +209,7 @@ export default class PopUpHandler {
   }
 
   hideNotifier() {
-    const notify = document.getElementById('Notifications-mew');
+    const notify = document.getElementById('Notifications');
     if (notify) {
       notify.className = 'hidden';
     }

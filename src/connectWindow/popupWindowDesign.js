@@ -383,11 +383,11 @@ const noticetext = `
       @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 
-      div#Notifications-mew.hidden {
+      div#Notifications.hidden {
         visibility: hidden;
       }
       
-      div#Notifications-mew.hidden {
+      div#Notifications.hidden {
         visibility: hidden;
       }
 
@@ -402,8 +402,8 @@ const noticetext = `
         display: none;
       }
 
-      #Notifications-mew,
-      #Notifications-mew * {
+      #Notifications,
+      #Notifications * {
 
         animation: none;
         animation-delay: 0;
@@ -518,13 +518,13 @@ const noticetext = `
 
       }
 
-      #Notifications-mew * {
+      #Notifications * {
         font-family: 'Roboto', sans-serif;
         font-weight: 500;
         box-sizing: border-box;
       }
 
-      #Notifications-mew {
+      #Notifications {
         position: fixed;
         top: 0;
         right: 0;
@@ -532,16 +532,16 @@ const noticetext = `
         z-index: 2147483647;
       }
 
-      #Notifications-mew style {
+      #Notifications style {
         display: none;
       }
 
-      #Notifications-mew .Notification {
+      #Notifications .Notification {
         display: block;
         margin: 8px 16px 0 16px;
       }
 
-      #Notifications-mew .NotificationBox {
+      #Notifications .NotificationBox {
         display: flex;
         flex-direction: column;
         background-color: #fff;
@@ -558,14 +558,14 @@ const noticetext = `
         overflow: hidden;
       }
 
-      #Notifications-mew
+      #Notifications
       .Notificationshow
       .NotificationBox {
         opacity: 1;
         transform: translateX(0);
       }
 
-      #Notifications-mew .NotificationContent {
+      #Notifications .NotificationContent {
         background-color: rgb(249, 250, 251);
         display: flex;
         flex-direction: row;
@@ -575,25 +575,25 @@ const noticetext = `
         cursor: pointer;
       }
 
-      #Notifications-mew .NotificationMessage {
+      #Notifications .NotificationMessage {
         display: block;
         color: black;
         line-height: 1.5;
       }
 
-      #Notifications-mew .NotificationChevron {
+      #Notifications .NotificationChevron {
         display: block;
         margin-left: 8px;
         transition: transform 0.05s;
       }
 
-      #Notifications-mew .NotificationProgressBar {
+      #Notifications .NotificationProgressBar {
         display: block;
         height: 2px;
         position: relative;
       }
 
-      #Notifications-mew .NotificationProgressBar::before {
+      #Notifications .NotificationProgressBar::before {
         display: block;
         position: absolute;
         content: "";
@@ -653,41 +653,41 @@ const noticetext = `
         }
       }
 
-      #Notifications-mew
+      #Notifications
       .NotificationExpand
       .NotificationProgressBar {
         margin-bottom: -1px;
       }
 
-      #Notifications-mew
+      #Notifications
       .NotificationExpand
       .NotificationChevron {
         transform: rotateZ(180deg);
       }
 
-      #Notifications-mew .NotificationActions {
+      #Notifications .NotificationActions {
         display: none;
         flex-direction: column;
         border-top: 1px solid #f5f7f8;
         padding: 8px 16px;
       }
 
-      #Notifications-mew
+      #Notifications
       .NotificationExpand
       .NotificationActions {
         display: flex;
       }
 
-      #Notifications-mew .NotificationAction {
+      #Notifications .NotificationAction {
         color: #888;
         margin: 8px 0;
       }
 
-      #Notifications-mew .NotificationButtonInfo {
+      #Notifications .NotificationButtonInfo {
         margin: 0 8px 0 0;
       }
 
-      #Notifications-mew .NotificationButton {
+      #Notifications .NotificationButton {
         color: #33c7b0;
         -webkit-text-fill-color: #33c7b0;
         cursor: pointer;
@@ -698,11 +698,11 @@ const noticetext = `
         transition: opacity 0.25s;
       }
 
-      #Notifications-mew .NotificationButton:active {
+      #Notifications .NotificationButton:active {
         opacity: 0.6;
       }
 
-      #Notifications-mew .NotificationContent .spaceman-background {
+      #Notifications .NotificationContent .spaceman-background {
         background-color: rgb(249, 250, 251);
         border-radius: 10px;
         height: 50px;

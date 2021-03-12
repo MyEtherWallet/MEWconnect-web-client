@@ -104,10 +104,14 @@ export default class PopUpCreator extends EventEmitter{
   }
 
   cancelConnectionSetup() {
-    this.popupWindowOpen = null;
-    this.hideNotifier();
-    this.closePopupWindow();
-    this.windowClosedListener();
+    try {
+      this.popupWindowOpen = null;
+      this.hideNotifier();
+      this.closePopupWindow();
+      this.windowClosedListener();
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   showQrError() {
