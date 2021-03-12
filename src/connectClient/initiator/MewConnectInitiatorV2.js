@@ -57,7 +57,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.isActiveInstance = true;
       this.timer = null;
 
-
       // WebRTC options
       this.iceTransportPolicy = 'all';
       this.trickle = true;
@@ -239,26 +238,24 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       });
       this.socketOn(this.signals.disconnected, data => {
         // this.beginRtcSequence(stunServers);
-        this.emit('socketDisconnected')
+        this.emit('socketDisconnected');
       }); // response
 
       this.socketOn(this.signals.initiated, this.initiated.bind(this)); // response
 
-
       this.socketOn(this.signals.confirmation, data => {
-        if(data !== '' && data){
+        if (data !== '' && data) {
           data.iceServers.map(obj => {
             const newObject = {};
             delete Object.assign(newObject, obj, { ['urls']: obj['url'] })[
               'url'
-              ];
+            ];
             return newObject;
-          })
+          });
           this.beginRtcSequence(data.iceServers);
         } else {
           this.beginRtcSequence(stunServers);
         }
-
       });
       // this.signals.answer
       this.socketOn('answer', this.recieveAnswer.bind(this));
@@ -594,11 +591,13 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   disconnectRTC() {
-    debugStages('DISCONNECT RTC');
-    this.connected = false;
-    this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
-    this.rtcDestroy();
-    this.instance = null;
+    debugStages('V2 DISCONNECT RTC');
+    if (this.connected) {
+      this.connected = false;
+      this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+      this.rtcDestroy();
+      this.instance = null;
+    }
   }
 
   retryViaTurn(data) {

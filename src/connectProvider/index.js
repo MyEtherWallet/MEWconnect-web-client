@@ -324,7 +324,7 @@ export default class Integration extends EventEmitter {
       connection.lifeCycle.RtcDisconnectEvent,
       () => {
         try {
-          this.popUpHandler.showNotice(messageConstants.disconnect);
+          if(this.popupCreator) this.popUpHandler.showNotice(messageConstants.disconnect);
           MEWconnectWallet.setConnectionState(connection.lifeCycle.disconnected);
           if(state.wallet !== null){
             this.emit('close')
@@ -391,7 +391,7 @@ export default class Integration extends EventEmitter {
     connection.webRtcCommunication.on(
       connection.lifeCycle.decryptError,
       () => {
-        this.popUpHandler.showNoticePersistentEnter(
+        if(this.popupCreator)  this.popUpHandler.showNoticePersistentEnter(
           messageConstants.communicationError
         );
       }

@@ -177,7 +177,6 @@ export default class PopUpCreator extends EventEmitter{
       debug('DONT NEED NEW'); // todo remove dev item
       return;
     }
-    console.log('sfsdfsdf'); // todo remove dev item
     const css = document.createElement('style');
     css.type = 'text/css';
     if ('textContent' in css) css.textContent = modalCSS(cssStyles);

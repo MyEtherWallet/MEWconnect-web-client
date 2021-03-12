@@ -354,6 +354,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
           id: decryptedData.id
         });
       }
+      this.initialAddressRequest = 'complete';
     } catch (e) {
       this.uiCommunicator(this.lifeCycle.decryptError);
       logger.error(e);
@@ -368,9 +369,9 @@ export default class WebRtcCommunication extends MewConnectCommon {
     if (!this.isAlive()) {
       debugStages('WRTC CLOSE', data);
       if (this.connected) {
+        this.connected = false;
         this.uiCommunicator(this.lifeCycle.RtcClosedEvent);
         this.uiCommunicator(this.lifeCycle.disconnected);
-        this.connected = false;
       } else {
         this.connected = false;
       }
@@ -402,6 +403,20 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   sendRtcMessage(type, msg, id) {
     debug(msg);
+    if(type === 'address' && !this.initialAddressRequest){
+      this.initialAddressRequest = 'sent';
+    }
+    // TODO: could break on batch transactions
+    // Doesn't when using mew V5 swap
+    if(this.lastSentType !== type){
+      this.lastSentType = type
+      setTimeout(() => {
+        this.lastSentType = '';
+      }, 100)
+    } else {
+      return;
+    }
+
     debug(`[WebRTC Comm - SEND RTC MESSAGE] type:  ${type},  message:  ${msg}, id: ${id}`);
     this.rtcSend(JSON.stringify({ type, data: msg, id })).catch(err => {
       debug(err);
