@@ -50,6 +50,7 @@ class HttpProvider {
       notificationCallbacks: [],
       disconnectCallbacks: [],
       closeCallbacks: [],
+      accountsChangedCallbacks: [],
       createSubscriptions: (subscription, ) => {
         requestManager.addSubscription()
       },
@@ -77,6 +78,7 @@ class HttpProvider {
           //   break;
 
           case 'accountsChanged':
+            this.httpProvider.accountsChangedCallbacks.push(callback)
             this.accountsChanged = callback;
             break;
           case 'disconnected':
@@ -98,9 +100,11 @@ class HttpProvider {
 
         switch (type) {
 
-          // case 'accountsChanged':
-          //   this.accountsChanged = callback;
-          //   break;
+          case 'accountsChanged':
+            this.httpProvider.accountsChangedCallbacks.forEach(function(callback) {
+              if (typeof callback === 'function') callback(data);
+            });
+            break;
           // case 'disconnected':
           //   this.disconnectedCallback = callback;
           //   break;

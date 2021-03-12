@@ -249,7 +249,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
       } else {
         this.popupCreator.refreshQrcode = this.initiatorStart.bind(this);
         this.popupCreator.openPopupWindow(qrCodeString);
-        // this.popupCreator.container.addEventListener('beforeunload', unloadOrClosed);
         this.popupCreator.container.addEventListener(
           'mewModalClosed',
           unloadOrClosed,
@@ -346,15 +345,24 @@ Keys
         debug('REGENERATE'); // todo remove dev item
         this.refreshCode();
       }
-      this.V2.on('ShowReload', () => {
-        this.uiCommunicator('ShowReload');
-      });
+      // this.V2.on('ShowReload', () => {
+      //   this.uiCommunicator('ShowReload');
+      // });
+
+      this.V2.on('socketDisconnected', () => {
+        if(!this.connected){
+          if(!this.showingRefresh){
+            this.showingRefresh = true;
+            this.popupCreator.showRetry(regenerateQRcodeOnClick)
+          }
+        }
+      })
+
       this.webRtcCommunication.on('showRefresh', () => {
         if(!this.showingRefresh){
           this.showingRefresh = true;
           this.popupCreator.showRetry(regenerateQRcodeOnClick)
         }
-
         })
     } catch (e) {
       // eslint-disable-next-line
@@ -378,7 +386,6 @@ Keys
 
     if (this.V1.on) {
       this.V1.on('socketPaired', () => {
-        console.log('socket 1 CONNECTED'); // todo remove dev item
         if (this.V2.socketDisconnect) this.V2.socketDisconnect();
         this.socketV1Connected = true;
       });
@@ -413,9 +420,9 @@ Keys
 
   disconnectRTC() {
     debugStages('DISCONNECT RTC');
-    this.connected = false;
     this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
     this.webRtcCommunication.disconnectRTC();
+    this.connected = false;
     this.instance = null;
   }
 

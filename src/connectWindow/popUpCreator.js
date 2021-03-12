@@ -167,13 +167,20 @@ export default class PopUpCreator extends EventEmitter{
 
   createQrCodeModal() {
     // this.popupWindowOpen = true;
+    const modalId = 'Mew-Wallet-Modal';
+    console.log(document.getElementById(modalId)); // todo remove dev item
+    if(!!document.getElementById(modalId)){
+      debug('DONT NEED NEW'); // todo remove dev item
+      return;
+    }
+    console.log('sfsdfsdf'); // todo remove dev item
     const css = document.createElement('style');
     css.type = 'text/css';
     if ('textContent' in css) css.textContent = modalCSS(cssStyles);
     else css.innerText = modalCSS(cssStyles);
     this.container.appendChild(css);
     const div = window.document.createElement('div');
-    div.id = 'Mew-Wallet-Modal';
+    div.id = modalId;
     // div.className = 'hidden';
     div.innerHTML = modalFrame(
       htmlDesign(

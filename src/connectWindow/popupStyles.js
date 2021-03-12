@@ -421,16 +421,16 @@ const connectedNotifierCSS = elementId => {
 
 const WindowInformerCSS = `
 
-        div#Notifications.hidden {
+        div#Notifications-mew.hidden {
           visibility: hidden; 
         }
         
-        div#Notifications.shown {
+        div#Notifications-mew.shown {
           visibility: visible; 
         }
         
-      #Notifications,
-      #Notifications * {
+      #Notifications-mew,
+      #Notifications-mew * {
 
         animation: none;
         animation-delay: 0;
@@ -585,13 +585,13 @@ const WindowInformerCSS = `
 
       }
 
-      #Notifications * {
+      #Notifications-mew * {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
         Arial, sans-serif;
         box-sizing: border-box;
       }
 
-      #Notifications {
+      #Notifications-mew {
         position: fixed;
         top: 0;
         right: 0;
@@ -599,16 +599,16 @@ const WindowInformerCSS = `
         z-index: 2147483647;
       }
 
-      #Notifications style {
+      #Notifications-mew style {
         display: none;
       }
 
-      #Notifications .Notification {
+      #Notifications-mew .Notification {
         display: block;
         margin: 8px 16px 0 16px;
       }
 
-      #Notifications .NotificationBox {
+      #Notifications-mew .NotificationBox {
         display: flex;
         flex-direction: column;
         background-color: #fff;
@@ -625,14 +625,14 @@ const WindowInformerCSS = `
         overflow: hidden;
       }
 
-      #Notifications
+      #Notifications-mew
       .Notificationshow
       .NotificationBox {
         opacity: 1;
         transform: translateX(0);
       }
 
-      #Notifications .NotificationContent {
+      #Notifications-mew .NotificationContent {
         display: flex;
         flex-direction: row;
         padding: 8px 8px 8px 16px;
@@ -641,25 +641,25 @@ const WindowInformerCSS = `
         cursor: pointer;
       }
 
-      #Notifications .NotificationMessage {
+      #Notifications-mew .NotificationMessage {
         display: block;
         color: black;
         line-height: 1.5;
       }
 
-      #Notifications .NotificationChevron {
+      #Notifications-mew .NotificationChevron {
         display: block;
         margin-left: 8px;
         transition: transform 0.05s;
       }
 
-      #Notifications .NotificationProgressBar {
+      #Notifications-mew .NotificationProgressBar {
         display: block;
         height: 2px;
         position: relative;
       }
 
-      #Notifications .NotificationProgressBar::before {
+      #Notifications-mew .NotificationProgressBar::before {
         display: block;
         position: absolute;
         content: "";
@@ -719,41 +719,41 @@ const WindowInformerCSS = `
         }
       }
 
-      #Notifications
+      #Notifications-mew
       .NotificationExpand
       .NotificationProgressBar {
         margin-bottom: -1px;
       }
 
-      #Notifications
+      #Notifications-mew
       .NotificationExpand
       .NotificationChevron {
         transform: rotateZ(180deg);
       }
 
-      #Notifications .NotificationActions {
+      #Notifications-mew .NotificationActions {
         display: none;
         flex-direction: column;
         border-top: 1px solid #f5f7f8;
         padding: 8px 16px;
       }
 
-      #Notifications
+      #Notifications-mew
       .NotificationExpand
       .NotificationActions {
         display: flex;
       }
 
-      #Notifications .NotificationAction {
+      #Notifications-mew .NotificationAction {
         color: #888;
         margin: 8px 0;
       }
 
-      #Notifications .NotificationButtonInfo {
+      #Notifications-mew .NotificationButtonInfo {
         margin: 0 8px 0 0;
       }
 
-      #Notifications .NotificationButton {
+      #Notifications-mew .NotificationButton {
         color: #1652f0;
         -webkit-text-fill-color: #1652f0;
         cursor: pointer;
@@ -764,7 +764,7 @@ const WindowInformerCSS = `
         transition: opacity 0.25s;
       }
 
-      #Notifications .NotificationButton:active {
+      #Notifications-mew .NotificationButton:active {
         opacity: 0.6;
       }
       `;

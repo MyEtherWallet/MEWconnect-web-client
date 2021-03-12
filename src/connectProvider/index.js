@@ -9,13 +9,12 @@ import url from 'url';
 import EventEmitter from 'events';
 import EventNames from './web3Provider/web3-provider/events';
 import { Transaction } from 'ethereumjs-tx';
-import messageConstants from '../messageConstants';
+import { messageConstants } from '../messages';
 // import parseTokensData from './web3Provider/helpers/parseTokensData';
 import debugLogger from 'debug';
 import PopUpCreator from '../connectWindow/popUpCreator';
 import { nativeCheck, mobileCheck } from './platformDeepLinking';
 import { DISCONNECTED, CONNECTING, CONNECTED } from '../config';
-import BigNumber from 'bignumber.js';
 import packageJson from '../../package.json'
 
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
@@ -197,9 +196,12 @@ export default class Integration extends EventEmitter {
       }
       if (state.web3Provider && state.wallet) {
         if (state.web3Provider.accountsChanged) {
-          state.web3Provider.accountsChanged([
+          state.web3Provider.emit('accountsChanged', [
             state.wallet.getChecksumAddressString()
-          ]);
+          ])
+          // state.web3Provider.accountsChanged([
+          //   state.wallet.getChecksumAddressString()
+          // ]);
         }
         eventHub.emit('accounts_available', [
           state.wallet.getChecksumAddressString()
@@ -290,10 +292,9 @@ export default class Integration extends EventEmitter {
       }
 
       state.enable = this.enable.bind(this);
-      web3Provider.close = this.disconnect.bind(this);
+      web3Provider.close = this.disconnect//.bind(this);
       web3Provider.disconnect = this.disconnect.bind(this);
       state.web3Provider = web3Provider;
-      console.log(state.web3Provider); // todo remove dev item
       state.web3 = new Web3(web3Provider);
       if (!this.runningInApp) {
         state.web3.currentProvider.sendAsync = state.web3.currentProvider.send;
@@ -322,46 +323,65 @@ export default class Integration extends EventEmitter {
     connection.webRtcCommunication.on(
       connection.lifeCycle.RtcDisconnectEvent,
       () => {
-        this.popUpHandler.showNotice(messageConstants.disconnect);
-        MEWconnectWallet.setConnectionState(connection.lifeCycle.disconnected);
-        console.log('DISCONNECT NOTIFIER', state.web3Provider); // todo remove dev item
-        if (state.wallet !== null && state.web3Provider.disconnectCallback) {
-          state.web3Provider.disconnectCallback();
-          // this.emit('disconnect')
+        try {
+          this.popUpHandler.showNotice(messageConstants.disconnect);
+          MEWconnectWallet.setConnectionState(connection.lifeCycle.disconnected);
+          if(state.wallet !== null){
+            this.emit('close')
+            this.emit('disconnect')
+          }
+          if (state.wallet !== null && state.web3Provider) {
+            state.web3Provider.emit('disconnect');
+            state.web3Provider.emit('close');
+          }
+          if (state.wallet !== null && state.web3Provider.disconnectCallback) {
+            state.web3Provider.disconnectCallback();
+          }
+          if (state.wallet !== null && state.web3Provider.closeCallback) {
+            state.web3Provider.closeCallback();
+          }
+          state.wallet = null;
+          this.emit(DISCONNECTED);
+          this.emit('close')
+          this.emit('disconnect')
+
+        } catch (e) {
+          if(this.popUpHandler){
+            this.popUpHandler.showNotice(messageConstants.disconnectError);
+          }
         }
-        if (state.wallet !== null && state.web3Provider.closeCallback) {
-          state.web3Provider.closeCallback();
-          // this.emit('close')
-        }
-        state.wallet = null;
-        this.emit(DISCONNECTED);
-        this.emit('close')
-        this.emit('disconnect')
       }
     );
 
     connection.webRtcCommunication.on(
       connection.lifeCycle.RtcClosedEvent,
       () => {
-        this.popUpHandler.showNotice(messageConstants.disconnect);
-        MEWconnectWallet.setConnectionState(connection.lifeCycle.disconnected);
-        console.log('DISCONNECT NOTIFIER', state.web3Provider); // todo remove dev item
-        if (state.wallet !== null && state.web3Provider.disconnectCallback) {
-          console.log('disconnectCallback', typeof state.web3Provider.closeCallback); // todo remove dev item
-          state.web3Provider.disconnectCallback();
-          state.web3Provider.emit('disconnect')
-          this.emit('disconnect')
-        }
-        if (state.wallet !== null && state.web3Provider.closeCallback) {
-          state.web3Provider.closeCallback();
-          this.emit('close')
-          state.web3Provider.emit('close')
-        }
+        try {
+          this.popUpHandler.showNotice(messageConstants.disconnect);
+          MEWconnectWallet.setConnectionState(connection.lifeCycle.disconnected);
+          if(state.wallet !== null){
+            this.emit('close')
+            this.emit('disconnect')
+          }
+          if (state.wallet !== null && state.web3Provider) {
+            state.web3Provider.emit('disconnect');
+            state.web3Provider.emit('close');
+          }
+          if (state.wallet !== null && state.web3Provider.disconnectCallback) {
+            state.web3Provider.disconnectCallback();
+          }
+          if (state.wallet !== null && state.web3Provider.closeCallback) {
+            state.web3Provider.closeCallback();
+          }
 
-        state.wallet = null;
-        this.emit(connection.lifeCycle.disconnected);
-        this.emit('close')
-        this.emit('disconnect')
+          state.wallet = null;
+          this.emit(connection.lifeCycle.disconnected);
+
+        } catch (e) {
+          if(this.popUpHandler){
+            this.popUpHandler.showNotice(messageConstants.disconnectError);
+          }
+        }
       }
     );
   }
@@ -395,6 +415,7 @@ export default class Integration extends EventEmitter {
       return true;
     } catch (e) {
       debugErrors('disconnect ERROR');
+      this.popUpHandler.showNotice(messageConstants.disconnectError);
       // eslint-disable-next-line
       console.error(e);
       return false;
@@ -487,7 +508,7 @@ export default class Integration extends EventEmitter {
           });
       }
     });
-    // TODO: Is this getting used?
+    // TODO: Is this getting used???
     eventHub.on('showSendSignedTx', (tx, resolve) => {
       this.popUpHandler.showNotice(messageConstants.approveTx);
       const newTx = new Transaction(tx);

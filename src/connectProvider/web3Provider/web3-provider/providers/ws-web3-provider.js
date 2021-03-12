@@ -21,6 +21,7 @@ const WebsocketProvider = function WebsocketProvider(url, options) {
   this.notificationCallbacks = [];
   this.closeCallbacks = [];
   this.disconnectCallbacks = []
+  this.accountsChangedCallbacks = [];
 
   options = options || {};
   this._customTimeout = options.timeout;
@@ -193,7 +194,6 @@ WebsocketProvider.prototype.send = function(payload, callback) {
 WebsocketProvider.prototype.on = function(type, callback) {
   if (typeof callback !== 'function')
     throw new Error('The second parameter callback must be a function.');
-  console.log('set callback'); // todo remove dev item
 
   switch (type) {
     case 'data':
@@ -213,6 +213,7 @@ WebsocketProvider.prototype.on = function(type, callback) {
       break;
 
     case 'accountsChanged':
+      this.accountsChangedCallbacks.push(callback)
       this.accountsChanged = callback;
       break;
     case 'disconnected':
@@ -220,12 +221,11 @@ WebsocketProvider.prototype.on = function(type, callback) {
       break;
     case 'disconnect':
       this.disconnectCallbacks.push(callback)
-      this.disconnectCallback = callback;
+      // this.disconnectCallback = callback;
       break;
     case 'close':
       this.closeCallbacks.push(callback)
-      console.log('set close callback'); // todo remove dev item
-      this.closeCallback = callback;
+      // this.closeCallback = callback;
       break;
   }
 };
@@ -236,9 +236,11 @@ WebsocketProvider.prototype.emit = function(type, data) {
 
   switch (type) {
 
-    // case 'accountsChanged':
-    //   this.accountsChanged = callback;
-    //   break;
+    case 'accountsChanged':
+      this.accountsChangedCallbacks.forEach(function(callback) {
+        if (_.isFunction(callback)) callback(data);
+      });
+      break;
     // case 'disconnected':
     //   this.disconnectedCallback = callback;
     //   break;
@@ -264,9 +266,11 @@ WebsocketProvider.prototype.removeListener = function(type, callback) {
         if (cb === callback) _this.notificationCallbacks.splice(index, 1);
       });
       break;
-    // case 'accountsChanged':
-    //   this.accountsChanged = callback;
-    //   break;
+    case 'accountsChanged':
+      this.accountsChangedCallbacks.forEach(function(cb, index) {
+        if (cb === callback) _this.accountsChangedCallbacks.splice(index, 1);
+      });
+      break;
     // case 'disconnected':
     //   this.disconnectedCallback = callback;
     //   break;
