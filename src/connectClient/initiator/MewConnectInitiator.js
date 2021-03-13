@@ -293,6 +293,15 @@ Keys
 
   async refreshCode() {
     // this.showingRefresh = false;
+    const v2Events = ["sendingOffer", "retryingViaTurn", "socketDisconnected", "socketPaired"]
+    const webRtcCommEvents = ["disconnected", "data", "UsingFallback", "showRefresh", "decryptError", "RtcConnectedEvent", "signal"]
+    // "sendingOffer", "retryingViaTurn", "socketDisconnected", "socketPaired"
+    // "disconnected", "data", "UsingFallback", "showRefresh", "decryptError", "RtcConnectedEvent", "signal"
+    webRtcCommEvents.forEach(event => this.webRtcCommunication.removeAllListeners(event))
+    v2Events.forEach(event => this.V2.removeAllListeners(event))
+    this.V2.socketDisconnect();
+    console.log(this.webRtcCommunication.eventNames()); // todo remove dev item
+    console.log(this.V2.eventNames()); // todo remove dev item
     if(this.popupCreator) this.popupCreator.popupWindowOpen = true;
     this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
     this.initiatorStart();
@@ -333,31 +342,26 @@ Keys
       });
 
       this.V2.on('retryingViaTurn', () => {
-        this.showingRefresh = false;
+        this.showingRefresh = false; // reset refresh
       });
       const regenerateQRcodeOnClick = () => {
         debug('REGENERATE'); // todo remove dev item
         this.refreshCode();
       };
-      // this.V2.on('ShowReload', () => {
-      //   this.uiCommunicator('ShowReload');
-      // });
 
-      this.V2.on('socketDisconnected', () => {
+      const showRefresh = () => {
         if (!this.connected) {
           if (!this.showingRefresh) {
-            this.showingRefresh = true;
+            this.showingRefresh = true; // only process one refresh event
             if(this.popupCreator) this.popupCreator.showRetry(regenerateQRcodeOnClick);
           }
         }
-      });
+      }
 
-      this.webRtcCommunication.on('showRefresh', () => {
-        if (!this.showingRefresh) {
-          this.showingRefresh = true;
-          if(this.popupCreator) this.popupCreator.showRetry(regenerateQRcodeOnClick);
-        }
-      });
+      this.V2.on('socketDisconnected', showRefresh.bind(this));
+      this.V2.on('showRefresh', showRefresh.bind(this));
+      this.webRtcCommunication.on('showRefresh', showRefresh.bind(this));
+
       this.webRtcCommunication.on(this.lifeCycle.decryptError, () => {
         if (this.webRtcCommunication.initialAddressRequest !== 'complete') {
           MewConnectInitiator.setConnectionState(DISCONNECTED);

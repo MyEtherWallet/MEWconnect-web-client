@@ -20,7 +20,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   constructor(options = {}) {
     super('V2');
     try {
-      this.uiCommunicator = options.uiCommunicator;
+      this.uiCommunicator = this.emit //options.uiCommunicator;
       this.supportedBrowser = MewConnectCommon.checkBrowser();
 
       this.activePeerId = '';
@@ -40,6 +40,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.iceState = '';
       this.turnServers = [];
       this.states = this.setResetStates();
+      this.offersSent = []
 
       this.webRtcCommunication = options.webRtcCommunication;
 
@@ -56,6 +57,8 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.initiatorId = uuid();
       this.isActiveInstance = true;
       this.timer = null;
+
+      this.retryCount = 0;
 
       // WebRTC options
       this.iceTransportPolicy = 'all';
@@ -188,7 +191,31 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   async useFallback() {
-    this.socketEmit(this.signals.tryTurn, { connId: this.connId });
+    this.retryCount++
+
+    if(this.retryCount >= 4) {
+      this.emit('showRefresh')
+      return;
+    } //prevent infinite retries
+    // prevent multiple requests
+    // There is a disconnect between the app expectation and the client.  Possibly
+    // if(!this.start){
+    //   this.start = Date.now();
+    //   this.socketEmit(this.signals.tryTurn, { connId: this.connId });
+    // }
+    // const tyrAgain =
+    //   (Date.now() - this.start) / 1000 > 30;
+    // if(tyrAgain){
+    //   this.start = Date.now();
+    //   this.socketEmit(this.signals.tryTurn, { connId: this.connId });
+    // }
+    // right now the app needs multiple sends to catch the app in the right state
+    if(!this.credentialsRequested){
+      this.credentialsRequested = true;
+      this.socketEmit(this.signals.tryTurn, { connId: this.connId });
+    }
+
+
   }
 
   socketEmit(signal, data) {
@@ -233,7 +260,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
         debugStages('SOCKET DISCONNECTED');
         this.socketConnected = false;
         if (!this.connected) {
-          // show new QRcode
+          this.emit('socketDisconnected');
         }
       });
       this.socketOn(this.signals.disconnected, data => {
@@ -305,6 +332,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   // Handle Receipt of TURN server details, and begin a WebRTC connection attempt using TURN
   beginTurn(data) {
     this.tryingTurn = true;
+    this.credentialsRequested = false;
     this.webRtcCommunication.turnReset(this.activePeerId);
     this.retryViaTurn(data);
   }
@@ -370,12 +398,19 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
   async sendOffer(data) {
     if (!this.isActiveInstance) return;
-    debug('sendOffer');
+    // prevent sending duplicate offers
+    if(this.offersSent.includes(data.sdp)) return;
+    this.offersSent.push(data.sdp)
+    // App was waiting for turn data and not sending back an answer
+    this.offerTimer = setTimeout(() => {
+      this.useFallback()
+    }, 5000)
+    debug('sendOffer', this.initiatorId);
     try {
       this.emit('sendingOffer');
       debug('SIGNAL', JSON.stringify(data));
       const encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(data));
-      this.uiCommunicator(this.lifeCycle.sendOffer);
+      // this.uiCommunicator(this.lifeCycle.sendOffer);
       this.states.offer = true;
       this.socketEmit(this.signals.offerSignal, {
         data: encryptedSend,
@@ -390,6 +425,9 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   // Handle the WebRTC ANSWER from the opposite (mobile) peer
   async recieveAnswer(data) {
     if (!this.isActiveInstance) return;
+    if(this.offerTimer){
+      clearTimeout(this.offerTimer)
+    }
     debug('received answer');
     try {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
