@@ -189,6 +189,9 @@ export default class MewConnectInitiator extends MewConnectCommon {
       } else if (dapp.includes('mewbuilds.com')) {
         qrCodeString =
           this.version + separator + privateKey + separator + this.connId;
+      } else if (dapp.includes('localhost')) {
+        qrCodeString =
+          this.version + separator + privateKey + separator + this.connId;
       }
 
       qrString = qrCodeString;
@@ -300,8 +303,7 @@ Keys
     webRtcCommEvents.forEach(event => this.webRtcCommunication.removeAllListeners(event))
     v2Events.forEach(event => this.V2.removeAllListeners(event))
     this.V2.socketDisconnect();
-    console.log(this.webRtcCommunication.eventNames()); // todo remove dev item
-    console.log(this.V2.eventNames()); // todo remove dev item
+
     if(this.popupCreator) this.popupCreator.popupWindowOpen = true;
     this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
     this.initiatorStart();

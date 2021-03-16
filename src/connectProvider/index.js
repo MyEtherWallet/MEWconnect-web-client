@@ -71,6 +71,11 @@ export default class Integration extends EventEmitter {
     popUpCreator = new PopUpCreator();
   }
 
+  closeDataChannelForDemo(){
+    const connection = state.wallet.getConnection();
+    connection.webRtcCommunication.closeDataChannelForDemo()
+  }
+
   createChainMapping() {
     return Object.keys(Networks).reduce(
       (acc, curr) => {

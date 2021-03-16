@@ -18,6 +18,10 @@
         <button @click="disconnect">Disconnect</button>
       </li>
       <li>
+        <hr/>
+        <button @click="closeDataChannel">Close Data Channel</button>
+      </li>
+      <li>
         <hr />
         <h3>Sign tx Full details</h3>
         <button v-show="userAddress !== ''" @click="signTxNonStandard">
@@ -468,6 +472,10 @@ export default {
     // })
   },
   methods: {
+    closeDataChannel(){
+      this.connect.closeDataChannelForDemo();
+      // console.log( ); // todo remove dev item
+    },
     doThing(){
 
     },

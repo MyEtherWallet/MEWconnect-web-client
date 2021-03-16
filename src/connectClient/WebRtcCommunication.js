@@ -44,6 +44,12 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.canSignal = false;
   }
 
+  closeDataChannelForDemo(){
+    if(this.isAlive()){
+      this.p._channel.close()
+    }
+  }
+
   clearExtraOnConnection() {
     this.peersCreated = {};
     this.allPeerIds = [];
@@ -53,7 +59,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   isAlive() {
     if (this.p !== null) {
-      return this.p.connected && !this.p.destroyed;
+      return this.p._connected && !this.p.destroyed;
     }
     return false;
   }
@@ -391,6 +397,18 @@ export default class WebRtcCommunication extends MewConnectCommon {
     debug('peerID', peerID);
     debug(err.code);
     debug('error', err);
+    if (err.code.includes('ERR_DATA_CHANNEL') && this.connected) {
+      if (this.isAlive() && this.p.createNewDataChannel) {
+        try {
+          debug('re-create dataChannel')
+          this.p.createNewDataChannel(uuid());
+        } catch (e) {
+          // eslint-disable-next-line
+          debug(e);
+          this.disconnectRTC();
+        }
+      }
+    }
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
       this.useFallback();
     } else {
@@ -475,7 +493,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
         } else {
           encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
         }
-        console.log(this.p); // todo remove dev item
         this.p.send(JSON.stringify(encryptedSend));
         debug('SENDING RTC');
       } else {
