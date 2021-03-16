@@ -42,7 +42,9 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.usingVersion = '';
     this.p = null;
     this.canSignal = false;
-
+    this.outstandingMobileMessage = false;
+    this.channelTest = false;
+    this.channelTestTimer = null;
   }
 
   closeDataChannelForDemo(){
@@ -342,7 +344,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     if (!this.connected) {
       this.fallbackTimer();
     }
-
+    this.outstandingMobileMessage = false;
     // this.emit('appData', data);
     try {
       let decryptedData;
@@ -357,12 +359,22 @@ export default class WebRtcCommunication extends MewConnectCommon {
       }
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
+        if(this.channelTest && parsed.type === 'address'){
+          this.channelTest = false;
+          debug('new channel connected')
+          return;
+        }
         this.emit('appData', {
           type: parsed.type,
           data: parsed.data,
           id: parsed.id
         });
       } else {
+        if(this.channelTest && decryptedData.type === 'address'){
+          this.channelTest = false;
+          debug('new channel connected')
+          return;
+        }
         this.emit('appData', {
           type: decryptedData.type,
           data: decryptedData.data,
@@ -403,6 +415,17 @@ export default class WebRtcCommunication extends MewConnectCommon {
         try {
           debug('re-create dataChannel')
           this.p.createNewDataChannel(uuid());
+          if(!this.channelTest && !this.outstandingMobileMessage){
+            this.channelTest = true;
+            // this.sendRtcMessage('address', '', '123')
+            this.channelTestTimer = setTimeout(() => {
+              if(this.channelTest){
+                debug('new data channel failed to respond')
+                this.disconnectRTC();
+              }
+            }, 5000)
+            return;
+          }
         } catch (e) {
           // eslint-disable-next-line
           debug(e);
@@ -435,6 +458,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     if (type === 'address' && !this.initialAddressRequest) {
       this.initialAddressRequest = 'sent';
     }
+
     // TODO: could break on batch transactions
     // Doesn't when using mew V5 swap
     if (this.lastSentType !== type) {
@@ -494,6 +518,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
         } else {
           encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(arg));
         }
+        this.outstandingMobileMessage = true;
         this.p.send(JSON.stringify(encryptedSend));
         debug('SENDING RTC');
       } else {
