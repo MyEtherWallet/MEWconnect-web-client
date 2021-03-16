@@ -42,6 +42,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.usingVersion = '';
     this.p = null;
     this.canSignal = false;
+
   }
 
   closeDataChannelForDemo(){

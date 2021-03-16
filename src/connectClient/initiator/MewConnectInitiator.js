@@ -11,7 +11,6 @@ import MewConnectInitiatorV2 from './MewConnectInitiatorV2';
 import MewConnectInitiatorV1 from './MewConnectInitiatorV1';
 
 import WebRtcCommunication from '../WebRtcCommunication';
-import PopUpCreator from '../../connectWindow/popUpCreator';
 import { DISCONNECTED, CONNECTED } from '../../config';
 
 const debug = debugLogger('MEWconnect:initiator-base');
@@ -41,6 +40,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
       this.p = null;
       this.socketV2Connected = false;
       this.socketV1Connected = false;
+      this.showingQR = false;
       this.connected = false;
       this.tryingTurn = false;
       this.turnDisabled = false;
@@ -96,8 +96,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
   }
 
   focusPopupWindow() {
-    if(!this.popupCreator) return;
-      if (this.popupCreator.popupWindowOpen) {
+    if (!this.popupCreator) return;
+    if (this.popupCreator.popupWindowOpen) {
       this.popupCreator.popupWindow.focus();
     }
   }
@@ -246,15 +246,17 @@ export default class MewConnectInitiator extends MewConnectCommon {
     debug(qrCodeString);
     if (this.showPopup) {
       if (this.popupCreator.popupWindowOpen) {
-        if(this.popupCreator) this.popupCreator.updateQrCode(qrCodeString);
+        if (this.popupCreator) this.popupCreator.updateQrCode(qrCodeString);
       } else {
-        if(this.popupCreator)  this.popupCreator.refreshQrcode = this.initiatorStart.bind(this);
+        if (this.popupCreator)
+          this.popupCreator.refreshQrcode = this.initiatorStart.bind(this);
         this.popupCreator.openPopupWindow(qrCodeString);
-        if(this.popupCreator) this.popupCreator.container.addEventListener(
-          'mewModalClosed',
-          unloadOrClosed,
-          { once: true }
-        );
+        if (this.popupCreator)
+          this.popupCreator.container.addEventListener(
+            'mewModalClosed',
+            unloadOrClosed,
+            { once: true }
+          );
       }
     } else {
       this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
@@ -296,15 +298,30 @@ Keys
 
   async refreshCode() {
     // this.showingRefresh = false;
-    const v2Events = ["sendingOffer", "retryingViaTurn", "socketDisconnected", "socketPaired"]
-    const webRtcCommEvents = ["disconnected", "data", "UsingFallback", "showRefresh", "decryptError", "RtcConnectedEvent", "signal"]
+    const v2Events = [
+      'sendingOffer',
+      'retryingViaTurn',
+      'socketDisconnected',
+      'socketPaired'
+    ];
+    const webRtcCommEvents = [
+      'disconnected',
+      'data',
+      'UsingFallback',
+      'showRefresh',
+      'decryptError',
+      'RtcConnectedEvent',
+      'signal'
+    ];
     // "sendingOffer", "retryingViaTurn", "socketDisconnected", "socketPaired"
     // "disconnected", "data", "UsingFallback", "showRefresh", "decryptError", "RtcConnectedEvent", "signal"
-    webRtcCommEvents.forEach(event => this.webRtcCommunication.removeAllListeners(event))
-    v2Events.forEach(event => this.V2.removeAllListeners(event))
+    webRtcCommEvents.forEach(event =>
+      this.webRtcCommunication.removeAllListeners(event)
+    );
+    v2Events.forEach(event => this.V2.removeAllListeners(event));
     this.V2.socketDisconnect();
 
-    if(this.popupCreator) this.popupCreator.popupWindowOpen = true;
+    if (this.popupCreator) this.popupCreator.popupWindowOpen = true;
     this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
     this.initiatorStart();
   }
@@ -340,7 +357,7 @@ Keys
       });
 
       this.V2.on('sendingOffer', () => {
-        if(this.popupCreator)  this.popupCreator.showConnecting();
+        if (this.popupCreator) this.popupCreator.showConnecting();
       });
 
       this.V2.on('retryingViaTurn', () => {
@@ -355,10 +372,11 @@ Keys
         if (!this.connected) {
           if (!this.showingRefresh) {
             this.showingRefresh = true; // only process one refresh event
-            if(this.popupCreator) this.popupCreator.showRetry(regenerateQRcodeOnClick);
+            if (this.popupCreator)
+              this.popupCreator.showRetry(regenerateQRcodeOnClick);
           }
         }
-      }
+      };
 
       this.V2.on('socketDisconnected', showRefresh.bind(this));
       this.V2.on('showRefresh', showRefresh.bind(this));
@@ -373,7 +391,7 @@ Keys
     } catch (e) {
       // eslint-disable-next-line
       console.error(e);
-      this.V2 = {};
+      this.V2 = null;
     }
 
     try {
@@ -387,13 +405,26 @@ Keys
       console.error(e);
       this.V1 = {};
     }
-    this.ShowQr(qrString);
+
+    if (!this.V2) {
+    }
+    // this.ShowQr(qrString);
     this.webRtcCommunication.setActiveInitiatorId(this.V2.initiatorId);
+    const connectionErrorTimeOut = setTimeout(() => {
+      window.alert('Failed to start MEWconnect. Please try again.');
+    }, 60000);
 
     if (this.V1.on) {
       this.V1.on('socketPaired', () => {
         if (this.V2.socketDisconnect) this.V2.socketDisconnect();
         this.socketV1Connected = true;
+      });
+      this.V1.once('SOCKET_CONNECTED', () => {
+        if (!this.showingQR) {
+          clearTimeout(connectionErrorTimeOut)
+          this.showingQR = true;
+          this.ShowQr(qrString);
+        }
       });
     }
 
@@ -401,6 +432,13 @@ Keys
       this.V2.on('socketPaired', () => {
         if (this.V1.socketDisconnect) this.V1.socketDisconnect();
         this.socketV2Connected = true;
+      });
+      this.V2.once('SOCKET_CONNECTED', () => {
+        if (!this.showingQR) {
+          clearTimeout(connectionErrorTimeOut)
+          this.showingQR = true;
+          this.ShowQr(qrString);
+        }
       });
     }
 
@@ -414,8 +452,8 @@ Keys
         this.emit(this.lifeCycle.RtcConnectedEvent);
         this.webRtcCommunication.on('appData', this.dataReceived.bind(this));
         this.connected = true;
-        if(this.popupCreator) this.popupCreator.removeWindowClosedListener();
-        if(this.popupCreator) this.popupCreator.closePopupWindow();
+        if (this.popupCreator) this.popupCreator.removeWindowClosedListener();
+        if (this.popupCreator) this.popupCreator.closePopupWindow();
         MewConnectInitiator.setConnectionState(CONNECTED);
       }
     );

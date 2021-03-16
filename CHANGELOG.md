@@ -1,3 +1,17 @@
+### Release 2.1.23-beta.7
+- Use Modified simple-peer library that does not kill connection on datachannel close
+- Add re-creation of dataChannel when dataChannel errors or closes and connection is still active
+- Add check to messages transmitted to the phone to prevent duplicates (100 ms minimum between same type sends)
+- Add check for an answer received after sending an offer and if no answer call try turn
+- Add a handler for anticipated use of turn credentials during first connection attempt
+- Fix communication of disconnect to Web3Modal
+- Fix creation of multiple QRcode modals causing blank QRcode bug
+- Clean up event listeners on recreation of V2 initiator and webRtcCommunication instances
+- Wait until a connection to a signal server is established before showing QRcode
+
+### Release 2.1.23-beta.6
+- Fix incorrect import breaking install
+
 ### Release 2.1.23-beta.5
 - Add connecting loader 
 - Add retry buttons to regenerate qrcode
