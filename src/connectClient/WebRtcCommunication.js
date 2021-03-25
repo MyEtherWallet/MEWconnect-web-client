@@ -138,11 +138,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.canSignal = !this.canSignal;
     this.fallbackTimer();
     this.setActivePeerId();
-    // if (this.p) {
-    //   console.log('PEER EXISTS'); // todo remove dev item
-    //   this.p.destroy();
-    //   delete this.p;
-    // }
     this.p = new this.Peer(simpleOptions);
     const peerID = this.getActivePeerId();
     this.answerReceived[peerID] = false;
@@ -159,7 +154,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
       this.stateChangeListener.bind(this, peerID)
     );
     this.p._pc.addEventListener('icecandidateerror', event => {
-      debug('ICE CANIDATE ERROR', event); // todo remove dev item
+      debug('ICE CANIDATE ERROR', event);
     });
   }
 
@@ -244,14 +239,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
   // Handle Socket Attempting Turn informative signal
   // Provide Notice that initial WebRTC connection failed and the fallback method will be used
   willAttemptTurn() {
-    // let connectionExists = false;
-    // this.p.getStats((err, stats) => {
-    //   if (err) console.log(err);
-    //   connectionExists = stats.find(stat => stat.state === 'succeeded');
-    //   console.log(connectionExists); // todo remove dev item
-    // });
-
-    // if (connectionExists) return;
     this.uiCommunicator(this.lifeCycle.UsingFallback, this.activeInitiatorId);
     if (!this.connected && this.tryingTurn && this.usingVersion === 'V2') {
       this.refreshQrTimer();
@@ -295,13 +282,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
     }
   }
 
-  // Handle Socket event to initiate turn connection
-  // Handle Receipt of TURN server details, and begin a WebRTC connection attempt using TURN
-  // beginTurn(data) {
-  //   console.log('TRYING TURN VALUE SET 3'); // todo remove dev item
-  //   this.tryingTurn = true;
-  //   this.retryViaTurn(data);
-  // }
 
   // ----- Failure Handlers
 
@@ -410,29 +390,32 @@ export default class WebRtcCommunication extends MewConnectCommon {
     debug('peerID', peerID);
     debug(err.code);
     debug('error', err);
-    if (err.code.includes('ERR_DATA_CHANNEL') && this.connected) {
-      if (this.isAlive() && this.p.createNewDataChannel) {
-        try {
-          debug('re-create dataChannel')
-          this.p.createNewDataChannel(uuid());
-          if(!this.channelTest && !this.outstandingMobileMessage){
-            this.channelTest = true;
-            // this.sendRtcMessage('address', '', '123')
-            this.channelTestTimer = setTimeout(() => {
-              if(this.channelTest){
-                debug('new data channel failed to respond')
-                this.disconnectRTC();
-              }
-            }, 5000)
-            return;
+    if(err.code && this.connected){
+      if (err.code.includes('ERR_DATA_CHANNEL') ) {
+        if (this.isAlive() && this.p.createNewDataChannel) {
+          try {
+            debug('re-create dataChannel')
+            this.p.createNewDataChannel(uuid());
+            if(!this.channelTest && !this.outstandingMobileMessage){
+              this.channelTest = true;
+              // this.sendRtcMessage('address', '', '123')
+              this.channelTestTimer = setTimeout(() => {
+                if(this.channelTest){
+                  debug('new data channel failed to respond')
+                  this.disconnectRTC();
+                }
+              }, 5000)
+              return;
+            }
+          } catch (e) {
+            // eslint-disable-next-line
+            debug(e);
+            this.disconnectRTC();
           }
-        } catch (e) {
-          // eslint-disable-next-line
-          debug(e);
-          this.disconnectRTC();
         }
       }
     }
+
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
       this.useFallback();
     } else {
@@ -504,14 +487,8 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   async rtcSend(arg) {
     try {
-      debug(this.isAlive()); // todo remove dev item
+      debug(this.isAlive());
       if (this.isAlive()) {
-        // if(!this.sentMessageIds.includes(arg.id)){
-        //   this.sentMessageIds.push(arg.id)
-        // } else {
-        //   console.log('known id'); // todo remove dev item
-        //   return;
-        // }
         let encryptedSend;
         if (typeof arg === 'string') {
           encryptedSend = await this.mewCrypto.encrypt(arg);
@@ -532,10 +509,10 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   rtcDestroy() {
-    debug('rtcDestroy'); // todo remove dev item
+    debug('rtcDestroy');
     if (this.isAlive()) {
       this.p.destroy();
-      debug('DESTROYED'); // todo remove dev item
+      debug('DESTROYED');
       this.connected = false;
       this.uiCommunicator(this.lifeCycle.RtcDestroyedEvent);
     } else if (!this.p.destroyed) {

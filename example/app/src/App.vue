@@ -404,13 +404,27 @@ export default {
     // Initialize the provider based client
     // this.connect = new mewConnect.Provider({windowClosedError: true, rpcUrl: 'ws://127.0.0.1:8545', /*chainId: 1*/});
     // 859569f6decc4446a5da1bb680e7e9cf
+
+    const newNetworks = {
+      name: 'matic',
+      name_long: 'matic',
+      blockExplorerTX: '',
+      blockExplorerAddr: '',
+      chainID: 80001,
+      currencyName: 'matic',
+      service: 'matic',
+      url: 'https://rpc-mumbai.matic.today'
+
+    }
     this.connect = new mewConnect.Provider({
+      // newNetworks: [newNetworks],
       windowClosedError: true,
       // chainId: 1,
-      chainId: 3,
+      chainId: 80001,
      // rpcUrl: 'https://mainnet.infura.io/v3/' //'wss://mainnet.infura.io/ws/v3/'
      //  rpcUrl: 'HTTP://127.0.0.1:7545'
-      rpcUrl: 'https://ropsten.infura.io/v3/c9b249497d074ab59c47a97bdfe6b401'
+     //  rpcUrl: 'https://ropsten.infura.io/v3/c9b249497d074ab59c47a97bdfe6b401'
+      rpcUrl: 'https://rpc-mumbai.matic.today'
      //  rpcUrl: 'ws://127.0.0.1:8545'
      //  infuraId: '7d06294ad2bd432887eada360c5e1986'
     });

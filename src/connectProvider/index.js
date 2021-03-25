@@ -10,12 +10,11 @@ import EventEmitter from 'events';
 import EventNames from './web3Provider/web3-provider/events';
 import { Transaction } from 'ethereumjs-tx';
 import { messageConstants } from '../messages';
-// import parseTokensData from './web3Provider/helpers/parseTokensData';
 import debugLogger from 'debug';
 import PopUpCreator from '../connectWindow/popUpCreator';
 import { nativeCheck, mobileCheck } from './platformDeepLinking';
 import { DISCONNECTED, CONNECTING, CONNECTED } from '../config';
-import packageJson from '../../package.json'
+import packageJson from '../../package.json';
 
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
 const debugErrors = debugLogger('MEWconnectError');
@@ -61,33 +60,74 @@ export default class Integration extends EventEmitter {
     this.CHAIN_ID = options.chainId || 1;
     this.RPC_URL = options.rpcUrl || false;
     this.noUrlCheck = options.noUrlCheck || false;
+    this.newNetworks = options.newNetworks || [];
+    this.knownNetworks = new Set();
     this.lastHash = null;
     this.initiator = new Initiator();
     this.popUpHandler = new PopUpHandler();
     this.connectionState = false;
-    this.chainIdMapping = this.createChainMapping();
+    this.chainIdMapping = this.createChainMapping(this.newNetworks);
     this.returnPromise = null;
     this.disconnectComplete = false;
     popUpCreator = new PopUpCreator();
   }
 
-  closeDataChannelForDemo(){
+  closeDataChannelForDemo() {
     const connection = state.wallet.getConnection();
-    connection.webRtcCommunication.closeDataChannelForDemo()
+    connection.webRtcCommunication.closeDataChannelForDemo();
   }
 
-  createChainMapping() {
-    return Object.keys(Networks).reduce(
+  formatNewNetworks(newNetwork) {
+    return {
+      type: {
+        name: newNetwork.name,
+        name_long: newNetwork.name_long || newNetwork.name,
+        homePage: newNetwork.homePage || '',
+        blockExplorerTX: newNetwork.blockExplorerTX || '',
+        blockExplorerAddr: newNetwork.blockExplorerAddr || '',
+        chainID: newNetwork.chainId
+          ? newNetwork.chainId
+          : newNetwork.chainID
+          ? newNetwork.chainID
+          : this.CHAIN_ID,
+        tokens: newNetwork.tokens || [],
+        contracts: [],
+        currencyName: newNetwork.currencyName || newNetwork.name
+      },
+      service: newNetwork.serviceName || newNetwork.name,
+      url: newNetwork.url || this.RPC_URL,
+      port: 443,
+      auth: false,
+      username: '',
+      password: ''
+    };
+  }
+
+  createChainMapping(newNetworks) {
+    let networks = Networks;
+    try {
+      const additional = newNetworks
+        .map(this.formatNewNetworks)
+        .reduce((acc, curr) => {
+          acc[curr.type.name] = curr;
+        }, {});
+      networks = { ...networks, ...additional };
+    } catch (e) {
+      // eslint-disable-next-line
+      console.error(e);
+    }
+    return Object.keys(networks).reduce(
       (acc, curr) => {
-        if (Networks[curr].length === 0) return acc;
+        if (networks[curr].length === 0) return acc;
         acc.push({
           name:
-            Networks[curr][0].type.name_long === 'Ethereum'
+            networks[curr][0].type.name_long === 'Ethereum'
               ? 'mainnet'
-              : Networks[curr][0].type.name_long.toLowerCase(),
-          chainId: Networks[curr][0].type.chainID,
-          key: Networks[curr][0].type.name
+              : networks[curr][0].type.name_long.toLowerCase(),
+          chainId: networks[curr][0].type.chainID,
+          key: networks[curr][0].type.name
         });
+        this.knownNetworks.add(networks[curr][0].type.chainID)
         return acc;
       },
       [{ name: 'mainnet', chainId: 1, key: 'ETH' }]
@@ -122,16 +162,16 @@ export default class Integration extends EventEmitter {
     );
   }
 
-  get getWalletOnly(){
-    if(state.wallet){
-      return state.wallet
+  get getWalletOnly() {
+    if (state.wallet) {
+      return state.wallet;
     }
   }
 
   enable() {
     popUpCreator.on('fatalError', () => {
       MEWconnectWallet.setConnectionState(DISCONNECTED);
-    })
+    });
     if (this.runningInApp) {
       return new Promise((resolve, reject) => {
         state.web3Provider
@@ -185,7 +225,7 @@ export default class Integration extends EventEmitter {
           popUpCreator,
           this.popUpHandler
         );
-        console.log(`Using MEWconnect v${packageJson.version}`); // todo remove dev item
+        console.log(`Using MEWconnect v${packageJson.version}`);
         this.popUpHandler.showConnectedNotice();
         this.popUpHandler.hideNotifier();
         this.createDisconnectNotifier();
@@ -203,7 +243,7 @@ export default class Integration extends EventEmitter {
         if (state.web3Provider.accountsChanged) {
           state.web3Provider.emit('accountsChanged', [
             state.wallet.getChecksumAddressString()
-          ])
+          ]);
           // state.web3Provider.accountsChanged([
           //   state.wallet.getChecksumAddressString()
           // ]);
@@ -253,9 +293,17 @@ export default class Integration extends EventEmitter {
           web3Provider = window.web3.currentProvider;
         }
       } else {
-        const chain = this.identifyChain(CHAIN_ID || 1);
-        const defaultNetwork = Networks[chain.key][0];
-        state.network = defaultNetwork;
+        let chain, defaultNetwork;
+        if(this.knownNetworks.has(CHAIN_ID)){
+          chain = this.identifyChain(CHAIN_ID || 1);
+          defaultNetwork = Networks[chain.key][0];
+          state.network = defaultNetwork;
+        } else {
+          chain = {name: 'unknown'}
+          defaultNetwork = this.formatNewNetworks({name: 'unknown'})
+          state.network = defaultNetwork
+        }
+
         if (this.infuraId && !this.RPC_URL) {
           RPC_URL = infuraUrlFormater(chain.name, this.infuraId);
         }
@@ -267,7 +315,9 @@ export default class Integration extends EventEmitter {
           !/[wW]/.test(hostUrl.protocol) &&
           !/[htpHTP]/.test(hostUrl.protocol)
         ) {
-          throw Error('Invalid rpc endpoint supplied to MEWconnect during setup');
+          throw Error(
+            'Invalid rpc endpoint supplied to MEWconnect during setup'
+          );
         }
         if (!_noCheck && !this.infuraId) {
           if (
@@ -297,7 +347,7 @@ export default class Integration extends EventEmitter {
       }
 
       state.enable = this.enable.bind(this);
-      web3Provider.close = this.disconnect//.bind(this);
+      web3Provider.close = this.disconnect; //.bind(this);
       web3Provider.disconnect = this.disconnect.bind(this);
       state.web3Provider = web3Provider;
       state.web3 = new Web3(web3Provider);
@@ -329,11 +379,14 @@ export default class Integration extends EventEmitter {
       connection.lifeCycle.RtcDisconnectEvent,
       () => {
         try {
-          if(this.popupCreator) this.popUpHandler.showNotice(messageConstants.disconnect);
-          MEWconnectWallet.setConnectionState(connection.lifeCycle.disconnected);
-          if(state.wallet !== null){
-            this.emit('close')
-            this.emit('disconnect')
+          if (this.popupCreator)
+            this.popUpHandler.showNotice(messageConstants.disconnect);
+          MEWconnectWallet.setConnectionState(
+            connection.lifeCycle.disconnected
+          );
+          if (state.wallet !== null) {
+            this.emit('close');
+            this.emit('disconnect');
           }
           if (state.wallet !== null && state.web3Provider) {
             state.web3Provider.emit('disconnect');
@@ -347,11 +400,10 @@ export default class Integration extends EventEmitter {
           }
           state.wallet = null;
           this.emit(DISCONNECTED);
-          this.emit('close')
-          this.emit('disconnect')
-
+          this.emit('close');
+          this.emit('disconnect');
         } catch (e) {
-          if(this.popUpHandler){
+          if (this.popUpHandler) {
             this.popUpHandler.showNotice(messageConstants.disconnectError);
           }
         }
@@ -363,10 +415,12 @@ export default class Integration extends EventEmitter {
       () => {
         try {
           this.popUpHandler.showNotice(messageConstants.disconnect);
-          MEWconnectWallet.setConnectionState(connection.lifeCycle.disconnected);
-          if(state.wallet !== null){
-            this.emit('close')
-            this.emit('disconnect')
+          MEWconnectWallet.setConnectionState(
+            connection.lifeCycle.disconnected
+          );
+          if (state.wallet !== null) {
+            this.emit('close');
+            this.emit('disconnect');
           }
           if (state.wallet !== null && state.web3Provider) {
             state.web3Provider.emit('disconnect');
@@ -381,9 +435,8 @@ export default class Integration extends EventEmitter {
 
           state.wallet = null;
           this.emit(connection.lifeCycle.disconnected);
-
         } catch (e) {
-          if(this.popUpHandler){
+          if (this.popUpHandler) {
             this.popUpHandler.showNotice(messageConstants.disconnectError);
           }
         }
@@ -391,16 +444,14 @@ export default class Integration extends EventEmitter {
     );
   }
 
-  createCommunicationError(){
+  createCommunicationError() {
     const connection = state.wallet.getConnection();
-    connection.webRtcCommunication.on(
-      connection.lifeCycle.decryptError,
-      () => {
-        if(this.popupCreator)  this.popUpHandler.showNoticePersistentEnter(
+    connection.webRtcCommunication.on(connection.lifeCycle.decryptError, () => {
+      if (this.popupCreator)
+        this.popUpHandler.showNoticePersistentEnter(
           messageConstants.communicationError
         );
-      }
-    );
+    });
   }
 
   disconnect() {
@@ -420,7 +471,7 @@ export default class Integration extends EventEmitter {
       return true;
     } catch (e) {
       debugErrors('disconnect ERROR');
-      if(this.popUpHandler){
+      if (this.popUpHandler) {
         this.popUpHandler.showNotice(messageConstants.disconnectError);
       }
       // eslint-disable-next-line
@@ -449,12 +500,11 @@ export default class Integration extends EventEmitter {
         state.wallet
           .signTransaction(tx)
           .then(_response => {
+            if (!transactionCache.includes(_response.tx.hash)) {
+              transactionCache.push(_response.tx.hash);
 
-            if(!transactionCache.includes(_response.tx.hash)){
-              transactionCache.push(_response.tx.hash)
-
-            this.popUpHandler.showNoticePersistentExit();
-            resolve(_response);
+              this.popUpHandler.showNoticePersistentExit();
+              resolve(_response);
             }
           })
           .catch(err => {
@@ -482,10 +532,10 @@ export default class Integration extends EventEmitter {
       }
     });
     eventHub.on(EventNames.ERROR_NOTIFY, err => {
-      if(err && err.message){
+      if (err && err.message) {
         this.popUpHandler.showNotice(err.message);
       }
-    })
+    });
     eventHub.on(EventNames.SHOW_MSG_CONFIRM_MODAL, (msg, resolve) => {
       if (!state.wallet) {
         this.popUpHandler.showNoticePersistentEnter(

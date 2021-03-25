@@ -1,3 +1,7 @@
+### Release 2.1.23-beta.8
+- Add method to retrieve stand alone wallet instance (instance without a web3 provider)
+- check for err.code before making a string comparison check for DATA_CHANNEL_ERROR 
+
 ### Release 2.1.23-beta.7
 - Use Modified simple-peer library that does not kill connection on datachannel close
 - Add re-creation of dataChannel when dataChannel errors or closes and connection is still active
