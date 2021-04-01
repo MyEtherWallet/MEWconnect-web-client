@@ -62,7 +62,10 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   isAlive() {
     if (this.p !== null) {
-      return this.p._connected && !this.p.destroyed;
+      if(this.p._connected && !this.p.destroyed){
+        return true;
+      }
+      return ;
     }
     return false;
   }
@@ -457,6 +460,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
       `[WebRTC Comm - SEND RTC MESSAGE] type:  ${type},  message:  ${msg}, id: ${id}`
     );
     this.rtcSend(JSON.stringify({ type, data: msg, id })).catch(err => {
+      logger.error(err)
       debug(err);
     });
   }
@@ -481,6 +485,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
         this.instance = null;
       }
     } catch (e) {
+      logger.error(e)
       debug(e);
     }
   }
@@ -501,9 +506,11 @@ export default class WebRtcCommunication extends MewConnectCommon {
       } else {
         // eslint-disable-next-line
         this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
+        logger.error(Error('No connection present to send'))
         return false;
       }
     } catch (e) {
+      logger.error(e)
       debug(e);
     }
   }
@@ -519,8 +526,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
       try {
         this.p.destroy();
       } catch (e) {
-        // eslint-disable-next-line
-        console.error(e);
+        logger.error(e)
       }
     }
   }
