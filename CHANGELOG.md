@@ -1,3 +1,6 @@
+### Release 2.1.24
+- Existence checks for retry button
+
 ### Release 2.1.23-beta.8
 - Add method to retrieve stand alone wallet instance (instance without a web3 provider)
 - check for err.code before making a string comparison check for DATA_CHANNEL_ERROR 

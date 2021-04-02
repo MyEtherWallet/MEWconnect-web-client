@@ -137,17 +137,17 @@ export default class PopUpCreator extends EventEmitter{
     if(document.querySelector('#refresh-container')) document.querySelector('#refresh-container').classList.remove('hidden');
     if(document.querySelector('#retry-button-mew'))  document.querySelector('#retry-button-mew').classList.remove('hidden');
     const eventHandler = evt => {
-      document.querySelector('#qr-code-display-container-mew').classList.remove('hidden');
-      document.querySelector('#qr-code-connecting-mew').classList.add('hidden');
-      document.querySelector('#retry-button-mew').classList.add('hidden');
-      document.querySelector('#refresh-container').classList.add('hidden');
-      retry.removeEventListener(
+      if(document.querySelector('#qr-code-display-container-mew')) document.querySelector('#qr-code-display-container-mew').classList.remove('hidden');
+      if(document.querySelector('#qr-code-connecting-mew')) document.querySelector('#qr-code-connecting-mew').classList.add('hidden');
+      if(document.querySelector('#retry-button-mew')) document.querySelector('#retry-button-mew').classList.add('hidden');
+      if(document.querySelector('#refresh-container')) document.querySelector('#refresh-container').classList.add('hidden');
+      if(retry) retry.removeEventListener(
         'click',
         eventHandler,
         {passive : false,
           once: true}
       );
-      retryOnModal.removeEventListener(
+      if(retryOnModal) retryOnModal.removeEventListener(
         'click',
         eventHandler,
         {passive : false,
@@ -155,13 +155,13 @@ export default class PopUpCreator extends EventEmitter{
       );
       callback();
     }
-    retry.addEventListener(
+    if(retry) retry.addEventListener(
       'click',
       eventHandler,
       {passive : false,
         once: true}
     );
-    retryOnModal.addEventListener(
+    if(retryOnModal) retryOnModal.addEventListener(
       'click',
       eventHandler,
       {passive : false,
