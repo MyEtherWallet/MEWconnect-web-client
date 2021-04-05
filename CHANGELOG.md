@@ -1,5 +1,6 @@
 ### Release 2.1.24
 - Existence checks for retry button
+- Fix css class naming to prevent css leaking into containing page
 
 ### Release 2.1.23-beta.8
 - Add method to retrieve stand alone wallet instance (instance without a web3 provider)
