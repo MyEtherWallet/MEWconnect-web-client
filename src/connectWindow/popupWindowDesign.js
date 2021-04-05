@@ -2,7 +2,7 @@ const cssStyles = `
       @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');
       @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-      .outer-container {
+      .outer-container-mew-modal {
         font-family: 'Roboto', sans-serif;
         box-sizing: border-box;
         bottom: 0;
@@ -20,7 +20,7 @@ const cssStyles = `
         max-height: 558px;
       }
       
-      .container {
+      .container-mew-modal {
         font-family: 'Roboto', sans-serif;
         color: #050f19;
         text-align: center;
@@ -126,7 +126,7 @@ const cssStyles = `
         margin-left: auto;
         margin-right: auto;
       }
-      .bottom-container {
+      .bottom-container-mew-modal {
         position: relative;
         font-family: 'Roboto', sans-serif;
         color: #050f19;
@@ -140,7 +140,7 @@ const cssStyles = `
         left: -15px;
         
       }
-      .bottom-container-text {
+      .bottom-container-mew-modal-text {
         font-family: 'Roboto', sans-serif;
         color: #050f19;
         box-sizing: border-box;
@@ -149,7 +149,7 @@ const cssStyles = `
         opacity: 0.5;
         text-align: left;
       }
-      .bottom-container-text-old {
+      .bottom-container-mew-modal-text-old {
         font-family: 'Roboto', sans-serif;
         color: #050f19;
         box-sizing: border-box;
@@ -200,13 +200,13 @@ const cssStyles = `
        cursor: pointer;
       }
       
-      #refresh-container {
+      #refresh-container-mew-modal {
       background: #33c7b0;
       border-radius: 5px;
       padding: 5px;
       }
       
-      #refresh-container:hover {
+      #refresh-container-mew-modal:hover {
       background: #238677;
       }
 
@@ -307,8 +307,8 @@ const htmlDesign = (
   androidLink
 ) => {
   return `
-    <div class="outer-container">
-      <div class="container">
+    <div class="outer-container-mew-modal">
+      <div class="container-mew-modal">
               <div class="close-mew-modal" id="close-mew-modal" aria-label="close modal" data-close>
           <img src="${iconImage}" height="17" width="11"/>
         </div>
@@ -333,7 +333,7 @@ const htmlDesign = (
         </ol>
       </div>
       <div class="bottom-background">
-        <div class="bottom-container">
+        <div class="bottom-container-mew-modal">
           <div class="left">
             <img
               class="spaceman-background"
@@ -751,7 +751,7 @@ const windowInformer = spaceman => {
 const modalFrame = innerContent => {
   return `
     <div class="mew-wallet-modal is-visible" id="mew-wallet-modal"></div>
-    <div class="mew-wallet-modal-container is-visible" id="mew-wallet-modal-container">
+    <div class="mew-wallet-modal-container-mew-modal is-visible" id="mew-wallet-modal-container">
       <div class="modal-dialog is-visible" id="mew-mobile-modal-dialog">
         <section class="modal-content">
         ${innerContent}
@@ -820,7 +820,7 @@ ${additionalCss}
         z-index: 999999;
       }
 
-      .mew-wallet-modal-container {
+      .mew-wallet-modal-container-mew-modal {
         position: fixed;
         top: 0;
         left: 0;
@@ -838,7 +838,7 @@ ${additionalCss}
         z-index: 999999;
       }
 
-      div.mew-wallet-modal-container.is-visible {
+      div.mew-wallet-modal-container-mew-modal.is-visible {
         visibility: visible;
         opacity: 1;
         background-color: transparent;

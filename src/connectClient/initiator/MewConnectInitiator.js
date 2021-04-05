@@ -17,6 +17,7 @@ import PopUpHandler from '../../connectWindow/popUpHandler';
 
 import WebRtcCommunication from '../WebRtcCommunication';
 import { DISCONNECTED, CONNECTED } from '../../config';
+import packageJson from '../../../package.json';
 
 const debug = debugLogger('MEWconnect:initiator-base');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
@@ -78,6 +79,8 @@ export default class MewConnectInitiator extends MewConnectCommon {
           this.socketDisconnect();
         }
       }, this.abandonedTimeout);
+
+      console.log(`Using MEWconnect v${packageJson.version}`);
     } catch (e) {
       debug('constructor error:', e);
     }
