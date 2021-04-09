@@ -204,13 +204,13 @@ export default class PopUpCreator extends EventEmitter{
   hideDialog(evt) {
     if (
       document.querySelector('.mew-wallet-modal') &&
-      document.querySelector('.mew-wallet-modal-container')
+      document.querySelector('.mew-wallet-modal-container-mew-modal')
     ) {
       document
         .querySelector('.mew-wallet-modal')
         .classList.remove('is-visible');
       document
-        .querySelector('.mew-wallet-modal-container')
+        .querySelector('.mew-wallet-modal-container-mew-modal')
         .classList.remove('is-visible');
       document.querySelector('.modal-dialog').classList.remove('is-visible');
     }
@@ -221,11 +221,11 @@ export default class PopUpCreator extends EventEmitter{
     this.popupWindowOpen = true;
     if (
       document.querySelector('.mew-wallet-modal') &&
-      document.querySelector('.mew-wallet-modal-container')
+      document.querySelector('.mew-wallet-modal-container-mew-modal')
     ) {
       document.querySelector('.mew-wallet-modal').classList.add('is-visible');
       document
-        .querySelector('.mew-wallet-modal-container')
+        .querySelector('.mew-wallet-modal-container-mew-modal')
         .classList.add('is-visible');
       document.querySelector('.modal-dialog').classList.add('is-visible');
     }
@@ -254,7 +254,7 @@ export default class PopUpCreator extends EventEmitter{
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
 
     const background = document.getElementById('mew-wallet-modal');
-    const background2 = document.getElementById('mew-wallet-modal-container');
+    const background2 = document.getElementById('mew-wallet-modal-container-mew-modal');
     const dialog = document.getElementById('mew-mobile-modal-dialog');
     document.getElementById('close-mew-modal').addEventListener('click', () => {
       this.cancelConnectionSetup();

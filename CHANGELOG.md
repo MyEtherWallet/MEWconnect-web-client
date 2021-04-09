@@ -1,3 +1,6 @@
+- ### Release 2.1.23-beta.10
+- Fix reference to css background class names in popUpCreator
+
 ### Release 2.1.23-beta.9
 - Existence checks for retry button
 - Fix css class naming to prevent css leaking into containing page
