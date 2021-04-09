@@ -56,7 +56,7 @@ export default async (
             res(toError(payload.id, 'User Rejected Request', 4001));
             return;
           }
-          debug('broadcasting', payload.method, _response);
+          debug('return signed transaction', payload.method, _response);
           res(null, toPayload(payload.id, _response.rawTransaction));
         });
       })

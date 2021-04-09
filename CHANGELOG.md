@@ -1,4 +1,4 @@
-### Release 2.1.24
+### Release 2.1.23-beta.9
 - Existence checks for retry button
 - Fix css class naming to prevent css leaking into containing page
 
