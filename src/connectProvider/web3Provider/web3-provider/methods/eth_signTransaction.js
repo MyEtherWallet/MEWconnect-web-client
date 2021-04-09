@@ -50,7 +50,7 @@ export default async (
 
     getSanitizedTx(tx)
       .then(_tx => {
-        eventHub.emit(EventNames.SHOW_TX_CONFIRM_MODAL, _tx, _response => {
+        eventHub.emit(EventNames.SHOW_TX_SIGN_MODAL, _tx, _response => {
           if (_response.reject) {
             debug('USER DECLINED SIGN TRANSACTION');
             res(toError(payload.id, 'User Rejected Request', 4001));

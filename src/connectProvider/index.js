@@ -127,7 +127,7 @@ export default class Integration extends EventEmitter {
           chainId: networks[curr][0].type.chainID,
           key: networks[curr][0].type.name
         });
-        this.knownNetworks.add(networks[curr][0].type.chainID)
+        this.knownNetworks.add(networks[curr][0].type.chainID);
         return acc;
       },
       [{ name: 'mainnet', chainId: 1, key: 'ETH' }]
@@ -219,7 +219,7 @@ export default class Integration extends EventEmitter {
           this.emit('popupWindowClosed');
           popUpCreator.popupWindowOpen = null;
         });
-
+        state.knownHashes = [];
         state.wallet = await MEWconnectWallet(
           state,
           popUpCreator,
@@ -294,14 +294,14 @@ export default class Integration extends EventEmitter {
         }
       } else {
         let chain, defaultNetwork;
-        if(this.knownNetworks.has(CHAIN_ID)){
+        if (this.knownNetworks.has(CHAIN_ID)) {
           chain = this.identifyChain(CHAIN_ID || 1);
           defaultNetwork = Networks[chain.key][0];
           state.network = defaultNetwork;
         } else {
-          chain = {name: 'unknown'}
-          defaultNetwork = this.formatNewNetworks({name: 'unknown'})
-          state.network = defaultNetwork
+          chain = { name: 'unknown' };
+          defaultNetwork = this.formatNewNetworks({ name: 'unknown' });
+          state.network = defaultNetwork;
         }
 
         if (this.infuraId && !this.RPC_URL) {
@@ -489,7 +489,7 @@ export default class Integration extends EventEmitter {
   setupListeners() {
     const transactionCache = [];
     eventHub.on(EventNames.SHOW_TX_CONFIRM_MODAL, (tx, resolve) => {
-      this.responseFunction = resolve;
+      // this.responseFunction = resolve;
       if (!state.wallet) {
         this.popUpHandler.showNoticePersistentEnter(
           messageConstants.notConnected
@@ -500,8 +500,44 @@ export default class Integration extends EventEmitter {
         state.wallet
           .signTransaction(tx)
           .then(_response => {
-            if (!transactionCache.includes(_response.tx.hash)) {
-              transactionCache.push(_response.tx.hash);
+            if (!state.knownHashes.includes(_response.tx.hash)) {
+              state.knownHashes.push(_response.tx.hash);
+
+              this.popUpHandler.showNoticePersistentExit();
+              resolve(_response);
+            }
+          })
+          .catch(err => {
+            this.popUpHandler.showNoticePersistentExit();
+
+            if (err.reject) {
+              this.popUpHandler.noShow();
+              setTimeout(() => {
+                this.popUpHandler.showNotice('decline');
+              }, 250);
+            } else {
+              debugErrors('sign transaction ERROR');
+              state.wallet.errorHandler(err);
+            }
+            resolve(err);
+          });
+      }
+    });
+
+    eventHub.on(EventNames.SHOW_TX_SIGN_MODAL, (tx, resolve) => {
+      // this.responseFunction = resolve;
+      if (!state.wallet) {
+        this.popUpHandler.showNoticePersistentEnter(
+          messageConstants.notConnected
+        );
+      } else {
+        this.popUpHandler.showNoticePersistentEnter(messageConstants.approveTx);
+
+        state.wallet
+          .signTransaction(tx)
+          .then(_response => {
+            if (!state.knownHashes.includes(_response.tx.hash)) {
+              state.knownHashes.push(_response.tx.hash);
 
               this.popUpHandler.showNoticePersistentExit();
               resolve(_response);
@@ -600,10 +636,12 @@ export default class Integration extends EventEmitter {
       );
     });
     eventHub.on('Receipt', () => {
+      state.knownHashes = [];
       this.lastHash = null;
       this.popUpHandler.showNotice(messageConstants.complete);
     });
     eventHub.on('Error', e => {
+      state.knownHashes = [];
       debugErrors('SendTx:Error ERROR');
       if (this.lastHash !== null) {
         this.popUpHandler.showNotice(

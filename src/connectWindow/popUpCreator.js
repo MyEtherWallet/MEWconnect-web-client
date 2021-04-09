@@ -25,6 +25,9 @@ import EventEmitter from 'events';
 const debug = debugLogger('MEWconnect:popup-window');
 // const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
+const selectors = {
+  '#qr-code-display-container-mew': '#qr-code-display-container-mew'
+}
 export default class PopUpCreator extends EventEmitter{
   constructor() {
     super();
@@ -254,12 +257,12 @@ export default class PopUpCreator extends EventEmitter{
     QrCode.toCanvas(element, qrcode, { errorCorrectionLevel: 'H', width: 200 });
 
     const background = document.getElementById('mew-wallet-modal');
-    const background2 = document.getElementById('mew-wallet-modal-container-mew-modal');
+    const background2 = document.getElementById('mew-wallet-modal-container');
     const dialog = document.getElementById('mew-mobile-modal-dialog');
     document.getElementById('close-mew-modal').addEventListener('click', () => {
       this.cancelConnectionSetup();
     });
-
+      console.log(background, background2, dialog); // todo remove dev item
     background.addEventListener('click', evt => {
       this.hideDialog();
     });
