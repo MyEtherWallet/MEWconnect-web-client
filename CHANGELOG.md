@@ -1,5 +1,7 @@
 - ### Release 2.1.23-beta.10
 - Fix reference to css background class names in popUpCreator
+- Fix typo with transaction receipt event
+- Add eth_decrypt, eth_getEncryptionPublicKey, and eth_signtypeData_v3 methods
 
 ### Release 2.1.23-beta.9
 - Existence checks for retry button

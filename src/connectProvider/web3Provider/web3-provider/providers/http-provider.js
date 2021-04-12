@@ -15,7 +15,10 @@ import {
   netVersion,
   personalSign,
   ecRecover,
-  ethSubscribeBypass
+  ethSubscribeBypass,
+  decrypt,
+  signTypedData_v3,
+  getEncryptionPublicKey
 } from '../methods/index';
 
 class HttpProvider {
@@ -43,6 +46,9 @@ class HttpProvider {
         middleware.use(ethGetBlockNumber);
         middleware.use(netVersion);
         middleware.use(ethSubscribeBypass)
+        middleware.use(decrypt);
+        middleware.use(signTypedData_v3);
+        middleware.use(getEncryptionPublicKey)
         middleware.run(req, callback).then(() => {
           requestManager.provider.send(payload, callback);
         });
@@ -174,6 +180,9 @@ class HttpProvider {
       }
     };
     this.httpProvider.send = new Proxy(this.httpProvider.send, handler);
+    this.httpProvider.request = (payload) => {
+      return this.httpProvider.send(payload.method, payload.params)
+    }
     return this.httpProvider;
   }
 }

@@ -11,6 +11,10 @@ import ethGetBlockNumber from './eth_blockNumber';
 import personalSign from './personal_sign';
 import ecRecover from './personal_ecRecover';
 import ethSubscribeBypass from './eth_subscribe'
+import getEncryptionPublicKey  from './eth_getEncryptionPublicKey';
+import decrypt from './eth_decrypt';
+import signTypedData_v3
+  from './eth_signTypedData_v3';
 
 export {
   ethSendTransaction,
@@ -25,5 +29,8 @@ export {
   ethGetTransactionReceipt,
   ethGetBlockByNumber,
   ethGetBlockNumber,
-  ethSubscribeBypass
+  ethSubscribeBypass,
+  getEncryptionPublicKey,
+  decrypt,
+  signTypedData_v3
 };

@@ -101,7 +101,7 @@ export default async (
                       .then(result => {
                         if (result !== null) {
                           clearInterval(interval);
-                          _promiObj.emit('receipt', res);
+                          _promiObj.emit('receipt', result);
                           return;
                         }
                         const cancelInterval =

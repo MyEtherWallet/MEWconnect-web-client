@@ -13,7 +13,10 @@ import {
   ethAccounts,
   ethCoinbase,
   ethGetTransactionCount,
-  netVersion
+  netVersion,
+  decrypt,
+  signTypedData_v3,
+  getEncryptionPublicKey
 } from '../methods/index';
 
 class WSProvider {
@@ -80,6 +83,9 @@ class WSProvider {
       middleware.use(ethGetTransactionCount);
       middleware.use(ethCoinbase);
       middleware.use(netVersion);
+      middleware.use(decrypt);
+      middleware.use(signTypedData_v3);
+      middleware.use(getEncryptionPublicKey)
       middleware.run(req, callback).then(() => {
         _this.connection.send(JSON.stringify(payload));
         _this._addResponseCallback(payload, callback);
@@ -137,6 +143,9 @@ class WSProvider {
       }
     };
     this.wsProvider.send = new Proxy(rawSend, handler);
+    this.wsProvider.request = (payload) => {
+      return this.wsProvider.send(payload.method, payload.params)
+    }
     return this.wsProvider;
   }
 }
