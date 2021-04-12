@@ -15,11 +15,9 @@ export default async (
   res,
   next
 ) => {
-  console.log('eth_getEncryptionPublicKey', payload, store, requestManager, eventHub); // todo remove dev item
 
   if (payload.method !== 'eth_getEncryptionPublicKey') return next();
   try {
-    console.log('eth_getEncryptionPublicKey', payload); // todo remove dev item
     // const mewConnect = store.wallet.getConnection();
     // mewConnect.sendRtcMessage('eth_getEncryptionPublicKey', '');
     // mewConnect.once('eth_getEncryptionPublicKey', data => {
@@ -31,7 +29,7 @@ export default async (
         res(toError(payload.id, 'User Rejected Request', 4001));
         return;
       }
-      debug('broadcasting', payload.method, _response);
+      debug('eth_getEncryptionPublicKey response', payload.method, _response);
       res(null, toPayload(payload.id, _response));
     });
   } catch (e) {

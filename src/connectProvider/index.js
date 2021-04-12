@@ -656,5 +656,47 @@ export default class Integration extends EventEmitter {
         this.popUpHandler.showNotice(messageConstants.error);
       }
     });
+
+    eventHub.on(EventNames.GET_ENCRYPTED_PUBLIC_KEY, ( resolve) => {
+      if (!state.wallet) {
+        this.popUpHandler.showNoticePersistentEnter(
+          messageConstants.notConnected
+        );
+      } else {
+        const mewConnect = state.wallet.getConnection();
+        mewConnect.sendRtcMessage('eth_getEncryptionPublicKey', '');
+        mewConnect.once('eth_getEncryptionPublicKey', data => {
+          resolve(data);
+        });
+      }
+    });
+
+    eventHub.on(EventNames.DECRYPT, (params, resolve) => {
+      if (!state.wallet) {
+        this.popUpHandler.showNoticePersistentEnter(
+          messageConstants.notConnected
+        );
+      } else {
+        const mewConnect = state.wallet.getConnection();
+        mewConnect.sendRtcMessage('eth_decrypt', params);
+        mewConnect.once('eth_decrypt', data => {
+          resolve(data);
+        });
+      }
+    });
+
+    eventHub.on(EventNames.SIGN_TYPE_DATA_V3, (params, resolve) => {
+      if (!state.wallet) {
+        this.popUpHandler.showNoticePersistentEnter(
+          messageConstants.notConnected
+        );
+      } else {
+        const mewConnect = state.wallet.getConnection();
+        mewConnect.sendRtcMessage('eth_signTypedData_v3', params);
+        mewConnect.once('eth_signTypedData_v3', data => {
+          resolve(data);
+        });
+      }
+    });
   }
 }
