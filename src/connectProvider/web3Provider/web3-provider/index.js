@@ -4,6 +4,7 @@ class MEWProvider {
   constructor(host, options, store, eventHub) {
     if (host && typeof host === 'string') {
       if (/^http(s)?:\/\//i.test(host)) {
+        store.noSubs = true;
         return new HttpProvider(host, options, store, eventHub);
       } else if (/^ws(s)?:\/\//i.test(host)) {
         return new WSProvider(host, options, store, eventHub);

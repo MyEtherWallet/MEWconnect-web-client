@@ -24,7 +24,7 @@ const connectedNoticeHtml = (elementId, imageSrc, iconImage) => {
     
     <div class="${elementId}-vertical-flex">
       <span class="${elementId}-label-text">Connected to</span>
-      <span class="${elementId}-big">MEW wallet</span>
+      <span class="${elementId}-big">MEW&nbsp;wallet</span>
       <span class="${elementId}-label-text">Powered by MyEtherWallet</span>
     </div>
   </div>

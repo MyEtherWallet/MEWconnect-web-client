@@ -19,6 +19,9 @@ const WebsocketProvider = function WebsocketProvider(url, options) {
   const _this = this;
   this.responseCallbacks = {};
   this.notificationCallbacks = [];
+  this.closeCallbacks = [];
+  this.disconnectCallbacks = []
+  this.accountsChangedCallbacks = [];
 
   options = options || {};
   this._customTimeout = options.timeout;
@@ -64,19 +67,22 @@ const WebsocketProvider = function WebsocketProvider(url, options) {
           if (_.isFunction(callback)) callback(result);
         });
       } else if (_this.responseCallbacks[id]) {
-        if(!result.error){
+        if (!result.error) {
           _this.responseCallbacks[id](null, result);
         } else {
-            if (result.error.message === 'subscription not found' && options.subscriptionNotFoundNoThrow) {
-              // eslint-disable-next-line
-              console.warn('subscription not found');
-              if (!result.result) {
-                result.result = 'subscription not found';
-              }
-              _this.responseCallbacks[id](null, result);
-            } else {
-              _this.responseCallbacks[id](result);
+          if (
+            result.error.message === 'subscription not found' &&
+            options.subscriptionNotFoundNoThrow
+          ) {
+            // eslint-disable-next-line
+            console.warn('subscription not found');
+            if (!result.result) {
+              result.result = 'subscription not found';
             }
+            _this.responseCallbacks[id](null, result);
+          } else {
+            _this.responseCallbacks[id](result);
+          }
         }
         delete _this.responseCallbacks[id];
       }
@@ -207,10 +213,46 @@ WebsocketProvider.prototype.on = function(type, callback) {
       break;
 
     case 'accountsChanged':
+      this.accountsChangedCallbacks.push(callback)
       this.accountsChanged = callback;
       break;
     case 'disconnected':
-      this.disconnected = callback;
+      this.disconnectedCallback = callback;
+      break;
+    case 'disconnect':
+      this.disconnectCallbacks.push(callback)
+      // this.disconnectCallback = callback;
+      break;
+    case 'close':
+      this.closeCallbacks.push(callback)
+      // this.closeCallback = callback;
+      break;
+  }
+};
+
+WebsocketProvider.prototype.emit = function(type, data) {
+  if (typeof type !== 'string')
+    throw new Error('The first parameter type must be a function.');
+
+  switch (type) {
+
+    case 'accountsChanged':
+      this.accountsChangedCallbacks.forEach(function(callback) {
+        if (_.isFunction(callback)) callback(data);
+      });
+      break;
+    // case 'disconnected':
+    //   this.disconnectedCallback = callback;
+    //   break;
+    case 'disconnect':
+      this.disconnectCallbacks.forEach(function(callback) {
+        if (_.isFunction(callback)) callback(data);
+      });
+      break;
+    case 'close':
+      this.closeCallbacks.forEach(function(callback) {
+      if (_.isFunction(callback)) callback(data);
+    });
       break;
   }
 };
@@ -222,6 +264,24 @@ WebsocketProvider.prototype.removeListener = function(type, callback) {
     case 'data':
       this.notificationCallbacks.forEach(function(cb, index) {
         if (cb === callback) _this.notificationCallbacks.splice(index, 1);
+      });
+      break;
+    case 'accountsChanged':
+      this.accountsChangedCallbacks.forEach(function(cb, index) {
+        if (cb === callback) _this.accountsChangedCallbacks.splice(index, 1);
+      });
+      break;
+    // case 'disconnected':
+    //   this.disconnectedCallback = callback;
+    //   break;
+    case 'disconnect':
+      this.disconnectCallbacks.forEach(function(cb, index) {
+        if (cb === callback) _this.disconnectCallbacks.splice(index, 1);
+      });
+      break;
+    case 'close':
+      this.closeCallbacks.forEach(function(cb, index) {
+        if (cb === callback) _this.closeCallbacks.splice(index, 1);
       });
       break;
   }

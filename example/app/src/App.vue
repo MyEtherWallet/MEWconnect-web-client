@@ -4,7 +4,7 @@
     <button @click="onClick">CONNECT</button>
     <h3>{{ userAddress }}</h3>
     <button @click="ecrecover">ecrecover</button>
-    <button @click="showThing">CHECK</button>
+    <button @click="doThing">CHECK</button>
     <div v-show="userAddress === ''">
       <button @click="selectNetwork(1)">Mainnet</button>
       <button @click="selectNetwork(3)">Ropsten</button>
@@ -13,8 +13,13 @@
     </div>
 
     <ul v-show="userAddress !== ''">
+<!--      <ul>-->
       <li>
         <button @click="disconnect">Disconnect</button>
+      </li>
+      <li>
+        <hr/>
+        <button @click="closeDataChannel">Close Data Channel</button>
       </li>
       <li>
         <hr />
@@ -27,6 +32,23 @@
       <li>
         <hr />
         <h3>Send</h3>
+        <label for="toAmount1">
+          to amount
+          <input
+              id="toAmount1"
+              v-model="toAmount"
+              placeholder="amount"
+          /> </label
+        ><br />
+        <!--        <button v-show="userAddress !== ''" @click="sendTx">send</button>-->
+        <button  @click="sendTx">send</button>
+        <h6>Sends to the connected wallet address</h6>
+        <h3>Tx Hash:</h3>
+        {{ txHash }}
+      </li>
+      <li>
+        <hr />
+        <h3>Send</h3>
         <label for="toAmount">
           to amount
           <input
@@ -34,8 +56,25 @@
             v-model="toAmount"
             placeholder="amount"
           /> </label
+        >
+        <label for="altNonce">
+         alt nonce
+          <input
+              id="altNonce"
+              v-model="altNonce"
+              placeholder="altNonce"
+          /> </label
+        >
+        <label for="altGasPrice">
+          altGasPrice
+          <input
+              id="altGasPrice"
+              v-model="altGasPrice"
+              placeholder="altGasPrice"
+          /> </label
         ><br />
-        <button v-show="userAddress !== ''" @click="sendTx">send</button>
+<!--        <button v-show="userAddress !== ''" @click="sendTx">send</button>-->
+        <button  @click="sendTx2">send alt-nonce</button>
         <h6>Sends to the connected wallet address</h6>
         <h3>Tx Hash:</h3>
         {{ txHash }}
@@ -100,7 +139,10 @@
           />
         </label>
         <br />
-        <button v-show="userAddress !== ''" @click="sendTxDetailed">
+<!--        <button v-show="userAddress !== ''" @click="sendTxDetailed">-->
+<!--          send-->
+<!--        </button>-->
+        <button @click="sendTxDetailed">
           send
         </button>
         <h6>Sends to the connected wallet address</h6>
@@ -346,7 +388,9 @@ export default {
       fromAddressDetailed: '',
       thing: false,
       checker: false,
-      checkOne: ''
+      checkOne: '',
+      altNonce: '',
+      altGasPrice: ''
     };
   },
   mounted() {
@@ -360,13 +404,29 @@ export default {
     // Initialize the provider based client
     // this.connect = new mewConnect.Provider({windowClosedError: true, rpcUrl: 'ws://127.0.0.1:8545', /*chainId: 1*/});
     // 859569f6decc4446a5da1bb680e7e9cf
+
+    const newNetworks = {
+      name: 'matic',
+      name_long: 'matic',
+      blockExplorerTX: '',
+      blockExplorerAddr: '',
+      chainID: 80001,
+      currencyName: 'matic',
+      service: 'matic',
+      url: 'https://rpc-mumbai.matic.today'
+
+    }
     this.connect = new mewConnect.Provider({
+      // newNetworks: [newNetworks],
       windowClosedError: true,
-      chainId: 1,
-      rpcUrl: 'wss://mainnet.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'
-      // rpcUrl: 'HTTP://127.0.0.1:7545'
-      // infuraId:
-      //   '7d06294ad2bd432887eada360c5e1986'
+      // chainId: 1,
+      chainId: 80001,
+     // rpcUrl: 'https://mainnet.infura.io/v3/' //'wss://mainnet.infura.io/ws/v3/'
+     //  rpcUrl: 'HTTP://127.0.0.1:7545'
+     //  rpcUrl: 'https://ropsten.infura.io/v3/c9b249497d074ab59c47a97bdfe6b401'
+      rpcUrl: 'https://rpc-mumbai.matic.today'
+     //  rpcUrl: 'ws://127.0.0.1:8545'
+     //  infuraId: '7d06294ad2bd432887eada360c5e1986'
     });
     this.connect.on('popupWindowClosed', () => {
       console.log(`popup window closed EVENT`);
@@ -384,21 +444,41 @@ export default {
     web3 = this.web3;
     // See the 'onClick' method below for starting the connection sequence
     // listener on the web3 provider emiting when the account changes (at the moment this is also the same as a connection being established.)
-    console.log(this.ethereum); // todo remove dev item
     this.ethereum.on('accountsChanged', accounts => {
       console.log(`accountsChanged User's address is ${accounts[0]}`);
     });
 
     this.ethereum.on('disconnected', () => {
+
       console.log(`accountsChanged User's address is DISCONNECTED`);
+      console.log("Provider");
       this.userAddress = '';
     });
     this.connect.on('disconnected', () => {
       console.log(`accountsChanged User's address is DISCONNECTED`);
+      console.log("Wallet Core");
+    });
+    console.log(this.ethereum.on); // todo remove dev item
+    this.ethereum.on('disconnect', () => {
+      console.log("Provider: disconnect");
+      this.userAddress = '';
+    });
+    this.connect.on('disconnect', () => {
+      console.log("Wallet Core: disconnect");
+      this.userAddress = '';
+    });
+
+    this.ethereum.on("connect", () => {
+      console.log("Provider: connect");
+    });
+
+    this.connect.on("connect", () => {
+      console.log("Wallet Core: connect");
     });
 
     this.altPopup = new PopUpCreator();
     // window.alert(this.thing + '2')
+    console.log(this.ethereum); // todo remove dev item
 
     this.thing = 27;
     // document.getElementById('signtx').addEventListener('click', (event) => {
@@ -406,6 +486,13 @@ export default {
     // })
   },
   methods: {
+    closeDataChannel(){
+      this.connect.closeDataChannelForDemo();
+      // console.log( ); // todo remove dev item
+    },
+    doThing(){
+
+    },
     showThing() {
       console.log('CONSOLE CHECK'); // todo remove dev item
 
@@ -448,7 +535,7 @@ export default {
       }
     },
     selectNetwork(chainId) {
-      // this.connect = new mewConnect.Provider({windowClosedError: true, chainId: chainId, infuraId: '7d06294ad2bd432887eada360c5e1986', /*rpcUrl: 'wss://ropsten.infura.io/ws/v3/7d06294ad2bd432887eada360c5e1986'*/});
+      // this.connect = new mewConnect.Provider({windowClosedError: true, chainId: chainId, infuraId: '', /*rpcUrl: 'wss://ropsten.infura.io/ws/v3/'*/});
     },
     animate() {
       this.connect.showNotice();
@@ -508,6 +595,7 @@ export default {
       this.userAddress = '';
     },
     getAccount() {
+      console.log(this.ethereum); // todo remove dev item
       this.ethereum.send('eth_requestAccounts').then(accounts => {
         console.log(`User's address is ${accounts[0]}`);
       });
@@ -548,7 +636,7 @@ export default {
             })
             .once('transactionHash', hash => {
               console.log(['Hash', hash]);
-              this.tokenTxHash = hash;
+              this.txHash = hash;
             })
             .once('receipt', res => {
               console.log(['Receipt', res]);
@@ -558,6 +646,44 @@ export default {
             })
             .then(txhash => console.log('THEN: ', txhash))
             .catch(err => console.error(err));
+        });
+      });
+    },
+    sendTx2() {
+      this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
+      this.web3.eth.getGasPrice().then(gasPrice => {
+        if(this.altGasPrice !== '' ){
+          gasPrice = this.altGasPrice
+        }
+        console.log('gasPrice', gasPrice); // todo remove dev item
+        this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
+          if(this.altNonce !== '' ){
+            nonce = this.altNonce
+          }
+          console.log('nonce', nonce); // todo remove dev item
+          this.web3.eth
+              .sendTransaction({
+                from: this.userAddress,
+                to: this.userAddress,
+                nonce,
+                value: new BigNumber(this.toAmount)
+                    .times(new BigNumber(10).pow(18))
+                    .toFixed()
+                /*gasPrice: gasPrice ,
+                gasLimit: '0xa'// 21000*/
+              })
+              .once('transactionHash', hash => {
+                console.log(['Hash', hash]);
+                this.txHash = hash;
+              })
+              .once('receipt', res => {
+                console.log(['Receipt', res]);
+              })
+              .on('error', err => {
+                console.log(['Error', err]);
+              })
+              .then(txhash => console.log('THEN: ', txhash))
+              .catch(err => console.error(err));
         });
       });
     },

@@ -4,9 +4,17 @@ const getSanitizedTx = tx => {
   return new Promise((resolve, reject) => {
     if (!tx.gas && !tx.gasLimit && !tx.chainId)
       return reject(new Error('"gas" or "chainId" is missing'));
-    if (tx.nonce < 0 || tx.gas < 0 || tx.gasPrice < 0 || !tx.gasPrice || tx.chainId < 0)
+    if (
+      tx.nonce < 0 ||
+      tx.gas < 0 ||
+      tx.gasPrice < 0 ||
+      !tx.gasPrice ||
+      tx.chainId < 0
+    )
       return reject(
-        new Error('Gas, gasPrice, nonce or chainId is lower than 0 or "gasPrice" is missing ')
+        new Error(
+          'Gas, gasPrice, nonce or chainId is lower than 0 or "gasPrice" is missing '
+        )
       );
 
     try {
@@ -22,5 +30,5 @@ const getSanitizedTx = tx => {
     }
   });
 };
-
+``
 export { getSanitizedTx };

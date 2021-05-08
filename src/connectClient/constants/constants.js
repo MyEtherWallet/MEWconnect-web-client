@@ -71,7 +71,9 @@ const lifeCycle = {
   attemptedDisconnectedSend: 'attemptedDisconnectedSend',
   connected: 'connected',
   disconnected: 'disconnected',
-  ShowReload: 'ShowReload'
+  ShowReload: 'ShowReload',
+  decryptError: 'decryptError',
+  connectingStart: 'connectingStart'
 };
 
 const communicationTypes = {

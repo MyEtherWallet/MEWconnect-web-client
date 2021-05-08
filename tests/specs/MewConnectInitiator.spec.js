@@ -1,13 +1,13 @@
 import 'regenerator-runtime/runtime';
 import { expect as chaiExpect } from 'chai';
 import debug from 'debug';
-import * as MewConnectSrc from '../../src';
+import * as MewConnectSrc from '../../src/connectClient/index';
 import MewConnectReceiver from '../helpers/MewConnectReceiver';
 
 const connectLogger = debug('test:Connect');
 const fallbackLogger = debug('test:Fallback');
 
-const signalUrl = typeof signalServer !== 'undefined' ? signalServer : 'https://connect.mewapi.io';
+const signalUrl = typeof signalServer !== 'undefined' ? signalServer : 'wss://connect2.mewapi.io/staging';
 
 
 
@@ -54,8 +54,9 @@ describe('Check Base Connection Operation', () => {
     const recSignals = [];
     const intSignals = [];
     const completed = [];
+    console.log(MewConnectSrc); // todo remove dev item
     const MewConnect = MewConnectSrc.default.Initiator;
-    const mewConnectClient = MewConnect.init();
+    const mewConnectClient = new MewConnect();
 
     mewConnectClient.initiatorStart(signalUrl);
 

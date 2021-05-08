@@ -23,11 +23,12 @@ const fetchTokens = async () => {
           if (tokensCollection !== undefined) {
             console.log('Writing tokens for the network: ' + tokenFile.name);
             tokensCollection = tokensCollection.map(item => {
-              return   {
-                "symbol": item.symbol,
-                "address": item.address,
-                "decimals": item.decimals,
-            }})
+              return {
+                symbol: item.symbol,
+                address: item.address,
+                decimals: item.decimals
+              };
+            });
             fs.writeFileSync(
               `${configs.TOKENS_PATH}/tokens-${tokenFile.name}.json`,
               JSON.stringify(tokensCollection)

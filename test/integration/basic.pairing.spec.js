@@ -193,6 +193,12 @@ describe('Pairing', () => {
         // initiator.rtcSend({ type: 'address', data: '' });
       });
 
+      initiator.on('displayCode', (data) => {
+        console.log(data); // todo remove dev item
+        if (!silent) console.log('address', data); // todo remove dev item
+        // initiator.rtcSend({ type: 'address', data: '' });
+      });
+
       await receiver.setKeys(
         initiator.publicKey,
         initiator.privateKey,

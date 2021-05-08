@@ -13,7 +13,10 @@ import {
   ethAccounts,
   ethCoinbase,
   ethGetTransactionCount,
-  netVersion
+  netVersion,
+  decrypt,
+  signTypedData_v3,
+  getEncryptionPublicKey
 } from '../methods/index';
 
 class WSProvider {
@@ -80,6 +83,9 @@ class WSProvider {
       middleware.use(ethGetTransactionCount);
       middleware.use(ethCoinbase);
       middleware.use(netVersion);
+      middleware.use(decrypt);
+      middleware.use(signTypedData_v3);
+      middleware.use(getEncryptionPublicKey)
       middleware.run(req, callback).then(() => {
         _this.connection.send(JSON.stringify(payload));
         _this._addResponseCallback(payload, callback);
@@ -106,34 +112,40 @@ class WSProvider {
           }
         }
 
-          if(typeof argumentsList[0] === 'string' && typeof argumentsList[1] !== 'function'){
-            return new Promise((resolve, reject) => {
-              const callback = (err, response) => {
-                if (err) reject(err);
-                else resolve(response.result);
-              };
-              let params = [];
-              if (argumentsList.length === 2) {
-                params = Array.isArray(argumentsList[1])
-                  ? argumentsList[1]
-                  : argumentsList[1] !== undefined
-                    ? [argumentsList[1]]
-                    : []
-              }
-              const payload = {
-                jsonrpc: "2.0",
-                id: 1,
-                method: argumentsList[0],
-                params: params
-              };
-              target(payload, callback);
-            });
-          }
+        if (
+          typeof argumentsList[0] === 'string' &&
+          typeof argumentsList[1] !== 'function'
+        ) {
+          return new Promise((resolve, reject) => {
+            const callback = (err, response) => {
+              if (err) reject(err);
+              else resolve(response.result);
+            };
+            let params = [];
+            if (argumentsList.length === 2) {
+              params = Array.isArray(argumentsList[1])
+                ? argumentsList[1]
+                : argumentsList[1] !== undefined
+                ? [argumentsList[1]]
+                : [];
+            }
+            const payload = {
+              jsonrpc: '2.0',
+              id: 1,
+              method: argumentsList[0],
+              params: params
+            };
+            target(payload, callback);
+          });
+        }
 
         return target(argumentsList[0], argumentsList[1]);
       }
     };
     this.wsProvider.send = new Proxy(rawSend, handler);
+    this.wsProvider.request = (payload) => {
+      return this.wsProvider.send(payload.method, payload.params)
+    }
     return this.wsProvider;
   }
 }

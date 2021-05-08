@@ -16,5 +16,3 @@ export function postMessageToParent(message, origin = '*') {
     window.parent.postMessage(message, origin);
   }
 }
-
-

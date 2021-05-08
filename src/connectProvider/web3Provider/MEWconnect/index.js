@@ -70,13 +70,14 @@ class MEWconnectWallet {
   }
 
   static setConnectionState(connectionState) {
-    if (!connectionState) MEWconnect.Initiator.setConnectionState('disconnected');
+    if (!connectionState)
+      MEWconnect.Initiator.setConnectionState('disconnected');
     else MEWconnect.Initiator.setConnectionState(connectionState);
-    debug('setConnectionState', MEWconnect.Initiator.connectionState)
+    debug('setConnectionState', MEWconnect.Initiator.connectionState);
   }
 
   static getConnectionState() {
-    debug('getConnectionState', MEWconnect.Initiator.connectionState)
+    debug('getConnectionState', MEWconnect.Initiator.connectionState);
 
     if (!MEWconnect.Initiator.connectionState) return 'disconnected';
     return MEWconnect.Initiator.connectionState;
@@ -132,7 +133,7 @@ class MEWconnectWallet {
         this.mewConnect.once('reject', () => {
           debug('signTx rejected');
           this.mewConnect.removeAllListeners('signTx');
-          reject({reject: true});
+          reject({ reject: true });
         });
       });
     };
@@ -150,7 +151,7 @@ class MEWconnectWallet {
         this.mewConnect.once('reject', () => {
           debug('signMessage rejected');
           this.mewConnect.removeAllListeners('signMessage');
-          reject({reject: true});
+          reject({ reject: true });
         });
       });
     };

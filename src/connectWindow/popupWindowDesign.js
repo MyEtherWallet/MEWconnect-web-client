@@ -2,7 +2,7 @@ const cssStyles = `
       @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');
       @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-      .outer-container {
+      .outer-container-mew-modal {
         font-family: 'Roboto', sans-serif;
         box-sizing: border-box;
         bottom: 0;
@@ -20,7 +20,7 @@ const cssStyles = `
         max-height: 558px;
       }
       
-      .container {
+      .container-mew-modal {
         font-family: 'Roboto', sans-serif;
         color: #050f19;
         text-align: center;
@@ -54,6 +54,7 @@ const cssStyles = `
         top: 0;
         width: 20px;
         cursor: pointer;
+        z-index: 10;
       }
       
       .qr-code {
@@ -125,7 +126,7 @@ const cssStyles = `
         margin-left: auto;
         margin-right: auto;
       }
-      .bottom-container {
+      .bottom-container-mew-modal {
         position: relative;
         font-family: 'Roboto', sans-serif;
         color: #050f19;
@@ -139,7 +140,7 @@ const cssStyles = `
         left: -15px;
         
       }
-      .bottom-container-text {
+      .bottom-container-mew-modal-text {
         font-family: 'Roboto', sans-serif;
         color: #050f19;
         box-sizing: border-box;
@@ -148,7 +149,7 @@ const cssStyles = `
         opacity: 0.5;
         text-align: left;
       }
-      .bottom-container-text-old {
+      .bottom-container-mew-modal-text-old {
         font-family: 'Roboto', sans-serif;
         color: #050f19;
         box-sizing: border-box;
@@ -198,11 +199,24 @@ const cssStyles = `
        color: rgba(5, 192, 165);
        cursor: pointer;
       }
+      
+      #refresh-container-mew-modal {
+      background: #33c7b0;
+      border-radius: 5px;
+      padding: 5px;
+      }
+      
+      #refresh-container-mew-modal:hover {
+      background: #238677;
+      }
 
       .refreshIcon {
+        padding-top: 5px;
         justify-content: center;
         margin-left: auto;
         margin-right: auto;
+        cursor: pointer;
+        color: #fffff;
       }
 
       .hidden {
@@ -238,26 +252,78 @@ const cssStyles = `
         .warn-color {
         color: orange;
         }
+        
+        .loader-mew,
+        .loader-mew:after {
+          border-radius: 50%;
+          width: 10em;
+          height: 10em;
+        }
+        .loader-mew {
+          margin: 20px auto;
+          font-size: 10px;
+          position: relative;
+          text-indent: -9999em;
+          border-top: 1em solid rgba(166,183,183, 0.2);
+          border-right: 1em solid rgba(166,183,183, 0.2);
+          border-bottom: 1em solid rgba(166,183,183, 0.2);
+          border-left: 1em solid rgba(8, 165, 178, 1);
+          -webkit-transform: translateZ(0);
+          -ms-transform: translateZ(0);
+          transform: translateZ(0);
+          -webkit-animation: load8 1.1s infinite linear;
+          animation: load8 1.1s infinite linear;
+        }
+        @-webkit-keyframes load8 {
+          0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+          }
+          100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+          }
+        }
+        @keyframes load8 {
+          0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+          }
+          100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+          }
+        }
     `;
 
-const htmlDesign = (refresh, image, playStore, appStore, camera, iconImage, iosLink, androidLink) => {
+const htmlDesign = (
+  refresh,
+  image,
+  playStore,
+  appStore,
+  camera,
+  iconImage,
+  iosLink,
+  androidLink
+) => {
   return `
-    <div class="outer-container">
-      <div class="container">
+    <div class="outer-container-mew-modal">
+      <div class="container-mew-modal">
               <div class="close-mew-modal" id="close-mew-modal" aria-label="close modal" data-close>
           <img src="${iconImage}" height="17" width="11"/>
         </div>
       <div class="upper-text">
 
-        <p class="text-one">Connect to MEW wallet app</p>
+        <p class="text-one">Connect to MEW&nbsp;wallet app</p>
         <p class="text-two">Scan this code to connect</p>
        </div>
-
-        <div class="qr-code">
+        <div id="qr-failure"></div>
+        <div id="qr-code-connecting-mew" class="hidden"><div class="loader-mew"></div><h4>Connecting...</h4> Creating encrypted peer-to-peer connection </div>
+        <div id="qr-code-display-container-mew" class="qr-code">
           <canvas id="canvas-for-mewconnect-qr-code"></canvas>
         </div>
         <div id="refresh-container" class="refreshIcon hidden">
-          <img id="refresh" src="${refresh}" />
+          Try Again <img id="refresh" src="${refresh}" />
         </div>
 
         <ol class="list-style">
@@ -267,7 +333,7 @@ const htmlDesign = (refresh, image, playStore, appStore, camera, iconImage, iosL
         </ol>
       </div>
       <div class="bottom-background">
-        <div class="bottom-container">
+        <div class="bottom-container-mew-modal">
           <div class="left">
             <img
               class="spaceman-background"
@@ -278,7 +344,7 @@ const htmlDesign = (refresh, image, playStore, appStore, camera, iconImage, iosL
           </div>
           <div class="center">
             <div class="right">
-              <p class="get-text">Don't have MEW wallet app?</p>
+              <p class="get-text">Don't have MEW&nbsp;wallet app?</p>
               <p id="popupsBlocked" class="warn-color"></p>
                       <a href="${iosLink}" target="_blank" id="appStore">               <img
                   id="apple-link"
@@ -320,9 +386,20 @@ const noticetext = `
       div#Notifications.hidden {
         visibility: hidden;
       }
+      
+      div#Notifications.hidden {
+        visibility: hidden;
+      }
 
-      div#Notifications.shown {
+      div#qrcodeError.shown {
         visibility: visible;
+      }
+      
+      div#qrcodeError.hidden {
+        visibility: hidden;
+      }
+      div#retry-button-mew.hidden {
+        display: none;
       }
 
       #Notifications,
@@ -528,10 +605,10 @@ const noticetext = `
           rgba(22, 82, 240, 0) 0%,
           rgba(51, 199, 176, 1) 100%
         );
-        animation: WalletLinkNotificationProgressBar 2s linear infinite;
+        animation: MewNotificationProgressBar 2s linear infinite;
       }
 
-      @keyframes WalletLinkNotificationProgressBar {
+      @keyframes MewNotificationProgressBar {
         0% {
           left: 0;
           width: 0%;
@@ -657,6 +734,14 @@ const windowInformer = spaceman => {
               <button id="NotificationButton2" class="NotificationButton NotificationButton2">Cancel
               </button>
             </div>
+            <div id="retry-button-mew" class="NotificationAction hidden"><span
+              class="NotificationButtonInfo NotificationButtonInfo2">Refresh QRcode and </span>
+              <button id="NotificationButton3" class="NotificationButton NotificationButton2">Try Again
+              </button>
+            </div>
+              <div id="qrcodeError" class="NotificationError hidden"><span
+              class="NotificationButtonInfo NotificationButtonInfo2">Failed to generate QR code. Please cancel and retry.</span>
+            </div>
           </div>
         </div>
       </div>
@@ -666,7 +751,7 @@ const windowInformer = spaceman => {
 const modalFrame = innerContent => {
   return `
     <div class="mew-wallet-modal is-visible" id="mew-wallet-modal"></div>
-    <div class="mew-wallet-modal-container is-visible" id="mew-wallet-modal-container">
+    <div class="mew-wallet-modal-container-mew-modal is-visible" id="mew-wallet-modal-container">
       <div class="modal-dialog is-visible" id="mew-mobile-modal-dialog">
         <section class="modal-content">
         ${innerContent}
@@ -735,7 +820,7 @@ ${additionalCss}
         z-index: 999999;
       }
 
-      .mew-wallet-modal-container {
+      .mew-wallet-modal-container-mew-modal {
         position: fixed;
         top: 0;
         left: 0;
@@ -753,7 +838,7 @@ ${additionalCss}
         z-index: 999999;
       }
 
-      div.mew-wallet-modal-container.is-visible {
+      div.mew-wallet-modal-container-mew-modal.is-visible {
         visibility: visible;
         opacity: 1;
         background-color: transparent;

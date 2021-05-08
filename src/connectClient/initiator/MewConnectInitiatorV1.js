@@ -1,6 +1,6 @@
 import createLogger from 'logging';
 import debugLogger from 'debug';
-import {V1endpoint, V2endpoint} from '../config';
+import { V1endpoint, V2endpoint } from '../config';
 
 import wrtc from 'wrtc';
 import io from 'socket.io-client';
@@ -94,6 +94,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     this.socket.on(this.signals.connect, () => {
       debug(': SOCKET CONNECTED');
       this.socketConnected = true;
+      this.emit('SOCKET_CONNECTED')
     });
 
     this.socketOn(this.signals.confirmation, this.beginRtcSequence.bind(this)); // response

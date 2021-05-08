@@ -1,3 +1,47 @@
+- ### Release 2.1.23-beta.10
+- Fix reference to css background class names in popUpCreator
+- Fix typo with transaction receipt event
+- Add eth_decrypt, eth_getEncryptionPublicKey, and eth_signtypeData_v3 methods
+
+### Release 2.1.23-beta.9
+- Existence checks for retry button
+- Fix css class naming to prevent css leaking into containing page
+
+### Release 2.1.23-beta.8
+- Add method to retrieve stand alone wallet instance (instance without a web3 provider)
+- check for err.code before making a string comparison check for DATA_CHANNEL_ERROR 
+
+### Release 2.1.23-beta.7
+- Use Modified simple-peer library that does not kill connection on datachannel close
+- Add re-creation of dataChannel when dataChannel errors or closes and connection is still active
+- Add check to messages transmitted to the phone to prevent duplicates (100 ms minimum between same type sends)
+- Add check for an answer received after sending an offer and if no answer call try turn
+- Add a handler for anticipated use of turn credentials during first connection attempt
+- Fix communication of disconnect to Web3Modal
+- Fix creation of multiple QRcode modals causing blank QRcode bug
+- Clean up event listeners on recreation of V2 initiator and webRtcCommunication instances
+- Wait until a connection to a signal server is established before showing QRcode
+
+### Release 2.1.23-beta.6
+- Fix incorrect import breaking install
+
+### Release 2.1.23-beta.5
+- Add connecting loader 
+- Add retry buttons to regenerate qrcode
+
+### Release 2.1.23-beta.4
+- Add a current instance cache for transaction hashes to prevent multiple send attempts 
+- Add notice when malformed response is received from mobile
+- Add a current instance timer to stop checking for transaction hash after 60 minutes
+- Add user notice of errors originating from a transaction
+
+
+### Release 2.1.23-beta.3
+- Fix EIP-1193 disconnect event name typo (disconnected -> disconnect)
+- Add wallet connected checks for eth_signTransaction, eth_sendTransaction
+- add no-op for subscriptions when using https
+- add a workaround to emit receipt without use of subscriptions on https
+
 ### Release 2.1.23-beta.2
 - Fix line breaking in popup
 
