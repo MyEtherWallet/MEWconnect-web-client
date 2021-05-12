@@ -1,0 +1,11 @@
+MEWconnect Client for MEW wallet
+MEWconnect Demo
+
+With the MEWconnect client, users can use your DApp in any desktop browser without installing an extension. Additionally, end-to-end encryption using client-side generated keys keeps all user activity private.
+
+The client provides a web3 instance so for DApp developers to integrate with MEW wallet using MEWconnect, all you need to do is drop a few lines of code into your application, and the MEW wallet app and MEWconnect client will take care of the rest.
+
+When integrating please use the image assets located here and shown under design in the sidebar
+
+Note that the MEWconnect Client is known to work on Ethereum testnets, but it is only officially supported on the Ethereum Mainnet.
+
