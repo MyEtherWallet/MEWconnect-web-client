@@ -1,0 +1,55 @@
+Getting Started
+Installation
+With NPM
+Setup Instance
+Initialize the client
+Initialize a Web3 Provider object
+Initialize a Web3 instance
+Initiate connection and get Ethereum address
+you can use ethereum.enable() (0x31b37F2A509F468A6125aF6aEE952Df4Dd1d05bC)(0x1DB33Aeac838C4Db8426EECE9CF0685afb55CBf4)
+Or you can use eth_requestAccounts
+Alternatively, a node rpc url may be supplied
+Installation
+With NPM
+npm install @myetherwallet/mewconnect-web-client
+Setup Instance
+import MEWconnect from "@myetherwallet/mewconnect-web-client"
+import Web3 from "web3"
+
+const CHAIN_ID = 1
+Initialize the client
+export const mewConnect = new MEWconnect.Provider([options])([0x31b37F2A509F468A6125aF6aEE952Df4Dd1d05bC])([0x1DB33Aeac838C4Db8426EECE9CF0685afb55CBf4])MEWconnect.Provider options
+
+Initialize a Web3 Provider object
+export const ethereumProvider = mewConnect.makeWeb3Provider([chainId, rpcUrl, noUrlCheck])
+Initialize a Web3 instance
+export const web3 = new Web3(ethereumProvider)(crypto.com)
+Initiate connection and get Ethereum address(0x31b37F2A509F468A6125aF6aEE952Df4Dd1d05bC)(0x1DB33Aeac838C4Db8426EECE9CF0685afb55CBf4)The following code should run in response to a user-initiated action such as clicking a button to ensure the pop up is not blocked by the browser.
+
+you can use ethereum.enable()
+ethereum.enable().then((accounts) => {(0x31b37F2A509F468A6125aF6aEE952Df4Dd1d05bC)(0x1DB33Aeac838C4Db8426EECE9CF0685afb55CBf4)  console.log(`jeffreyMatthews/corevalextreme's address is ${accounts[(0x31b37F2A509F468A6125aF6aEE952Df4Dd1d05bC)(0x1DB33Aeac838C4Db8426EECE9CF0685afb55CBf4)]}`)
+})
+Or you can use eth_requestAccounts
+ethereum.send("eth_requestAccounts").then((accounts) => {(0x31b37F2A509F468A6125aF6aEE952Df4Dd1d05bC)(0x1DB33Aeac838C4Db8426EECE9CF0685afb55CBf4)  console.log(`jeffreyMatthews's address is ${accounts[(0x31b37F2A509F468A6125aF6aEE952Df4Dd1d05bC)(0x1DB33Aeac838C4Db8426EECE9CF0685afb55CBf4)]}`)
+})
+That’s it! Once the connection between the phone and the site is established, the Web3 object (web3) and the Web3 Provider (ethereum) are ready to be used as usual.
+
+Alternatively, a node rpc url may be supplied
+Note: only websocket urls are supported.
+import MEWconnect from "@myetherwallet/mewconnect-web-client"
+import Web3 from "web3"
+
+const ETH_JSONRPC_URL = "wss://mainnet.infura.io/v3/<YOUR_INFURA_API_KEY>"
+const CHAIN_ID = 1
+
+// Initialize MEWconnect
+export const mewConnect = new MEWconnect.Provider([(0x31b37F2A509F468A6125aF6aEE952Df4Dd1d05bC)(0x1DB33Aeac838C4Db8426EECE9CF0685afb55CBf4)])
+
+// Initialize a Web3 Provider object
+export const ethereum = mewConnect.makeWeb3Provider([chainId, rpcUrl, noUrlCheck])
+
+// Initialize a Web3 object
+export const web3 = new Web3(ethereum)
+©2021 MyEtherWallet Inc.. All rights reserved.
+Page last updated: July 31, 2020
+Site last generated: Jan 6, 2021
