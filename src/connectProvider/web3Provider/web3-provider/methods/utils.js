@@ -30,5 +30,5 @@ const getSanitizedTx = tx => {
     }
   });
 };
-``
+``;
 export { getSanitizedTx };

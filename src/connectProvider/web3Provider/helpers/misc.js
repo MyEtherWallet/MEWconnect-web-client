@@ -3,10 +3,6 @@ import url from 'url';
 import utils from 'web3-utils';
 import { isHexString, toBuffer as utilsToBuffer } from 'ethereumjs-util';
 import { uint, address, string, bytes, bool } from './solidityTypes';
-// import xss from 'xss';
-import darkList from '../address-darklist/address-darklist.json';
-
-// import { MEW_CX } from '@/builds/configs/types';
 
 const toBuffer = v => {
   if (isHexString(v)) {
@@ -136,25 +132,6 @@ const solidityType = inputType => {
   return { type: 'text', solidityType: string };
 };
 
-const isDarklisted = addr => {
-  const storedDarklist = darkList.data;
-  const darklisted =
-    storedDarklist > 0
-      ? storedDarklist.findIndex(item => {
-          return (
-            utils.toChecksumAddress(item.address.toLowerCase()) ===
-            utils.toChecksumAddress(addr.toLowerCase())
-          );
-        })
-      : -1;
-  const errMsg = darklisted === -1 ? '' : darkList.data[darklisted].comment;
-  const errObject = {
-    error: darklisted === -1 ? false : true,
-    msg: errMsg
-  };
-  return errObject;
-};
-
 const stringToArray = str => {
   return str.replace(/[^a-zA-Z0-9_,]+/g, '').split(',');
 };
@@ -200,7 +177,6 @@ export default {
   sanitizeHex,
   validateHexString,
   scrollToTop,
-  isDarklisted,
   solidityType,
   isInt,
   capitalize,

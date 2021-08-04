@@ -1,4 +1,4 @@
-import {messages} from '../messages'
+import { messages } from '../messages';
 export function getMessage(text, extra) {
   if (extra) {
     switch (extra.type) {
@@ -17,12 +17,12 @@ export function getMessage(text, extra) {
           extra.hash
         )}" target="_blank">View details</a>`;
       case 'nonStandardMessage':
-        return extra.message
+        return extra.message;
     }
   }
 
-  const regEx = new RegExp(/^Returned error:/)
-  if(regEx.test(text)){
+  const regEx = new RegExp(/^Returned error:/);
+  if (regEx.test(text)) {
     return text;
   }
 

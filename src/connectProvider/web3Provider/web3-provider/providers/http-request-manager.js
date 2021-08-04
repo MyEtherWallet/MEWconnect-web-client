@@ -17,6 +17,7 @@ class HttpRequestManager {
     return new Web3RequestManager(this);
   }
   send(payload, callback) {
+    console.log(payload, this.host);
     this.request
       .post(this.host, payload)
       .then(result => {

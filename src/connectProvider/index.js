@@ -244,9 +244,6 @@ export default class Integration extends EventEmitter {
           state.web3Provider.emit('accountsChanged', [
             state.wallet.getChecksumAddressString()
           ]);
-          // state.web3Provider.accountsChanged([
-          //   state.wallet.getChecksumAddressString()
-          // ]);
         }
         eventHub.emit('accounts_available', [
           state.wallet.getChecksumAddressString()
@@ -657,7 +654,7 @@ export default class Integration extends EventEmitter {
       }
     });
 
-    eventHub.on(EventNames.GET_ENCRYPTED_PUBLIC_KEY, ( resolve) => {
+    eventHub.on(EventNames.GET_ENCRYPTED_PUBLIC_KEY, resolve => {
       if (!state.wallet) {
         this.popUpHandler.showNoticePersistentEnter(
           messageConstants.notConnected

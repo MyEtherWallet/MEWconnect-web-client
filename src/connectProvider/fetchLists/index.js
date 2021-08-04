@@ -2,7 +2,6 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const configs = require('./configs');
 const tokenList = require('./lists/tokens.json');
-// const contractList = require('./lists/contracts.json');
 
 const fetchTokens = async () => {
   try {

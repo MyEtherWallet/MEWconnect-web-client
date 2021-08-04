@@ -20,7 +20,7 @@ const WebsocketProvider = function WebsocketProvider(url, options) {
   this.responseCallbacks = {};
   this.notificationCallbacks = [];
   this.closeCallbacks = [];
-  this.disconnectCallbacks = []
+  this.disconnectCallbacks = [];
   this.accountsChangedCallbacks = [];
 
   options = options || {};
@@ -213,18 +213,18 @@ WebsocketProvider.prototype.on = function(type, callback) {
       break;
 
     case 'accountsChanged':
-      this.accountsChangedCallbacks.push(callback)
+      this.accountsChangedCallbacks.push(callback);
       this.accountsChanged = callback;
       break;
     case 'disconnected':
       this.disconnectedCallback = callback;
       break;
     case 'disconnect':
-      this.disconnectCallbacks.push(callback)
+      this.disconnectCallbacks.push(callback);
       // this.disconnectCallback = callback;
       break;
     case 'close':
-      this.closeCallbacks.push(callback)
+      this.closeCallbacks.push(callback);
       // this.closeCallback = callback;
       break;
   }
@@ -235,15 +235,11 @@ WebsocketProvider.prototype.emit = function(type, data) {
     throw new Error('The first parameter type must be a function.');
 
   switch (type) {
-
     case 'accountsChanged':
       this.accountsChangedCallbacks.forEach(function(callback) {
         if (_.isFunction(callback)) callback(data);
       });
       break;
-    // case 'disconnected':
-    //   this.disconnectedCallback = callback;
-    //   break;
     case 'disconnect':
       this.disconnectCallbacks.forEach(function(callback) {
         if (_.isFunction(callback)) callback(data);
@@ -251,15 +247,14 @@ WebsocketProvider.prototype.emit = function(type, data) {
       break;
     case 'close':
       this.closeCallbacks.forEach(function(callback) {
-      if (_.isFunction(callback)) callback(data);
-    });
+        if (_.isFunction(callback)) callback(data);
+      });
       break;
   }
 };
 
 WebsocketProvider.prototype.removeListener = function(type, callback) {
   const _this = this;
-
   switch (type) {
     case 'data':
       this.notificationCallbacks.forEach(function(cb, index) {
@@ -271,9 +266,6 @@ WebsocketProvider.prototype.removeListener = function(type, callback) {
         if (cb === callback) _this.accountsChangedCallbacks.splice(index, 1);
       });
       break;
-    // case 'disconnected':
-    //   this.disconnectedCallback = callback;
-    //   break;
     case 'disconnect':
       this.disconnectCallbacks.forEach(function(cb, index) {
         if (cb === callback) _this.disconnectCallbacks.splice(index, 1);

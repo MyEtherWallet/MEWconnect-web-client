@@ -2,7 +2,6 @@
 import MEWconnect from '../../../index';
 import { Transaction } from 'ethereumjs-tx';
 import WalletInterface from '../WalletInterface';
-import { MEW_CONNECT as mewConnectType } from '../bip44/index';
 import {
   getSignTransactionObject,
   sanitizeHex,
@@ -56,7 +55,7 @@ class MEWconnectWalletInterface extends WalletInterface {
 
 class MEWconnectWallet {
   constructor(state, popupCreator, popUpHandler) {
-    this.identifier = mewConnectType;
+    this.identifier = 'mew_connect';
     this.isHardware = IS_HARDWARE;
     this.mewConnect = new MEWconnect.Initiator({
       v1Url: V1_SIGNAL_URL,
@@ -188,10 +187,6 @@ createWallet.errorHandler = errorHandler;
 const signalerConnect = (url, mewConnect) => {
   return new Promise(resolve => {
     mewConnect.initiatorStart(url);
-    // future extension
-    // mewConnect.on('AuthRejected', () => {
-    //   reject();
-    // });
     mewConnect.on('RtcConnectedEvent', () => {
       mewConnect.sendRtcMessage('address', '');
       mewConnect.once('address', data => {

@@ -17,10 +17,7 @@ import {
   isHexString,
   toBuffer as utilsToBuffer
 } from 'ethereumjs-util';
-import commonGenerator from './helpers/commonGenerator';
-import { Transaction } from 'ethereumjs-tx';
 import { toChecksumAddress } from './helpers/addressUtils';
-import Networks from './networks/index';
 
 const toBuffer = v => {
   if (isHexString(v)) {
