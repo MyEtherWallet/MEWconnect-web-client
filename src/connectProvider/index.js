@@ -493,20 +493,18 @@ export default class Integration extends EventEmitter {
         );
       } else {
         this.popUpHandler.showNoticePersistentEnter(messageConstants.approveTx);
-
         state.wallet
           .signTransaction(tx)
           .then(_response => {
+            if (!_response) return;
             if (!state.knownHashes.includes(_response.tx.hash)) {
               state.knownHashes.push(_response.tx.hash);
-
               this.popUpHandler.showNoticePersistentExit();
               resolve(_response);
             }
           })
           .catch(err => {
             this.popUpHandler.showNoticePersistentExit();
-
             if (err.reject) {
               this.popUpHandler.noShow();
               setTimeout(() => {

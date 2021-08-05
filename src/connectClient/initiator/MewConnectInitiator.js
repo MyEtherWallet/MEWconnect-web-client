@@ -10,10 +10,9 @@ import MewConnectCrypto from '../MewConnectCrypto';
 import MewConnectInitiatorV2 from './MewConnectInitiatorV2';
 import MewConnectInitiatorV1 from './MewConnectInitiatorV1';
 
-import PopUpCreator from '../../connectWindow/popUpCreator'
+import PopUpCreator from '../../connectWindow/popUpCreator';
 import MEWconnectWallet from '../../connectProvider/web3Provider/MEWconnect/index';
 import PopUpHandler from '../../connectWindow/popUpHandler';
-
 
 import WebRtcCommunication from '../WebRtcCommunication';
 import { DISCONNECTED, CONNECTED } from '../../config';
@@ -61,7 +60,11 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
       this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
-      this.popupCreator = options.popupCreator ? options.popupCreator : options.newPopupCreator ? new PopUpCreator() : undefined;
+      this.popupCreator = options.popupCreator
+        ? options.popupCreator
+        : options.newPopupCreator
+        ? new PopUpCreator()
+        : undefined;
 
       debugConnectionState(
         'Initial Connection State:',
@@ -96,13 +99,9 @@ export default class MewConnectInitiator extends MewConnectCommon {
     return MewConnectInitiator.connectionState;
   }
 
-  async createWalletOnly(network){
+  async createWalletOnly(network) {
     this.popUpHandler = new PopUpHandler();
-    return MEWconnectWallet(
-      { network },
-      this.popupCreator,
-      this.popUpHandler
-    );
+    return MEWconnectWallet({ network }, this.popupCreator, this.popUpHandler);
   }
 
   isAlive() {
@@ -420,7 +419,7 @@ Keys
       });
       this.V1.once('SOCKET_CONNECTED', () => {
         if (!this.showingQR) {
-          clearTimeout(connectionErrorTimeOut)
+          clearTimeout(connectionErrorTimeOut);
           this.showingQR = true;
           this.ShowQr(qrString);
         }
@@ -434,7 +433,7 @@ Keys
       });
       this.V2.once('SOCKET_CONNECTED', () => {
         if (!this.showingQR) {
-          clearTimeout(connectionErrorTimeOut)
+          clearTimeout(connectionErrorTimeOut);
           this.showingQR = true;
           this.ShowQr(qrString);
         }

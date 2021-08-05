@@ -82,7 +82,6 @@ class WSProvider {
       });
     };
     this.wsProvider.request = payload => {
-      console.log('request wss', payload);
       return new Promise((resolve, reject) => {
         this.wsProvider.send(
           {

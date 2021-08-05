@@ -103,7 +103,6 @@ class HttpProvider {
       }
     };
     this.httpProvider.request = payload => {
-      console.log('request http', payload);
       return new Promise((resolve, reject) => {
         this.httpProvider.send(
           {

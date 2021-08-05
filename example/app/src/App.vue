@@ -757,7 +757,18 @@ export default {
           params: [this.userAddress, JSON.stringify(data)]
         })
         .then(sig => {
-          console.log(sig);
+          console.log('typed data sig', sig);
+          console.log(
+            sigUtil
+              .recoverTypedSignature(
+                {
+                  sig,
+                  data
+                },
+                'V3'
+              )
+              .toString('hex')
+          );
         });
     },
     getEncryptionPublicKey() {
@@ -768,7 +779,6 @@ export default {
         })
         .then(pubkey => {
           console.log(`User's public encryption key ${pubkey}`);
-          const ethUtil = require('ethereumjs-util');
           const encryptedMessage = ethUtil.bufferToHex(
             Buffer.from(
               JSON.stringify(

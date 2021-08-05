@@ -42,14 +42,10 @@ export default async ({ payload, store, eventHub }, res, next) => {
     } else if (!tx.gasLimit && tx.gas) {
       tx.gasLimit = tx.gas;
     }
-    tx.gas =
-      !tx.gas || new BigNumber(tx.gas).lte(0)
-        ? await store.state.web3.eth.estimateGas(localTx)
-        : tx.gas;
-    tx.gasPrice =
-      !tx.gasPrice || new BigNumber(tx.gasPrice).lte(0)
-        ? await store.state.web3.eth.getGasPrice()
-        : tx.gasPrice;
+    tx.gas = !tx.gas ? await store.state.web3.eth.estimateGas(localTx) : tx.gas;
+    tx.gasPrice = !tx.gasPrice
+      ? await store.state.web3.eth.getGasPrice()
+      : tx.gasPrice;
     tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
   } catch (e) {
     eventHub.emit(EventNames.ERROR_NOTIFY, e);
@@ -68,50 +64,45 @@ export default async ({ payload, store, eventHub }, res, next) => {
           return;
         }
         debug('broadcasting', payload.method, _response.rawTransaction);
-        if (!store.state.knownHashes.includes(_response.tx.hash)) {
-          store.state.knownHashes.push(_response.tx.hash);
-
-          const _promiObj = store.state.web3.eth.sendSignedTransaction(
-            _response.rawTransaction
-          );
-
-          _promiObj
-            .once('transactionHash', hash => {
-              if (store.state.wallet !== null) {
-                if (store.noSubs) {
-                  const txHash = hash;
-                  const start = Date.now();
-                  const interval = setInterval(() => {
-                    store.state.web3.eth
-                      .getTransactionReceipt(txHash)
-                      .then(result => {
-                        if (result !== null) {
-                          clearInterval(interval);
-                          _promiObj.emit('receipt', result);
-                          return;
-                        }
-                        const cancelInterval =
-                          (Date.now() - start) / 1000 > 60 * 60;
-                        if (cancelInterval) {
-                          clearInterval(interval);
-                        }
-                      })
-                      .catch(err => {
-                        eventHub.emit(EventNames.ERROR_NOTIFY, err);
-                        _promiObj.emit('error', err);
-                      });
-                  }, 1000);
-                }
+        const _promiObj = store.state.web3.eth.sendSignedTransaction(
+          _response.rawTransaction
+        );
+        _promiObj
+          .once('transactionHash', hash => {
+            if (store.state.wallet !== null) {
+              if (store.noSubs) {
+                const txHash = hash;
+                const start = Date.now();
+                const interval = setInterval(() => {
+                  store.state.web3.eth
+                    .getTransactionReceipt(txHash)
+                    .then(result => {
+                      if (result !== null) {
+                        clearInterval(interval);
+                        _promiObj.emit('receipt', result);
+                        return;
+                      }
+                      const cancelInterval =
+                        (Date.now() - start) / 1000 > 60 * 60;
+                      if (cancelInterval) {
+                        clearInterval(interval);
+                      }
+                    })
+                    .catch(err => {
+                      eventHub.emit(EventNames.ERROR_NOTIFY, err);
+                      _promiObj.emit('error', err);
+                    });
+                }, 5000);
               }
-              res(null, toPayload(payload.id, hash));
-            })
-            .on('error', err => {
-              eventHub.emit(EventNames.ERROR_NOTIFY, err);
-              debugErrors('Error: eth_sendTransaction', err);
-              res(err);
-            });
-          setEvents(_promiObj, _tx, eventHub);
-        }
+            }
+            res(null, toPayload(payload.id, hash));
+          })
+          .on('error', err => {
+            eventHub.emit(EventNames.ERROR_NOTIFY, err);
+            debugErrors('Error: eth_sendTransaction', err);
+            res(err);
+          });
+        setEvents(_promiObj, _tx, eventHub);
       });
     })
     .catch(e => {
