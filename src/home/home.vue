@@ -31,35 +31,33 @@
 <script>
 /* eslint-disable */
 
-
 export default {
   name: 'home',
   title: 'MEWconnect client demo',
-  data () {
+  data() {
     return {
       web3: {}
     };
   },
-  mounted () {
-  }
+  mounted() {}
 };
 </script>
 
 <style lang="scss">
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+
+ul {
+  list-style-type: none;
+
+  li {
     text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
   }
-
-  ul {
-    list-style-type: none;
-
-    li {
-      text-align: center;
-    }
-  }
+}
 </style>
