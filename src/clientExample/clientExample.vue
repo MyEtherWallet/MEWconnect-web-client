@@ -1,21 +1,28 @@
 <template>
-  <div >
+  <div>
     <p>
       <!-- use router-link component for navigation. -->
       <!-- specify the link by passing the `to` prop. -->
       <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
       <router-link to="/home">Go to Home</router-link>
-
     </p>
     <button @click="onClick">CONNECT</button>
     <h3>{{ userAddress }}</h3>
-
+    <button @click="getBlockNumber">Get Block Number</button>
+    <div v-show="userAddress === ''">
+      <button @click="selectNetwork(1)">Mainnet</button>
+      <button @click="selectNetwork(3)">Ropsten</button>
+      <button @click="selectNetwork(5)">Goerli</button>
+      <button @click="selectNetwork(42)">Kovan</button>
+      <button @click="selectNetwork(137)">Matic</button>
+      <button @click="selectNetwork(56)">BSC</button>
+    </div>
     <ul v-show="userAddress !== ''">
       <li>
         <button @click="disconnect">Disconnect</button>
       </li>
       <li>
-        <hr/>
+        <hr />
         <h2>Send</h2>
         <label for="toAmount">
           to amount
@@ -31,7 +38,7 @@
         {{ txHash }}
       </li>
       <li>
-        <hr/>
+        <hr />
         <h2>Send With Data</h2>
         <label for="toAmountData">
           to amount
@@ -43,11 +50,7 @@
         ><br />
         <label for="toData">
           to data
-          <input
-            id="toData"
-            v-model="toData"
-            placeholder="0x"
-          /> </label
+          <input id="toData" v-model="toData" placeholder="0x" /> </label
         ><br />
         <label for="toAddressData">
           to data
@@ -63,7 +66,7 @@
         {{ txHash }}
       </li>
       <li>
-        <hr/>
+        <hr />
         <h2>Send Token</h2>
         <label for="tokenAddress">
           token address
@@ -92,7 +95,7 @@
         <button v-show="tokenAddress !== ''" @click="approveToken(tokenAmount)">
           approve
         </button>
-        <br/>
+        <br />
         <button v-show="tokenAddress !== ''" @click="sendToken(tokenAmount)">
           send
         </button>
@@ -100,16 +103,34 @@
         {{ tokenTxHash }}
       </li>
       <li>
-        <hr/>
+        <hr />
         <h2>Other Actions</h2>
         <button @click="getAccount">get account</button>
         <h3>{{ account }}</h3>
       </li>
       <li>
+        <hr />
+        <button @click="getEncryptionPublicKey">
+          encrypt decrypt public key
+        </button>
+      </li>
+      <li>
+        <hr />
+        <button @click="signTypedDataV3">
+          signed Typed v3
+        </button>
+      </li>
+      <li>
+        <hr />
         <input v-model="messageToSign" />
-        <button @click="signMessage">sign message</button><br/>
-        <textarea v-if="signature !== ''" v-model="signature" disabled style="margin: 0px; height: 169px; width: 454px;"></textarea>
-        <br/>
+        <button @click="signMessage">sign message</button><br />
+        <textarea
+          v-if="signature !== ''"
+          v-model="signature"
+          disabled
+          style="margin: 0px; height: 169px; width: 454px;"
+        ></textarea>
+        <br />
       </li>
       <li>
         <button @click="getBalance">balance</button>
@@ -166,7 +187,8 @@ import mewConnect from '@myetherwallet/mewconnect-web-client';
 import PopUpCreator from '../../node_modules/@myetherwallet/mewconnect-web-client/src/connectWindow/popUpCreator.js';
 import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
-
+import ethUtil from 'ethereumjs-utils';
+import * as sigUtil from 'eth-sig-util';
 const messageConstants = {
   decline: 'decline',
   approveTx: 'approveTx',
@@ -177,6 +199,14 @@ const messageConstants = {
   signMessage: 'signMessage',
   error: 'error',
   notConnected: 'notConnected'
+};
+const NetworkEndPoints = {
+  1: 'https://nodes.mewapi.io/rpc/eth',
+  3: 'https://nodes.mewapi.io/rpc/rop',
+  5: 'wss://nodes.mewapi.io/ws/goerli',
+  42: 'https://nodes.mewapi.io/rpc/kovan',
+  137: 'wss://nodes.mewapi.io/ws/matic',
+  56: 'https://nodes.mewapi.io/rpc/bsc'
 };
 export default {
   name: 'app',
@@ -207,9 +237,13 @@ export default {
   },
   mounted() {
     // Initialize the provider based client
-    this.connect = new mewConnect.Provider({infuraId: '859569f6decc4446a5da1bb680e7e9cf'});
+    this.connect = new mewConnect.Provider({
+      windowClosedError: true,
+      chainId: 1,
+      rpcUrl: NetworkEndPoints[1]
+    });
     // Create the MEWconnect web3 provider
-    this.ethereum = this.connect.makeWeb3Provider(1)
+    this.ethereum = this.connect.makeWeb3Provider();
     // Create a web3 instance using the MEWconnect web3 provider
     this.web3 = new Web3(this.ethereum);
     // See the 'onClick' method below for starting the connection sequence
@@ -221,6 +255,19 @@ export default {
     this.altPopup = new PopUpCreator();
   },
   methods: {
+    getBlockNumber() {
+      this.web3.eth.getBlockNumber().then(console.log);
+    },
+    selectNetwork(chainId) {
+      this.connect = new mewConnect.Provider({
+        windowClosedError: true,
+        chainId,
+        rpcUrl: NetworkEndPoints[chainId]
+      });
+      this.ethereum = this.connect.makeWeb3Provider();
+      this.web3 = new Web3(this.ethereum);
+      this.web3.eth.getBlockNumber().then(console.log);
+    },
     animate() {
       this.connect.showNotice();
     },
@@ -257,7 +304,7 @@ export default {
     animateConnectedNotifier() {
       this.connect.showConnectedNotice();
     },
-    partialReset(){
+    partialReset() {
       this.toAddressData = '';
       this.toData = '0x';
       this.toAmount = 0;
@@ -273,9 +320,11 @@ export default {
       this.userAddress = '';
     },
     getAccount() {
-      this.ethereum.send('eth_requestAccounts').then(accounts => {
-        console.log(`User's address is ${accounts[0]}`);
-      });
+      this.ethereum
+        .request({ method: 'eth_requestAccounts' })
+        .then(accounts => {
+          console.log(`User's address is 1${accounts[0]}`);
+        });
     },
     getBalance() {
       this.web3.eth
@@ -318,17 +367,17 @@ export default {
         this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
           const rawTx = {
             from: this.userAddress,
-            to: this.toAddressData === '' ? this.userAddress : this.toAddressData,
+            to:
+              this.toAddressData === '' ? this.userAddress : this.toAddressData,
             nonce,
             value: new BigNumber(this.toAmount)
               .times(new BigNumber(10).pow(18))
               .toFixed(),
             gasPrice: gasPrice,
             data: this.toData
-          }
-          this.web3.eth
-            .estimateGas(rawTx).then(gasLimit => {
-              rawTx.gas = gasLimit;
+          };
+          this.web3.eth.estimateGas(rawTx).then(gasLimit => {
+            rawTx.gas = gasLimit;
             this.web3.eth
               .sendTransaction(rawTx)
               .once('transactionHash', hash => {
@@ -343,10 +392,99 @@ export default {
                 console.log(['Error', err]);
               })
               .then(txhash => console.log('THEN: ', txhash));
-          })
-
+          });
         });
       });
+    },
+    signTypedDataV3() {
+      const data = {
+        types: {
+          EIP712Domain: [
+            { name: 'name', type: 'string' },
+            { name: 'version', type: 'string' },
+            { name: 'chainId', type: 'uint256' },
+            { name: 'verifyingContract', type: 'address' }
+          ],
+          Person: [
+            { name: 'name', type: 'string' },
+            { name: 'wallet', type: 'address' }
+          ],
+          Mail: [
+            { name: 'from', type: 'Person' },
+            { name: 'to', type: 'Person' },
+            { name: 'contents', type: 'string' }
+          ]
+        },
+        primaryType: 'Mail',
+        domain: {
+          name: 'Ether Mail',
+          version: '1',
+          chainId: 1,
+          verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC'
+        },
+        message: {
+          sender: {
+            name: 'Cow',
+            wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826'
+          },
+          recipient: {
+            name: 'Bob',
+            wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB'
+          },
+          contents: 'Hello, Bob!'
+        }
+      };
+      this.ethereum
+        .request({
+          method: 'eth_signTypedData_v3',
+          params: [this.userAddress, JSON.stringify(data)]
+        })
+        .then(sig => {
+          console.log('typed data sig', sig);
+          console.log(
+            sigUtil
+              .recoverTypedSignature(
+                {
+                  sig,
+                  data
+                },
+                'V3'
+              )
+              .toString('hex')
+          );
+        });
+    },
+    getEncryptionPublicKey() {
+      this.ethereum
+        .request({
+          method: 'eth_getEncryptionPublicKey',
+          params: [this.userAddress]
+        })
+        .then(pubkey => {
+          console.log(`User's public encryption key ${pubkey}`);
+          const encryptedMessage = ethUtil.bufferToHex(
+            Buffer.from(
+              JSON.stringify(
+                sigUtil.encrypt(
+                  pubkey,
+                  { data: 'Hello world! ' + new Date().getTime() },
+                  'x25519-xsalsa20-poly1305'
+                )
+              ),
+              'utf8'
+            )
+          );
+          console.log('encrypted message', encryptedMessage);
+          this.ethereum
+            .request({
+              method: 'eth_decrypt',
+              params: [encryptedMessage, this.userAddress]
+            })
+            .then(decryptedMessage =>
+              console.log('The decrypted message is:', decryptedMessage)
+            )
+            .catch(error => console.log(error.message));
+        });
     },
     signMessage() {
       this.web3.eth
@@ -434,30 +572,30 @@ export default {
     approveToken(amount, decimals = this.tokenDecimals) {
       const jsonInterface = [
         {
-          "constant": false,
-          "inputs": [
+          constant: false,
+          inputs: [
             {
-              "internalType": "address",
-              "name": "usr",
-              "type": "address"
+              internalType: 'address',
+              name: 'usr',
+              type: 'address'
             },
             {
-              "internalType": "uint256",
-              "name": "wad",
-              "type": "uint256"
+              internalType: 'uint256',
+              name: 'wad',
+              type: 'uint256'
             }
           ],
-          "name": "approve",
-          "outputs": [
+          name: 'approve',
+          outputs: [
             {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
+              internalType: 'bool',
+              name: '',
+              type: 'bool'
             }
           ],
-          "payable": false,
-          "stateMutability": "nonpayable",
-          "type": "function"
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function'
         }
       ];
       const contract = new this.web3.eth.Contract(jsonInterface);

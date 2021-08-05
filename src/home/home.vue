@@ -2,23 +2,28 @@
   <div>
     <p>
       <router-link to="/interactive">Interactive Demo</router-link>
-
     </p>
     <p>
       <router-link to="/web3Modal">Web3 Modal Example</router-link>
     </p>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
     <p>
-      <a href="https://github.com/MyEtherWallet/MEWconnect-web-client/tree/mewconnect-demo" target="_blank">Code for this example</a>
+      <a
+        href="https://github.com/MyEtherWallet/MEWconnect-web-client/tree/mewconnect-demo"
+        target="_blank"
+        >Code for this example</a
+      >
     </p>
     <p>
-      <a href="https://github.com/MyEtherWallet/MEWconnect-web-client">Github</a>
+      <a href="https://github.com/MyEtherWallet/MEWconnect-web-client"
+        >Github</a
+      >
     </p>
   </div>
 </template>

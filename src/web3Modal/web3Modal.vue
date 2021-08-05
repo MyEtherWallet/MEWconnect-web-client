@@ -2,14 +2,17 @@
   <div>
     <p>
       <router-link to="/home">Go to Home</router-link>
-
     </p>
     <button @click="setup">Show web3 modal popup</button>
-    <br/>
-    <br/>
-    <br/>
+    <br />
+    <br />
+    <br />
     <p>
-      <a href="https://github.com/MyEtherWallet/MEWconnect-web-client/blob/mewconnect-demo/src/web3Modal/web3Modal.vue" target="_blank">Code for this example</a>
+      <a
+        href="https://github.com/MyEtherWallet/MEWconnect-web-client/blob/mewconnect-demo/src/web3Modal/web3Modal.vue"
+        target="_blank"
+        >Code for this example</a
+      >
     </p>
   </div>
 </template>
