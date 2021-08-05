@@ -34,7 +34,7 @@ require('regenerator-runtime/runtime');
 
 var name = "@myetherwallet/mewconnect-web-client";
 var homepage = "https://github.com/myetherwallet/MEWconnect-web-client";
-var version = "2.1.23-beta.9";
+var version = "2.2.0-beta.1";
 var main = "./dist/index.js";
 var module$1 = "./src/index.js";
 var scripts = {
@@ -4936,7 +4936,11 @@ class MewConnectInitiator extends MewConnectCommon {
 
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
       this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
-      this.popupCreator = options.popupCreator ? options.popupCreator : options.newPopupCreator ? new PopUpCreator() : undefined;
+      this.popupCreator = options.popupCreator
+        ? options.popupCreator
+        : options.newPopupCreator
+        ? new PopUpCreator()
+        : undefined;
 
       debugConnectionState(
         'Initial Connection State:',
@@ -4971,13 +4975,9 @@ class MewConnectInitiator extends MewConnectCommon {
     return MewConnectInitiator.connectionState;
   }
 
-  async createWalletOnly(network){
+  async createWalletOnly(network) {
     this.popUpHandler = new PopUpHandler();
-    return createWallet(
-      { network },
-      this.popupCreator,
-      this.popUpHandler
-    );
+    return createWallet({ network }, this.popupCreator, this.popUpHandler);
   }
 
   isAlive() {
@@ -6346,7 +6346,6 @@ class WSProvider {
       });
     };
     this.wsProvider.request = payload => {
-      console.log('request wss', payload);
       return new Promise((resolve, reject) => {
         this.wsProvider.send(
           {
@@ -6384,7 +6383,6 @@ class HttpRequestManager {
     return new web3CoreRequestmanager.Manager(this);
   }
   send(payload, callback) {
-    console.log(payload, this.host);
     this.request
       .post(this.host, payload)
       .then(result => {
@@ -6484,7 +6482,6 @@ class HttpProvider {
       }
     };
     this.httpProvider.request = payload => {
-      console.log('request http', payload);
       return new Promise((resolve, reject) => {
         this.httpProvider.send(
           {
@@ -7212,16 +7209,13 @@ class Integration extends EventEmitter {
           .signTransaction(tx)
           .then(_response => {
             if (!_response) return;
-            console.log(_response, '87768687686--------');
             if (!state.knownHashes.includes(_response.tx.hash)) {
-              console.log(_response, '87768687686--------', 1);
               state.knownHashes.push(_response.tx.hash);
               this.popUpHandler.showNoticePersistentExit();
               resolve(_response);
             }
           })
           .catch(err => {
-            console.log('87768687686--------', 2, err);
             this.popUpHandler.showNoticePersistentExit();
             if (err.reject) {
               this.popUpHandler.noShow();
