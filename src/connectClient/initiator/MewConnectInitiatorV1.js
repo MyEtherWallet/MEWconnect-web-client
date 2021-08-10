@@ -94,7 +94,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     this.socket.on(this.signals.connect, () => {
       debug(': SOCKET CONNECTED');
       this.socketConnected = true;
-      this.emit('SOCKET_CONNECTED')
+      this.emit('SOCKET_CONNECTED');
     });
 
     this.socketOn(this.signals.confirmation, this.beginRtcSequence.bind(this)); // response
