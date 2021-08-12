@@ -56,6 +56,7 @@ typings/
 
 # dotenv environment variables file
 .env
+dist/
 
 .idea/
 /example/Initiator_Peer/mewConnect.js
