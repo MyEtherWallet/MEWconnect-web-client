@@ -779,27 +779,41 @@ export default {
         })
         .then(pubkey => {
           console.log(`User's public encryption key ${pubkey}`);
-          const encryptedMessage = ethUtil.bufferToHex(
-            Buffer.from(
-              JSON.stringify(
-                sigUtil.encrypt(
-                  pubkey,
-                  { data: 'Hello world! ' + new Date().getTime() },
-                  'x25519-xsalsa20-poly1305'
-                )
-              ),
-              'utf8'
-            )
+          const encryptedMessage = Buffer.from(
+            JSON.stringify(
+              sigUtil.encrypt(
+                pubkey,
+                { data: 'Hello world! ' + new Date().getTime() },
+                'x25519-xsalsa20-poly1305'
+              )
+            ),
+            'utf8'
           );
-          console.log('encrypted message', encryptedMessage);
+
+          const encryptedMessageHex = ethUtil.bufferToHex(encryptedMessage);
+          console.log('encrypted message', encryptedMessageHex);
           setTimeout(() => {
             this.ethereum
               .request({
                 method: 'eth_decrypt',
-                params: [encryptedMessage, this.userAddress]
+                params: [encryptedMessageHex, this.userAddress]
               })
               .then(decryptedMessage =>
                 console.log('The decrypted message is:', decryptedMessage)
+              )
+              .catch(error => console.log(error.message));
+          }, 2000);
+          setTimeout(() => {
+            this.ethereum
+              .request({
+                method: 'eth_decrypt',
+                params: [encryptedMessage.toString('utf8'), this.userAddress]
+              })
+              .then(decryptedMessage =>
+                console.log(
+                  'The decrypted struct message is:',
+                  decryptedMessage
+                )
               )
               .catch(error => console.log(error.message));
           }, 4000);

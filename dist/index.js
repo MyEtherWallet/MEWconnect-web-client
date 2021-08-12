@@ -34,7 +34,7 @@ require('regenerator-runtime/runtime');
 
 var name = "@myetherwallet/mewconnect-web-client";
 var homepage = "https://github.com/myetherwallet/MEWconnect-web-client";
-var version = "2.2.0-beta.1";
+var version = "2.2.0-beta.2";
 var main = "./dist/index.js";
 var module$1 = "./src/index.js";
 var scripts = {
@@ -6736,40 +6736,25 @@ const debugErrors$5 = debugLogger('MEWconnectError');
 let state = {
   wallet: null
 };
-
-const infuraUrlFormater = (name$$1, infuraId) => {
-  return `wss://${name$$1}.infura.io/ws/v3/${infuraId}`;
-};
 const eventHub = new EventEmitter();
 let popUpCreator = {};
 
 class Integration extends EventEmitter {
   constructor(options = {}) {
     super();
-    if (window.web3) {
-      if (window.web3.currentProvider) {
-        if (
-          window.web3.currentProvider.isMewConnect ||
-          window.web3.currentProvider.isTrust
-        ) {
-          this.runningInApp = true;
-          state.web3Provider = window.web3.currentProvider;
-        } else {
-          this.runningInApp = false;
-        }
+    if (window.ethereum) {
+      if (window.ethereum.isMewConnect || window.ethereum.isTrust) {
+        this.runningInApp = true;
+        state.web3Provider = window.ethereum;
       } else {
         this.runningInApp = false;
       }
     } else {
       this.runningInApp = false;
     }
-
     this.windowClosedError = options.windowClosedError || false;
     this.subscriptionNotFoundNoThrow =
       options.subscriptionNotFoundNoThrow || true;
-    // eslint-disable-next-line
-    this.infuraId = !!options.infuraId ? options.infuraId : false;
-
     this.CHAIN_ID = options.chainId || 1;
     this.RPC_URL = options.rpcUrl || false;
     this.noUrlCheck = options.noUrlCheck || false;
@@ -6993,14 +6978,13 @@ class Integration extends EventEmitter {
     RPC_URL = this.RPC_URL,
     _noCheck = this.noUrlCheck
   ) {
-    let chainError = false;
     let web3Provider;
     try {
       if (this.runningInApp) {
         if (state.web3Provider) {
           web3Provider = state.web3Provider;
         } else {
-          web3Provider = window.web3.currentProvider;
+          web3Provider = window.ethereum;
         }
       } else {
         let chain, defaultNetwork;
@@ -7013,10 +6997,6 @@ class Integration extends EventEmitter {
           defaultNetwork = this.formatNewNetworks({ name: 'unknown' });
           state.network = defaultNetwork;
         }
-
-        if (this.infuraId && !this.RPC_URL) {
-          RPC_URL = infuraUrlFormater(chain.name, this.infuraId);
-        }
         const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
         const options = {
           subscriptionNotFoundNoThrow: this.subscriptionNotFoundNoThrow
@@ -7028,17 +7008,6 @@ class Integration extends EventEmitter {
           throw Error(
             'Invalid rpc endpoint supplied to MEWconnect during setup'
           );
-        }
-        if (!_noCheck && !this.infuraId) {
-          if (
-            !hostUrl.hostname.includes(chain.name) &&
-            hostUrl.hostname.includes('infura.io')
-          ) {
-            chainError = true;
-            throw Error(
-              `ChainId: ${CHAIN_ID} and infura endpoint ${hostUrl.hostname} don't match`
-            );
-          }
         }
         const parsedUrl = `${hostUrl.protocol}//${
           hostUrl.hostname ? hostUrl.hostname : hostUrl.host
@@ -7073,9 +7042,7 @@ class Integration extends EventEmitter {
       return web3Provider;
     } catch (e) {
       debugErrors$5('makeWeb3Provider ERROR');
-      if (chainError) {
-        throw e;
-      } else {
+      {
         // eslint-disable-next-line
         console.error(e);
       }

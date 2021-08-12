@@ -622,14 +622,14 @@ export default class Integration extends EventEmitter {
       }
     });
 
-    eventHub.on(EventNames.GET_ENCRYPTED_PUBLIC_KEY, resolve => {
+    eventHub.on(EventNames.GET_ENCRYPTED_PUBLIC_KEY, (params, resolve) => {
       if (!state.wallet) {
         this.popUpHandler.showNoticePersistentEnter(
           messageConstants.notConnected
         );
       } else {
         const mewConnect = state.wallet.getConnection();
-        mewConnect.sendRtcMessage('eth_getEncryptionPublicKey', '');
+        mewConnect.sendRtcMessage('eth_getEncryptionPublicKey', params);
         mewConnect.once('eth_getEncryptionPublicKey', data => {
           resolve(data);
         });
