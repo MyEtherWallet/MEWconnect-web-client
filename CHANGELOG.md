@@ -1,5 +1,5 @@
 - ### Release 2.2.0-beta.3
-- change eth_decrypt, eth_getEncryptionPublicKey, eth_sign, eth_signTypedData_v3, personal_sign adhere to the standard
+- change eth_decrypt, eth_getEncryptionPublicKey adhere to the standard
 
 - ### Release 2.2.0-beta.2
 - Fix reference to css background class names in popUpCreator
