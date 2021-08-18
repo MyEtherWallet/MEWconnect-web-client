@@ -1,3 +1,6 @@
+- ### Release 2.2.0-beta.4
+- cleanup and rollup updates
+
 - ### Release 2.2.0-beta.3
 - change eth_decrypt, eth_getEncryptionPublicKey adhere to the standard
 

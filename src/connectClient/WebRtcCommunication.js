@@ -1,17 +1,12 @@
-/* eslint-disable */
-import createLogger from 'logging';
 import debugLogger from 'debug';
-
 import SimplePeer from 'simple-peer';
 import { isBrowser } from 'browser-or-node';
-
 import uuid from 'uuid/v4';
 import MewConnectCommon from './MewConnectCommon';
 
 const debug = debugLogger('MEWconnect:webRTC-communication');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:peer-stages');
-const logger = createLogger('WebRtcCommunication');
 
 export default class WebRtcCommunication extends MewConnectCommon {
   constructor(mewCrypto) {
@@ -47,9 +42,9 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.channelTestTimer = null;
   }
 
-  closeDataChannelForDemo(){
-    if(this.isAlive()){
-      this.p._channel.close()
+  closeDataChannelForDemo() {
+    if (this.isAlive()) {
+      this.p._channel.close();
     }
   }
 
@@ -62,10 +57,10 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   isAlive() {
     if (this.p !== null) {
-      if(this.p._connected && !this.p.destroyed){
+      if (this.p._connected && !this.p.destroyed) {
         return true;
       }
-      return ;
+      return;
     }
     return false;
   }
@@ -178,7 +173,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     }
   }
 
-  receiveAnswer(plainTextOffer, peerID) {
+  receiveAnswer(plainTextOffer) {
     debug('receiveAnswer for version: ', this.usingVersion);
     this.fallbackTimer();
     if (this.tryingTurn && this.usingVersion === 'V1') {
@@ -285,7 +280,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
     }
   }
 
-
   // ----- Failure Handlers
 
   stateChangeListener(peerID, evt) {
@@ -342,9 +336,9 @@ export default class WebRtcCommunication extends MewConnectCommon {
       }
       if (this.isJSON(decryptedData)) {
         const parsed = JSON.parse(decryptedData);
-        if(this.channelTest && parsed.type === 'address'){
+        if (this.channelTest && parsed.type === 'address') {
           this.channelTest = false;
-          debug('new channel connected')
+          debug('new channel connected');
           return;
         }
         this.emit('appData', {
@@ -353,9 +347,9 @@ export default class WebRtcCommunication extends MewConnectCommon {
           id: parsed.id
         });
       } else {
-        if(this.channelTest && decryptedData.type === 'address'){
+        if (this.channelTest && decryptedData.type === 'address') {
           this.channelTest = false;
-          debug('new channel connected')
+          debug('new channel connected');
           return;
         }
         this.emit('appData', {
@@ -367,7 +361,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
       this.initialAddressRequest = 'complete';
     } catch (e) {
       this.uiCommunicator(this.lifeCycle.decryptError);
-      logger.error(e);
+      console.error(e);
       debug('onData ERROR: data=', data);
       debug('onData ERROR: data.toString()=', data.toString());
     }
@@ -393,21 +387,21 @@ export default class WebRtcCommunication extends MewConnectCommon {
     debug('peerID', peerID);
     debug(err.code);
     debug('error', err);
-    if(err.code && this.connected){
-      if (err.code.includes('ERR_DATA_CHANNEL') ) {
+    if (err.code && this.connected) {
+      if (err.code.includes('ERR_DATA_CHANNEL')) {
         if (this.isAlive() && this.p.createNewDataChannel) {
           try {
-            debug('re-create dataChannel')
+            debug('re-create dataChannel');
             this.p.createNewDataChannel(uuid());
-            if(!this.channelTest && !this.outstandingMobileMessage){
+            if (!this.channelTest && !this.outstandingMobileMessage) {
               this.channelTest = true;
               // this.sendRtcMessage('address', '', '123')
               this.channelTestTimer = setTimeout(() => {
-                if(this.channelTest){
-                  debug('new data channel failed to respond')
+                if (this.channelTest) {
+                  debug('new data channel failed to respond');
                   this.disconnectRTC();
                 }
-              }, 5000)
+              }, 5000);
               return;
             }
           } catch (e) {
@@ -460,7 +454,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
       `[WebRTC Comm - SEND RTC MESSAGE] type:  ${type},  message:  ${msg}, id: ${id}`
     );
     this.rtcSend(JSON.stringify({ type, data: msg, id })).catch(err => {
-      logger.error(err)
+      console.error(err);
       debug(err);
     });
   }
@@ -485,7 +479,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
         this.instance = null;
       }
     } catch (e) {
-      logger.error(e)
+      console.error(e);
       debug(e);
     }
   }
@@ -506,11 +500,11 @@ export default class WebRtcCommunication extends MewConnectCommon {
       } else {
         // eslint-disable-next-line
         this.uiCommunicator(this.lifeCycle.attemptedDisconnectedSend);
-        logger.error(Error('No connection present to send'))
+        console.error(Error('No connection present to send'));
         return false;
       }
     } catch (e) {
-      logger.error(e)
+      console.error(e);
       debug(e);
     }
   }
@@ -526,7 +520,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
       try {
         this.p.destroy();
       } catch (e) {
-        logger.error(e)
+        console.error(e);
       }
     }
   }

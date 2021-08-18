@@ -1,9 +1,5 @@
-/* eslint-disable */
 'use strict';
-
 import queryString from 'query-string';
-// uncomment below to run tests
-// import WebSocket from 'promise-ws';
 import 'isomorphic-ws';
 import debugLogger from 'debug';
 
@@ -26,7 +22,7 @@ export default class WebsocketConnection {
     this.keepAlive = {
       ping: 'ping',
       pong: 'pong'
-    }
+    };
   }
 
   /**
@@ -131,7 +127,7 @@ export default class WebsocketConnection {
         debugPeer('parsedMessage: message data', parsedMessage.data);
       }
 
-      if(parsedMessage.signal === 'ping' || parsedMessage.signal === 'pong') {
+      if (parsedMessage.signal === 'ping' || parsedMessage.signal === 'pong') {
         return;
       }
       const signal = parsedMessage.signal;
@@ -155,7 +151,7 @@ export default class WebsocketConnection {
 
   onClose() {
     debug(`websocket onClose = ${this.getSocketState()}`);
-    if(this.listeners['onClose']){
+    if (this.listeners['onClose']) {
       this.listeners['onClose'].call(this);
     }
   }

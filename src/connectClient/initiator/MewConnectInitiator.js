@@ -1,5 +1,3 @@
-/* eslint-disable */
-// import createLogger from 'logging';
 import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
 import { V1endpoint, V2endpoint } from '../config';
@@ -212,17 +210,6 @@ export default class MewConnectInitiator extends MewConnectCommon {
 
       qrString = qrCodeString;
 
-      const unloadOrClosed = () => {
-        if (!this.connected) {
-          // eslint-disable-next-line no-console
-          debug('popup window closed');
-          this.uiCommunicator('popup_window_closed');
-          MewConnectInitiator.setConnectionState();
-          this.socketDisconnect();
-          this.emit(this.lifeCycle.AuthRejected);
-        }
-      };
-
       debug(qrCodeString);
     } catch (e) {
       debug('displayCode error:', e);
@@ -399,14 +386,10 @@ Keys
         connId: this.connId
       });
     } catch (e) {
-      // eslint-disable-next-line
       console.error(e);
       this.V1 = {};
     }
 
-    if (!this.V2) {
-    }
-    // this.ShowQr(qrString);
     this.webRtcCommunication.setActiveInitiatorId(this.V2.initiatorId);
     const connectionErrorTimeOut = setTimeout(() => {
       window.alert('Failed to start MEWconnect. Please try again.');
@@ -442,7 +425,7 @@ Keys
 
     this.webRtcCommunication.once(
       this.jsonDetails.lifeCycle.RtcConnectedEvent,
-      peerid => {
+      () => {
         this.webRtcCommunication.removeAllListeners(
           this.jsonDetails.lifeCycle.RtcConnectedEvent
         );
@@ -485,12 +468,11 @@ Keys
 
   dataReceived(data) {
     debug('dataReceived', data);
-    // this.webRtcCommunication.once('appData', this.dataReceived.bind(this));
     if (data.id) {
       debug('MESSAGE ID RECEIVED', data.id);
       if (this.requestIds.includes(data.id)) {
         this.uiCommunicator(data.type, data.data);
-        const idx = this.requestIds.findIndex(item => item === id);
+        const idx = this.requestIds.findIndex(item => item === data.id);
         this.requestIds.splice(idx, 1);
         debug('MESSAGE IDS KNOWN', this.requestIds);
       } else {

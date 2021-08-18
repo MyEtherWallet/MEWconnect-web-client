@@ -1,4 +1,3 @@
-/* eslint-disable */
 import PopUpHandler from '../connectWindow/popUpHandler';
 import Initiator from '../connectClient/MewConnectInitiator';
 import Web3 from 'web3';
@@ -12,7 +11,7 @@ import { Transaction } from 'ethereumjs-tx';
 import { messageConstants } from '../messages';
 import debugLogger from 'debug';
 import PopUpCreator from '../connectWindow/popUpCreator';
-import { nativeCheck, mobileCheck } from './platformDeepLinking';
+import { nativeCheck } from './platformDeepLinking';
 import { DISCONNECTED, CONNECTING, CONNECTED } from '../config';
 import packageJson from '../../package.json';
 
@@ -24,7 +23,6 @@ let state = {
 };
 const eventHub = new EventEmitter();
 let popUpCreator = {};
-const recentDataRecord = [];
 
 export default class Integration extends EventEmitter {
   constructor(options = {}) {
@@ -151,6 +149,7 @@ export default class Integration extends EventEmitter {
     if (state.wallet) {
       return state.wallet;
     }
+    return null;
   }
 
   enable() {
@@ -158,7 +157,7 @@ export default class Integration extends EventEmitter {
       MEWconnectWallet.setConnectionState(DISCONNECTED);
     });
     if (this.runningInApp) {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         state.web3Provider
           .request({
             method: 'eth_requestAccounts',
@@ -260,12 +259,7 @@ export default class Integration extends EventEmitter {
     return 'ETH';
   }
 
-  makeWeb3Provider(
-    CHAIN_ID = this.CHAIN_ID,
-    RPC_URL = this.RPC_URL,
-    _noCheck = this.noUrlCheck
-  ) {
-    let chainError = false;
+  makeWeb3Provider(CHAIN_ID = this.CHAIN_ID, RPC_URL = this.RPC_URL) {
     let web3Provider;
     try {
       if (this.runningInApp) {
@@ -330,12 +324,7 @@ export default class Integration extends EventEmitter {
       return web3Provider;
     } catch (e) {
       debugErrors('makeWeb3Provider ERROR');
-      if (chainError) {
-        throw e;
-      } else {
-        // eslint-disable-next-line
-        console.error(e);
-      }
+      console.error(e);
     }
   }
 
@@ -454,7 +443,6 @@ export default class Integration extends EventEmitter {
   }
 
   setupListeners() {
-    const transactionCache = [];
     eventHub.on(EventNames.SHOW_TX_CONFIRM_MODAL, (tx, resolve) => {
       // this.responseFunction = resolve;
       if (!state.wallet) {
@@ -605,7 +593,7 @@ export default class Integration extends EventEmitter {
       this.lastHash = null;
       this.popUpHandler.showNotice(messageConstants.complete);
     });
-    eventHub.on('Error', e => {
+    eventHub.on('Error', () => {
       state.knownHashes = [];
       debugErrors('SendTx:Error ERROR');
       if (this.lastHash !== null) {

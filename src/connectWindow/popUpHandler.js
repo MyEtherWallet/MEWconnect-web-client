@@ -2,10 +2,6 @@ import { notifierCSS, connectedNotifierCSS } from './popupStyles';
 import { noticeHtml, connectedNoticeHtml } from './popupHtml';
 import { spaceman, closeIconBlack, closeIconWhite } from './images/index';
 import { getMessage } from './messageCreator';
-// import debugLogger from 'debug';
-
-// TODO add debug logging
-// const debug = debugLogger('MEWconnect:popup-handler');
 
 export default class PopUpHandler {
   constructor() {
