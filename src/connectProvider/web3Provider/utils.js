@@ -1,4 +1,4 @@
-import { bufferToInt } from 'ethereumjs-util';
+import { bufferToInt } from 'ethereumjs-utils';
 
 const getBufferFromHex = hex => {
   hex = sanitizeHex(hex);

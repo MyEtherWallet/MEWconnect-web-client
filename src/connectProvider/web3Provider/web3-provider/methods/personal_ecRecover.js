@@ -1,7 +1,7 @@
 /* eslint-disable */
 import misc from '../../helpers/misc';
 import { toError, toPayload } from '../jsonrpc';
-import utils from 'ethereumjs-util';
+import utils from 'ethereumjs-utils';
 
 export default async ({ payload }, res, next) => {
   if (payload.method !== 'personal_ecRecover') return next();

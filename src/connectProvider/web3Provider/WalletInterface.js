@@ -16,7 +16,7 @@ import {
   privateToPublic,
   isHexString,
   toBuffer as utilsToBuffer
-} from 'ethereumjs-util';
+} from 'ethereumjs-utils';
 import { toChecksumAddress } from './helpers/addressUtils';
 
 const toBuffer = v => {

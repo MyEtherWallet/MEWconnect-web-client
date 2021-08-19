@@ -1,5 +1,5 @@
 import eccrypto from 'eccrypto';
-import ethUtils from 'ethereumjs-util';
+import ethUtils from 'ethereumjs-utils';
 import crypto from 'crypto';
 import secp256k1 from 'secp256k1';
 

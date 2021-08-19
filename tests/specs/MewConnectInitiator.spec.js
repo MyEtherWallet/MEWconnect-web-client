@@ -1,53 +1,49 @@
-import 'regenerator-runtime/runtime';
 import { expect as chaiExpect } from 'chai';
 import debug from 'debug';
-import * as MewConnectSrc from '../../src/connectClient/index';
+import * as MewConnectSrc from '../../src/connectClient/';
 import MewConnectReceiver from '../helpers/MewConnectReceiver';
 
 const connectLogger = debug('test:Connect');
 const fallbackLogger = debug('test:Fallback');
 
-const signalUrl = typeof signalServer !== 'undefined' ? signalServer : 'wss://connect2.mewapi.io/staging';
-
-
+const signalUrl = 'wss://connect2.mewapi.io/staging';
 
 describe('Check Base Connection Operation', () => {
   if (typeof mocha === 'undefined') {
     const wrtc = require('wrtc');
 
     Object.defineProperties(window, {
-      'MediaStream': {
+      MediaStream: {
         value: wrtc.MediaStream
       },
-      'MediaStreamTrack': {
+      MediaStreamTrack: {
         value: wrtc.MediaStreamTrack
       },
-      'RTCDataChannel': {
+      RTCDataChannel: {
         value: wrtc.RTCDataChannel
       },
-      'RTCDataChannelEvent': {
+      RTCDataChannelEvent: {
         value: wrtc.RTCDataChannelEvent
       },
-      'RTCIceCandidate': {
+      RTCIceCandidate: {
         value: wrtc.RTCIceCandidate
       },
-      'RTCPeerConnection': {
+      RTCPeerConnection: {
         value: wrtc.RTCPeerConnection
       },
-      'RTCPeerConnectionIceEvent': {
+      RTCPeerConnectionIceEvent: {
         value: wrtc.RTCPeerConnectionIceEvent
       },
-      'RTCRtpReceiver': {
+      RTCRtpReceiver: {
         value: wrtc.RTCRtpReceiver
       },
-      'RTCRtpSender': {
+      RTCRtpSender: {
         value: wrtc.RTCRtpSender
       },
-      'RTCSessionDescription': {
+      RTCSessionDescription: {
         value: wrtc.RTCSessionDescription
       }
     });
-
   }
   it('should connect', function(done) {
     if (typeof mocha !== 'undefined') this.timeout(7000);
@@ -108,12 +104,24 @@ describe('Check Base Connection Operation', () => {
       mewConnectClient.on('RtcConnectedEvent', () => {
         setTimeout(() => {
           mewConnectClient.disconnectRTC();
-          chaiExpect(intSignals).to.be.an('array').to.include.members(['signatureCheck', 'SocketConnectedEvent', 'sendOffer', 'answerReceived', 'codeDisplay', 'RtcInitiatedEvent']);
+          chaiExpect(intSignals)
+            .to.be.an('array')
+            .to.include.members([
+              'signatureCheck',
+              'SocketConnectedEvent',
+              'sendOffer',
+              'answerReceived',
+              'codeDisplay',
+              'RtcInitiatedEvent'
+            ]);
           chaiExpect(intSignals).to.not.include(['UsingFallback']);
 
           completed.push('Initiator');
           connectLogger('intSignals', intSignals);
-          if (completed.includes('Initiator') && completed.includes('Receiver')) {
+          if (
+            completed.includes('Initiator') &&
+            completed.includes('Receiver')
+          ) {
             done();
           }
         }, 1000);
@@ -122,17 +130,21 @@ describe('Check Base Connection Operation', () => {
       recieverPeer.on('RtcConnectedEvent', () => {
         setTimeout(() => {
           recieverPeer.disconnectRTC();
-          chaiExpect(recSignals).to.be.an('array').to.include.members(['RtcInitiatedEvent', 'signatureCheck']);
+          chaiExpect(recSignals)
+            .to.be.an('array')
+            .to.include.members(['RtcInitiatedEvent', 'signatureCheck']);
           completed.push('Receiver');
           connectLogger('recSignals', recSignals);
-          if (completed.includes('Initiator') && completed.includes('Receiver')) {
+          if (
+            completed.includes('Initiator') &&
+            completed.includes('Receiver')
+          ) {
             done();
           }
         }, 1000);
       });
     });
   }, 7000);
-
 });
 
 xdescribe('Check Fallback Operation', () => {
@@ -140,38 +152,37 @@ xdescribe('Check Fallback Operation', () => {
     const wrtc = require('wrtc');
 
     Object.defineProperties(window, {
-      'MediaStream': {
+      MediaStream: {
         value: wrtc.MediaStream
       },
-      'MediaStreamTrack': {
+      MediaStreamTrack: {
         value: wrtc.MediaStreamTrack
       },
-      'RTCDataChannel': {
+      RTCDataChannel: {
         value: wrtc.RTCDataChannel
       },
-      'RTCDataChannelEvent': {
+      RTCDataChannelEvent: {
         value: wrtc.RTCDataChannelEvent
       },
-      'RTCIceCandidate': {
+      RTCIceCandidate: {
         value: wrtc.RTCIceCandidate
       },
-      'RTCPeerConnection': {
+      RTCPeerConnection: {
         value: wrtc.RTCPeerConnection
       },
-      'RTCPeerConnectionIceEvent': {
+      RTCPeerConnectionIceEvent: {
         value: wrtc.RTCPeerConnectionIceEvent
       },
-      'RTCRtpReceiver': {
+      RTCRtpReceiver: {
         value: wrtc.RTCRtpReceiver
       },
-      'RTCRtpSender': {
+      RTCRtpSender: {
         value: wrtc.RTCRtpSender
       },
-      'RTCSessionDescription': {
+      RTCSessionDescription: {
         value: wrtc.RTCSessionDescription
       }
     });
-
   }
   it('should call fallback', function(done) {
     if (typeof mocha !== 'undefined') {
@@ -217,7 +228,6 @@ xdescribe('Check Fallback Operation', () => {
       });
       recieverPeer.on('RtcInitiatedEvent', () => {
         recSignals.push('RtcInitiatedEvent');
-
       });
       recieverPeer.on('UsingFallback', () => {
         console.log('UsingFallback - event');
@@ -250,9 +260,22 @@ xdescribe('Check Fallback Operation', () => {
         setTimeout(() => {
           mewConnectClient.disconnectRTC();
           fallbackLogger('intSignals', intSignals);
-          chaiExpect(intSignals).to.be.an('array').to.include.members(['UsingFallback', 'signatureCheck', 'SocketConnectedEvent', 'sendOffer', 'answerReceived', 'codeDisplay', 'RtcInitiatedEvent']);
+          chaiExpect(intSignals)
+            .to.be.an('array')
+            .to.include.members([
+              'UsingFallback',
+              'signatureCheck',
+              'SocketConnectedEvent',
+              'sendOffer',
+              'answerReceived',
+              'codeDisplay',
+              'RtcInitiatedEvent'
+            ]);
           completed.push('Initiator');
-          if (completed.includes('Initiator') && completed.includes('Receiver')) {
+          if (
+            completed.includes('Initiator') &&
+            completed.includes('Receiver')
+          ) {
             done();
           }
         }, 500);
@@ -262,16 +285,23 @@ xdescribe('Check Fallback Operation', () => {
         setTimeout(() => {
           recieverPeer.disconnectRTC();
           fallbackLogger('recSignals', recSignals);
-          chaiExpect(recSignals).to.be.an('array').to.include.members(['RtcInitiatedEvent', 'signatureCheck', 'UsingFallback']);
+          chaiExpect(recSignals)
+            .to.be.an('array')
+            .to.include.members([
+              'RtcInitiatedEvent',
+              'signatureCheck',
+              'UsingFallback'
+            ]);
           completed.push('Receiver');
 
-          if (completed.includes('Initiator') && completed.includes('Receiver')) {
+          if (
+            completed.includes('Initiator') &&
+            completed.includes('Receiver')
+          ) {
             done();
           }
         }, 500);
       });
-
     });
   });
-
 });

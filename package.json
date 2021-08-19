@@ -1,7 +1,7 @@
 {
   "name": "@myetherwallet/mewconnect-web-client",
   "homepage": "https://github.com/myetherwallet/MEWconnect-web-client",
-  "version": "2.2.0-beta.4",
+  "version": "2.2.0-beta.6",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "test": "npm run test:jest",
     "buildBrowserTest": "webpack --config tests/browser/webpack.config.js",
     "buildBrowserTest:watch": "webpack --config tests/browser/webpack.config.js -w",
-    "build": "npm run lint && rimraf dist/ && npx rollup -c && babel dist/cjs --out-dir dist/cjs && babel dist/esm --out-dir dist/esm",
+    "build": "npm run lint && rimraf dist/ && npx rollup -c",
     "build:dev": "rimraf dist/ && npx rollup -c",
     "lint": "npx eslint --fix 'src/**.js'",
     "update:mainlist": "node src/connectProvider/fetchLists/fetchMainLists.js",
@@ -25,6 +25,8 @@
     "pre-commit": "npm run lint"
   },
   "dependencies": {
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "bignumber.js": "^9.0.0",
     "browser-or-node": "^1.2.1",
@@ -32,6 +34,7 @@
     "debug": "^4.0.1",
     "detect-browser": "^3.0.1",
     "eccrypto": "^1.1.3",
+    "eth-sig-util": "^3.0.1",
     "ethereumjs-common": "^1.5.0",
     "ethereumjs-tx": "^2.1.2",
     "ethereumjs-utils": "^5.2.5",
@@ -102,9 +105,5 @@
     "url-loader": "^3.0.0",
     "vue-template-compiler": "^2.6.10",
     "yorkie": "^2.0.0"
-  },
-  "optionalDependencies": {
-    "eth-sig-util": "^3.0.1",
-    "ethereumjs-util": "^5.2.1"
   }
 }

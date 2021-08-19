@@ -141,7 +141,7 @@ const getTimer = () => {
     const url = URL.createObjectURL(
       new Blob([workerCode()], { type: 'text/javascript' })
     );
-    worker = new Worker(url);
+    const worker = new Worker(url);
     worker.onmessage = Timer.onmessage;
     return Timer;
   }

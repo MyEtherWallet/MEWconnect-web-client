@@ -1,9 +1,9 @@
-'use strict'
+'use strict';
 
-import crypto from 'crypto'
-import eccrypto from 'eccrypto'
-import ethUtils from 'ethereumjs-util'
-import secp256k1 from 'secp256k1'
+import crypto from 'crypto';
+import eccrypto from 'eccrypto';
+import ethUtils from 'ethereumjs-utils';
+import secp256k1 from 'secp256k1';
 
 export default (() => {
   /**
@@ -12,13 +12,13 @@ export default (() => {
    * @return {Object} - publicKey/privateKey object
    */
   const generateKeys = () => {
-    let privateKey = Buffer.from(crypto.randomBytes(32), 'hex')
-    let publicKey = secp256k1.publicKeyCreate(privateKey)
+    const privateKey = Buffer.from(crypto.randomBytes(32), 'hex');
+    const publicKey = secp256k1.publicKeyCreate(privateKey);
     return {
       publicKey,
       privateKey
-    }
-  }
+    };
+  };
 
   /**
    * Generate a connId using given a public key
@@ -27,8 +27,8 @@ export default (() => {
    * @return {String} - connId string
    */
   const generateConnId = publicKey => {
-    return publicKey.toString('hex').slice(-32)
-  }
+    return publicKey.toString('hex').slice(-32);
+  };
 
   /**
    * Generate a random message of 32 bytes
@@ -36,15 +36,15 @@ export default (() => {
    * @return {String} - The randomly generated string
    */
   const generateRandomMessage = () => {
-    return crypto.randomBytes(32).toString('hex')
-  }
+    return crypto.randomBytes(32).toString('hex');
+  };
 
-  const   bufferToString = (buf) => {
+  const bufferToString = buf => {
     if (buf instanceof Buffer) {
       return buf.toString('hex');
     }
     return buf;
-  }
+  };
 
   /**
    * Sign a message using a privateKey
@@ -54,19 +54,21 @@ export default (() => {
    * @return {String} - Signed message
    */
   const signMessage = (msg, privateKey) => {
-    let hashedMsg = ethUtils.hashPersonalMessage(ethUtils.toBuffer(bufferToString(msg)))
-    let signed = ethUtils.ecsign(
+    const hashedMsg = ethUtils.hashPersonalMessage(
+      ethUtils.toBuffer(bufferToString(msg))
+    );
+    const signed = ethUtils.ecsign(
       Buffer.from(hashedMsg),
       Buffer.from(privateKey, 'hex')
-    )
-    let combined = Buffer.concat([
+    );
+    const combined = Buffer.concat([
       Buffer.from([signed.v]),
       Buffer.from(signed.r),
       Buffer.from(signed.s)
-    ])
-    let combinedHex = combined.toString('hex')
-    return combinedHex
-  }
+    ]);
+    const combinedHex = combined.toString('hex');
+    return combinedHex;
+  };
 
   /**
    * Encrypt a set of data given a private key using eccrypto
@@ -78,17 +80,17 @@ export default (() => {
    */
   const encrypt = async (data, privateKey) => {
     return new Promise((resolve, reject) => {
-      let publicKey = eccrypto.getPublic(privateKey)
+      const publicKey = eccrypto.getPublic(privateKey);
       eccrypto
         .encrypt(publicKey, Buffer.from(data))
         .then(encryptedData => {
-          resolve(encryptedData)
+          resolve(encryptedData);
         })
         .catch(error => {
-          reject(error)
-        })
-    })
-  }
+          reject(error);
+        });
+    });
+  };
 
   /**
    * Decrypt an encrypted data object given a private key using eccrypto
@@ -107,37 +109,37 @@ export default (() => {
           mac: Buffer.from(data.mac)
         })
         .then(decrypted => {
-          let result
+          let result;
           try {
             if (isJSON(decrypted)) {
-              const humanRadable = JSON.parse(decrypted)
+              const humanRadable = JSON.parse(decrypted);
               if (Array.isArray(humanRadable)) {
-                result = humanRadable[0]
+                result = humanRadable[0];
               } else {
-                result = humanRadable
+                result = humanRadable;
               }
             } else {
-              result = decrypted.toString()
+              result = decrypted.toString();
             }
           } catch (e) {
-            reject(e)
+            reject(e);
           }
-          resolve(JSON.stringify(result))
+          resolve(JSON.stringify(result));
         })
         .catch(error => {
-          reject(error)
-        })
-    })
-  }
+          reject(error);
+        });
+    });
+  };
 
   const isJSON = arg => {
     try {
-      JSON.parse(arg)
-      return true
+      JSON.parse(arg);
+      return true;
     } catch (e) {
-      return false
+      return false;
     }
-  }
+  };
 
   return {
     generateKeys,
@@ -146,5 +148,5 @@ export default (() => {
     signMessage,
     encrypt,
     decrypt
-  }
-})()
+  };
+})();

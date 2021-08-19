@@ -1,3 +1,6 @@
+- ### Release 2.2.0-beta.6
+- update rollup and more cleanup
+
 - ### Release 2.2.0-beta.4
 - cleanup and rollup updates
 

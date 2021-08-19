@@ -8,7 +8,7 @@ import {
   getBufferFromHex,
   calculateChainIdFromV
 } from '../utils';
-import { hashPersonalMessage } from 'ethereumjs-util';
+import { hashPersonalMessage } from 'ethereumjs-utils';
 import errorHandler from './errorHandler';
 import commonGenerator from '../helpers/commonGenerator';
 import Misc from '../helpers/misc';

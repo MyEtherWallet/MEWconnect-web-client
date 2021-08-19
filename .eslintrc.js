@@ -4,6 +4,7 @@ module.exports = {
     ROUTER_MODE: 'readonly',
     NODE_ENV: 'readonly'
   },
+  ignorePatterns: ['dist/**/*.js'],
   root: true,
   env: {
     node: true,

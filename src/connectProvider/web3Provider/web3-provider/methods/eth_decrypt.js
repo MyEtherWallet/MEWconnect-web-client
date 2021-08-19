@@ -3,7 +3,7 @@ import { toError, toPayload } from '../jsonrpc';
 import EventNames from '../events';
 import debugLogger from 'debug';
 import { isHexStrict } from 'web3-utils';
-import { bufferToHex } from 'ethereumjs-util';
+import { bufferToHex } from 'ethereumjs-utils';
 const debug = debugLogger('MEWconnectWeb3');
 const debugErrors = debugLogger('MEWconnectError');
 

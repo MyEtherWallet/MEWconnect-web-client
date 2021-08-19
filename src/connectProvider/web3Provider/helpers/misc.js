@@ -1,7 +1,7 @@
 import { isAddress } from './addressUtils';
 import url from 'url';
 import utils from 'web3-utils';
-import { isHexString, toBuffer as utilsToBuffer } from 'ethereumjs-util';
+import { isHexString, toBuffer as utilsToBuffer } from 'ethereumjs-utils';
 import { uint, address, string, bytes, bool } from './solidityTypes';
 
 const toBuffer = v => {
