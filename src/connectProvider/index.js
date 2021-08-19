@@ -3,7 +3,7 @@ import Initiator from '../connectClient/MewConnectInitiator';
 import Web3 from 'web3';
 import MEWProvider from './web3Provider/web3-provider/index';
 import MEWconnectWallet from './web3Provider/MEWconnect/index';
-import Networks from './web3Provider/networks/index';
+import * as Networks from './web3Provider/networks/types';
 import url from 'url';
 import EventEmitter from 'events';
 import EventNames from './web3Provider/web3-provider/events';
@@ -62,27 +62,19 @@ export default class Integration extends EventEmitter {
 
   formatNewNetworks(newNetwork) {
     return {
-      type: {
-        name: newNetwork.name,
-        name_long: newNetwork.name_long || newNetwork.name,
-        homePage: newNetwork.homePage || '',
-        blockExplorerTX: newNetwork.blockExplorerTX || '',
-        blockExplorerAddr: newNetwork.blockExplorerAddr || '',
-        chainID: newNetwork.chainId
-          ? newNetwork.chainId
-          : newNetwork.chainID
-          ? newNetwork.chainID
-          : this.CHAIN_ID,
-        tokens: newNetwork.tokens || [],
-        contracts: [],
-        currencyName: newNetwork.currencyName || newNetwork.name
-      },
-      service: newNetwork.serviceName || newNetwork.name,
-      url: newNetwork.url || this.RPC_URL,
-      port: 443,
-      auth: false,
-      username: '',
-      password: ''
+      name: newNetwork.name,
+      name_long: newNetwork.name_long || newNetwork.name,
+      homePage: newNetwork.homePage || '',
+      blockExplorerTX: newNetwork.blockExplorerTX || '',
+      blockExplorerAddr: newNetwork.blockExplorerAddr || '',
+      chainID: newNetwork.chainId
+        ? newNetwork.chainId
+        : newNetwork.chainID
+        ? newNetwork.chainID
+        : this.CHAIN_ID,
+      tokens: newNetwork.tokens || [],
+      contracts: [],
+      currencyName: newNetwork.currencyName || newNetwork.name
     };
   }
 
@@ -92,29 +84,25 @@ export default class Integration extends EventEmitter {
       const additional = newNetworks
         .map(this.formatNewNetworks)
         .reduce((acc, curr) => {
-          acc[curr.type.name] = curr;
+          acc[curr.name] = curr;
         }, {});
-      networks = { ...networks, ...additional };
+      networks = Object.assign(networks, additional);
+      this.networks = networks;
     } catch (e) {
-      // eslint-disable-next-line
       console.error(e);
     }
-    return Object.keys(networks).reduce(
-      (acc, curr) => {
-        if (networks[curr].length === 0) return acc;
-        acc.push({
-          name:
-            networks[curr][0].type.name_long === 'Ethereum'
-              ? 'mainnet'
-              : networks[curr][0].type.name_long.toLowerCase(),
-          chainId: networks[curr][0].type.chainID,
-          key: networks[curr][0].type.name
-        });
-        this.knownNetworks.add(networks[curr][0].type.chainID);
-        return acc;
-      },
-      [{ name: 'mainnet', chainId: 1, key: 'ETH' }]
-    );
+    return Object.keys(networks).reduce((acc, curr) => {
+      acc.push({
+        name:
+          networks[curr].name_long === 'Ethereum'
+            ? 'mainnet'
+            : networks[curr].name_long.toLowerCase(),
+        chainId: networks[curr].chainID,
+        key: networks[curr].name
+      });
+      this.knownNetworks.add(networks[curr].chainID);
+      return acc;
+    }, []);
   }
 
   showNotifierDemo(details) {
@@ -123,7 +111,7 @@ export default class Integration extends EventEmitter {
         type: messageConstants.sent,
         hash:
           '0x543284135d7821e0271272df721101420003cb0e43e8c2e2eed1451cdb571fa4',
-        explorerPath: state.network.type.blockExplorerTX
+        explorerPath: state.network.blockExplorerTX
       });
     } else {
       this.popUpHandler.showNotice(details);
@@ -269,17 +257,15 @@ export default class Integration extends EventEmitter {
           web3Provider = window.ethereum;
         }
       } else {
-        let chain, defaultNetwork;
         if (this.knownNetworks.has(CHAIN_ID)) {
-          chain = this.identifyChain(CHAIN_ID || 1);
-          defaultNetwork = Networks[chain.key][0];
-          state.network = defaultNetwork;
+          const chain = this.identifyChain(CHAIN_ID || 1);
+          state.network = this.networks[chain.key];
         } else {
-          chain = { name: 'unknown' };
-          defaultNetwork = this.formatNewNetworks({ name: 'unknown' });
-          state.network = defaultNetwork;
+          throw new Error(
+            'Unknown network, please add your network to the constructor'
+          );
         }
-        const hostUrl = url.parse(RPC_URL || defaultNetwork.url);
+        const hostUrl = url.parse(RPC_URL);
         const options = {
           subscriptionNotFoundNoThrow: this.subscriptionNotFoundNoThrow
         };
@@ -583,7 +569,7 @@ export default class Integration extends EventEmitter {
         {
           type: messageConstants.sent,
           hash: hash,
-          explorerPath: state.network.type.blockExplorerTX
+          explorerPath: state.network.blockExplorerTX
         },
         10000
       );
@@ -601,7 +587,7 @@ export default class Integration extends EventEmitter {
           {
             type: messageConstants.failed,
             hash: this.lastHash,
-            explorerPath: state.network.type.blockExplorerTX
+            explorerPath: state.network.blockExplorerTX
           },
           10000
         );

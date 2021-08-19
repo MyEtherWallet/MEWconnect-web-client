@@ -293,7 +293,7 @@ function _nonIterableSpread() {
 
 var name = "@myetherwallet/mewconnect-web-client";
 var homepage = "https://github.com/myetherwallet/MEWconnect-web-client";
-var version = "2.2.0-beta.6";
+var version = "2.2.0-beta.7";
 var main = "dist/cjs/index.js";
 var module = "dist/esm/index.js";
 var scripts = {
@@ -5774,14 +5774,12 @@ var getTimer = function getTimer() {
   } else if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope // eslint-disable-line
   ) {
       return createTimerObject();
-    } else {
+    } else if (worker === undefined) {
     var url = URL.createObjectURL(new Blob([workerCode()], {
       type: 'text/javascript'
     }));
-
-    var _worker = new Worker(url);
-
-    _worker.onmessage = Timer.onmessage;
+    worker = new Worker(url);
+    worker.onmessage = Timer.onmessage;
     return Timer;
   }
 };
@@ -6860,7 +6858,7 @@ var MEWProvider = function MEWProvider(host, options, store, eventHub) {
   }
 };
 
-var tokens$1 = [
+var tokens$4 = [
 	{
 		symbol: "$AAPL",
 		address: "0x41eFc0253ee7Ea44400abB5F907FDbfdEbc82bec",
@@ -35335,7 +35333,7 @@ var ETH = {
   blockExplorerTX: 'https://etherscan.io/tx/[[txHash]]',
   blockExplorerAddr: 'https://etherscan.io/address/[[address]]',
   chainID: 1,
-  tokens: tokens$1,
+  tokens: tokens$4,
   contracts: [],
   currencyName: 'ETH'
 };
@@ -35369,7 +35367,7 @@ var KOV = {
   currencyName: 'KOV'
 };
 
-var tokens = [
+var tokens$3 = [
 	{
 		symbol: "*PLASMA",
 		address: "0x95D7321EdCe519419ba1DbC60A89bAfbF55EAC0D",
@@ -35519,80 +35517,2635 @@ var ROP = {
   blockExplorerTX: 'https://ropsten.etherscan.io/tx/[[txHash]]',
   blockExplorerAddr: 'https://ropsten.etherscan.io/address/[[address]]',
   chainID: 3,
-  tokens: tokens,
+  tokens: tokens$3,
   contracts: [],
   currencyName: 'ROP'
 };
 
-var types = /*#__PURE__*/Object.freeze({
+var tokens$2 = [
+	{
+		symbol: "$DG",
+		address: "0x2a93172c8DCCbfBC60a39d56183B7279a2F647b4",
+		decimals: 18
+	},
+	{
+		symbol: "0xBTC",
+		address: "0x71B821aa52a49F32EEd535fCA6Eb5aa130085978",
+		decimals: 8
+	},
+	{
+		symbol: "AAVE",
+		address: "0xD6DF932A45C0f255f85145f286eA0b292B21C90B",
+		decimals: 18
+	},
+	{
+		symbol: "AGA",
+		address: "0x033d942A6b495C4071083f4CDe1f17e986FE856c",
+		decimals: 4
+	},
+	{
+		symbol: "AGAr",
+		address: "0xF84BD51eab957c2e7B7D646A3427C5A50848281D",
+		decimals: 8
+	},
+	{
+		symbol: "amAAVE",
+		address: "0x1d2a0E5EC8E5bBDCA5CB219e649B565d8e5c3360",
+		decimals: 18
+	},
+	{
+		symbol: "amDAI",
+		address: "0x27F8D03b3a2196956ED754baDc28D73be8830A6e",
+		decimals: 18
+	},
+	{
+		symbol: "amUSDC",
+		address: "0x1a13F4Ca1d028320A707D99520AbFefca3998b7F",
+		decimals: 6
+	},
+	{
+		symbol: "amUSDT",
+		address: "0x60D55F02A771d515e077c9C2403a1ef324885CeC",
+		decimals: 6
+	},
+	{
+		symbol: "amWBTC",
+		address: "0x5c2ed810328349100A66B82b78a1791B101C9D61",
+		decimals: 8
+	},
+	{
+		symbol: "amWETH",
+		address: "0x28424507fefb6f7f8E9D3860F56504E4e5f5f390",
+		decimals: 18
+	},
+	{
+		symbol: "amWMATIC",
+		address: "0x8dF3aad3a84da6b69A4DA8aeC3eA40d9091B2Ac4",
+		decimals: 18
+	},
+	{
+		symbol: "ANY",
+		address: "0x6aB6d61428fde76768D7b45D8BFeec19c6eF91A8",
+		decimals: 18
+	},
+	{
+		symbol: "ARIA20",
+		address: "0x46F48FbdedAa6F5500993BEDE9539ef85F4BeE8e",
+		decimals: 18
+	},
+	{
+		symbol: "AZUKI",
+		address: "0x7CdC0421469398e0F3aA8890693d86c840Ac8931",
+		decimals: 18
+	},
+	{
+		symbol: "bBADGER",
+		address: "0x2628D301b161DB70E3dBbAc88d9D900cA426fF02",
+		decimals: 18
+	},
+	{
+		symbol: "bDIGG",
+		address: "0xFDde616084427f0A231D0664a985E1F820E34693",
+		decimals: 18
+	},
+	{
+		symbol: "BIFI",
+		address: "0xFbdd194376de19a88118e84E279b977f165d01b8",
+		decimals: 18
+	},
+	{
+		symbol: "BTU",
+		address: "0xFdc26CDA2d2440d0E83CD1DeE8E8bE48405806DC",
+		decimals: 18
+	},
+	{
+		symbol: "BURNER",
+		address: "0x0000000000000000000000000000000000000000",
+		decimals: 0
+	},
+	{
+		symbol: "CC10",
+		address: "0x9c49BA0212Bb5Db371e66b59D1565b7c06E4894e",
+		decimals: 18
+	},
+	{
+		symbol: "CEL",
+		address: "0xD85d1e945766Fea5Eda9103F918Bd915FbCa63E6",
+		decimals: 4
+	},
+	{
+		symbol: "CFi",
+		address: "0xeCf8f2FA183b1C4d2A269BF98A54fCe86C812d3e",
+		decimals: 18
+	},
+	{
+		symbol: "COMP",
+		address: "0x8505b9d2254A7Ae468c0E9dd10Ccea3A837aef5c",
+		decimals: 18
+	},
+	{
+		symbol: "CRV",
+		address: "0x172370d5Cd63279eFa6d502DAB29171933a610AF",
+		decimals: 18
+	},
+	{
+		symbol: "CTSI",
+		address: "0x2727Ab1c2D22170ABc9b595177B2D5C6E1Ab7B7B",
+		decimals: 18
+	},
+	{
+		symbol: "DAI",
+		address: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+		decimals: 18
+	},
+	{
+		symbol: "DB",
+		address: "0x0e59D50adD2d90f5111aca875baE0a72D95B4762",
+		decimals: 18
+	},
+	{
+		symbol: "DEFI5",
+		address: "0x42435F467D33e5C4146a4E8893976ef12BBCE762",
+		decimals: 18
+	},
+	{
+		symbol: "DEGEN",
+		address: "0x8a2870fb69A90000D6439b7aDfB01d4bA383A415",
+		decimals: 18
+	},
+	{
+		symbol: "DFYN",
+		address: "0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97",
+		decimals: 18
+	},
+	{
+		symbol: "DMT",
+		address: "0xd28449BB9bB659725aCcAd52947677ccE3719fD7",
+		decimals: 18
+	},
+	{
+		symbol: "DRC",
+		address: "0xFeD16c746CB5BFeD009730f9E3e6A673006105c7",
+		decimals: 0
+	},
+	{
+		symbol: "DSLA",
+		address: "0xa0E390e9ceA0D0e8cd40048ced9fA9EA10D71639",
+		decimals: 18
+	},
+	{
+		symbol: "EASY",
+		address: "0xDb3b3b147A030F032633f6C4BEBf9a2fB5a882B5",
+		decimals: 18
+	},
+	{
+		symbol: "ELE",
+		address: "0xAcD7B3D9c10e97d0efA418903C0c7669E702E4C0",
+		decimals: 18
+	},
+	{
+		symbol: "Elemeteum (PoS)",
+		address: "0x07738Eb4ce8932CA961c815Cb12C9d4ab5Bd0Da4",
+		decimals: 18
+	},
+	{
+		symbol: "FISH",
+		address: "0x3a3Df212b7AA91Aa0402B9035b098891d276572B",
+		decimals: 18
+	},
+	{
+		symbol: "FRAX",
+		address: "0x104592a158490a9228070E0A8e5343B499e125D0",
+		decimals: 18
+	},
+	{
+		symbol: "FSN",
+		address: "0x2bF9b864cdc97b08B6D79ad4663e71B8aB65c45c",
+		decimals: 18
+	},
+	{
+		symbol: "FXS",
+		address: "0x3e121107F6F22DA4911079845a470757aF4e1A1b",
+		decimals: 18
+	},
+	{
+		symbol: "GAME",
+		address: "0x8d1566569d5b695d44a9a234540f68D393cDC40D",
+		decimals: 18
+	},
+	{
+		symbol: "GFARM2",
+		address: "0x7075cAB6bCCA06613e2d071bd918D1a0241379E2",
+		decimals: 18
+	},
+	{
+		symbol: "GHST",
+		address: "0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7",
+		decimals: 18
+	},
+	{
+		symbol: "HAWK",
+		address: "0x69CBC7449ee102eB792f1656744bF1A7c1bACB7e",
+		decimals: 18
+	},
+	{
+		symbol: "HEX",
+		address: "0x23D29D30e35C5e8D321e1dc9A8a61BFD846D4C5C",
+		decimals: 8
+	},
+	{
+		symbol: "Holyheld (PoS)",
+		address: "0x521CddC0CBa84F14c69C1E99249F781AA73Ee0BC",
+		decimals: 18
+	},
+	{
+		symbol: "IGG",
+		address: "0xe6FC6C7CB6d2c31b359A49A33eF08aB87F4dE7CE",
+		decimals: 6
+	},
+	{
+		symbol: "IRON",
+		address: "0xD86b5923F3AD7b585eD81B448170ae026c65ae9a",
+		decimals: 18
+	},
+	{
+		symbol: "Krill",
+		address: "0x05089C9EBFFa4F0AcA269e32056b1b36B37ED71b",
+		decimals: 18
+	},
+	{
+		symbol: "LEND",
+		address: "0x313d009888329C9d1cf4f75CA3f32566335bd604",
+		decimals: 18
+	},
+	{
+		symbol: "LINK",
+		address: "0x53E0bca35eC356BD5ddDFebbD1Fc0fD03FaBad39",
+		decimals: 18
+	},
+	{
+		symbol: "MANA",
+		address: "0xA1c57f48F0Deb89f569dFbE6E2B7f46D33606fD4",
+		decimals: 18
+	},
+	{
+		symbol: "mDEF",
+		address: "0x82B6205002ecd05e97642D38D61e2cFeaC0E18cE",
+		decimals: 9
+	},
+	{
+		symbol: "MEME",
+		address: "0xf2b5a8c37278bcdD50727D5CA879f8e5A4642e2e",
+		decimals: 8
+	},
+	{
+		symbol: "miFARM",
+		address: "0xab0b2ddB9C7e440fAc8E140A89c0dbCBf2d7Bbff",
+		decimals: 18
+	},
+	{
+		symbol: "mOCEAN",
+		address: "0x282d8efCe846A88B159800bd4130ad77443Fa1A1",
+		decimals: 18
+	},
+	{
+		symbol: "MONA",
+		address: "0x6968105460f67c3BF751bE7C15f92F5286Fd0CE5",
+		decimals: 18
+	},
+	{
+		symbol: "mRBAL",
+		address: "0x66768ad00746aC4d68ded9f64886d55d5243f5Ec",
+		decimals: 18
+	},
+	{
+		symbol: "mUSD",
+		address: "0xE840B73E5287865EEc17d250bFb1536704B43B21",
+		decimals: 18
+	},
+	{
+		symbol: "MUST",
+		address: "0x9C78EE466D6Cb57A4d01Fd887D2b5dFb2D46288f",
+		decimals: 18
+	},
+	{
+		symbol: "NDR",
+		address: "0xfb65ef42F7c8A70ff73F627DB6E9ba2Aff1F20fa",
+		decimals: 18
+	},
+	{
+		symbol: "NFTP",
+		address: "0xf7d9e281c5Cb4C6796284C5b663b3593D2037aF2",
+		decimals: 18
+	},
+	{
+		symbol: "OM",
+		address: "0xC3Ec80343D2bae2F8E680FDADDe7C17E71E114ea",
+		decimals: 18
+	},
+	{
+		symbol: "OPU",
+		address: "0x7ff2FC33E161E3b1C6511B934F0209D304267857",
+		decimals: 18
+	},
+	{
+		symbol: "PICKLE",
+		address: "0x2b88aD57897A8b496595925F43048301C37615Da",
+		decimals: 18
+	},
+	{
+		symbol: "PLOT",
+		address: "0xe82808eaA78339b06a691fd92E1Be79671cAd8D3",
+		decimals: 18
+	},
+	{
+		symbol: "PolyDodge",
+		address: "0x8A953CfE442c5E8855cc6c61b1293FA648BAE472",
+		decimals: 18
+	},
+	{
+		symbol: "PPDEX",
+		address: "0x127984b5E6d5c59f81DACc9F1C8b3Bdc8494572e",
+		decimals: 18
+	},
+	{
+		symbol: "PYR",
+		address: "0x348e62131fce2F4e0d5ead3Fe1719Bc039B380A9",
+		decimals: 18
+	},
+	{
+		symbol: "QUICK",
+		address: "0x831753DD7087CaC61aB5644b308642cc1c33Dc13",
+		decimals: 18
+	},
+	{
+		symbol: "RBAL",
+		address: "0x03247a4368A280bEc8133300cD930A3a61d604f6",
+		decimals: 18
+	},
+	{
+		symbol: "SDT",
+		address: "0x361A5a4993493cE00f61C32d4EcCA5512b82CE90",
+		decimals: 18
+	},
+	{
+		symbol: "SENT",
+		address: "0x48e3883233461C2eF4cB3FcF419D6db07fb86CeA",
+		decimals: 8
+	},
+	{
+		symbol: "SUPER",
+		address: "0xa1428174F516F527fafdD146b883bB4428682737",
+		decimals: 18
+	},
+	{
+		symbol: "SUPERBID",
+		address: "0xA3860f969075045D82de85B06bB665f93c4BAE32",
+		decimals: 18
+	},
+	{
+		symbol: "SUSHI",
+		address: "0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a",
+		decimals: 18
+	},
+	{
+		symbol: "SWAP",
+		address: "0x3809dcDd5dDe24B37AbE64A5a339784c3323c44F",
+		decimals: 18
+	},
+	{
+		symbol: "SWG",
+		address: "0x043A3Aa319B563aC25D4E342d32bFfb51298DB7b",
+		decimals: 18
+	},
+	{
+		symbol: "TEL",
+		address: "0xdF7837DE1F2Fa4631D716CF2502f8b230F1dcc32",
+		decimals: 2
+	},
+	{
+		symbol: "TITAN",
+		address: "0xaAa5B9e6c589642f98a1cDA99B9D024B8407285A",
+		decimals: 18
+	},
+	{
+		symbol: "UBT",
+		address: "0x7FBc10850caE055B27039aF31bD258430e714c62",
+		decimals: 8
+	},
+	{
+		symbol: "UNI",
+		address: "0xb33EaAd8d922B1083446DC23f610c2567fB5180f",
+		decimals: 18
+	},
+	{
+		symbol: "USDC",
+		address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+		decimals: 6
+	},
+	{
+		symbol: "USDT",
+		address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+		decimals: 6
+	},
+	{
+		symbol: "VISION",
+		address: "0x034b2090b579228482520c589dbD397c53Fc51cC",
+		decimals: 18
+	},
+	{
+		symbol: "WBTC",
+		address: "0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6",
+		decimals: 18
+	},
+	{
+		symbol: "WETH",
+		address: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+		decimals: 18
+	},
+	{
+		symbol: "WISE",
+		address: "0xB77e62709e39aD1cbeEBE77cF493745AeC0F453a",
+		decimals: 18
+	},
+	{
+		symbol: "WMATIC",
+		address: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+		decimals: 18
+	},
+	{
+		symbol: "WOLF",
+		address: "0x8f18dC399594b451EdA8c5da02d0563c0b2d0f16",
+		decimals: 9
+	},
+	{
+		symbol: "WRX",
+		address: "0x72d6066F486bd0052eefB9114B66ae40e0A6031a",
+		decimals: 8
+	},
+	{
+		symbol: "xMARK",
+		address: "0xf153EfF70DC0bf3b085134928daeEA248d9B30d0",
+		decimals: 9
+	},
+	{
+		symbol: "xSDT",
+		address: "0xD921F8318cfd786baB1ea7492673F053c518Ac04",
+		decimals: 18
+	},
+	{
+		symbol: "YFI",
+		address: "0xDA537104D6A5edd53c6fBba9A898708E465260b6",
+		decimals: 18
+	},
+	{
+		symbol: "ZUT",
+		address: "0xe86E8beb7340659DDDCE61727E500e3A5aD75a90",
+		decimals: 18
+	},
+	{
+		symbol: "ZUZ",
+		address: "0x232eaB56c4fB3f84c6Fb0a50c087c74b7B43c6Ad",
+		decimals: 18
+	}
+];
+
+var MATIC = {
+  name: 'MATIC',
+  name_long: 'Polygon (Matic)',
+  homePage: 'https://polygonscan.com/',
+  blockExplorerTX: 'https://polygonscan.com/tx/[[txHash]]',
+  blockExplorerAddr: 'https://polygonscan.com/address/[[address]]',
+  chainID: 137,
+  tokens: tokens$2,
+  contracts: [],
+  currencyName: 'MATIC'
+};
+
+var tokens$1 = [
+	{
+		symbol: "1INCH",
+		address: "0x111111111117dC0aa78b770fA6A738034120C302",
+		decimals: 18
+	},
+	{
+		symbol: "7UP",
+		address: "0x29f350B3822F51dc29619C583AdBC9628646E315",
+		decimals: 18
+	},
+	{
+		symbol: "8PAY",
+		address: "0xFeea0bDd3D07eb6FE305938878C0caDBFa169042",
+		decimals: 18
+	},
+	{
+		symbol: "AceD",
+		address: "0x3B98bbefe14B98000f10124ca95eD298AC9dB3Ff",
+		decimals: 18
+	},
+	{
+		symbol: "ACS",
+		address: "0x4197C6EF3879a08cD51e5560da5064B773aa1d29",
+		decimals: 18
+	},
+	{
+		symbol: "ACSI",
+		address: "0x5b17b4d5e4009B5C43e3e3d63A5229F794cBA389",
+		decimals: 18
+	},
+	{
+		symbol: "ADA",
+		address: "0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47",
+		decimals: 18
+	},
+	{
+		symbol: "ALLOY",
+		address: "0x5eF5994fA33FF4eB6c82d51ee1DC145c546065Bd",
+		decimals: 18
+	},
+	{
+		symbol: "ALPA",
+		address: "0xc5E6689C9c8B02be7C49912Ef19e79cF24977f03",
+		decimals: 18
+	},
+	{
+		symbol: "ALPACA",
+		address: "0x8F0528cE5eF7B51152A59745bEfDD91D97091d2F",
+		decimals: 18
+	},
+	{
+		symbol: "ALPHA",
+		address: "0xa1faa113cbE53436Df28FF0aEe54275c13B40975",
+		decimals: 18
+	},
+	{
+		symbol: "ANKR",
+		address: "0xf307910A4c7bbc79691fD374889b36d8531B08e3",
+		decimals: 18
+	},
+	{
+		symbol: "ANY",
+		address: "0xF68C9Df95a18B2A5a5fa1124d79EEEffBaD0B6Fa",
+		decimals: 18
+	},
+	{
+		symbol: "anyBTC",
+		address: "0x54261774905f3e6E9718f2ABb10ed6555cae308a",
+		decimals: 8
+	},
+	{
+		symbol: "anyETH",
+		address: "0x6F817a0cE8F7640Add3bC0c1C2298635043c2423",
+		decimals: 18
+	},
+	{
+		symbol: "AQUAGOAT",
+		address: "0x07af67b392B7A202fAD8E0FBc64C34F33102165B",
+		decimals: 9
+	},
+	{
+		symbol: "ARGON",
+		address: "0x851F7a700c5d67DB59612b871338a85526752c25",
+		decimals: 18
+	},
+	{
+		symbol: "ATOM",
+		address: "0x0Eb3a705fc54725037CC9e008bDede697f62F335",
+		decimals: 18
+	},
+	{
+		symbol: "AUTO",
+		address: "0xa184088a740c695E156F91f5cC086a06bb78b827",
+		decimals: 18
+	},
+	{
+		symbol: "BAKE",
+		address: "0xE02dF9e3e622DeBdD69fb838bB799E3F168902c5",
+		decimals: 18
+	},
+	{
+		symbol: "bALBT",
+		address: "0x72fAa679E1008Ad8382959FF48E392042A8b06f7",
+		decimals: 18
+	},
+	{
+		symbol: "BALL",
+		address: "0xC87eaFC1D1C3F46148Ea5446d7A645602340b1E6",
+		decimals: 18
+	},
+	{
+		symbol: "BANANA",
+		address: "0x603c7f932ED1fc6575303D8Fb018fDCBb0f39a95",
+		decimals: 18
+	},
+	{
+		symbol: "BAND",
+		address: "0xAD6cAEb32CD2c308980a548bD0Bc5AA4306c6c18",
+		decimals: 18
+	},
+	{
+		symbol: "BAT",
+		address: "0x101d82428437127bF1608F699CD651e6Abf9766E",
+		decimals: 18
+	},
+	{
+		symbol: "bBADGER",
+		address: "0x1F7216fdB338247512Ec99715587bb97BBf96eae",
+		decimals: 18
+	},
+	{
+		symbol: "bBAG",
+		address: "0x1AD0132D8B5Ef3cEBDA1A9692f36AC30be871b6b",
+		decimals: 18
+	},
+	{
+		symbol: "BBOO",
+		address: "0xd909840613fCb0fADC6ee7E5eCF30cDEf4281a68",
+		decimals: 18
+	},
+	{
+		symbol: "bCFX",
+		address: "0x045c4324039dA91c52C55DF5D785385Aab073DcF",
+		decimals: 18
+	},
+	{
+		symbol: "BCH",
+		address: "0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf",
+		decimals: 18
+	},
+	{
+		symbol: "BCHA",
+		address: "0xD475c9c934DCD6d5f1cAC530585aa5ba14185b92",
+		decimals: 18
+	},
+	{
+		symbol: "BDAY",
+		address: "0x645748Fa7e54A818310aFDad898410bcB54FC4E0",
+		decimals: 18
+	},
+	{
+		symbol: "bDIGG",
+		address: "0x5986D5c77c65e5801a5cAa4fAE80089f870A71dA",
+		decimals: 18
+	},
+	{
+		symbol: "BDO",
+		address: "0x190b589cf9Fb8DDEabBFeae36a813FFb2A702454",
+		decimals: 18
+	},
+	{
+		symbol: "BEAR",
+		address: "0x580f500cC7Da45B7B058De7dF325F6D8f83065E1",
+		decimals: 18
+	},
+	{
+		symbol: "BELT",
+		address: "0xE0e514c71282b6f4e823703a39374Cf58dc3eA4f",
+		decimals: 18
+	},
+	{
+		symbol: "BELUGA",
+		address: "0x181dE8C57C4F25eBA9Fd27757BBd11Cc66a55d31",
+		decimals: 18
+	},
+	{
+		symbol: "Berry",
+		address: "0x8626F099434d9A7E603B8f0273880209eaBfc1c5",
+		decimals: 18
+	},
+	{
+		symbol: "BETH",
+		address: "0x250632378E573c6Be1AC2f97Fcdf00515d0Aa91B",
+		decimals: 18
+	},
+	{
+		symbol: "BFI",
+		address: "0x81859801b01764D4f0Fa5E64729f5a6C3b91435b",
+		decimals: 18
+	},
+	{
+		symbol: "BGO",
+		address: "0x579A6277a6c2c63a5b25006F63Bce5DC8D9c25e7",
+		decimals: 18
+	},
+	{
+		symbol: "BGOV",
+		address: "0xf8E026dC4C0860771f691EcFFBbdfe2fa51c77CF",
+		decimals: 18
+	},
+	{
+		symbol: "BHC",
+		address: "0x6fd7c98458a943f469E1Cf4eA85B173f5Cd342F4",
+		decimals: 18
+	},
+	{
+		symbol: "BIDR",
+		address: "0x9A2f5556e9A637e8fBcE886d8e3cf8b316a1D8a2",
+		decimals: 18
+	},
+	{
+		symbol: "BIFI",
+		address: "0xCa3F508B8e4Dd382eE878A314789373D80A5190A",
+		decimals: 18
+	},
+	{
+		symbol: "BINGUS",
+		address: "0xdA20C8a5c3B1AB48e31ba6e43f0F2830E50218D8",
+		decimals: 9
+	},
+	{
+		symbol: "bKANGAL",
+		address: "0xd632Bd021a07AF70592CE1E18717Ab9aA126DECB",
+		decimals: 18
+	},
+	{
+		symbol: "bLEO",
+		address: "0x6421531AF54C7B14Ea805719035EBf1e3661c44A",
+		decimals: 3
+	},
+	{
+		symbol: "blink",
+		address: "0x63870A18B6e42b01Ef1Ad8A2302ef50B7132054F",
+		decimals: 6
+	},
+	{
+		symbol: "BLUE",
+		address: "0x36C0556c2B15aED79F842675Ff030782738eF9e8",
+		decimals: 18
+	},
+	{
+		symbol: "BLZD",
+		address: "0x57067A6BD75c0E95a6A5f158455926e43E79BeB0",
+		decimals: 18
+	},
+	{
+		symbol: "bMXX",
+		address: "0x4131b87F74415190425ccD873048C708F8005823",
+		decimals: 18
+	},
+	{
+		symbol: "BNBTC",
+		address: "0xE7Cb24F449973D5B3520E5b93D88B405903c75Fb",
+		decimals: 8
+	},
+	{
+		symbol: "BNSD",
+		address: "0xC1165227519FfD22Fdc77Ceb1037b9b284eeF068",
+		decimals: 18
+	},
+	{
+		symbol: "BOG",
+		address: "0xD7B729ef857Aa773f47D37088A1181bB3fbF0099",
+		decimals: 18
+	},
+	{
+		symbol: "BONDLY",
+		address: "0x96058f8C3e16576D9BD68766f3836d9A33158f89",
+		decimals: 18
+	},
+	{
+		symbol: "BOR",
+		address: "0x92D7756c60dcfD4c689290E8A9F4d263b3b32241",
+		decimals: 18
+	},
+	{
+		symbol: "BORSHCH",
+		address: "0x7b41e1860c91Be188c18341AE53a18B49C4b8D15",
+		decimals: 18
+	},
+	{
+		symbol: "BR34P",
+		address: "0xa86d305A36cDB815af991834B46aD3d7FbB38523",
+		decimals: 8
+	},
+	{
+		symbol: "BREW",
+		address: "0x790Be81C3cA0e53974bE2688cDb954732C9862e1",
+		decimals: 18
+	},
+	{
+		symbol: "BRICK",
+		address: "0xc4DaA5a9f2B832eD0f9Bc579662883cD53EA9d61",
+		decimals: 18
+	},
+	{
+		symbol: "bROOBEE",
+		address: "0xE64F5Cb844946C1F102Bd25bBD87a5aB4aE89Fbe",
+		decimals: 18
+	},
+	{
+		symbol: "BRRL",
+		address: "0xcbe73dd7E8FC74011136b837a59205801c45e6A1",
+		decimals: 18
+	},
+	{
+		symbol: "BRY",
+		address: "0xf859Bf77cBe8699013d6Dbc7C2b926Aaf307F830",
+		decimals: 18
+	},
+	{
+		symbol: "BSC",
+		address: "0x17bc015607Fdf93e7C949e9Ca22f96907cFBeF88",
+		decimals: 18
+	},
+	{
+		symbol: "BSCPAD",
+		address: "0x5A3010d4d8D3B5fB49f8B6E57FB9E48063f16700",
+		decimals: 18
+	},
+	{
+		symbol: "BSCS",
+		address: "0xbcb24AFb019BE7E93EA9C43B7E22Bb55D5B7f45D",
+		decimals: 18
+	},
+	{
+		symbol: "BSCX",
+		address: "0x5Ac52EE5b2a633895292Ff6d8A89bB9190451587",
+		decimals: 18
+	},
+	{
+		symbol: "bSRK",
+		address: "0x14b1166aB53A237c8cEaeE2BBc4BbCa200cb7da8",
+		decimals: 18
+	},
+	{
+		symbol: "BTCB",
+		address: "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
+		decimals: 18
+	},
+	{
+		symbol: "BTCST",
+		address: "0x78650B139471520656b9E7aA7A5e9276814a38e9",
+		decimals: 17
+	},
+	{
+		symbol: "BTD",
+		address: "0xD1102332a213E21faF78B69C03572031F3552c33",
+		decimals: 18
+	},
+	{
+		symbol: "BTS",
+		address: "0xc2e1acef50aE55661855E8dcB72adB182A3cC259",
+		decimals: 18
+	},
+	{
+		symbol: "BUNNY",
+		address: "0xC9849E6fdB743d08fAeE3E34dd2D1bc69EA11a51",
+		decimals: 18
+	},
+	{
+		symbol: "BURGER",
+		address: "0xAe9269f27437f0fcBC232d39Ec814844a51d6b8f",
+		decimals: 18
+	},
+	{
+		symbol: "BURNER",
+		address: "0x0000000000000000000000000000000000000000",
+		decimals: 0
+	},
+	{
+		symbol: "BUSD",
+		address: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+		decimals: 18
+	},
+	{
+		symbol: "BUX",
+		address: "0x211FfbE424b90e25a15531ca322adF1559779E45",
+		decimals: 18
+	},
+	{
+		symbol: "bwJUP",
+		address: "0x0231f91e02DebD20345Ae8AB7D71A41f8E140cE7",
+		decimals: 18
+	},
+	{
+		symbol: "Cake",
+		address: "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+		decimals: 18
+	},
+	{
+		symbol: "CAN",
+		address: "0x007EA5C0Ea75a8DF45D288a4debdD5bb633F9e56",
+		decimals: 18
+	},
+	{
+		symbol: "CBIX",
+		address: "0x34681C1035F97E1eDcccec5f142e02FF81a3A230",
+		decimals: 18
+	},
+	{
+		symbol: "CCAKE",
+		address: "0xc7091AA18598b87588e37501b6Ce865263CD67Ce",
+		decimals: 18
+	},
+	{
+		symbol: "CHI",
+		address: "0x0000000000004946c0e9F43F4Dee607b0eF1fA1c",
+		decimals: 0
+	},
+	{
+		symbol: "CHIP",
+		address: "0xa25FC408EF05321103243557C851101f9AceE608",
+		decimals: 18
+	},
+	{
+		symbol: "CHS",
+		address: "0xaDD8A06fd58761A5047426e160B2B88AD3B9D464",
+		decimals: 18
+	},
+	{
+		symbol: "CLIMB",
+		address: "0x2A1d286ed5edAD78BeFD6E0d8BEb38791e8cD69d",
+		decimals: 8
+	},
+	{
+		symbol: "COMP",
+		address: "0x52CE071Bd9b1C4B00A0b92D298c512478CaD67e8",
+		decimals: 18
+	},
+	{
+		symbol: "COOK",
+		address: "0x965b0Df5BDA0E7a0649324D78f03D5F7F2De086a",
+		decimals: 18
+	},
+	{
+		symbol: "COS",
+		address: "0x96Dd399F9c3AFda1F194182F71600F1B65946501",
+		decimals: 18
+	},
+	{
+		symbol: "CPX",
+		address: "0xB7B1bd104645D5A06120d369c63822b2AeAd1598",
+		decimals: 18
+	},
+	{
+		symbol: "crADA",
+		address: "0x81C15D3E956e55e77E1f3F257f0A65Bd2725fC55",
+		decimals: 8
+	},
+	{
+		symbol: "crALPHA",
+		address: "0x264Bc4Ea2F45cF6331AD6C3aC8d7257Cf487FcbC",
+		decimals: 8
+	},
+	{
+		symbol: "crATOM",
+		address: "0x0E9d900C884964dC4B26db96Ba113825B1a09Baa",
+		decimals: 8
+	},
+	{
+		symbol: "crBAND",
+		address: "0x738f3810b3dA0F3e6dC8C689D0d72f3b4992c43b",
+		decimals: 8
+	},
+	{
+		symbol: "crBCH",
+		address: "0xCb87Cee8c77CdFD310fb3C58ff72e688d46f90b1",
+		decimals: 8
+	},
+	{
+		symbol: "crBNB",
+		address: "0x1Ffe17B99b439bE0aFC831239dDECda2A790fF3A",
+		decimals: 8
+	},
+	{
+		symbol: "crBTCB",
+		address: "0x11883Cdea6bAb720092791cc89affa54428Ce069",
+		decimals: 8
+	},
+	{
+		symbol: "crBUSD",
+		address: "0x2Bc4eb013DDee29D37920938B96d353171289B7C",
+		decimals: 8
+	},
+	{
+		symbol: "crCREAM",
+		address: "0x426D6D53187be3288fe37f214e3F6901D8145b62",
+		decimals: 8
+	},
+	{
+		symbol: "crDAI",
+		address: "0x9095e8d707E40982aFFce41C61c10895157A1B22",
+		decimals: 8
+	},
+	{
+		symbol: "crDOT",
+		address: "0x53D88d2ffDBE71E81D95b08AE0cA49D0C4A8515f",
+		decimals: 8
+	},
+	{
+		symbol: "CREAM",
+		address: "0xd4CB328A82bDf5f03eB737f37Fa6B370aef3e888",
+		decimals: 18
+	},
+	{
+		symbol: "crEOS",
+		address: "0x19eE64850862cFd234e20c0db4edA286f12ec907",
+		decimals: 8
+	},
+	{
+		symbol: "crETH",
+		address: "0xb31f5d117541825D6692c10e4357008EDF3E2BCD",
+		decimals: 8
+	},
+	{
+		symbol: "crFIL",
+		address: "0x1aF8c1C3AD36A041cb6678feD86B1E095004fd16",
+		decimals: 8
+	},
+	{
+		symbol: "crLINK",
+		address: "0x3942936782d788ce69155F776A51A5F1C9dd9B22",
+		decimals: 8
+	},
+	{
+		symbol: "crLTC",
+		address: "0x8cc7E2a6de999758499658bB702143FD025E09B2",
+		decimals: 8
+	},
+	{
+		symbol: "CROW",
+		address: "0xcc2E12a9b5b75360c6FBf23B584c275D52cDdb0E",
+		decimals: 18
+	},
+	{
+		symbol: "CRP",
+		address: "0x1Ad8D89074AFA789A027B9a31d0bd14e254711D0",
+		decimals: 18
+	},
+	{
+		symbol: "CRPTP",
+		address: "0xD0e931a596C8A0F6e2EbaAE507a55F687BeF829c",
+		decimals: 18
+	},
+	{
+		symbol: "crTWT",
+		address: "0x2d3bfaDF9BC94E3Ab796029A030e863F1898aA06",
+		decimals: 8
+	},
+	{
+		symbol: "crUNI",
+		address: "0x3B0Be453a4008EBc2eDd457e7Bd355f1C5469d68",
+		decimals: 8
+	},
+	{
+		symbol: "crUSDC",
+		address: "0xD83C88DB3A6cA4a32FFf1603b0f7DDce01F5f727",
+		decimals: 8
+	},
+	{
+		symbol: "crUSDT",
+		address: "0xEF6d459FE81C3Ed53d292c936b2df5a8084975De",
+		decimals: 8
+	},
+	{
+		symbol: "CRX",
+		address: "0x97a30C692eCe9C317235d48287d23d358170FC40",
+		decimals: 18
+	},
+	{
+		symbol: "crXRP",
+		address: "0xAa46e2c21B7763a73DB48e9b318899253E66e20C",
+		decimals: 8
+	},
+	{
+		symbol: "crXTZ",
+		address: "0xE692714717a89E4F2ab89dd17d8DDdD7bb52De8e",
+		decimals: 8
+	},
+	{
+		symbol: "crYFI",
+		address: "0xEA466cd2583A0290b9E7b987a769a7Eb468FB0A5",
+		decimals: 8
+	},
+	{
+		symbol: "CTF",
+		address: "0x299baC24C8ad5635586fDe6619efF7891a6c8969",
+		decimals: 18
+	},
+	{
+		symbol: "CTK",
+		address: "0xA8c2B8eec3d368C0253ad3dae65a5F2BBB89c929",
+		decimals: 6
+	},
+	{
+		symbol: "CUB",
+		address: "0x50D809c74e0B8e49e7B4c65BB3109AbE3Ff4C1C1",
+		decimals: 18
+	},
+	{
+		symbol: "CUMMIES",
+		address: "0x27Ae27110350B98d564b9A3eeD31bAeBc82d878d",
+		decimals: 18
+	},
+	{
+		symbol: "CYC",
+		address: "0x810EE35443639348aDbbC467b33310d2AB43c168",
+		decimals: 18
+	},
+	{
+		symbol: "D100",
+		address: "0x9d8AAC497A4b8fe697dd63101d793F0C6A6EEbB6",
+		decimals: 9
+	},
+	{
+		symbol: "DAI",
+		address: "0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3",
+		decimals: 18
+	},
+	{
+		symbol: "DANGO",
+		address: "0x0957C57C9EB7744850dCC95db5A06eD4a246236E",
+		decimals: 6
+	},
+	{
+		symbol: "DDIM",
+		address: "0xc9132C76060F6b319764Ea075973a650A1a53bC9",
+		decimals: 18
+	},
+	{
+		symbol: "DEGO",
+		address: "0x3FdA9383A84C05eC8f7630Fe10AdF1fAC13241CC",
+		decimals: 18
+	},
+	{
+		symbol: "DEXE",
+		address: "0x039cB485212f996A9DBb85A9a75d898F94d38dA6",
+		decimals: 18
+	},
+	{
+		symbol: "DF",
+		address: "0x4A9A2b2b04549C3927dd2c9668A5eF3fCA473623",
+		decimals: 18
+	},
+	{
+		symbol: "DFX",
+		address: "0x74B3abB94e9e1ECc25Bd77d6872949B4a9B2aACF",
+		decimals: 18
+	},
+	{
+		symbol: "DFY",
+		address: "0xD98560689C6e748DC37bc410B4d3096B1aA3D8C2",
+		decimals: 18
+	},
+	{
+		symbol: "DIESEL",
+		address: "0xe1eA2E1907d93F154234CE3b5A7418faf175fE11",
+		decimals: 18
+	},
+	{
+		symbol: "DITTO",
+		address: "0x233d91A0713155003fc4DcE0AFa871b508B3B715",
+		decimals: 9
+	},
+	{
+		symbol: "DODO",
+		address: "0x67ee3Cb086F8a16f34beE3ca72FAD36F7Db929e2",
+		decimals: 18
+	},
+	{
+		symbol: "DOG",
+		address: "0xF94CA0B303e52d68b63626Bed7f680fa4DC3f779",
+		decimals: 9
+	},
+	{
+		symbol: "DOGE",
+		address: "0xbA2aE424d960c26247Dd6c32edC70B295c744C43",
+		decimals: 8
+	},
+	{
+		symbol: "DOS",
+		address: "0xDc0f0a5719c39764b011eDd02811BD228296887C",
+		decimals: 18
+	},
+	{
+		symbol: "DOT",
+		address: "0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402",
+		decimals: 18
+	},
+	{
+		symbol: "DUSK",
+		address: "0xB2BD0749DBE21f623d9BABa856D3B0f0e1BFEc9C",
+		decimals: 18
+	},
+	{
+		symbol: "EARS",
+		address: "0x0EC4B89462557150302AC6e81270a081F2e3BD20",
+		decimals: 18
+	},
+	{
+		symbol: "ECP",
+		address: "0x375483CfA7Fc18F6b455E005D835A8335FbdbB1f",
+		decimals: 9
+	},
+	{
+		symbol: "EGG",
+		address: "0xF952Fc3ca7325Cc27D15885d37117676d25BfdA6",
+		decimals: 18
+	},
+	{
+		symbol: "EGLD",
+		address: "0xbF7c81FFF98BbE61B40Ed186e4AfD6DDd01337fe",
+		decimals: 18
+	},
+	{
+		symbol: "ELE",
+		address: "0xAcD7B3D9c10e97d0efA418903C0c7669E702E4C0",
+		decimals: 18
+	},
+	{
+		symbol: "ELF",
+		address: "0xa3f020a5C92e15be13CAF0Ee5C95cF79585EeCC9",
+		decimals: 18
+	},
+	{
+		symbol: "ElonGate",
+		address: "0x2A9718defF471f3Bb91FA0ECEAB14154F150a385",
+		decimals: 9
+	},
+	{
+		symbol: "EOS",
+		address: "0x56b6fB708fC5732DEC1Afc8D8556423A2EDcCbD6",
+		decimals: 18
+	},
+	{
+		symbol: "EPS",
+		address: "0xA7f552078dcC247C2684336020c03648500C6d9F",
+		decimals: 18
+	},
+	{
+		symbol: "ERC20",
+		address: "0x58730ae0FAA10d73b0cDdb5e7b87C3594f7a20CB",
+		decimals: 18
+	},
+	{
+		symbol: "ETC",
+		address: "0x3d6545b08693daE087E957cb1180ee38B9e3c25E",
+		decimals: 18
+	},
+	{
+		symbol: "ETH",
+		address: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
+		decimals: 18
+	},
+	{
+		symbol: "ETHb",
+		address: "0xc5137E8e017799e71A65e0cFe3F340d719AF17D3",
+		decimals: 18
+	},
+	{
+		symbol: "FARM",
+		address: "0x4B5C23cac08a567ecf0c1fFcA8372A45a5D33743",
+		decimals: 18
+	},
+	{
+		symbol: "FAT",
+		address: "0x90e767A68a7d707B74D569C8E79f9bBb79b98a8b",
+		decimals: 18
+	},
+	{
+		symbol: "FEB",
+		address: "0xA72a0564d0e887123112e6A4DC1abA7611Ad861d",
+		decimals: 0
+	},
+	{
+		symbol: "FIL",
+		address: "0x0D8Ce2A99Bb6e3B7Db580eD848240e4a0F9aE153",
+		decimals: 18
+	},
+	{
+		symbol: "FINE",
+		address: "0x4e6415a5727ea08aAE4580057187923aeC331227",
+		decimals: 18
+	},
+	{
+		symbol: "FLO",
+		address: "0x2263bF3C00787a7cfA17aef830261D1FE342FD5B",
+		decimals: 18
+	},
+	{
+		symbol: "FMT",
+		address: "0x99c6e435eC259A7E8d65E1955C9423DB624bA54C",
+		decimals: 18
+	},
+	{
+		symbol: "FOR",
+		address: "0x658A109C5900BC6d2357c87549B651670E5b0539",
+		decimals: 18
+	},
+	{
+		symbol: "FOX",
+		address: "0xFAd8E46123D7b4e77496491769C167FF894d2ACB",
+		decimals: 9
+	},
+	{
+		symbol: "FREE",
+		address: "0x12e34cDf6A031a10FE241864c32fB03a4FDaD739",
+		decimals: 18
+	},
+	{
+		symbol: "FREN",
+		address: "0x13958e1eb63dFB8540Eaf6ed7DcbBc1A60FD52AF",
+		decimals: 18
+	},
+	{
+		symbol: "FRIES",
+		address: "0x393B312C01048b3ed2720bF1B090084C09e408A1",
+		decimals: 18
+	},
+	{
+		symbol: "FRONT",
+		address: "0x928e55daB735aa8260AF3cEDadA18B5f70C72f1b",
+		decimals: 18
+	},
+	{
+		symbol: "FSAFE",
+		address: "0xEE738a9e5FB78c24D26ceCD30389ED977C38D0Ca",
+		decimals: 9
+	},
+	{
+		symbol: "Fuel",
+		address: "0x2090c8295769791ab7A3CF1CC6e0AA19F35e441A",
+		decimals: 18
+	},
+	{
+		symbol: "fUSDT",
+		address: "0x049d68029688eAbF473097a2fC38ef61633A3C7A",
+		decimals: 6
+	},
+	{
+		symbol: "FUSE",
+		address: "0x5857c96DaE9cF8511B08Cb07f85753C472D36Ea3",
+		decimals: 18
+	},
+	{
+		symbol: "FUSII",
+		address: "0x3A50d6daacc82f17A2434184fE904fC45542A734",
+		decimals: 18
+	},
+	{
+		symbol: "GEN",
+		address: "0xB0F2939A1c0e43683E5954c9Fe142F7df9F8D967",
+		decimals: 18
+	},
+	{
+		symbol: "GFCE",
+		address: "0x94BaBBE728D9411612Ee41b20241a6FA251b26Ce",
+		decimals: 9
+	},
+	{
+		symbol: "GMT",
+		address: "0x99e92123eB77Bc8f999316f622e5222498438784",
+		decimals: 18
+	},
+	{
+		symbol: "GREEN",
+		address: "0xa4FB1f591980e6E4eb4661A0D96df19A13D21aA7",
+		decimals: 18
+	},
+	{
+		symbol: "GST",
+		address: "0x444A0E0c139Cac67e8f9be945C6Dfe01A2766ED1",
+		decimals: 18
+	},
+	{
+		symbol: "GTON",
+		address: "0x64D5BaF5ac030e2b7c435aDD967f787ae94D0205",
+		decimals: 18
+	},
+	{
+		symbol: "gwUSDN",
+		address: "0xc4b6F32B84657E9f6a73fE119f0967bE5bA8CF05",
+		decimals: 18
+	},
+	{
+		symbol: "HAKKA",
+		address: "0x1D1eb8E8293222e1a29d2C0E4cE6C0Acfd89AaaC",
+		decimals: 18
+	},
+	{
+		symbol: "HARD",
+		address: "0xf79037F6f6bE66832DE4E7516be52826BC3cBcc4",
+		decimals: 6
+	},
+	{
+		symbol: "Helmet",
+		address: "0x948d2a81086A075b3130BAc19e4c6DEe1D2E3fE8",
+		decimals: 18
+	},
+	{
+		symbol: "HOGL",
+		address: "0x182c763a4b2Fbd18C9B5f2D18102a0dDd9D5DF26",
+		decimals: 18
+	},
+	{
+		symbol: "HPS",
+		address: "0xeDa21B525Ac789EaB1a08ef2404dd8505FfB973D",
+		decimals: 18
+	},
+	{
+		symbol: "HYDRO",
+		address: "0xf3DBB49999B25c9D6641a9423C7ad84168D00071",
+		decimals: 18
+	},
+	{
+		symbol: "ICE",
+		address: "0xf16e81dce15B08F326220742020379B855B87DF9",
+		decimals: 18
+	},
+	{
+		symbol: "INJ",
+		address: "0xa2B726B1145A4773F68593CF171187d8EBe4d495",
+		decimals: 18
+	},
+	{
+		symbol: "INNBC",
+		address: "0xdF1F0026374d4BCc490BE5E316963Cf6Df2FfF19",
+		decimals: 6
+	},
+	{
+		symbol: "IOTX",
+		address: "0x9678E42ceBEb63F23197D726B29b1CB20d0064E5",
+		decimals: 18
+	},
+	{
+		symbol: "IRON",
+		address: "0x7b65B489fE53fCE1F6548Db886C08aD73111DDd8",
+		decimals: 18
+	},
+	{
+		symbol: "ITAM",
+		address: "0x04C747b40Be4D535fC83D09939fb0f626F32800B",
+		decimals: 18
+	},
+	{
+		symbol: "JGN",
+		address: "0xC13B7a43223BB9Bf4B69BD68Ab20ca1B79d81C75",
+		decimals: 18
+	},
+	{
+		symbol: "JIGG",
+		address: "0x82d49D4c442219Fdda7857fC1102E7CE6e6E5612",
+		decimals: 18
+	},
+	{
+		symbol: "JNTR",
+		address: "0x5f2Caa99Fc378248Ac02CbbAaC27e3Fa155Ed2C4",
+		decimals: 18
+	},
+	{
+		symbol: "JULb",
+		address: "0x32dFFc3fE8E3EF3571bF8a72c0d0015C5373f41D",
+		decimals: 18
+	},
+	{
+		symbol: "JulD",
+		address: "0x5A41F637C3f7553dBa6dDC2D3cA92641096577ea",
+		decimals: 18
+	},
+	{
+		symbol: "JUV",
+		address: "0xC40C9A843E1c6D01b7578284a9028854f6683b1B",
+		decimals: 2
+	},
+	{
+		symbol: "KaiInu",
+		address: "0xe5a09784b16E1065C37dF14c6e2f06fDcE317a1b",
+		decimals: 9
+	},
+	{
+		symbol: "KEBAB",
+		address: "0x7979F6C54ebA05E18Ded44C4F986F49a5De551c2",
+		decimals: 18
+	},
+	{
+		symbol: "KEY",
+		address: "0x85c128eE1feEb39A59490c720A9C563554B51D33",
+		decimals: 18
+	},
+	{
+		symbol: "KIND",
+		address: "0xE3Ba88c38D2789FE58465020CC0FB60b70c10d32",
+		decimals: 8
+	},
+	{
+		symbol: "KODA",
+		address: "0x9E993671976a5AC51bBfB3Db9E34eAC8d518fe82",
+		decimals: 9
+	},
+	{
+		symbol: "KP3RB",
+		address: "0x5EA29eEe799aA7cC379FdE5cf370BC24f2Ea7c81",
+		decimals: 18
+	},
+	{
+		symbol: "LAUNCH",
+		address: "0xb5389A679151C4b8621b1098C6E0961A3CFEe8d4",
+		decimals: 18
+	},
+	{
+		symbol: "LIME",
+		address: "0xBBabF1636b7ab0069a8F7ce76b4AFbee2F1e2F2c",
+		decimals: 18
+	},
+	{
+		symbol: "LINA",
+		address: "0x762539b45A1dCcE3D36d080F74d1AED37844b878",
+		decimals: 18
+	},
+	{
+		symbol: "LINK",
+		address: "0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD",
+		decimals: 18
+	},
+	{
+		symbol: "LIT",
+		address: "0xb59490aB09A0f526Cc7305822aC65f2Ab12f9723",
+		decimals: 18
+	},
+	{
+		symbol: "LOT",
+		address: "0x4E7Ae924FD9a5D60b56BE486b2900efE0c6a9CA7",
+		decimals: 9
+	},
+	{
+		symbol: "lowb",
+		address: "0x843D4a358471547f51534e3e51fae91cb4Dc3F28",
+		decimals: 18
+	},
+	{
+		symbol: "LPTP",
+		address: "0x73a3a0CD0C2cC69Dc18335EAd38525ED3222587e",
+		decimals: 18
+	},
+	{
+		symbol: "LTC",
+		address: "0x4338665CBB7B2485A8855A139b75D5e34AB0DB94",
+		decimals: 18
+	},
+	{
+		symbol: "LTO",
+		address: "0x857B222Fc79e1cBBf8Ca5f78CB133d1b7CF34BBd",
+		decimals: 18
+	},
+	{
+		symbol: "LUNAR",
+		address: "0x4e8a9D0BF525d78fd9E0c88710099f227F6924cf",
+		decimals: 9
+	},
+	{
+		symbol: "MARSH",
+		address: "0x2FA5dAF6Fe0708fBD63b1A7D1592577284f52256",
+		decimals: 18
+	},
+	{
+		symbol: "MASH",
+		address: "0x787732f27D18495494cea3792ed7946BbCFF8db2",
+		decimals: 18
+	},
+	{
+		symbol: "MATH",
+		address: "0xF218184Af829Cf2b0019F8E6F0b2423498a36983",
+		decimals: 18
+	},
+	{
+		symbol: "MATTER",
+		address: "0x1C9491865a1DE77C5b6e19d2E6a5F1D7a6F2b25F",
+		decimals: 18
+	},
+	{
+		symbol: "MBOX",
+		address: "0x3203c9E46cA618C8C1cE5dC67e7e9D75f5da2377",
+		decimals: 18
+	},
+	{
+		symbol: "MCRN",
+		address: "0xacb2d47827C9813AE26De80965845D80935afd0B",
+		decimals: 18
+	},
+	{
+		symbol: "MDA",
+		address: "0xd72aA9e1cDDC2F6D6e0444580002170fbA1f8eED",
+		decimals: 18
+	},
+	{
+		symbol: "MDG",
+		address: "0xC1eDCc306E6faab9dA629efCa48670BE4678779D",
+		decimals: 18
+	},
+	{
+		symbol: "MDO",
+		address: "0x35e869B7456462b81cdB5e6e42434bD27f3F788c",
+		decimals: 18
+	},
+	{
+		symbol: "MDS",
+		address: "0x242E46490397ACCa94ED930F2C4EdF16250237fa",
+		decimals: 18
+	},
+	{
+		symbol: "MEOWTH",
+		address: "0xE561479bEbEE0e606c19bB1973Fc4761613e3C42",
+		decimals: 18
+	},
+	{
+		symbol: "MGB",
+		address: "0xF78839B9e972Cf15014843A7Ca5ebf1E321A284c",
+		decimals: 18
+	},
+	{
+		symbol: "MILK",
+		address: "0x8E9f5173e16Ff93F81579d73A7f9723324d6B6aF",
+		decimals: 18
+	},
+	{
+		symbol: "MILK2",
+		address: "0x4A5a34212404f30C5aB7eB61b078fA4A55AdC5a5",
+		decimals: 18
+	},
+	{
+		symbol: "MKR",
+		address: "0x5f0Da599BB2ccCfcf6Fdfd7D81743B6020864350",
+		decimals: 18
+	},
+	{
+		symbol: "MLA",
+		address: "0xbDDD7D426274fc5F370817C80C06b86D651963e4",
+		decimals: 18
+	},
+	{
+		symbol: "MNDAO",
+		address: "0x069B2619Eb24367A46Fda638Bd1b88Aa4daD7879",
+		decimals: 9
+	},
+	{
+		symbol: "MNTN",
+		address: "0xA7Fcb2BAaBDA9dB593e24B25A1a32bfb5168018b",
+		decimals: 18
+	},
+	{
+		symbol: "MOCHI",
+		address: "0x055daB90880613a556a5ae2903B2682f8A5b8d27",
+		decimals: 18
+	},
+	{
+		symbol: "MOD",
+		address: "0xd4fBc57B6233F268E7FbA3b66E62719D74deecBc",
+		decimals: 18
+	},
+	{
+		symbol: "MOONMOON",
+		address: "0x0e0e877894a101Ad8711AE3A0194Fa44Ca837a79",
+		decimals: 9
+	},
+	{
+		symbol: "MOONSTAR",
+		address: "0xCe5814eFfF15D53EFd8025B9F2006D4d7D640b9B",
+		decimals: 9
+	},
+	{
+		symbol: "MOONTOKEN",
+		address: "0x81E4d494b85A24a58a6BA45c9B418b32a4E039de",
+		decimals: 18
+	},
+	{
+		symbol: "MRAT",
+		address: "0x6D949f9297A522c0f97C232CC209a67Bd7CfA471",
+		decimals: 9
+	},
+	{
+		symbol: "MSC",
+		address: "0x8C784C49097Dcc637b93232e15810D53871992BF",
+		decimals: 18
+	},
+	{
+		symbol: "MSS",
+		address: "0xAcABD3f9b8F76fFd2724604185Fa5AFA5dF25aC6",
+		decimals: 18
+	},
+	{
+		symbol: "MTF",
+		address: "0x95Ea82A63ee70f3cB141eC55ea4a37339746eB32",
+		decimals: 8
+	},
+	{
+		symbol: "NANA",
+		address: "0x355ad7aBB7bdD53beC94c068F3ABbCB2E2571d0D",
+		decimals: 9
+	},
+	{
+		symbol: "NAUT",
+		address: "0x05B339B0A346bF01f851ddE47a5d485c34FE220c",
+		decimals: 8
+	},
+	{
+		symbol: "NEAR",
+		address: "0x1Fa4a73a3F0133f0025378af00236f3aBDEE5D63",
+		decimals: 18
+	},
+	{
+		symbol: "NEON",
+		address: "0x94026f0227cE0c9611e8a228f114F9F19CC3Fa87",
+		decimals: 18
+	},
+	{
+		symbol: "NFTART",
+		address: "0xF7844CB890F4C339c497aeAb599aBDc3c874B67A",
+		decimals: 9
+	},
+	{
+		symbol: "NFTL",
+		address: "0x2f7b4C618Dc8E0bBA648E54cDADce3D8361f9816",
+		decimals: 18
+	},
+	{
+		symbol: "NIU",
+		address: "0xfA90d5d5Ff08D9A06C9fDF89B4B22217b9dbc418",
+		decimals: 18
+	},
+	{
+		symbol: "NMX",
+		address: "0xd32d01A43c869EdcD1117C640fBDcfCFD97d9d65",
+		decimals: 18
+	},
+	{
+		symbol: "NRV",
+		address: "0x42F6f551ae042cBe50C739158b4f0CAC0Edb9096",
+		decimals: 18
+	},
+	{
+		symbol: "NUTS",
+		address: "0x8893D5fA71389673C5c4b9b3cb4EE1ba71207556",
+		decimals: 18
+	},
+	{
+		symbol: "NVT",
+		address: "0xf0E406c49C63AbF358030A299C0E00118C4C6BA5",
+		decimals: 8
+	},
+	{
+		symbol: "OCT",
+		address: "0x49277cC5be56b519901E561096bfD416277b4F6d",
+		decimals: 8
+	},
+	{
+		symbol: "OCTA",
+		address: "0x86c3E4FfAcdB3AF628ef985a518cd6ee22A22b28",
+		decimals: 9
+	},
+	{
+		symbol: "ONT",
+		address: "0xFd7B3A77848f1C2D67E05E54d78d174a0C850335",
+		decimals: 18
+	},
+	{
+		symbol: "OPERAND",
+		address: "0x7Cb2f28505E733F60C0db208AfaA321c792F6Cf4",
+		decimals: 8
+	},
+	{
+		symbol: "PALM",
+		address: "0x9768E5b2d8e761905BC81Dfc554f9437A46CdCC6",
+		decimals: 18
+	},
+	{
+		symbol: "PASTA",
+		address: "0xAB9D0Fae6eB062F2698C2D429a1BE9185A5D4F6E",
+		decimals: 18
+	},
+	{
+		symbol: "PAX",
+		address: "0xb7F8Cd00C5A06c0537E2aBfF0b58033d02e5E094",
+		decimals: 18
+	},
+	{
+		symbol: "PAXG",
+		address: "0x7950865a9140cB519342433146Ed5b40c6F210f7",
+		decimals: 18
+	},
+	{
+		symbol: "pCWS",
+		address: "0xbcf39F0EDDa668C58371E519AF37CA705f2bFcbd",
+		decimals: 18
+	},
+	{
+		symbol: "PDO",
+		address: "0x5BCcFbd33873A5498F8406146868eDdd5E998962",
+		decimals: 18
+	},
+	{
+		symbol: "PEAK",
+		address: "0x630d98424eFe0Ea27fB1b3Ab7741907DFFEaAd78",
+		decimals: 8
+	},
+	{
+		symbol: "PET",
+		address: "0x4d4e595d643dc61EA7FCbF12e4b1AAA39f9975B8",
+		decimals: 18
+	},
+	{
+		symbol: "PHO",
+		address: "0xb9784C1633ef3b839563B988c323798634714368",
+		decimals: 8
+	},
+	{
+		symbol: "PIG",
+		address: "0x8850D2c68c632E3B258e612abAA8FadA7E6958E5",
+		decimals: 9
+	},
+	{
+		symbol: "PIKA",
+		address: "0x50D370cc853217099Bef3815FaaBfc563139eC2A",
+		decimals: 18
+	},
+	{
+		symbol: "PIN",
+		address: "0xb21f4E20BF387bD207AdC0bA4e5169ACa3B253bf",
+		decimals: 18
+	},
+	{
+		symbol: "PNL",
+		address: "0x16A62C9955ca1BA52e0ECA9ee4c3992204Eb0915",
+		decimals: 18
+	},
+	{
+		symbol: "PoFi",
+		address: "0x461f6C9aE13a7daC7055C73fBF8daB529D667041",
+		decimals: 18
+	},
+	{
+		symbol: "POLAR",
+		address: "0x1C545E9943CFd1b41E60a7917465911fa00Fc28C",
+		decimals: 18
+	},
+	{
+		symbol: "POLS",
+		address: "0x7e624FA0E1c4AbFD309cC15719b7E2580887f570",
+		decimals: 18
+	},
+	{
+		symbol: "POODL",
+		address: "0x4a68C250486a116DC8D6A0C5B0677dE07cc09C5D",
+		decimals: 9
+	},
+	{
+		symbol: "pOPIUM",
+		address: "0x566cedD201F67E542A6851A2959c1a449a041945",
+		decimals: 18
+	},
+	{
+		symbol: "PROM",
+		address: "0xaF53d56ff99f1322515E54FdDE93FF8b3b7DAFd5",
+		decimals: 18
+	},
+	{
+		symbol: "PROPEL",
+		address: "0x9B44Df3318972bE845d83f961735609137C4C23c",
+		decimals: 18
+	},
+	{
+		symbol: "QUAM",
+		address: "0x1AdE17B4B38B472B5259BbC938618226dF7b5Ca8",
+		decimals: 18
+	},
+	{
+		symbol: "Ramen",
+		address: "0x4F47A0d15c1E53F3d94c069C7D16977c29F9CB6B",
+		decimals: 18
+	},
+	{
+		symbol: "RAMP",
+		address: "0x8519EA49c997f50cefFa444d240fB655e89248Aa",
+		decimals: 18
+	},
+	{
+		symbol: "RAZE",
+		address: "0x65e66a61D0a8F1e686C2D6083ad611a10D84D97A",
+		decimals: 18
+	},
+	{
+		symbol: "REEF",
+		address: "0xF21768cCBC73Ea5B6fd3C687208a7c2def2d966e",
+		decimals: 18
+	},
+	{
+		symbol: "renBCH",
+		address: "0xA164B067193bd119933e5C1e7877421FCE53D3E5",
+		decimals: 8
+	},
+	{
+		symbol: "renBTC",
+		address: "0xfCe146bF3146100cfe5dB4129cf6C82b0eF4Ad8c",
+		decimals: 8
+	},
+	{
+		symbol: "renDGB",
+		address: "0x31a0D1A199631D244761EEba67e8501296d2E383",
+		decimals: 8
+	},
+	{
+		symbol: "renDOGE",
+		address: "0xc3fEd6eB39178A541D274e6Fc748d48f0Ca01CC3",
+		decimals: 8
+	},
+	{
+		symbol: "renFIL",
+		address: "0xDBf31dF14B66535aF65AaC99C32e9eA844e14501",
+		decimals: 18
+	},
+	{
+		symbol: "renLUNA",
+		address: "0xc4Ace9278e7E01755B670C0838c3106367639962",
+		decimals: 6
+	},
+	{
+		symbol: "renZEC",
+		address: "0x695FD30aF473F2960e81Dc9bA7cB67679d35EDb7",
+		decimals: 8
+	},
+	{
+		symbol: "RSD",
+		address: "0x61Ed1C66239d29Cc93C8597c6167159e8F69a823",
+		decimals: 18
+	},
+	{
+		symbol: "RUGBUST",
+		address: "0x57bb0f40479D7Dd0caa67f2A579273A8e9c038Ee",
+		decimals: 18
+	},
+	{
+		symbol: "RUPEE",
+		address: "0x7B0409A3A3f79bAa284035d48E1DFd581d7d7654",
+		decimals: 18
+	},
+	{
+		symbol: "SACT",
+		address: "0x1bA8c21c623C843Cd4c60438d70E7Ad50f363fbb",
+		decimals: 18
+	},
+	{
+		symbol: "SAFEBTC",
+		address: "0x380624A4a7e69dB1cA07deEcF764025FC224D056",
+		decimals: 9
+	},
+	{
+		symbol: "SAFEGALAXY",
+		address: "0x6b51231c43B1604815313801dB5E9E614914d6e4",
+		decimals: 9
+	},
+	{
+		symbol: "SAFEMARS",
+		address: "0x3aD9594151886Ce8538C1ff615EFa2385a8C3A88",
+		decimals: 9
+	},
+	{
+		symbol: "SAFEMOON",
+		address: "0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3",
+		decimals: 9
+	},
+	{
+		symbol: "SAFEP",
+		address: "0xA8c514D991F59baB02d32b68f04204cB89261c88",
+		decimals: 8
+	},
+	{
+		symbol: "SAFESPACE",
+		address: "0xe1DB3d1eE5CfE5C6333BE96e6421f9Bd5b85c987",
+		decimals: 9
+	},
+	{
+		symbol: "SAFESTAR",
+		address: "0x3C00F8FCc8791fa78DAA4A480095Ec7D475781e2",
+		decimals: 9
+	},
+	{
+		symbol: "SAIL",
+		address: "0x8148b58393f00b4B379cBEb8018d3445E0b636a0",
+		decimals: 18
+	},
+	{
+		symbol: "sALPACA",
+		address: "0x6F695Bd5FFD25149176629f8491A5099426Ce7a7",
+		decimals: 18
+	},
+	{
+		symbol: "SALT",
+		address: "0x2849b1aE7E04A3D9Bc288673A92477CF63F28aF4",
+		decimals: 18
+	},
+	{
+		symbol: "sBDO",
+		address: "0x0d9319565be7f53CeFE84Ad201Be3f40feAE2740",
+		decimals: 18
+	},
+	{
+		symbol: "SEA",
+		address: "0xFB52FC1f90Dd2B070B9Cf7ad68ac3d68905643fa",
+		decimals: 18
+	},
+	{
+		symbol: "SFP",
+		address: "0xD41FDb03Ba84762dD66a0af1a6C8540FF1ba5dfb",
+		decimals: 18
+	},
+	{
+		symbol: "SFUND",
+		address: "0x477bC8d23c634C154061869478bce96BE6045D12",
+		decimals: 18
+	},
+	{
+		symbol: "SHAKE",
+		address: "0xbA8A6Ef5f15ED18e7184f44a775060a6bF91d8d0",
+		decimals: 18
+	},
+	{
+		symbol: "SHIELD",
+		address: "0x60b3BC37593853c04410c4F07fE4D6748245BF77",
+		decimals: 18
+	},
+	{
+		symbol: "SLME",
+		address: "0x4fCfA6cC8914ab455B5b33Df916d90BFe70b6AB1",
+		decimals: 18
+	},
+	{
+		symbol: "SMDX",
+		address: "0xEA8c5B9c537f3ebBcc8F2df0573F2d084E9e2BDb",
+		decimals: 18
+	},
+	{
+		symbol: "SMOKE",
+		address: "0x5239fE1A8c0b6ece6AD6009D15315e02B1E7c4Ea",
+		decimals: 18
+	},
+	{
+		symbol: "SOAK",
+		address: "0x849233FF1aea15D80EF658B2871664C9Ca994063",
+		decimals: 18
+	},
+	{
+		symbol: "SOUL",
+		address: "0x67d012F731c23F0313CEA1186d0121779c77fcFE",
+		decimals: 8
+	},
+	{
+		symbol: "SOUP",
+		address: "0x94F559aE621F1c810F31a6a620Ad7376776fe09E",
+		decimals: 18
+	},
+	{
+		symbol: "SOUPS",
+		address: "0x69F27E70E820197A6e495219D9aC34C8C6dA7EeE",
+		decimals: 18
+	},
+	{
+		symbol: "SPACE",
+		address: "0x0abd3E3502c15ec252f90F64341cbA74a24fba06",
+		decimals: 18
+	},
+	{
+		symbol: "SPARTA",
+		address: "0xE4Ae305ebE1AbE663f261Bc00534067C80ad677C",
+		decimals: 18
+	},
+	{
+		symbol: "SPG",
+		address: "0x3aabCf53A1930A42E18D938C019E83Ebee50a849",
+		decimals: 9
+	},
+	{
+		symbol: "SPOOL",
+		address: "0x8cEAe826D99A8936bC5e2d2e1e7f79afA0408315",
+		decimals: 18
+	},
+	{
+		symbol: "SPORE",
+		address: "0x77f6A5f1B7a2b6D6C322Af8581317D6Bb0a52689",
+		decimals: 18
+	},
+	{
+		symbol: "START",
+		address: "0x31D0a7AdA4d4c131Eb612DB48861211F63e57610",
+		decimals: 18
+	},
+	{
+		symbol: "STAX",
+		address: "0x0Da6Ed8B13214Ff28e9Ca979Dd37439e8a88F6c4",
+		decimals: 18
+	},
+	{
+		symbol: "STEEL",
+		address: "0x9001eE054F1692feF3A48330cB543b6FEc6287eb",
+		decimals: 18
+	},
+	{
+		symbol: "STM",
+		address: "0x90DF11a8ccE420675e73922419e3f4f3Fe13CCCb",
+		decimals: 18
+	},
+	{
+		symbol: "SUPER",
+		address: "0x51BA0b044d96C3aBfcA52B64D733603CCC4F0d4D",
+		decimals: 18
+	},
+	{
+		symbol: "SWAMP",
+		address: "0xc5A49b4CBe004b6FD55B30Ba1dE6AC360FF9765d",
+		decimals: 18
+	},
+	{
+		symbol: "SWGb",
+		address: "0xE40255C5d7fa7ceEc5120408C78C787CECB4cfdb",
+		decimals: 18
+	},
+	{
+		symbol: "SWIRL",
+		address: "0x52d86850bc8207b520340B7E39cDaF22561b9E56",
+		decimals: 18
+	},
+	{
+		symbol: "SWTH",
+		address: "0x250b211EE44459dAd5Cd3bCa803dD6a7EcB5d46C",
+		decimals: 8
+	},
+	{
+		symbol: "SXP",
+		address: "0x47BEAd2563dCBf3bF2c9407fEa4dC236fAbA485A",
+		decimals: 18
+	},
+	{
+		symbol: "TACO",
+		address: "0x9066e87Bac891409D690cfEfA41379b34af06391",
+		decimals: 18
+	},
+	{
+		symbol: "TAO",
+		address: "0xf0443834B7b21104b7102Edbe8F9ec06204Cd395",
+		decimals: 9
+	},
+	{
+		symbol: "TBC",
+		address: "0xeAF7D8395CCE52DAef138d39a1CEfA51b97C15aE",
+		decimals: 18
+	},
+	{
+		symbol: "TCT",
+		address: "0xCA0a9Df6a8cAD800046C1DDc5755810718b65C44",
+		decimals: 18
+	},
+	{
+		symbol: "TFF",
+		address: "0x2d69c55baEcefC6ec815239DA0a985747B50Db6E",
+		decimals: 18
+	},
+	{
+		symbol: "TINFOIL Token",
+		address: "0xaADeB3d2170d391aBb1a12e3Da69cC93D880A31b",
+		decimals: 18
+	},
+	{
+		symbol: "TIT",
+		address: "0xe9C97e26dE6F4109E041736867789E789dc904d3",
+		decimals: 18
+	},
+	{
+		symbol: "TKO",
+		address: "0x9f589e3eabe42ebC94A44727b3f3531C0c877809",
+		decimals: 18
+	},
+	{
+		symbol: "TLM",
+		address: "0x2222227E22102Fe3322098e4CBfE18cFebD57c95",
+		decimals: 4
+	},
+	{
+		symbol: "TNDR",
+		address: "0x7Cc46141AB1057b1928de5Ad5Ee78Bb37eFC4868",
+		decimals: 18
+	},
+	{
+		symbol: "TOOLS",
+		address: "0x1311b352467d2B5c296881BaDEA82850bcd8f886",
+		decimals: 18
+	},
+	{
+		symbol: "TORJ",
+		address: "0xECD2376a8C5Ece76323282441a1b935Bbcb45Ec2",
+		decimals: 3
+	},
+	{
+		symbol: "TPT",
+		address: "0xECa41281c24451168a37211F0bc2b8645AF45092",
+		decimals: 4
+	},
+	{
+		symbol: "TRADE",
+		address: "0x7af173F350D916358AF3e218Bdf2178494Beb748",
+		decimals: 18
+	},
+	{
+		symbol: "TRDG",
+		address: "0x92a42Db88Ed0F02c71D439e55962Ca7CAB0168b5",
+		decimals: 9
+	},
+	{
+		symbol: "TREAT",
+		address: "0xac0C7d9B063eD2C0946982dDB378e03886C064E6",
+		decimals: 18
+	},
+	{
+		symbol: "TREE",
+		address: "0x039471b9e8a86B977aaeb5eC4182Cf3866f436B0",
+		decimals: 18
+	},
+	{
+		symbol: "TUSD",
+		address: "0x14016E85a25aeb13065688cAFB43044C2ef86784",
+		decimals: 18
+	},
+	{
+		symbol: "TWT",
+		address: "0x4B0F1812e5Df2A09796481Ff14017e6005508003",
+		decimals: 18
+	},
+	{
+		symbol: "TXL",
+		address: "0x1FFD0b47127fdd4097E54521C9E2c7f0D66AafC5",
+		decimals: 18
+	},
+	{
+		symbol: "TYPH",
+		address: "0x4090e535F2e251F5F88518998B18b54d26B3b07c",
+		decimals: 18
+	},
+	{
+		symbol: "UBU",
+		address: "0xd2DdFba7bb12f6e70c2AAB6B6bf9EdaEf42ed22F",
+		decimals: 18
+	},
+	{
+		symbol: "UBXT",
+		address: "0xBbEB90cFb6FAFa1F69AA130B7341089AbeEF5811",
+		decimals: 18
+	},
+	{
+		symbol: "UNFI",
+		address: "0xA7cA04F7602cD7A939d3E4827F442f48cF8E9daD",
+		decimals: 18
+	},
+	{
+		symbol: "UNI",
+		address: "0xBf5140A22578168FD562DCcF235E5D43A02ce9B1",
+		decimals: 18
+	},
+	{
+		symbol: "UNICORN",
+		address: "0xe3E1FabEaBD48491bD6902B0c32FDEee8D2Ff12b",
+		decimals: 18
+	},
+	{
+		symbol: "UNIF",
+		address: "0xce5347fdd503f25f8428151A274544A5bD1Bd8cA",
+		decimals: 9
+	},
+	{
+		symbol: "USDC",
+		address: "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
+		decimals: 18
+	},
+	{
+		symbol: "USDT",
+		address: "0x55d398326f99059fF775485246999027B3197955",
+		decimals: 18
+	},
+	{
+		symbol: "UST",
+		address: "0x23396cF899Ca06c4472205fC903bDB4de249D6fC",
+		decimals: 18
+	},
+	{
+		symbol: "UTL",
+		address: "0x3fc20a9672b321e66083896B40a567D5Cc65cfAF",
+		decimals: 18
+	},
+	{
+		symbol: "vADA",
+		address: "0x9A0AF7FDb2065Ce470D72664DE73cAE409dA28Ec",
+		decimals: 8
+	},
+	{
+		symbol: "VAI",
+		address: "0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7",
+		decimals: 18
+	},
+	{
+		symbol: "VANCAT",
+		address: "0x8597ba143AC509189E89aaB3BA28d661A5dD9830",
+		decimals: 0
+	},
+	{
+		symbol: "vBCH",
+		address: "0x5F0388EBc2B94FA8E123F404b79cCF5f40b29176",
+		decimals: 8
+	},
+	{
+		symbol: "vBETH",
+		address: "0x972207A639CC1B374B893cc33Fa251b55CEB7c07",
+		decimals: 8
+	},
+	{
+		symbol: "vBNB",
+		address: "0xA07c5b74C9B40447a954e1466938b865b6BBea36",
+		decimals: 8
+	},
+	{
+		symbol: "vBSWAP",
+		address: "0x4f0ed527e8A95ecAA132Af214dFd41F30b361600",
+		decimals: 18
+	},
+	{
+		symbol: "vBTC",
+		address: "0x882C173bC7Ff3b7786CA16dfeD3DFFfb9Ee7847B",
+		decimals: 8
+	},
+	{
+		symbol: "vBUSD",
+		address: "0x95c78222B3D6e262426483D42CfA53685A67Ab9D",
+		decimals: 8
+	},
+	{
+		symbol: "vDAI",
+		address: "0x334b3eCB4DCa3593BCCC3c7EBD1A1C1d1780FBF1",
+		decimals: 8
+	},
+	{
+		symbol: "vDOT",
+		address: "0x1610bc33319e9398de5f57B33a5b184c806aD217",
+		decimals: 8
+	},
+	{
+		symbol: "vETH",
+		address: "0xf508fCD89b8bd15579dc79A6827cB4686A3592c8",
+		decimals: 8
+	},
+	{
+		symbol: "vFIL",
+		address: "0xf91d58b5aE142DAcC749f58A49FCBac340Cb0343",
+		decimals: 8
+	},
+	{
+		symbol: "VGD",
+		address: "0xFd91Fa8fab5cA11569E256fa8844Bc2abecc331D",
+		decimals: 18
+	},
+	{
+		symbol: "VIDT",
+		address: "0x3f515f0a8e93F2E2f891ceeB3Db4e62e202d7110",
+		decimals: 18
+	},
+	{
+		symbol: "VIKING",
+		address: "0x896eDE222D3f7f3414e136a2791BDB08AAa25Ce0",
+		decimals: 18
+	},
+	{
+		symbol: "vLINK",
+		address: "0x650b940a1033B8A1b1873f78730FcFC73ec11f1f",
+		decimals: 8
+	},
+	{
+		symbol: "vLTC",
+		address: "0x57A5297F2cB2c0AaC9D554660acd6D385Ab50c6B",
+		decimals: 8
+	},
+	{
+		symbol: "vSXP",
+		address: "0x2fF3d0F6990a40261c66E1ff2017aCBc282EB6d0",
+		decimals: 8
+	},
+	{
+		symbol: "vUSDC",
+		address: "0xecA88125a5ADbe82614ffC12D0DB554E2e2867C8",
+		decimals: 8
+	},
+	{
+		symbol: "vUSDT",
+		address: "0xfD5840Cd36d94D7229439859C0112a4185BC0255",
+		decimals: 8
+	},
+	{
+		symbol: "vXRP",
+		address: "0xB248a295732e0225acd3337607cc01068e3b9c10",
+		decimals: 8
+	},
+	{
+		symbol: "vXVS",
+		address: "0x151B1e2635A717bcDc836ECd6FbB62B674FE3E1D",
+		decimals: 8
+	},
+	{
+		symbol: "Warden",
+		address: "0x0fEAdcC3824E7F3c12f40E324a60c23cA51627fc",
+		decimals: 18
+	},
+	{
+		symbol: "WATCH",
+		address: "0x7A9f28EB62C791422Aa23CeAE1dA9C847cBeC9b0",
+		decimals: 18
+	},
+	{
+		symbol: "WBNB",
+		address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+		decimals: 18
+	},
+	{
+		symbol: "WENMOON",
+		address: "0xb93ba7DC61ECFced69067151FC00C41cA369A797",
+		decimals: 7
+	},
+	{
+		symbol: "WEX",
+		address: "0xa9c41A46a6B3531d28d5c32F6633dd2fF05dFB90",
+		decimals: 18
+	},
+	{
+		symbol: "WHIRL",
+		address: "0x7f479d78380Ad00341fdD7322fE8AEf766e29e5A",
+		decimals: 18
+	},
+	{
+		symbol: "WOOP",
+		address: "0x8b303d5BbfBbf46F1a4d9741E491e06986894e18",
+		decimals: 18
+	},
+	{
+		symbol: "WOW",
+		address: "0x4DA996C5Fe84755C80e108cf96Fe705174c5e36A",
+		decimals: 18
+	},
+	{
+		symbol: "wSOTE",
+		address: "0x541E619858737031A1244A5d0Cd47E5ef480342c",
+		decimals: 18
+	},
+	{
+		symbol: "XBN",
+		address: "0x547CBE0f0c25085e7015Aa6939b28402EB0CcDAC",
+		decimals: 18
+	},
+	{
+		symbol: "XCUR",
+		address: "0x708C671Aa997da536869B50B6C67FA0C32Ce80B2",
+		decimals: 8
+	},
+	{
+		symbol: "XED",
+		address: "0x5621b5A3f4a8008c4CCDd1b942B121c8B1944F1f",
+		decimals: 18
+	},
+	{
+		symbol: "XEND",
+		address: "0x4a080377f83D669D7bB83B3184a8A5E61B500608",
+		decimals: 18
+	},
+	{
+		symbol: "xMARK",
+		address: "0x26A5dFab467d4f58fB266648CAe769503CEC9580",
+		decimals: 9
+	},
+	{
+		symbol: "XRP",
+		address: "0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE",
+		decimals: 18
+	},
+	{
+		symbol: "XSPACE",
+		address: "0xAD90c05BC51672eEdfeE36E58b3ff1A78bbC146d",
+		decimals: 9
+	},
+	{
+		symbol: "XVS",
+		address: "0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63",
+		decimals: 18
+	},
+	{
+		symbol: "XWIN",
+		address: "0xd88ca08d8eec1E9E09562213Ae83A7853ebB5d28",
+		decimals: 18
+	},
+	{
+		symbol: "YETU",
+		address: "0x6652048Fa5E66ed63a0225FFd7C82e106b0Aa18b",
+		decimals: 18
+	},
+	{
+		symbol: "YFI",
+		address: "0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e",
+		decimals: 18
+	},
+	{
+		symbol: "YFII",
+		address: "0x7F70642d88cf1C4a3a7abb072B53B929b653edA5",
+		decimals: 18
+	},
+	{
+		symbol: "yPANDA",
+		address: "0x9806aec346064183b5cE441313231DFf89811f7A",
+		decimals: 8
+	},
+	{
+		symbol: "YVS",
+		address: "0x47c1C7B9D7941A7265D123DCfb100D8FB5348213",
+		decimals: 18
+	},
+	{
+		symbol: "ZD",
+		address: "0x1c213179C2c08906fB759878860652a61727Ed14",
+		decimals: 18
+	},
+	{
+		symbol: "ZEC",
+		address: "0x1Ba42e5193dfA8B03D15dd1B86a3113bbBEF8Eeb",
+		decimals: 18
+	},
+	{
+		symbol: "ZEFI",
+		address: "0x0288D3E353fE2299F11eA2c2e1696b4A648eCC07",
+		decimals: 18
+	},
+	{
+		symbol: "ZERO",
+		address: "0x1f534d2B1ee2933f1fdF8e4b63A44b2249d77EAf",
+		decimals: 18
+	},
+	{
+		symbol: "ZIL",
+		address: "0xb86AbCb37C3A4B64f74f59301AFF131a1BEcC787",
+		decimals: 12
+	},
+	{
+		symbol: "zSEED",
+		address: "0x5cd50Aae14E14B3fdF3fF13c7A40e8cf5ae8b0A5",
+		decimals: 18
+	}
+];
+
+var BSC = {
+  name: 'BSC',
+  name_long: 'Binance Smart Chain',
+  homePage: 'https://www.binance.org/en/smartChain',
+  blockExplorerTX: 'https://bscscan.com/tx/[[txHash]]',
+  blockExplorerAddr: 'https://bscscan.com/address/[[address]]',
+  chainID: 56,
+  tokens: tokens$1,
+  contracts: [],
+  currencyName: 'BNB'
+};
+
+var tokens = [
+	{
+		symbol: "BEC",
+		address: "0x085fb4f24031EAedbC2B611AA528f22343eB52Db",
+		decimals: 8
+	},
+	{
+		symbol: "PLAY",
+		address: "0x5acE17f87c7391E5792a7683069A8025B83bbd85",
+		decimals: 0
+	},
+	{
+		symbol: "UVC",
+		address: "0x76d0184CF511788032A74a1FB91146e63F43dd53",
+		decimals: 5
+	},
+	{
+		symbol: "UVCX",
+		address: "0xd6dF0C579f2A65049a893fDaEC9fCE098CC19F87",
+		decimals: 18
+	}
+];
+
+var ETC = {
+  name: 'ETC',
+  name_long: 'Ethereum Classic',
+  homePage: 'https://ethereumclassic.org/',
+  blockExplorerTX: 'https://blockscout.com/etc/mainnet/tx/[[txHash]]',
+  blockExplorerAddr: 'https://blockscout.com/etc/mainnet/address/[[address]]',
+  chainID: 61,
+  tokens: tokens,
+  contracts: [],
+  currencyName: 'ETC'
+};
+
+var Networks = /*#__PURE__*/Object.freeze({
   __proto__: null,
   ETH: ETH,
   GOERLI: GOERLI,
   KOV: KOV,
-  ROP: ROP
-});
-
-var ethMewWs = {
-  type: ETH,
-  service: 'myetherwallet.com-ws',
-  url: 'wss://nodes.mewapi.io/ws/eth',
-  port: 443,
-  auth: false,
-  username: '',
-  password: ''
-};
-
-var kovMewWs = {
-  type: KOV,
-  service: 'myetherwallet.com-ws',
-  url: 'wss://nodes.mewapi.io/ws/kovan',
-  port: 443,
-  auth: false,
-  username: '',
-  password: ''
-};
-
-var ropMewWs = {
-  type: ROP,
-  service: 'myetherwallet.com-ws',
-  url: 'wss://nodes.mewapi.io/ws/rop',
-  port: 443,
-  auth: false,
-  username: '',
-  password: ''
-};
-
-var goerliMewWs = {
-  type: GOERLI,
-  service: 'myetherwallet.com-ws',
-  url: 'wss://nodes.mewapi.io/ws/goerli',
-  port: 443,
-  auth: false,
-  username: '',
-  password: ''
-};
-
-var nodes = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  ethmewws: ethMewWs,
-  kovmewws: kovMewWs,
-  ropmewws: ropMewWs,
-  goerlimewws: goerliMewWs
-});
-
-/* eslint-disable */
-var platform = require('platform');
-var nodeList = {};
-Object.keys(types).forEach(function (key) {
-  nodeList[types[key].name] = [];
-});
-Object.keys(nodes).forEach(function (key) {
-  if (nodes[key].service === ethMewWs.service) {
-    nodeList[nodes[key].type.name].splice(0, 0, nodes[key]);
-  } else if (nodes[key].service === 'infura.io' && platform.name && platform.name === 'firefox') return; // temp until infura fix https://github.com/INFURA/infura/issues/174
-  else {
-      nodeList[nodes[key].type.name].push(nodes[key]);
-    }
+  ROP: ROP,
+  MATIC: MATIC,
+  BSC: BSC,
+  ETC: ETC
 });
 
 var APP_STORE_LINK = IOS_LINK;
@@ -35715,23 +38268,15 @@ var Integration = /*#__PURE__*/function (_EventEmitter) {
     key: "formatNewNetworks",
     value: function formatNewNetworks(newNetwork) {
       return {
-        type: {
-          name: newNetwork.name,
-          name_long: newNetwork.name_long || newNetwork.name,
-          homePage: newNetwork.homePage || '',
-          blockExplorerTX: newNetwork.blockExplorerTX || '',
-          blockExplorerAddr: newNetwork.blockExplorerAddr || '',
-          chainID: newNetwork.chainId ? newNetwork.chainId : newNetwork.chainID ? newNetwork.chainID : this.CHAIN_ID,
-          tokens: newNetwork.tokens || [],
-          contracts: [],
-          currencyName: newNetwork.currencyName || newNetwork.name
-        },
-        service: newNetwork.serviceName || newNetwork.name,
-        url: newNetwork.url || this.RPC_URL,
-        port: 443,
-        auth: false,
-        username: '',
-        password: ''
+        name: newNetwork.name,
+        name_long: newNetwork.name_long || newNetwork.name,
+        homePage: newNetwork.homePage || '',
+        blockExplorerTX: newNetwork.blockExplorerTX || '',
+        blockExplorerAddr: newNetwork.blockExplorerAddr || '',
+        chainID: newNetwork.chainId ? newNetwork.chainId : newNetwork.chainID ? newNetwork.chainID : this.CHAIN_ID,
+        tokens: newNetwork.tokens || [],
+        contracts: [],
+        currencyName: newNetwork.currencyName || newNetwork.name
       };
     }
   }, {
@@ -35739,34 +38284,29 @@ var Integration = /*#__PURE__*/function (_EventEmitter) {
     value: function createChainMapping(newNetworks) {
       var _this2 = this;
 
-      var networks = nodeList;
+      var networks = Networks;
 
       try {
         var additional = newNetworks.map(this.formatNewNetworks).reduce(function (acc, curr) {
-          acc[curr.type.name] = curr;
+          acc[curr.name] = curr;
         }, {});
-        networks = _objectSpread2(_objectSpread2({}, networks), additional);
+        networks = Object.assign(networks, additional);
+        this.networks = networks;
       } catch (e) {
-        // eslint-disable-next-line
         console.error(e);
       }
 
       return Object.keys(networks).reduce(function (acc, curr) {
-        if (networks[curr].length === 0) return acc;
         acc.push({
-          name: networks[curr][0].type.name_long === 'Ethereum' ? 'mainnet' : networks[curr][0].type.name_long.toLowerCase(),
-          chainId: networks[curr][0].type.chainID,
-          key: networks[curr][0].type.name
+          name: networks[curr].name_long === 'Ethereum' ? 'mainnet' : networks[curr].name_long.toLowerCase(),
+          chainId: networks[curr].chainID,
+          key: networks[curr].name
         });
 
-        _this2.knownNetworks.add(networks[curr][0].type.chainID);
+        _this2.knownNetworks.add(networks[curr].chainID);
 
         return acc;
-      }, [{
-        name: 'mainnet',
-        chainId: 1,
-        key: 'ETH'
-      }]);
+      }, []);
     }
   }, {
     key: "showNotifierDemo",
@@ -35775,7 +38315,7 @@ var Integration = /*#__PURE__*/function (_EventEmitter) {
         this.popUpHandler.showNotice({
           type: messageConstants.sent,
           hash: '0x543284135d7821e0271272df721101420003cb0e43e8c2e2eed1451cdb571fa4',
-          explorerPath: state.network.type.blockExplorerTX
+          explorerPath: state.network.blockExplorerTX
         });
       } else {
         this.popUpHandler.showNotice(details);
@@ -35947,23 +38487,14 @@ var Integration = /*#__PURE__*/function (_EventEmitter) {
             web3Provider = window.ethereum;
           }
         } else {
-          var chain, defaultNetwork;
-
           if (this.knownNetworks.has(CHAIN_ID)) {
-            chain = this.identifyChain(CHAIN_ID || 1);
-            defaultNetwork = nodeList[chain.key][0];
-            state.network = defaultNetwork;
+            var chain = this.identifyChain(CHAIN_ID || 1);
+            state.network = this.networks[chain.key];
           } else {
-            chain = {
-              name: 'unknown'
-            };
-            defaultNetwork = this.formatNewNetworks({
-              name: 'unknown'
-            });
-            state.network = defaultNetwork;
+            throw new Error('Unknown network, please add your network to the constructor');
           }
 
-          var hostUrl = url.parse(RPC_URL || defaultNetwork.url);
+          var hostUrl = url.parse(RPC_URL);
           var options = {
             subscriptionNotFoundNoThrow: this.subscriptionNotFoundNoThrow
           };
@@ -36266,7 +38797,7 @@ var Integration = /*#__PURE__*/function (_EventEmitter) {
         _this7.popUpHandler.showNotice({
           type: messageConstants.sent,
           hash: hash,
-          explorerPath: state.network.type.blockExplorerTX
+          explorerPath: state.network.blockExplorerTX
         }, 10000);
       });
       eventHub.on('Receipt', function () {
@@ -36283,7 +38814,7 @@ var Integration = /*#__PURE__*/function (_EventEmitter) {
           _this7.popUpHandler.showNotice({
             type: messageConstants.failed,
             hash: _this7.lastHash,
-            explorerPath: state.network.type.blockExplorerTX
+            explorerPath: state.network.blockExplorerTX
           }, 10000);
         } else {
           _this7.popUpHandler.showNotice(messageConstants.error);
