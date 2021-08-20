@@ -29,9 +29,7 @@ class WSProvider {
         this.wsProvider.connection.readyState ===
         this.wsProvider.connection.OPEN
       )
-        this.wsProvider.connection.send(
-          '{"jsonrpc":"2.0","method":"net_version","params":[],"id":1}'
-        );
+        this.wsProvider.connection.send('');
       if (
         !Object.is(this.wsProvider, store.state.web3.currentProvider) &&
         this.lastMessage + 10 * 60 * 1000 < new Date().getTime() //wait extra 10 minutes
