@@ -36,7 +36,7 @@ export default async ({ payload, store, eventHub }, res, next) => {
       !tx.gas || new BigNumber(tx.gas).lte(0)
         ? await store.state.web3.eth.estimateGas(localTx)
         : tx.gas;
-    tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
+    tx.chainId = !tx.chainId ? store.state.network.chainID : tx.chainId;
     tx.gasPrice =
       !tx.gasPrice || new BigNumber(tx.gasPrice).lte(0)
         ? await store.state.web3.eth.getGasPrice()

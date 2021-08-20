@@ -425,6 +425,7 @@ export default {
       .getBalance('0x192627797720b7c5EC7b9FAAeafa41FF49f866e3')
       .then(console.log)
       .catch(console.error);
+    this.web3.eth.net.getId().then(console.log);
     web3 = this.web3;
     this.ethereum.on('accountsChanged', accounts => {
       console.log(`accountsChanged User's address is ${accounts[0]}`);
@@ -497,6 +498,7 @@ export default {
       this.ethereum = this.connect.makeWeb3Provider();
       this.web3 = new Web3(this.ethereum);
       this.web3.eth.getBlockNumber().then(console.log);
+      this.web3.eth.net.getId().then(console.log);
     },
     animate() {
       this.connect.showNotice();

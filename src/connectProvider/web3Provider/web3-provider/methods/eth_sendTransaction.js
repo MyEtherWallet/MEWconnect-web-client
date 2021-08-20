@@ -46,7 +46,7 @@ export default async ({ payload, store, eventHub }, res, next) => {
     tx.gasPrice = !tx.gasPrice
       ? await store.state.web3.eth.getGasPrice()
       : tx.gasPrice;
-    tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
+    tx.chainId = !tx.chainId ? store.state.network.chainID : tx.chainId;
   } catch (e) {
     eventHub.emit(EventNames.ERROR_NOTIFY, e);
     debugErrors(e);

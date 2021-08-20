@@ -95,7 +95,7 @@ class MEWconnectWallet {
         tx.data.slice(0, 10) === '0xa9059cbb' ||
         tx.data.slice(0, 10) === '0x095ea7b3'
       ) {
-        tokenInfo = this.state.network.type.tokens.find(
+        tokenInfo = this.state.network.tokens.find(
           entry => entry.address.toLowerCase() === tx.to.toLowerCase()
         );
         if (tokenInfo) {
@@ -116,7 +116,7 @@ class MEWconnectWallet {
         this.mewConnect.once('signTx', result => {
           this.mewConnect.removeAllListeners('reject');
           tx = new Transaction(sanitizeHex(result), {
-            common: commonGenerator(this.state.network.type)
+            common: commonGenerator(this.state.network)
           });
           const signedChainId = calculateChainIdFromV(tx.v);
           if (signedChainId !== networkId)
