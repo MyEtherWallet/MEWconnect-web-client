@@ -1,14 +1,13 @@
-/* eslint-disable */
 'use strict';
 
 const _ = require('underscore');
 const errors = require('web3-core-helpers').errors;
 
-var isNode =
+const isNode =
   Object.prototype.toString.call(
     typeof process !== 'undefined' ? process : 0
   ) === '[object process]';
-var isRN =
+const isRN =
   typeof navigator !== 'undefined' && navigator.product === 'ReactNative';
 
 let Ws = null;
@@ -22,9 +21,9 @@ if (isNode || isRN) {
   _btoa = function(str) {
     return Buffer.from(str).toString('base64');
   };
-  var url = require('url');
+  const url = require('url');
   if (url.URL) {
-    var newURL = url.URL;
+    const newURL = url.URL;
     parseURL = function(url) {
       return new newURL(url);
     };
