@@ -4,6 +4,13 @@
 const _ = require('underscore');
 const errors = require('web3-core-helpers').errors;
 
+var isNode =
+  Object.prototype.toString.call(
+    typeof process !== 'undefined' ? process : 0
+  ) === '[object process]';
+var isRN =
+  typeof navigator !== 'undefined' && navigator.product === 'ReactNative';
+
 let Ws = null;
 let _btoa = null;
 let parseURL = null;
@@ -11,10 +18,26 @@ Ws = function(url, protocols) {
   if (protocols) return new window.WebSocket(url, protocols);
   return new window.WebSocket(url);
 };
-_btoa = btoa;
-parseURL = function(url) {
-  return new URL(url);
-};
+if (isNode || isRN) {
+  _btoa = function(str) {
+    return Buffer.from(str).toString('base64');
+  };
+  var url = require('url');
+  if (url.URL) {
+    var newURL = url.URL;
+    parseURL = function(url) {
+      return new newURL(url);
+    };
+  } else {
+    parseURL = require('url').parse;
+  }
+} else {
+  _btoa = btoa.bind(window);
+  parseURL = function(url) {
+    return new URL(url);
+  };
+}
+
 const WebsocketProvider = function WebsocketProvider(url, options) {
   const _this = this;
   this.responseCallbacks = {};
