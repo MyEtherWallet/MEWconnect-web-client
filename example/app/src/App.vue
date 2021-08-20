@@ -12,6 +12,7 @@
       <button @click="selectNetwork(42)">Kovan</button>
       <button @click="selectNetwork(137)">Matic</button>
       <button @click="selectNetwork(56)">BSC</button>
+      <button @click="selectNetwork(4)">Rinkeby</button>
     </div>
 
     <ul v-show="userAddress !== ''">
@@ -332,7 +333,8 @@ const NetworkEndPoints = {
   5: 'wss://nodes.mewapi.io/ws/goerli',
   42: 'https://nodes.mewapi.io/rpc/kovan',
   137: 'wss://nodes.mewapi.io/ws/matic',
-  56: 'https://nodes.mewapi.io/rpc/bsc'
+  56: 'https://nodes.mewapi.io/rpc/bsc',
+  4: 'wss://nodes.mewapi.io/ws/rinkeby'
 };
 let web3;
 

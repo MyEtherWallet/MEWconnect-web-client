@@ -316,7 +316,7 @@ function _nonIterableSpread() {
 
 var name = "@myetherwallet/mewconnect-web-client";
 var homepage = "https://github.com/myetherwallet/MEWconnect-web-client";
-var version = "2.2.0-beta.7";
+var version = "2.2.0-beta.9";
 var main = "dist/cjs/index.js";
 var module$1 = "dist/esm/index.js";
 var scripts = {
@@ -3420,7 +3420,7 @@ var MEWconnectWallet = /*#__PURE__*/function () {
                         switch (_context.prev = _context.next) {
                           case 0:
                             if (tx.data.slice(0, 10) === '0xa9059cbb' || tx.data.slice(0, 10) === '0x095ea7b3') {
-                              tokenInfo = _this2.state.network.type.tokens.find(function (entry) {
+                              tokenInfo = _this2.state.network.tokens.find(function (entry) {
                                 return entry.address.toLowerCase() === tx.to.toLowerCase();
                               });
 
@@ -3445,7 +3445,7 @@ var MEWconnectWallet = /*#__PURE__*/function () {
                                 _this2.mewConnect.removeAllListeners('reject');
 
                                 tx = new ethereumjsTx.Transaction(sanitizeHex$1(result), {
-                                  common: commonGenerator(_this2.state.network.type)
+                                  common: commonGenerator(_this2.state.network)
                                 });
                                 var signedChainId = calculateChainIdFromV(tx.v);
                                 if (signedChainId !== networkId) throw new Error('Invalid networkId signature returned. Expected: ' + networkId + ', Got: ' + signedChainId, 'InvalidNetworkId');
@@ -5968,7 +5968,7 @@ var ethSendTransaction = /*#__PURE__*/(function () {
 
           case 37:
             tx.gasPrice = _context.t2;
-            tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
+            tx.chainId = !tx.chainId ? store.state.network.chainID : tx.chainId;
             _context.next = 47;
             break;
 
@@ -6251,7 +6251,7 @@ var ethSignTransaction = /*#__PURE__*/(function () {
 
           case 29:
             tx.gas = _context.t1;
-            tx.chainId = !tx.chainId ? store.state.network.type.chainID : tx.chainId;
+            tx.chainId = !tx.chainId ? store.state.network.chainID : tx.chainId;
 
             if (!(!tx.gasPrice || new BigNumber__default['default'](tx.gasPrice).lte(0))) {
               _context.next = 37;
@@ -6327,7 +6327,7 @@ var netVersion = /*#__PURE__*/(function () {
             return _context.abrupt("return", next());
 
           case 3:
-            res(null, toPayload(payload.id, store.state.network.type.chainID));
+            res(null, toPayload(payload.id, store.state.network.chainID));
 
           case 4:
           case "end":
@@ -38160,6 +38160,18 @@ var ETC = {
   currencyName: 'ETC'
 };
 
+var RIN = {
+  name: 'RIN',
+  name_long: 'Rinkeby',
+  homePage: 'https://www.rinkeby.io/',
+  blockExplorerTX: 'https://rinkeby.etherscan.io/tx/[[txHash]]',
+  blockExplorerAddr: 'https://rinkeby.etherscan.io/address/[[address]]',
+  chainID: 4,
+  tokens: [],
+  contracts: [],
+  currencyName: 'RIN'
+};
+
 var Networks = /*#__PURE__*/Object.freeze({
   __proto__: null,
   ETH: ETH,
@@ -38168,7 +38180,8 @@ var Networks = /*#__PURE__*/Object.freeze({
   ROP: ROP,
   MATIC: MATIC,
   BSC: BSC,
-  ETC: ETC
+  ETC: ETC,
+  RIN: RIN
 });
 
 var APP_STORE_LINK = IOS_LINK;

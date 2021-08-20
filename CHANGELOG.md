@@ -1,3 +1,6 @@
+- ### Release 2.2.0-beta.9
+- add more networks
+
 - ### Release 2.2.0-beta.6
 - update rollup and more cleanup
 

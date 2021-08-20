@@ -5,5 +5,5 @@ import ROP from './ROP';
 import MATIC from './MATIC';
 import BSC from './BSC';
 import ETC from './ETC';
-
-export { ETH, GOERLI, KOV, ROP, MATIC, BSC, ETC };
+import RIN from './RIN';
+export { ETH, GOERLI, KOV, ROP, MATIC, BSC, ETC, RIN };
