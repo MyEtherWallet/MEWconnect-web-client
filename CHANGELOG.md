@@ -1,3 +1,6 @@
+- ### Release 2.2.0-beta.10
+- Fix github issues, npm audit fix
+
 - ### Release 2.2.0-beta.9
 - add more networks
 
