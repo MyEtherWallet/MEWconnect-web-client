@@ -6,4 +6,5 @@ import MATIC from './MATIC';
 import BSC from './BSC';
 import ETC from './ETC';
 import RIN from './RIN';
-export { ETH, GOERLI, KOV, ROP, MATIC, BSC, ETC, RIN };
+import BOBA from './BOBA';
+export { ETH, GOERLI, KOV, ROP, MATIC, BSC, ETC, RIN, BOBA };
