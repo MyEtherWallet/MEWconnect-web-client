@@ -1,3 +1,6 @@
+- ### Release 2.2.0-beta.11
+- return all lowercase address strings, fix npm resolution
+
 - ### Release 2.2.0-beta.10
 - Fix github issues, npm audit fix
 

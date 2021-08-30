@@ -208,21 +208,19 @@ export default class Integration extends EventEmitter {
 
       if (state.web3 && state.wallet) {
         await state.web3.eth.getTransactionCount(
-          state.wallet.getChecksumAddressString()
+          state.wallet.getAddressString()
         );
       }
       if (state.web3Provider && state.wallet) {
         if (state.web3Provider.accountsChanged) {
           state.web3Provider.emit('accountsChanged', [
-            state.wallet.getChecksumAddressString()
+            state.wallet.getAddressString()
           ]);
         }
-        eventHub.emit('accounts_available', [
-          state.wallet.getChecksumAddressString()
-        ]);
+        eventHub.emit('accounts_available', [state.wallet.getAddressString()]);
       }
 
-      resolve([state.wallet.getChecksumAddressString()]);
+      resolve([state.wallet.getAddressString()]);
     });
   }
 

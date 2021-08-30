@@ -19,7 +19,7 @@ import { Manager } from 'web3-core-requestmanager';
 import { v4 } from 'uuid';
 import { formatters } from 'web3-core-helpers';
 import BigNumber from 'bignumber.js';
-import url from 'url';
+import url$1 from 'url';
 import utils, { isHexStrict } from 'web3-utils';
 import axios from 'axios';
 import { Transaction } from 'ethereumjs-tx';
@@ -293,7 +293,7 @@ function _nonIterableSpread() {
 
 var name = "@myetherwallet/mewconnect-web-client";
 var homepage = "https://github.com/myetherwallet/MEWconnect-web-client";
-var version = "2.2.0-beta.9";
+var version = "2.2.0-beta.11";
 var main = "dist/cjs/index.js";
 var module = "dist/esm/index.js";
 var scripts = {
@@ -304,7 +304,7 @@ var scripts = {
 	test: "npm run test:jest",
 	buildBrowserTest: "webpack --config tests/browser/webpack.config.js",
 	"buildBrowserTest:watch": "webpack --config tests/browser/webpack.config.js -w",
-	build: "npm run lint && rimraf dist/ && npx rollup -c",
+	build: "npx npm-force-resolutions && npm install && npm run lint && rimraf dist/ && npx rollup -c",
 	"build:dev": "rimraf dist/ && npx rollup -c",
 	lint: "npx eslint --fix 'src/**.js'",
 	"update:mainlist": "node src/connectProvider/fetchLists/fetchMainLists.js",
@@ -325,7 +325,7 @@ var dependencies = {
 	"core-js": "^3.4.4",
 	debug: "^4.0.1",
 	"detect-browser": "^3.0.1",
-	eccrypto: "^1.1.3",
+	eccrypto: "^1.1.6",
 	"eth-sig-util": "^3.0.1",
 	"ethereumjs-common": "^1.5.0",
 	"ethereumjs-tx": "^2.1.2",
@@ -354,7 +354,7 @@ var dependencies = {
 	"web3-utils": "1.5.0",
 	"webrtc-adapter": "^6.4.3",
 	wrtc: "^0.4.6",
-	ws: "^7.2.1"
+	ws: "^7.5.3"
 };
 var devDependencies = {
 	"@babel/core": "^7.8.4",
@@ -369,7 +369,7 @@ var devDependencies = {
 	"@vue/cli-plugin-eslint": "^4.2.3",
 	"@vue/cli-service": "^4.1.0",
 	"@vue/eslint-config-prettier": "^4.0.1",
-	axios: "^0.19.2",
+	axios: "^0.21.1",
 	"babel-core": "^7.0.0-bridge.0",
 	"babel-eslint": "^10.0.3",
 	"babel-jest": "^25.1.0",
@@ -398,6 +398,9 @@ var devDependencies = {
 	"vue-template-compiler": "^2.6.10",
 	yorkie: "^2.0.0"
 };
+var resolutions = {
+	"xmlhttprequest-ssl": "1.6.1"
+};
 var packageJson = {
 	name: name,
 	homepage: homepage,
@@ -407,7 +410,8 @@ var packageJson = {
 	scripts: scripts,
 	gitHooks: gitHooks,
 	dependencies: dependencies,
-	devDependencies: devDependencies
+	devDependencies: devDependencies,
+	resolutions: resolutions
 };
 
 var V1endpoint = 'https://connect.mewapi.io';
@@ -3124,7 +3128,7 @@ var isJson = function isJson(str) {
 };
 
 var getService = function getService(parsableUrl) {
-  var parsedUrl = url.parse(parsableUrl).hostname;
+  var parsedUrl = url$1.parse(parsableUrl).hostname;
   var splitUrl = parsedUrl.split('.');
   if (splitUrl.length > 2) // eslint-disable-next-line
     return capitalize("".concat(splitUrl[1], ".").concat(splitUrl[2]));
@@ -5180,12 +5184,12 @@ var MewConnectClient = {
   Initiator: MewConnectInitiator
 };
 
-/* eslint-disable */
-
 var _ = require('underscore');
 
 var errors = require('web3-core-helpers').errors;
 
+var isNode = Object.prototype.toString.call(typeof process !== 'undefined' ? process : 0) === '[object process]';
+var isRN = typeof navigator !== 'undefined' && navigator.product === 'ReactNative';
 var Ws = null;
 var _btoa = null;
 var parseURL = null;
@@ -5195,11 +5199,29 @@ Ws = function Ws(url, protocols) {
   return new window.WebSocket(url);
 };
 
-_btoa = btoa;
+if (isNode || isRN) {
+  _btoa = function _btoa(str) {
+    return Buffer.from(str).toString('base64');
+  };
 
-parseURL = function parseURL(url) {
-  return new URL(url);
-};
+  var url = require('url');
+
+  if (url.URL) {
+    var newURL = url.URL;
+
+    parseURL = function parseURL(url) {
+      return new newURL(url);
+    };
+  } else {
+    parseURL = require('url').parse;
+  }
+} else {
+  _btoa = btoa.bind(window);
+
+  parseURL = function parseURL(url) {
+    return new URL(url);
+  };
+}
 
 var WebsocketProvider = function WebsocketProvider(url, options) {
   var _this = this;
@@ -6613,7 +6635,7 @@ var WSProvider = function WSProvider(host, options, store, eventHub) {
   this.lastMessage = new Date().getTime();
 
   var keepAlive = function keepAlive() {
-    if (_this2.wsProvider.connection.readyState === _this2.wsProvider.connection.OPEN) _this2.wsProvider.connection.send('{"jsonrpc":"2.0","method":"net_version","params":[],"id":1}');
+    if (_this2.wsProvider.connection.readyState === _this2.wsProvider.connection.OPEN) _this2.wsProvider.connection.send('');
 
     if (!Object.is(_this2.wsProvider, store.state.web3.currentProvider) && _this2.lastMessage + 10 * 60 * 1000 < new Date().getTime() //wait extra 10 minutes
     ) {
@@ -38433,18 +38455,18 @@ var Integration = /*#__PURE__*/function (_EventEmitter) {
                   }
 
                   _context.next = 19;
-                  return state.web3.eth.getTransactionCount(state.wallet.getChecksumAddressString());
+                  return state.web3.eth.getTransactionCount(state.wallet.getAddressString());
 
                 case 19:
                   if (state.web3Provider && state.wallet) {
                     if (state.web3Provider.accountsChanged) {
-                      state.web3Provider.emit('accountsChanged', [state.wallet.getChecksumAddressString()]);
+                      state.web3Provider.emit('accountsChanged', [state.wallet.getAddressString()]);
                     }
 
-                    eventHub.emit('accounts_available', [state.wallet.getChecksumAddressString()]);
+                    eventHub.emit('accounts_available', [state.wallet.getAddressString()]);
                   }
 
-                  resolve([state.wallet.getChecksumAddressString()]);
+                  resolve([state.wallet.getAddressString()]);
 
                 case 21:
                 case "end":
@@ -38507,7 +38529,7 @@ var Integration = /*#__PURE__*/function (_EventEmitter) {
             throw new Error('Unknown network, please add your network to the constructor');
           }
 
-          var hostUrl = url.parse(RPC_URL);
+          var hostUrl = url$1.parse(RPC_URL);
           var options = {
             subscriptionNotFoundNoThrow: this.subscriptionNotFoundNoThrow
           };
