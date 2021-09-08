@@ -642,7 +642,6 @@ export default class Integration extends EventEmitter {
           messageConstants.notConnected
         );
       } else {
-        console.log('heeerrreee');
         const mewConnect = state.wallet.getConnection();
         mewConnect.sendRtcMessage('eth_signTypedData_v4', params);
         mewConnect.once('eth_signTypedData_v4', data => {

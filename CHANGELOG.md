@@ -1,3 +1,6 @@
+- ### Release 2.2.0-beta.12
+- add eth_signTypedData_v4
+
 - ### Release 2.2.0-beta.11
 - return all lowercase address strings, fix npm resolution
 
