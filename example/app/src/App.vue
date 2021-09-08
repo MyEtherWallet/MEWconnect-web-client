@@ -726,6 +726,12 @@ export default {
     signTypedDataV4() {
       const data = {
         types: {
+          EIP712Domain: [
+            { name: 'name', type: 'string' },
+            { name: 'version', type: 'string' },
+            { name: 'chainId', type: 'uint256' },
+            { name: 'verifyingContract', type: 'address' }
+          ],
           Person: [
             { name: 'name', type: 'string' },
             { name: 'wallet', type: 'address' }
@@ -733,32 +739,26 @@ export default {
           Mail: [
             { name: 'from', type: 'Person' },
             { name: 'to', type: 'Person' },
-            { name: 'contents', type: 'string' },
-            { name: 'replyTo', type: 'Mail' }
+            { name: 'contents', type: 'string' }
           ]
         },
         primaryType: 'Mail',
+        domain: {
+          name: 'Ether Mail',
+          version: '1',
+          chainId: 1,
+          verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC'
+        },
         message: {
-          from: {
+          sender: {
             name: 'Cow',
             wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826'
           },
-          to: {
+          recipient: {
             name: 'Bob',
             wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB'
           },
-          contents: 'Hello, Bob!',
-          replyTo: {
-            to: {
-              name: 'Cow',
-              wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826'
-            },
-            from: {
-              name: 'Bob',
-              wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB'
-            },
-            contents: 'Hello!'
-          }
+          contents: 'Hello, Bob!'
         }
       };
       this.ethereum
