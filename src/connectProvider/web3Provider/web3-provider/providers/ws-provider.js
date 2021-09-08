@@ -16,6 +16,7 @@ import {
   netVersion,
   decrypt,
   signTypedData_v3,
+  signTypedData_v4,
   getEncryptionPublicKey,
   ethRequestAccounts
 } from '../methods/index';
@@ -73,6 +74,7 @@ class WSProvider {
       middleware.use(netVersion);
       middleware.use(decrypt);
       middleware.use(signTypedData_v3);
+      middleware.use(signTypedData_v4);
       middleware.use(getEncryptionPublicKey);
       middleware.run(req, callback).then(() => {
         _this.connection.send(JSON.stringify(payload));

@@ -9,6 +9,7 @@ import ecRecover from './personal_ecRecover';
 import getEncryptionPublicKey from './eth_getEncryptionPublicKey';
 import decrypt from './eth_decrypt';
 import signTypedData_v3 from './eth_signTypedData_v3';
+import signTypedData_v4 from './eth_signTypedData_v4';
 import ethRequestAccounts from './eth_requestAccounts';
 
 export {
@@ -23,5 +24,6 @@ export {
   getEncryptionPublicKey,
   decrypt,
   signTypedData_v3,
+  signTypedData_v4,
   ethRequestAccounts
 };

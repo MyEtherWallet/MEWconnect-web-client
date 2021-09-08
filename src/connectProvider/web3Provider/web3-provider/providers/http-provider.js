@@ -13,6 +13,7 @@ import {
   ecRecover,
   decrypt,
   signTypedData_v3,
+  signTypedData_v4,
   getEncryptionPublicKey,
   ethRequestAccounts
 } from '../methods/index';
@@ -39,6 +40,7 @@ class HttpProvider {
         middleware.use(netVersion);
         middleware.use(decrypt);
         middleware.use(signTypedData_v3);
+        middleware.use(signTypedData_v4);
         middleware.use(getEncryptionPublicKey);
         middleware.run(req, callback).then(() => {
           requestManager.provider.send(payload, callback);

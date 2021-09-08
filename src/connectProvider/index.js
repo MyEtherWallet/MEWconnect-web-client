@@ -635,5 +635,20 @@ export default class Integration extends EventEmitter {
         });
       }
     });
+
+    eventHub.on(EventNames.SIGN_TYPE_DATA_V4, (params, resolve) => {
+      if (!state.wallet) {
+        this.popUpHandler.showNoticePersistentEnter(
+          messageConstants.notConnected
+        );
+      } else {
+        console.log('heeerrreee');
+        const mewConnect = state.wallet.getConnection();
+        mewConnect.sendRtcMessage('eth_signTypedData_v4', params);
+        mewConnect.once('eth_signTypedData_v4', data => {
+          resolve(data);
+        });
+      }
+    });
   }
 }

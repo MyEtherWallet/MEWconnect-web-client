@@ -221,6 +221,12 @@
       </li>
       <li>
         <hr />
+        <button @click="signTypedDataV4">
+          signed Typed v4
+        </button>
+      </li>
+      <li>
+        <hr />
         <input v-model="messageToSign" />
         <button @click="signMessage">sign message</button><br />
         <textarea
@@ -716,6 +722,64 @@ export default {
             .catch(err => console.error(err));
         });
       });
+    },
+    signTypedDataV4() {
+      const data = {
+        types: {
+          Person: [
+            { name: 'name', type: 'string' },
+            { name: 'wallet', type: 'address' }
+          ],
+          Mail: [
+            { name: 'from', type: 'Person' },
+            { name: 'to', type: 'Person' },
+            { name: 'contents', type: 'string' },
+            { name: 'replyTo', type: 'Mail' }
+          ]
+        },
+        primaryType: 'Mail',
+        message: {
+          from: {
+            name: 'Cow',
+            wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826'
+          },
+          to: {
+            name: 'Bob',
+            wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB'
+          },
+          contents: 'Hello, Bob!',
+          replyTo: {
+            to: {
+              name: 'Cow',
+              wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826'
+            },
+            from: {
+              name: 'Bob',
+              wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB'
+            },
+            contents: 'Hello!'
+          }
+        }
+      };
+      this.ethereum
+        .request({
+          method: 'eth_signTypedData_v4',
+          params: [this.userAddress, JSON.stringify(data)]
+        })
+        .then(sig => {
+          console.log('typed data sig', sig);
+          console.log(
+            sigUtil
+              .recoverTypedSignature(
+                {
+                  sig,
+                  data
+                },
+                'V4'
+              )
+              .toString('hex')
+          );
+        });
     },
     signTypedDataV3() {
       const data = {
