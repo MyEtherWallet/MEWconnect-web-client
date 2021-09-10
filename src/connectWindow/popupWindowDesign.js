@@ -710,7 +710,7 @@ const noticetext = `
       }
       `;
 
-const windowInformer = spaceman => {
+const windowInformer = (spaceman) => {
   return `
       <div class="Notification Notificationshow NotificationExpand">
         <div class="NotificationBox">
@@ -748,12 +748,12 @@ const windowInformer = spaceman => {
 `;
 };
 
-const modalFrame = innerContent => {
+const modalFrame = (innerContent) => {
   return `
     <div class="mew-wallet-modal is-visible" id="mew-wallet-modal"></div>
     <div class="mew-wallet-modal-container-mew-modal is-visible" id="mew-wallet-modal-container">
       <div class="modal-dialog is-visible" id="mew-mobile-modal-dialog">
-        <section class="modal-content">
+        <section class="mew-wallet-modal-content">
         ${innerContent}
         </section>
       </div>
@@ -765,7 +765,7 @@ const modalCSS = (additionalCss = '') => {
   return `
 ${additionalCss}
 
-      #mew-mobile-modal-dialog section.modal-content{
+      #mew-mobile-modal-dialog section.mew-wallet-modal-content{
         position: fixed;
         min-width: 448px;
         max-width: 448px;
