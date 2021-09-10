@@ -752,8 +752,8 @@ const modalFrame = innerContent => {
   return `
     <div class="mew-wallet-modal is-visible" id="mew-wallet-modal"></div>
     <div class="mew-wallet-modal-container-mew-modal is-visible" id="mew-wallet-modal-container">
-      <div class="mew-modal-dialog is-visible" id="mew-mobile-modal-dialog">
-        <section class="mew-wallet-modal-content">
+      <div class="modal-dialog is-visible" id="mew-mobile-modal-dialog">
+        <section class="modal-content">
         ${innerContent}
         </section>
       </div>
@@ -765,7 +765,7 @@ const modalCSS = (additionalCss = '') => {
   return `
 ${additionalCss}
 
-      #mew-mobile-modal-dialog section.mew-wallet-modal-content{
+      #mew-mobile-modal-dialog section.modal-content{
         position: fixed;
         min-width: 448px;
         max-width: 448px;
@@ -774,6 +774,7 @@ ${additionalCss}
         width: 100%;
         height: 100%;
         border-radius: 16px;
+        background-color: none !important;
       }
             
       .mew-wallet-modal {
@@ -799,7 +800,7 @@ ${additionalCss}
         z-index: 999999;
       }
 
-      div.mew-modal-dialog {
+      div.modal-dialog {
         position: fixed;
         background: rgb(255, 255, 255);
         border-radius: 16px;
