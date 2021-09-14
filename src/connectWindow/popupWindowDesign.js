@@ -57,7 +57,7 @@ const cssStyles = `
         z-index: 10;
       }
       
-      .qr-code {
+      .mew-qr-code {
         font-family: 'Roboto', sans-serif;
         color: #050f19;
         height: 210px;
@@ -70,7 +70,7 @@ const cssStyles = `
         border-radius: 8px;
         display: inline-block;
       }
-      .text-one {
+      .mew-text-one {
         min-width: 380px;
         height: 30px;
         color: rgba(0, 0, 0);
@@ -83,7 +83,7 @@ const cssStyles = `
         box-sizing: border-box;
         padding-bottom: 8px;
       }
-      .text-two {
+      .mew-text-two {
         font-family: 'Roboto', sans-serif;
         font-size: 14px;
         color: rgba(0, 0, 0, 0.55);
@@ -94,7 +94,7 @@ const cssStyles = `
         min-width: 265px;
         padding-top: 8px;
       }
-      .list-style {
+      .mew-list-style {
         width: 278px;
         height: 48px;
         color: rgba(0, 0, 0, 0.55);
@@ -109,11 +109,11 @@ const cssStyles = `
         position: relative;
         left: 30px
       }
-      .list-style li {
+      .mew-list-style li {
         margin-left: 0;
         padding-left: 10px;
       }
-      .bottom-background {
+      .mew-bottom-background {
         position: absolute;
         bottom: 0;
         right: 64px;
@@ -140,6 +140,24 @@ const cssStyles = `
         left: -15px;
         
       }
+
+      .bottom-container-mew-modal > .left {
+        margin-right: 15px;
+      }
+
+      .bottom-container-mew-modal > .center {
+        margin-right: 15px;
+      }
+
+      .bottom-container-mew-modal > .right {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .bottom-container-mew-modal > .left-img {
+        padding-right: 10px;
+      }
+
       .bottom-container-mew-modal-text {
         font-family: 'Roboto', sans-serif;
         color: #050f19;
@@ -160,33 +178,17 @@ const cssStyles = `
         text-align: center;
       }
 
-      .left {
-        margin-right: 15px;
-      }
-
       .spaceman-background {
         background-color: white;
         border-radius: 10px;
-      }
-
-      .center{
-        align-items: center;
-      }
-
-      .right {
-        align-items: flex-start;
-        text-align: left;
-      }
-
-      .left-img {
-        padding-right: 10px;
       }
 
       p {
         margin: 0;
         padding-bottom: 5px;
       }
-      .bottom {
+
+      .mew-bottom {
         color: rgba(0, 0, 0, 0.55);
         font-size: 12px;
         font-family: 'Roboto', sans-serif;
@@ -219,11 +221,11 @@ const cssStyles = `
         color: #fffff;
       }
 
-      .hidden {
+      .mew-hidden {
         display: none;
       }
       
-      .get-text {
+      .mew-get-text {
         width: 265px;
         height: 16px;
         color: rgb(0, 0, 0);
@@ -233,7 +235,7 @@ const cssStyles = `
         letter-spacing: 0.17px;
       }
       
-      .camera-icon {
+      .mew-camera-icon {
           opacity: 0.54;
           position: relative;
           bottom: -2px;
@@ -241,15 +243,15 @@ const cssStyles = `
           width: 14px;
         }
         
-        #google-link:hover {
+        #mew-google-link:hover {
         cursor: pointer;
         }
         
-        #apple-link:hover {
+        #mew-apple-link:hover {
         cursor: pointer;
         }
         
-        .warn-color {
+        .mew-warn-color {
         color: orange;
         }
         
@@ -314,25 +316,25 @@ const htmlDesign = (
         </div>
       <div class="upper-text">
 
-        <p class="text-one">Connect to MEW&nbsp;wallet app</p>
-        <p class="text-two">Scan this code to connect</p>
+        <p class="mew-text-one">Connect to MEW&nbsp;wallet app</p>
+        <p class="mew-text-two">Scan this code to connect</p>
        </div>
         <div id="qr-failure"></div>
-        <div id="qr-code-connecting-mew" class="hidden"><div class="loader-mew"></div><h4>Connecting...</h4> Creating encrypted peer-to-peer connection </div>
-        <div id="qr-code-display-container-mew" class="qr-code">
+        <div id="qr-code-connecting-mew" class="mew-hidden"><div class="loader-mew"></div><h4>Connecting...</h4> Creating encrypted peer-to-peer connection </div>
+        <div id="qr-code-display-container-mew" class="mew-qr-code">
           <canvas id="canvas-for-mewconnect-qr-code"></canvas>
         </div>
-        <div id="refresh-container" class="refreshIcon hidden">
+        <div id="refresh-container" class="refreshIcon mew-hidden">
           Try Again <img id="refresh" src="${refresh}" />
         </div>
 
-        <ol class="list-style">
+        <ol class="mew-list-style">
           <li>Open MEW wallet app on your mobile device</li>
-          <li class="with-image">Click <img class="camera-icon" src="${camera}"> icon in the top right corner</li>
+          <li class="with-image">Click <img class="mew-camera-icon" src="${camera}"> icon in the top right corner</li>
           <li>Scan this code to connect</li>
         </ol>
       </div>
-      <div class="bottom-background">
+      <div class="mew-bottom-background">
         <div class="bottom-container-mew-modal">
           <div class="left">
             <img
@@ -344,10 +346,10 @@ const htmlDesign = (
           </div>
           <div class="center">
             <div class="right">
-              <p class="get-text">Don't have MEW&nbsp;wallet app?</p>
-              <p id="popupsBlocked" class="warn-color"></p>
+              <p class="mew-get-text">Don't have MEW&nbsp;wallet app?</p>
+              <p id="popupsBlocked" class="mew-warn-color"></p>
                       <a href="${iosLink}" target="_blank" id="appStore">               <img
-                  id="apple-link"
+                  id="mew-apple-link"
                   class="left-img"
                   src="${appStore}"
                   height="40"
@@ -355,7 +357,7 @@ const htmlDesign = (
                 /></a>
 
                       <a href="${androidLink}" target="_blank" id="playStore">                <img
-                  id="google-link"
+                  id="mew-google-link"
                   src="${playStore}"
                   height="40"
                   width="135"
@@ -367,7 +369,7 @@ const htmlDesign = (
           </div>
 
         </div>
-        <div class="bottom">
+        <div class="mew-bottom">
           Powered by <a href="https://myetherwallet.github.io/MEWconnect-Protocol-Documentation/" target="_blank" id="proto-link" class="bottom-link">MEWconnect protocol</a> <br />
           brought to you by <a href="https://www.myetherwallet.com/" target="_blank" id="mew-link" class="bottom-link">MyEtherWallet</a>
         </div>
@@ -383,11 +385,11 @@ const noticetext = `
       @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 
-      div#Notifications.hidden {
+      div#Notifications.mew-hidden {
         visibility: hidden;
       }
       
-      div#Notifications.hidden {
+      div#Notifications.mew-hidden {
         visibility: hidden;
       }
 
@@ -395,10 +397,10 @@ const noticetext = `
         visibility: visible;
       }
       
-      div#qrcodeError.hidden {
+      div#qrcodeError.mew-hidden {
         visibility: hidden;
       }
-      div#retry-button-mew.hidden {
+      div#retry-button-mew.mew-hidden {
         display: none;
       }
 
@@ -734,12 +736,12 @@ const windowInformer = spaceman => {
               <button id="NotificationButton2" class="NotificationButton NotificationButton2">Cancel
               </button>
             </div>
-            <div id="retry-button-mew" class="NotificationAction hidden"><span
+            <div id="retry-button-mew" class="NotificationAction mew-hidden"><span
               class="NotificationButtonInfo NotificationButtonInfo2">Refresh QRcode and </span>
               <button id="NotificationButton3" class="NotificationButton NotificationButton2">Try Again
               </button>
             </div>
-              <div id="qrcodeError" class="NotificationError hidden"><span
+              <div id="qrcodeError" class="NotificationError mew-hidden"><span
               class="NotificationButtonInfo NotificationButtonInfo2">Failed to generate QR code. Please cancel and retry.</span>
             </div>
           </div>
