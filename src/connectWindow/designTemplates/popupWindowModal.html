@@ -7,7 +7,7 @@
       @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');
       @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-      .outer-container {
+      .mew-outer-container {
         font-family: 'Roboto', sans-serif;
         box-sizing: border-box;
         bottom: 0;
@@ -21,7 +21,7 @@
         text-align: center;
         top: 0;
       }
-      .container {
+      .mew-wallet-container {
         font-family: 'Roboto', sans-serif;
         color: #050f19;
         text-align: center;
@@ -37,7 +37,7 @@
         padding-top: 16px;
       }
 
-      .upper-text {
+      .mew-upper-text {
         position: relative;
         bottom: 15px;
       }
@@ -49,7 +49,7 @@
         left: 100%;
         width: 20px;
       }
-      .qr-code {
+      .mew-qr-code {
         font-family: 'Roboto', sans-serif;
         color: #050f19;
         height: 210px;
@@ -62,7 +62,7 @@
         border-radius: 8px;
         display: inline-block;
       }
-      .text-one {
+      .mew-text-one {
         min-width: 380px;
         height: 30px;
         color: rgba(0, 0, 0);
@@ -75,7 +75,7 @@
         box-sizing: border-box;
         padding-bottom: 8px;
       }
-      .text-two {
+      .mew-text-two {
         font-family: 'Roboto', sans-serif;
         font-size: 14px;
         color: rgba(0, 0, 0, 0.55);
@@ -86,7 +86,7 @@
         min-width: 265px;
         padding-top: 8px;
       }
-      .list-style {
+      .mew-list-style {
         width: 278px;
         height: 48px;
         color: rgba(0, 0, 0, 0.55);
@@ -101,17 +101,17 @@
         position: relative;
         left: 30px;
       }
-      .list-style li {
+      .mew-list-style li {
         margin-left: 0;
         padding-left: 10px;
       }
-      .bottom-background {
+      .mew-bottom-background {
         background: rgb(249, 250, 251);
         text-align: center;
         padding-top: 25px;
         padding-bottom: 15px;
       }
-      .bottom-container {
+      .mew-bottom-container {
         position: relative;
         font-family: 'Roboto', sans-serif;
         color: #050f19;
@@ -144,25 +144,25 @@
         text-align: center;
       }
 
-      .left {
+      .mew-bottom-background > .left {
         margin-right: 15px;
       }
 
-      .spaceman-background {
+      .mew-bottom-background > .spaceman-background {
         background-color: white;
         border-radius: 10px;
       }
 
-      .center {
+      .mew-bottom-background > .center {
         align-items: center;
       }
 
-      .right {
+      .mew-bottom-background > .right {
         align-items: flex-start;
         text-align: left;
       }
 
-      .left-img {
+      .mew-bottom-background > .left-img {
         padding-right: 10px;
       }
 
@@ -170,7 +170,7 @@
         margin: 0;
         padding-bottom: 5px;
       }
-      .bottom {
+      .mew-bottom {
         color: rgba(0, 0, 0, 0.55);
         font-size: 12px;
         font-family: 'Roboto', sans-serif;
@@ -178,23 +178,23 @@
         letter-spacing: 0.15px;
       }
 
-      .bottom-link {
+      .mew-bottom > .bottom-link {
         text-decoration: none;
         color: rgba(5, 192, 165);
         cursor: pointer;
       }
 
-      .refreshIcon {
+      .mew-refresh-icon {
         justify-content: center;
         margin-left: auto;
         margin-right: auto;
       }
 
-      .hidden {
+      .mew-hidden {
         display: none;
       }
 
-      .get-text {
+      .mew-get-text {
         width: 265px;
         height: 16px;
         color: rgb(0, 0, 0);
@@ -204,7 +204,7 @@
         letter-spacing: 0.17px;
       }
 
-      .camera-icon {
+      .mew-camera-icon {
         opacity: 0.54;
         position: relative;
         bottom: -2px;
@@ -212,15 +212,15 @@
         width: 14px;
       }
 
-      #google-link:hover {
+      #mew-google-link:hover {
         cursor: pointer;
       }
 
-      #apple-link:hover {
+      #mew-apple-link:hover {
         cursor: pointer;
       }
 
-      .warn-color {
+      .mew-warn-color {
         color: orange;
       }
 
@@ -320,9 +320,9 @@
       <div class="mew-wallet-modal-dialog">
         <header class="modal-header"></header>
         <section class="mew-wallet-modal-content">
-          <div class="outer-container">
-            <div class="container">
-              <div class="upper-text">
+          <div class="mew-outer-container">
+            <div class="mew-wallet-container">
+              <div class="mew-upper-text">
                 <div
                   class="close-mew-modal"
                   id="close-mew-modal"
@@ -335,29 +335,29 @@
                     width="11"
                   />
                 </div>
-                <p class="text-one">Connect to MEW wallet app</p>
-                <p class="text-two">Scan this code to connect</p>
+                <p class="mew-text-one">Connect to MEW wallet app</p>
+                <p class="mew-text-two">Scan this code to connect</p>
               </div>
 
-              <div class="qr-code">
+              <div class="mew-qr-code">
                 <canvas id="canvas-for-mewconnect-qr-code"></canvas>
               </div>
-              <div id="refresh-container" class="refreshIcon hidden">
+              <div id="refresh-container" class="mew-refresh-icon mew-hidden">
                 <img id="refresh" src="${refresh}" />
               </div>
 
-              <ol class="list-style">
+              <ol class="mew-list-style">
                 <li>Open MEW wallet app on your mobile device</li>
                 <li class="with-image">
                   Click
-                  <img class="camera-icon" src="./rawImages/camera.png" /> icon
+                  <img class="mew-camera-icon" src="./rawImages/camera.png" /> icon
                   in the top right corner
                 </li>
                 <li>Scan this code to connect</li>
               </ol>
             </div>
-            <div class="bottom-background">
-              <div class="bottom-container">
+            <div class="mew-bottom-background">
+              <div class="mew-bottom-container">
                 <div class="left">
                   <img
                     class="spaceman-background"
@@ -368,15 +368,15 @@
                 </div>
                 <div class="center">
                   <div class="right">
-                    <p class="get-text">Don't have MEW wallet app?</p>
-                    <p id="popupsBlocked" class="warn-color"></p>
+                    <p class="mew-get-text">Don't have MEW wallet app?</p>
+                    <p id="popupsBlocked" class="mew-warn-color"></p>
                     <a
                       href="https://apps.apple.com/app/id1464614025"
                       target="_blank"
                       id="appStore"
                     >
                       <img
-                        id="apple-link"
+                        id="mew-apple-link"
                         class="left-img"
                         src="./rawImages/button-app-store.png"
                         height="40"
@@ -389,7 +389,7 @@
                       id="playStore"
                     >
                       <img
-                        id="google-link"
+                        id="mew-google-link"
                         src="./rawImages/button-google-play-color.png"
                         height="40"
                         width="135"
@@ -397,7 +397,7 @@
                   </div>
                 </div>
               </div>
-              <div class="bottom">
+              <div class="mew-bottom">
                 Powered by
                 <a
                   href="https://myetherwallet.github.io/MEWconnect-Protocol-Documentation/"
