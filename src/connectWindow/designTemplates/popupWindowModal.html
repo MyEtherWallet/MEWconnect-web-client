@@ -247,7 +247,7 @@
         opacity: 0.25;
       }
 
-      div.modal-dialog {
+      div.mew-wallet-modal-dialog {
         background: rgb(255, 255, 255);
         border-radius: 16px;
         box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05),
@@ -288,13 +288,13 @@
         background-color: transparent;
       }
 
-      div.modal-dialog.is-visible {
+      div.mew-wallet-modal-dialog.is-visible {
         visibility: visible;
         opacity: 1;
         /*z-index: 2;*/
       }
 
-      .modal-dialog > * {
+      .mew-wallet-modal-dialog > * {
         padding: 1rem;
       }
 
@@ -317,7 +317,7 @@
     <button id="open-button">OPEN</button>
     <div class="mew-wallet-modal" id="mew-wallet-modal"></div>
     <div class="mew-wallet-modal-container" id="mew-wallet-modal-container">
-      <div class="mew-wallet-modal-dialog">
+      <div class="mew-wallet-mew-wallet-modal-dialog">
         <header class="modal-header"></header>
         <section class="mew-wallet-modal-content">
           <div class="mew-outer-container">
@@ -436,7 +436,7 @@
             .querySelector('.mew-wallet-modal-container')
             .classList.remove('is-visible');
           document
-            .querySelector('.modal-dialog')
+            .querySelector('.mew-wallet-modal-dialog')
             .classList.remove('is-visible');
         } else {
           document
@@ -445,7 +445,7 @@
           document
             .querySelector('.mew-wallet-modal-container')
             .classList.add('is-visible');
-          document.querySelector('.modal-dialog').classList.add('is-visible');
+          document.querySelector('.mew-wallet-modal-dialog').classList.add('is-visible');
         }
       };
       const background = document.getElementById('mew-wallet-modal');

@@ -215,7 +215,9 @@ export default class PopUpCreator extends EventEmitter {
       document
         .querySelector('.mew-wallet-modal-container-mew-modal')
         .classList.remove('is-visible');
-      document.querySelector('.modal-dialog').classList.remove('is-visible');
+      document
+        .querySelector('.mew-wallet-modal-dialog')
+        .classList.remove('is-visible');
     }
   }
 
@@ -230,7 +232,9 @@ export default class PopUpCreator extends EventEmitter {
       document
         .querySelector('.mew-wallet-modal-container-mew-modal')
         .classList.add('is-visible');
-      document.querySelector('.modal-dialog').classList.add('is-visible');
+      document
+        .querySelector('.mew-wallet-modal-dialog')
+        .classList.add('is-visible');
     }
   }
 
