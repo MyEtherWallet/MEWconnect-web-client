@@ -1,3 +1,6 @@
+- ### Release 2.2.0-beta.14
+- UI
+
 - ### Release 2.2.0-beta.12
 - add eth_signTypedData_v4
 

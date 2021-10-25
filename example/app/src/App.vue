@@ -417,7 +417,7 @@ export default {
     };
   },
   mounted() {
-    localStorage.debug = '*';
+    //localStorage.debug = '*';
     console.log('LOADEDED'); // todo remove dev item
     this.connect = new mewConnect.Provider({
       windowClosedError: true,
