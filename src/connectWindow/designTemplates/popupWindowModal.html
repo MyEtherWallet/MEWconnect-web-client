@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+      .mew-outer-container {
+        font-family: 'Roboto', sans-serif;
+        box-sizing: border-box;
+        bottom: 0;
+        color: #050f19;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        left: 0;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        top: 0;
+      }
+      .mew-wallet-container {
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        text-align: center;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        flex-shrink: 0;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+        padding-bottom: 16px;
+        padding-top: 16px;
+      }
+
+      .mew-upper-text {
+        position: relative;
+        bottom: 15px;
+      }
+
+      div.close-mew-modal {
+        /*justify-content: right;*/
+        position: relative;
+        padding-top: 10px;
+        left: 100%;
+        width: 20px;
+      }
+      .mew-qr-code {
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        height: 210px;
+        width: 210px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        box-sizing: border-box;
+        background-color: white;
+        border-radius: 8px;
+        display: inline-block;
+      }
+      .mew-text-one {
+        min-width: 380px;
+        height: 30px;
+        color: rgba(0, 0, 0);
+        font-size: 24px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+        text-align: center;
+        letter-spacing: 0.3px;
+        line-height: 30px;
+        box-sizing: border-box;
+        padding-bottom: 8px;
+      }
+      .mew-text-two {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.55);
+        font-weight: normal;
+        height: 16px;
+        letter-spacing: 0.17px;
+        text-align: center;
+        min-width: 265px;
+        padding-top: 8px;
+      }
+      .mew-list-style {
+        width: 278px;
+        height: 48px;
+        color: rgba(0, 0, 0, 0.55);
+        font-size: 12px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: normal;
+        letter-spacing: 0.15px;
+        line-height: 16px;
+        margin-left: 20px;
+        list-style-position: outside;
+        text-align: left;
+        position: relative;
+        left: 30px;
+      }
+      .mew-list-style li {
+        margin-left: 0;
+        padding-left: 10px;
+      }
+      .mew-bottom-background {
+        background: rgb(249, 250, 251);
+        text-align: center;
+        padding-top: 25px;
+        padding-bottom: 15px;
+      }
+      .mew-bottom-container {
+        position: relative;
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        text-align: center;
+        box-sizing: border-box;
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: row;
+        flex-flow: row wrap;
+        justify-content: center;
+        left: -15px;
+      }
+      .bottom-container-text {
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        box-sizing: border-box;
+        font-size: 13px;
+        margin: 0;
+        opacity: 0.5;
+        text-align: left;
+      }
+      .bottom-container-text-old {
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        box-sizing: border-box;
+        font-size: 13px;
+        margin: 0;
+        opacity: 0.5;
+        padding: 16px;
+        text-align: center;
+      }
+
+      .mew-bottom-background > .left {
+        margin-right: 15px;
+      }
+
+      .mew-bottom-background > .spaceman-background {
+        background-color: white;
+        border-radius: 10px;
+      }
+
+      .mew-bottom-background > .center {
+        align-items: center;
+      }
+
+      .mew-bottom-background > .right {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .mew-bottom-background > .left-img {
+        padding-right: 10px;
+      }
+
+      p {
+        margin: 0;
+        padding-bottom: 5px;
+      }
+      .mew-bottom {
+        color: rgba(0, 0, 0, 0.55);
+        font-size: 12px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: lighter;
+        letter-spacing: 0.15px;
+      }
+
+      .mew-bottom > .bottom-link {
+        text-decoration: none;
+        color: rgba(5, 192, 165);
+        cursor: pointer;
+      }
+
+      .mew-refresh-icon {
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .mew-hidden {
+        display: none;
+      }
+
+      .mew-get-text {
+        width: 265px;
+        height: 16px;
+        color: rgb(0, 0, 0);
+        font-size: 14px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: normal;
+        letter-spacing: 0.17px;
+      }
+
+      .mew-camera-icon {
+        opacity: 0.54;
+        position: relative;
+        bottom: -2px;
+        height: 14px;
+        width: 14px;
+      }
+
+      #mew-google-link:hover {
+        cursor: pointer;
+      }
+
+      #mew-apple-link:hover {
+        cursor: pointer;
+      }
+
+      .mew-warn-color {
+        color: orange;
+      }
+
+      .mew-wallet-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background: black;
+        cursor: default;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.35s ease-in;
+        z-index: 99999999;
+      }
+
+      .mew-wallet-modal.is-visible {
+        visibility: visible;
+        opacity: 0.25;
+      }
+
+      div.mew-wallet-modal-dialog {
+        background: rgb(255, 255, 255);
+        border-radius: 16px;
+        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05),
+          0px 3px 6px 0px rgba(0, 0, 0, 0.05),
+          0px 8px 16px 0px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        min-width: 448px;
+        max-width: 448px;
+        min-height: 558px;
+        overflow: auto;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .mew-wallet-modal-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background-color: transparent;
+        cursor: default;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.35s ease-in;
+      }
+
+      div.mew-wallet-modal-container.is-visible {
+        visibility: visible;
+        opacity: 1;
+        background-color: transparent;
+      }
+
+      div.mew-wallet-modal-dialog.is-visible {
+        visibility: visible;
+        opacity: 1;
+        /*z-index: 2;*/
+      }
+
+      .mew-wallet-modal-dialog > * {
+        padding: 1rem;
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .modal-header .close-modal {
+        font-size: 1.5rem;
+      }
+
+      /*.modal p + p {*/
+      /*  margin-top: 1rem;*/
+      /*}*/
+    </style>
+  </head>
+  <body>
+    <button id="open-button">OPEN</button>
+    <div class="mew-wallet-modal" id="mew-wallet-modal"></div>
+    <div class="mew-wallet-modal-container" id="mew-wallet-modal-container">
+      <div class="mew-wallet-mew-wallet-modal-dialog">
+        <header class="modal-header"></header>
+        <section class="mew-wallet-modal-content">
+          <div class="mew-outer-container">
+            <div class="mew-wallet-container">
+              <div class="mew-upper-text">
+                <div
+                  class="close-mew-modal"
+                  id="close-mew-modal"
+                  aria-label="close modal"
+                  data-close
+                >
+                  <img
+                    src="./rawImages/times-solid (2).png"
+                    height="15"
+                    width="11"
+                  />
+                </div>
+                <p class="mew-text-one">Connect to MEW wallet app</p>
+                <p class="mew-text-two">Scan this code to connect</p>
+              </div>
+
+              <div class="mew-qr-code">
+                <canvas id="canvas-for-mewconnect-qr-code"></canvas>
+              </div>
+              <div id="refresh-container" class="mew-refresh-icon mew-hidden">
+                <img id="refresh" src="${refresh}" />
+              </div>
+
+              <ol class="mew-list-style">
+                <li>Open MEW wallet app on your mobile device</li>
+                <li class="with-image">
+                  Click
+                  <img class="mew-camera-icon" src="./rawImages/camera.png" /> icon
+                  in the top right corner
+                </li>
+                <li>Scan this code to connect</li>
+              </ol>
+            </div>
+            <div class="mew-bottom-background">
+              <div class="mew-bottom-container">
+                <div class="left">
+                  <img
+                    class="spaceman-background"
+                    src="./rawImages/spaceman.png"
+                    height="58"
+                    width="58"
+                  />
+                </div>
+                <div class="center">
+                  <div class="right">
+                    <p class="mew-get-text">Don't have MEW wallet app?</p>
+                    <p id="popupsBlocked" class="mew-warn-color"></p>
+                    <a
+                      href="https://apps.apple.com/app/id1464614025"
+                      target="_blank"
+                      id="appStore"
+                    >
+                      <img
+                        id="mew-apple-link"
+                        class="left-img"
+                        src="./rawImages/button-app-store.png"
+                        height="40"
+                        width="120"
+                    /></a>
+
+                    <a
+                      href="https://play.google.com/store/apps/details?id=com.myetherwallet.mewwallet"
+                      target="_blank"
+                      id="playStore"
+                    >
+                      <img
+                        id="mew-google-link"
+                        src="./rawImages/button-google-play-color.png"
+                        height="40"
+                        width="135"
+                    /></a>
+                  </div>
+                </div>
+              </div>
+              <div class="mew-bottom">
+                Powered by
+                <a
+                  href="https://myetherwallet.github.io/MEWconnect-Protocol-Documentation/"
+                  target="_blank"
+                  id="proto-link"
+                  class="bottom-link"
+                  >MEWconnect protocol</a
+                >
+                <br />
+                brought to you by
+                <a
+                  href="https://www.myetherwallet.com/"
+                  target="_blank"
+                  id="mew-link"
+                  class="bottom-link"
+                  >MyEtherWallet</a
+                >
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <script>
+      const button = document.getElementById('open-button');
+      const clickAction = function(evt) {
+        if (
+          document
+            .querySelector('.mew-wallet-modal')
+            .classList.contains('is-visible')
+        ) {
+          document
+            .querySelector('.mew-wallet-modal')
+            .classList.remove('is-visible');
+          document
+            .querySelector('.mew-wallet-modal-container')
+            .classList.remove('is-visible');
+          document
+            .querySelector('.mew-wallet-modal-dialog')
+            .classList.remove('is-visible');
+        } else {
+          document
+            .querySelector('.mew-wallet-modal')
+            .classList.add('is-visible');
+          document
+            .querySelector('.mew-wallet-modal-container')
+            .classList.add('is-visible');
+          document.querySelector('.mew-wallet-modal-dialog').classList.add('is-visible');
+        }
+      };
+      const background = document.getElementById('mew-wallet-modal');
+      const background2 = document.getElementById('mew-wallet-modal-container');
+      button.addEventListener('click', clickAction);
+      background.addEventListener('click', clickAction);
+      background2.addEventListener('click', clickAction);
+    </script>
+  </body>
+</html>

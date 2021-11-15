@@ -3,7 +3,7 @@ import CryptoUtils from '../utils/crypto-utils';
 const debugLogger = require('debug');
 const io = require('socket.io-client');
 const EventEmitter = require('events').EventEmitter;
-const MewConnectCrypto = require('../../dist/index.js').Crypto;
+const MewConnectCrypto = require('../../dist/cjs/index.js').Crypto;
 const SimplePeer = require('simple-peer');
 const wrtc = require('wrtc');
 
@@ -11,7 +11,6 @@ const {
   versions,
   connectionCodeSchemas,
   connectionCodeSeparator,
-  signal,
   rtc,
   stages,
   lifeCycle,
@@ -43,9 +42,7 @@ const debug = debugLogger('MEWconnect:receiver');
 const debugState = debugLogger('MEWconnect:receiver-state');
 
 export default class MewConnectReceiver extends EventEmitter {
-  constructor(
-    options = {}
-  ) {
+  constructor(options = {}) {
     super();
 
     this.onlyTurn = options.onlyTurn || false;
@@ -105,15 +102,14 @@ export default class MewConnectReceiver extends EventEmitter {
         this.socketDisconnect();
       }
     }, 120000);
-
   }
 
   async setKeys(publicKey, privateKey, connId) {
     console.log(privateKey); // todo remove dev item
-    this.publicKey = publicKey
-    this.privateKey = privateKey
-    this.connId = connId
-    this.signed = CryptoUtils.signMessage(this.privateKey, this.privateKey)
+    this.publicKey = publicKey;
+    this.privateKey = privateKey;
+    this.connId = connId;
+    this.signed = CryptoUtils.signMessage(this.privateKey, this.privateKey);
     console.log(this.signed); // todo remove dev item
   }
 
@@ -190,8 +186,8 @@ export default class MewConnectReceiver extends EventEmitter {
         this.socketConnected = true;
       });
 
-      this.socketOn(this.signals.confirmation, (stuff) =>{
-        console.log('confimation', stuff)
+      this.socketOn(this.signals.confirmation, stuff => {
+        console.log('confimation', stuff);
       }); // response
 
       // identity and locate an opposing peer
@@ -237,7 +233,6 @@ export default class MewConnectReceiver extends EventEmitter {
       connId: this.connId,
       version: encryptedVersion
     });
-
   }
 
   // ----- Socket Event handlers
@@ -301,7 +296,7 @@ export default class MewConnectReceiver extends EventEmitter {
 
   async processOfferReceipt(data) {
     try {
-      if(!this.turnTried){
+      if (!this.turnTried) {
         this.useFallback();
       } else {
         const decryptedOffer = await this.mewCrypto.decrypt(data.data);
@@ -321,19 +316,27 @@ export default class MewConnectReceiver extends EventEmitter {
       debug('Receive Offer ---------------------');
       let simpleOptions;
 
-      if (this.simplePeerOptions && typeof this.simplePeerOptions === 'object') {
+      if (
+        this.simplePeerOptions &&
+        typeof this.simplePeerOptions === 'object'
+      ) {
         this.simplePeerOptions.config = {
-          iceServers: this.turnServers.length > 0 ? this.jsonDetails.stunSrvers.concat(this.turnServers) : this.jsonDetails.stunSrvers
+          iceServers:
+            this.turnServers.length > 0
+              ? this.jsonDetails.stunSrvers.concat(this.turnServers)
+              : this.jsonDetails.stunSrvers
         };
         simpleOptions = this.simplePeerOptions;
       } else {
-
         simpleOptions = {
           initiator: false,
           trickle: false,
           iceTransportPolicy: 'all',
           config: {
-            iceServers: this.turnServers.length > 0 ? this.turnServers : this.jsonDetails.stunSrvers
+            iceServers:
+              this.turnServers.length > 0
+                ? this.turnServers
+                : this.jsonDetails.stunSrvers
           },
           wrtc: wrtc
         };
@@ -357,7 +360,6 @@ export default class MewConnectReceiver extends EventEmitter {
         debug('receiveOffer', data);
         this.createPeer(simpleOptions);
       }
-
     } else {
       this.onlyTurn = false;
       this.attemptTurnConnect();
@@ -365,7 +367,7 @@ export default class MewConnectReceiver extends EventEmitter {
   }
 
   onRTC(signal, fn) {
-    this.p.on(signal, fn)
+    this.p.on(signal, fn);
   }
 
   createPeer(options, forSignal) {
@@ -379,10 +381,13 @@ export default class MewConnectReceiver extends EventEmitter {
       this.p.on(this.rtcEvents.data, this.onData.bind(this));
       this.p.on(this.rtcEvents.signal, this.onSignal.bind(this));
 
-      this.p._pc.addEventListener('iceconnectionstatechange', (evt) => {
+      this.p._pc.addEventListener('iceconnectionstatechange', evt => {
         // eslint-disable-next-line no-undef
-        if(typeof jest === 'undefined') { // included because target is not defined in jest
-          debugState(' ---------- iceconnectionstatechange: Reciever ----------'); // todo remove dev item
+        if (typeof jest === 'undefined') {
+          // included because target is not defined in jest
+          debugState(
+            ' ---------- iceconnectionstatechange: Reciever ----------'
+          ); // todo remove dev item
           debugState(evt.target.signalingState); // todo remove dev item
           debugState(evt.target.iceGatheringState); // todo remove dev item
           debugState(evt.target.iceConnectionState); // todo remove dev item
@@ -391,7 +396,6 @@ export default class MewConnectReceiver extends EventEmitter {
           }
         }
       });
-
     } else {
       debug('RECIEVER: PEER RETURNED TRUE');
       debug(this.p);
@@ -439,7 +443,7 @@ export default class MewConnectReceiver extends EventEmitter {
         console.log('DECRYPTED DATA RECEIVED 2', decryptedData);
         this.emit(decryptedData.type, decryptedData.data);
       }
-      if(parsed.type === 'address' || decryptedData.type === 'address'){
+      if (parsed.type === 'address' || decryptedData.type === 'address') {
         console.log(parsed, decryptedData); // todo remove dev item
         this.rtcSend({ type: 'address', data: '0x000000000000000' });
       }
@@ -523,14 +527,13 @@ export default class MewConnectReceiver extends EventEmitter {
 
   retryViaTurn(data) {
     // if (!this.triedTurn) {
-      this.turnTried = true;
-      this.uiCommunicator(this.lifeCycle.UsingFallback);
-      this.triedTurn = true;
-      debug(`turn servers: ${JSON.stringify(data)}`);
-      debug('Retrying via TURN');
-      this.turnServers = data.data;
-      this.receiveOffer();
+    this.turnTried = true;
+    this.uiCommunicator(this.lifeCycle.UsingFallback);
+    this.triedTurn = true;
+    debug(`turn servers: ${JSON.stringify(data)}`);
+    debug('Retrying via TURN');
+    this.turnServers = data.data;
+    this.receiveOffer();
     // }
   }
-
 }

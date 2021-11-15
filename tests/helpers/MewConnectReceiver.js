@@ -1,7 +1,7 @@
 const debugLogger = require('debug');
 const io = require('socket.io-client');
 const EventEmitter = require('events').EventEmitter;
-const MewConnectCrypto = require('../../dist/index.js').Crypto;
+const MewConnectCrypto = require('../../src/connectClient/MewConnectCrypto');
 const SimplePeer = require('simple-peer');
 
 const {
@@ -66,7 +66,8 @@ export default class MewConnectReceiver extends EventEmitter {
 
     this.io = io;
     this.Peer = SimplePeer;
-    this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
+    console.log(MewConnectCrypto); // todo remove dev item
+    this.mewCrypto = options.cryptoImpl || MewConnectCrypto.default.create();
 
     this.signals = this.jsonDetails.signals;
     this.rtcEvents = this.jsonDetails.rtc;

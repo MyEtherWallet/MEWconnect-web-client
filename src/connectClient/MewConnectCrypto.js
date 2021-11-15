@@ -1,11 +1,7 @@
-import createLogger from 'logging';
-
 import eccrypto from 'eccrypto';
-import ethUtils from 'ethereumjs-util';
+import ethUtils from 'ethereumjs-utils';
 import crypto from 'crypto';
 import secp256k1 from 'secp256k1';
-
-const logger = createLogger('MewCrypto');
 
 export default class MewConnectCrypto {
   static create() {
@@ -86,7 +82,7 @@ export default class MewConnectCrypto {
               result = _initial.toString();
             }
           } catch (e) {
-            logger.error(e);
+            console.error(e);
           }
           resolve(JSON.stringify(result));
         })

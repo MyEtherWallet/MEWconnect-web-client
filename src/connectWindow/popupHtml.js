@@ -5,7 +5,7 @@ const noticeHtml = (elementId, imageSrc, iconImage) => {
       <img src="${iconImage}" height="15" width="11" />
     </div>
     <img id="${elementId + '-img'}" src="${imageSrc}"/>
-    <span id="${elementId + '-label-text'}">MEW wallet</span>
+    <span id="${elementId + '-label-text'}">MEW&nbsp;wallet</span>
   </div>
   
   <div id="${elementId + '-text'}">
@@ -24,7 +24,7 @@ const connectedNoticeHtml = (elementId, imageSrc, iconImage) => {
     
     <div class="${elementId}-vertical-flex">
       <span class="${elementId}-label-text">Connected to</span>
-      <span class="${elementId}-big">MEW wallet</span>
+      <span class="${elementId}-big">MEW&nbsp;wallet</span>
       <span class="${elementId}-label-text">Powered by MyEtherWallet</span>
     </div>
   </div>

@@ -2,5 +2,9 @@ import ETH from './ETH.js';
 import GOERLI from './GOERLI.js';
 import KOV from './KOV.js';
 import ROP from './ROP';
-
-export { ETH, GOERLI, KOV, ROP };
+import MATIC from './MATIC';
+import BSC from './BSC';
+import ETC from './ETC';
+import RIN from './RIN';
+import BOBA from './BOBA';
+export { ETH, GOERLI, KOV, ROP, MATIC, BSC, ETC, RIN, BOBA };

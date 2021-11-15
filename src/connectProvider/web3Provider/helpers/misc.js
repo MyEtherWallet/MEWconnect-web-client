@@ -1,12 +1,8 @@
 import { isAddress } from './addressUtils';
 import url from 'url';
 import utils from 'web3-utils';
-import { isHexString, toBuffer as utilsToBuffer } from 'ethereumjs-util';
+import { isHexString, toBuffer as utilsToBuffer } from 'ethereumjs-utils';
 import { uint, address, string, bytes, bool } from './solidityTypes';
-// import xss from 'xss';
-import darkList from '../address-darklist/address-darklist.json';
-
-// import { MEW_CX } from '@/builds/configs/types';
 
 const toBuffer = v => {
   if (isHexString(v)) {
@@ -112,26 +108,6 @@ const validateHexString = str => {
   return utils.isHex(str);
 };
 
-// const reorderNetworks = () => {
-//   const oldObject = Object.assign({}, nodeList);
-//   delete oldObject['ETH'];
-//   delete oldObject['RIN'];
-//   delete oldObject['ROP'];
-//   const newObject = Object.assign(
-//     {},
-//     {
-//       ETH: nodeList['ETH'],
-//       ROP: nodeList['ROP'],
-//       RIN: nodeList['RIN'],
-//       ...oldObject
-//     }
-//   );
-//   for (const net in newObject) {
-//     if (newObject[net].length === 0) delete newObject[net];
-//   }
-//   return newObject;
-// };
-
 const solidityType = inputType => {
   if (!inputType) inputType = '';
   if (inputType.includes('[') && inputType.includes(']')) {
@@ -154,25 +130,6 @@ const solidityType = inputType => {
   if (inputType.includes(bytes)) return { type: 'text', solidityType: bytes };
   if (inputType.includes(bool)) return { type: 'radio', solidityType: bool };
   return { type: 'text', solidityType: string };
-};
-
-const isDarklisted = addr => {
-  const storedDarklist = darkList.data;
-  const darklisted =
-    storedDarklist > 0
-      ? storedDarklist.findIndex(item => {
-          return (
-            utils.toChecksumAddress(item.address.toLowerCase()) ===
-            utils.toChecksumAddress(addr.toLowerCase())
-          );
-        })
-      : -1;
-  const errMsg = darklisted === -1 ? '' : darkList.data[darklisted].comment;
-  const errObject = {
-    error: darklisted === -1 ? false : true,
-    msg: errMsg
-  };
-  return errObject;
 };
 
 const stringToArray = str => {
@@ -210,41 +167,21 @@ const isContractArgValid = (value, solidityType) => {
   return false;
 };
 
-// const stripTags = content => {
-//   const insertToDom = new DOMParser().parseFromString(content, 'text/html');
-//   insertToDom.body.textContent.replace(/(<([^>]+)>)/gi, '') || '';
-//   const string = xss(insertToDom.body.textContent, {
-//     whitelist: [],
-//     stripIgnoreTag: true,
-//     stripIgnoreTagBody: '*'
-//   });
-//   return string;
-// };
-//
-// const isMewCx = () => {
-//   return BUILD_TYPE === MEW_CX;
-// };
-
 export default {
   isJson,
   doesExist,
   padLeftEven,
   formatDate,
   isValidENSorEtherAddress,
-  // isValidENSAddress,
   isValidETHAddress,
   sanitizeHex,
   validateHexString,
   scrollToTop,
-  // reorderNetworks,
-  isDarklisted,
   solidityType,
   isInt,
   capitalize,
   getService,
   stringToArray,
   isContractArgValid,
-  // stripTags,
-  // isMewCx,
   toBuffer
 };

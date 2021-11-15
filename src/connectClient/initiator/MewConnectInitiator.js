@@ -1,5 +1,3 @@
-/* eslint-disable */
-// import createLogger from 'logging';
 import debugLogger from 'debug';
 import { isBrowser } from 'browser-or-node';
 import { V1endpoint, V2endpoint } from '../config';
@@ -10,15 +8,18 @@ import MewConnectCrypto from '../MewConnectCrypto';
 import MewConnectInitiatorV2 from './MewConnectInitiatorV2';
 import MewConnectInitiatorV1 from './MewConnectInitiatorV1';
 
-import WebRtcCommunication from '../WebRtcCommunication';
 import PopUpCreator from '../../connectWindow/popUpCreator';
+import MEWconnectWallet from '../../connectProvider/web3Provider/MEWconnect/index';
+import PopUpHandler from '../../connectWindow/popUpHandler';
+
+import WebRtcCommunication from '../WebRtcCommunication';
+import { DISCONNECTED, CONNECTED } from '../../config';
+import packageJson from '../../../package.json';
 
 const debug = debugLogger('MEWconnect:initiator-base');
-// const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
 const debugStages = debugLogger('MEWconnect:initiator-stages');
-// const logger = createLogger('MewConnectInitiator');
 const debugConnectionState = debugLogger('MEWconnect:connection-state');
-
+let qrString;
 export default class MewConnectInitiator extends MewConnectCommon {
   constructor(options = {}) {
     super(options.version);
@@ -26,7 +27,7 @@ export default class MewConnectInitiator extends MewConnectCommon {
     this.showPopup = options.showPopup || false;
     try {
       this.supportedBrowser = MewConnectCommon.checkBrowser();
-this.requestIds = [];
+      this.requestIds = [];
       this.V1 = {};
       this.V2 = {};
 
@@ -42,21 +43,26 @@ this.requestIds = [];
       this.p = null;
       this.socketV2Connected = false;
       this.socketV1Connected = false;
+      this.showingQR = false;
       this.connected = false;
       this.tryingTurn = false;
       this.turnDisabled = false;
       this.signalUrl = null;
       this.iceState = '';
       this.turnServers = [];
-      this.refreshTimer = null;
       this.refreshDelay = 20000;
       this.socketsCreated = false;
       this.refreshCount = 0;
       this.abandonedTimeout = 300000;
+      this.showingRefresh = false;
 
       this.mewCrypto = options.cryptoImpl || MewConnectCrypto.create();
       this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
-      this.popupCreator = options.popupCreator || new PopUpCreator();
+      this.popupCreator = options.popupCreator
+        ? options.popupCreator
+        : options.newPopupCreator
+        ? new PopUpCreator()
+        : undefined;
 
       debugConnectionState(
         'Initial Connection State:',
@@ -72,22 +78,28 @@ this.requestIds = [];
       setTimeout(() => {
         if (this.socket) {
           this.socketDisconnect();
-          this.refreshCheck();
         }
       }, this.abandonedTimeout);
+
+      console.log(`Using MEWconnect v${packageJson.version}`);
     } catch (e) {
       debug('constructor error:', e);
     }
   }
 
   static setConnectionState(connectionState) {
-    if (!connectionState) MewConnectInitiator.connectionState = 'disconnected';
+    if (!connectionState) MewConnectInitiator.connectionState = DISCONNECTED;
     else MewConnectInitiator.connectionState = connectionState;
   }
 
   static getConnectionState() {
-    if (!MewConnectInitiator.connectionState) return 'disconnected';
+    if (!MewConnectInitiator.connectionState) return DISCONNECTED;
     return MewConnectInitiator.connectionState;
+  }
+
+  async createWalletOnly(network) {
+    this.popUpHandler = new PopUpHandler();
+    return MEWconnectWallet({ network }, this.popupCreator, this.popUpHandler);
   }
 
   isAlive() {
@@ -98,6 +110,7 @@ this.requestIds = [];
   }
 
   focusPopupWindow() {
+    if (!this.popupCreator) return;
     if (this.popupCreator.popupWindowOpen) {
       this.popupCreator.popupWindow.focus();
     }
@@ -122,8 +135,10 @@ this.requestIds = [];
               this.rtcDestroy();
             }
           }
-          this.popupCreator.removeWindowClosedListener();
-          this.popupCreator.closePopupWindow();
+          if (this.popupCreator) {
+            this.popupCreator.removeWindowClosedListener();
+            this.popupCreator.closePopupWindow();
+          }
         };
       } catch (e) {
         debug(e);
@@ -175,42 +190,63 @@ this.requestIds = [];
       this.socketKey = privateKey;
       const separator = this.jsonDetails.connectionCodeSeparator;
       let qrCodeString =
-        this.version + separator + privateKey + separator + this.connId + ':name=' + dapp.replace(/^www\./, '');
-      if(dapp.includes('myetherwallet.com')){
+        this.version +
+        separator +
+        privateKey +
+        separator +
+        this.connId +
+        ':name=' +
+        dapp.replace(/^www\./, '');
+      if (dapp.includes('myetherwallet.com')) {
         qrCodeString =
           this.version + separator + privateKey + separator + this.connId;
-      } else if(dapp.includes('mewbuilds.com')){
+      } else if (dapp.includes('mewbuilds.com')) {
+        qrCodeString =
+          this.version + separator + privateKey + separator + this.connId;
+      } else if (dapp.includes('localhost')) {
         qrCodeString =
           this.version + separator + privateKey + separator + this.connId;
       }
 
+      qrString = qrCodeString;
 
       debug(qrCodeString);
-      if (this.showPopup) {
-        if (this.popupCreator.popupWindowOpen) {
-          this.popupCreator.updateQrCode(qrCodeString);
-        } else {
-          this.popupCreator.refreshQrcode = this.initiatorStart.bind(this);
-          this.popupCreator.openPopupWindow(qrCodeString);
-          this.popupCreator.popupWindow.addEventListener('beforeunload', () => {
-            if (!this.connected) {
-              // eslint-disable-next-line no-console
-              debug('popup window closed');
-              this.uiCommunicator('popup_window_closed');
-              MewConnectInitiator.setConnectionState();
-              this.socketDisconnect();
-              this.emit(this.lifeCycle.AuthRejected);
-              this.refreshCheck();
-            }
-          });
-        }
-      } else {
-        this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
-        this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
-        this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
-      }
     } catch (e) {
       debug('displayCode error:', e);
+    }
+  }
+
+  ShowQr(qrCodeString) {
+    const unloadOrClosed = () => {
+      if (!this.connected) {
+        // eslint-disable-next-line no-console
+        debug('popup window closed');
+        this.uiCommunicator('popup_window_closed');
+        MewConnectInitiator.setConnectionState();
+        this.socketDisconnect();
+        this.emit(this.lifeCycle.AuthRejected);
+      }
+    };
+
+    debug(qrCodeString);
+    if (this.showPopup) {
+      if (this.popupCreator.popupWindowOpen) {
+        if (this.popupCreator) this.popupCreator.updateQrCode(qrCodeString);
+      } else {
+        if (this.popupCreator)
+          this.popupCreator.refreshQrcode = this.initiatorStart.bind(this);
+        this.popupCreator.openPopupWindow(qrCodeString);
+        if (this.popupCreator)
+          this.popupCreator.container.addEventListener(
+            'mewModalClosed',
+            unloadOrClosed,
+            { once: true }
+          );
+      }
+    } else {
+      this.uiCommunicator(this.lifeCycle.codeDisplay, qrCodeString);
+      // this.uiCommunicator(this.lifeCycle.checkNumber, privateKey);
+      this.uiCommunicator(this.lifeCycle.ConnectionId, this.connId);
     }
   }
 
@@ -246,21 +282,37 @@ Keys
   }
 
   async refreshCode() {
-    this.initiatorStart();
-  }
+    // this.showingRefresh = false;
+    const v2Events = [
+      'sendingOffer',
+      'retryingViaTurn',
+      'socketDisconnected',
+      'socketPaired'
+    ];
+    const webRtcCommEvents = [
+      'disconnected',
+      'data',
+      'UsingFallback',
+      'showRefresh',
+      'decryptError',
+      'RtcConnectedEvent',
+      'signal'
+    ];
+    // "sendingOffer", "retryingViaTurn", "socketDisconnected", "socketPaired"
+    // "disconnected", "data", "UsingFallback", "showRefresh", "decryptError", "RtcConnectedEvent", "signal"
+    webRtcCommEvents.forEach(event =>
+      this.webRtcCommunication.removeAllListeners(event)
+    );
+    v2Events.forEach(event => this.V2.removeAllListeners(event));
+    this.V2.socketDisconnect();
 
-  refreshCheck() {
-    if (this.refreshTimer !== null) {
-      clearTimeout(this.refreshTimer);
-      this.refreshTimer = null;
-    }
+    if (this.popupCreator) this.popupCreator.popupWindowOpen = true;
+    this.webRtcCommunication = new WebRtcCommunication(this.mewCrypto);
+    this.initiatorStart();
   }
 
   // TODO change this to use supplied urls at time point
   async initiatorStart(url, testPrivate) {
-    // this.refreshTimer = setTimeout(() => {
-    //   this.refreshCode();
-    // }, this.refreshDelay);
     if (this.socketV1Connected) {
       this.V1.socketDisconnect();
     }
@@ -290,16 +342,41 @@ Keys
       });
 
       this.V2.on('sendingOffer', () => {
-        this.refreshCheck();
+        if (this.popupCreator) this.popupCreator.showConnecting();
       });
 
       this.V2.on('retryingViaTurn', () => {
-        this.refreshCheck();
+        this.showingRefresh = false; // reset refresh
+      });
+      const regenerateQRcodeOnClick = () => {
+        debug('REGENERATE');
+        this.refreshCode();
+      };
+
+      const showRefresh = () => {
+        if (!this.connected) {
+          if (!this.showingRefresh) {
+            this.showingRefresh = true; // only process one refresh event
+            if (this.popupCreator)
+              this.popupCreator.showRetry(regenerateQRcodeOnClick);
+          }
+        }
+      };
+
+      this.V2.on('socketDisconnected', showRefresh.bind(this));
+      this.V2.on('showRefresh', showRefresh.bind(this));
+      this.webRtcCommunication.on('showRefresh', showRefresh.bind(this));
+
+      this.webRtcCommunication.on(this.lifeCycle.decryptError, () => {
+        if (this.webRtcCommunication.initialAddressRequest !== 'complete') {
+          MewConnectInitiator.setConnectionState(DISCONNECTED);
+          this.webRtcCommunication.rtcDestroy();
+        }
       });
     } catch (e) {
       // eslint-disable-next-line
       console.error(e);
-      this.V2 = {};
+      this.V2 = null;
     }
 
     try {
@@ -309,16 +386,26 @@ Keys
         connId: this.connId
       });
     } catch (e) {
-      // eslint-disable-next-line
       console.error(e);
       this.V1 = {};
     }
+
     this.webRtcCommunication.setActiveInitiatorId(this.V2.initiatorId);
+    const connectionErrorTimeOut = setTimeout(() => {
+      window.alert('Failed to start MEWconnect. Please try again.');
+    }, 60000);
 
     if (this.V1.on) {
       this.V1.on('socketPaired', () => {
         if (this.V2.socketDisconnect) this.V2.socketDisconnect();
         this.socketV1Connected = true;
+      });
+      this.V1.once('SOCKET_CONNECTED', () => {
+        if (!this.showingQR) {
+          clearTimeout(connectionErrorTimeOut);
+          this.showingQR = true;
+          this.ShowQr(qrString);
+        }
       });
     }
 
@@ -327,16 +414,28 @@ Keys
         if (this.V1.socketDisconnect) this.V1.socketDisconnect();
         this.socketV2Connected = true;
       });
+      this.V2.once('SOCKET_CONNECTED', () => {
+        if (!this.showingQR) {
+          clearTimeout(connectionErrorTimeOut);
+          this.showingQR = true;
+          this.ShowQr(qrString);
+        }
+      });
     }
 
-    this.webRtcCommunication.on(
+    this.webRtcCommunication.once(
       this.jsonDetails.lifeCycle.RtcConnectedEvent,
       () => {
-        this.refreshCheck();
+        this.webRtcCommunication.removeAllListeners(
+          this.jsonDetails.lifeCycle.RtcConnectedEvent
+        );
+        debug('RTC CONNECTED ENVIRONMENT SETUP');
+        this.emit(this.lifeCycle.RtcConnectedEvent);
+        this.webRtcCommunication.on('appData', this.dataReceived.bind(this));
         this.connected = true;
-        this.popupCreator.removeWindowClosedListener();
-        this.popupCreator.closePopupWindow();
-        MewConnectInitiator.setConnectionState('connected');
+        if (this.popupCreator) this.popupCreator.removeWindowClosedListener();
+        if (this.popupCreator) this.popupCreator.closePopupWindow();
+        MewConnectInitiator.setConnectionState(CONNECTED);
       }
     );
   }
@@ -344,15 +443,16 @@ Keys
   socketDisconnect() {
     this.V2.socketDisconnect();
     this.V1.socketDisconnect();
-    this.refreshCheck();
   }
 
   disconnectRTC() {
-    debugStages('DISCONNECT RTC');
-    this.connected = false;
-    this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
-    this.webRtcCommunication.disconnectRTC();
-    this.instance = null;
+    if (this.connected) {
+      debugStages('DISCONNECT RTC');
+      this.uiCommunicator(this.lifeCycle.RtcDisconnectEvent);
+      this.webRtcCommunication.disconnectRTC();
+      this.connected = false;
+      this.instance = null;
+    }
   }
 
   async rtcSend(arg) {
@@ -362,25 +462,25 @@ Keys
   sendRtcMessage(type, data) {
     const id = uuid();
     this.requestIds.push(id);
-    debug('MESSAGE IDS KNOWN', this.requestIds)
+    debug('MESSAGE IDS KNOWN', this.requestIds);
     this.webRtcCommunication.sendRtcMessage(type, data, id);
   }
 
   dataReceived(data) {
     debug('dataReceived', data);
-    if(data.id){
+    if (data.id) {
       debug('MESSAGE ID RECEIVED', data.id);
       if (this.requestIds.includes(data.id)) {
         this.uiCommunicator(data.type, data.data);
-        const idx = this.requestIds.findIndex(item => item === id);
+        const idx = this.requestIds.findIndex(item => item === data.id);
         this.requestIds.splice(idx, 1);
-        debug('MESSAGE IDS KNOWN', this.requestIds)
+        debug('MESSAGE IDS KNOWN', this.requestIds);
       } else {
-        debug('**NO MESSAGE ID RECEIVED**');
+        debug('**NO MESSAGE ID RECEIVED : field present**');
         this.uiCommunicator(data.type, data.data);
       }
     } else {
-      debug('**NO MESSAGE ID RECEIVED**');
+      debug('**NO MESSAGE ID RECEIVED : field absent**');
       this.uiCommunicator(data.type, data.data);
     }
   }
