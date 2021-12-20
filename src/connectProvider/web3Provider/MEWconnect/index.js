@@ -1,22 +1,21 @@
+/* eslint-disable */
 import MEWconnect from '../../../index';
-// import networks from '../networks/index';
 import { Transaction } from 'ethereumjs-tx';
 import WalletInterface from '../WalletInterface';
-import { MEW_CONNECT as mewConnectType } from '../bip44/index';
 import {
   getSignTransactionObject,
   sanitizeHex,
   getBufferFromHex,
   calculateChainIdFromV
 } from '../utils';
-import { hashPersonalMessage } from 'ethereumjs-util';
+import { hashPersonalMessage } from 'ethereumjs-utils';
 import errorHandler from './errorHandler';
 import commonGenerator from '../helpers/commonGenerator';
 import Misc from '../helpers/misc';
-// import debugLogger from 'debug';
+import debugLogger from 'debug';
 
 // TODO add debug logging
-// const debug = debugLogger('MEWconnect:popup-window');
+const debug = debugLogger('MEWconnect:wallet');
 // const debugConnectionState = debugLogger('MEWconnect:connection-state');
 
 const V1_SIGNAL_URL = 'https://connect.mewapi.io';
@@ -24,9 +23,17 @@ const V2_SIGNAL_URL = 'wss://connect2.mewapi.io/staging';
 const IS_HARDWARE = true;
 
 class MEWconnectWalletInterface extends WalletInterface {
-  constructor(pubkey, isHardware, identifier, txSigner, msgSigner, mewConnect) {
+  constructor(
+    pubkey,
+    isHardware,
+    identifier,
+    txSigner,
+    msgSigner,
+    mewConnect,
+    popUpHandler
+  ) {
     super(pubkey, true, identifier);
-    this.errorHandler = errorHandler;
+    this.errorHandler = errorHandler(popUpHandler);
     this.txSigner = txSigner;
     this.msgSigner = msgSigner;
     this.isHardware = isHardware;
@@ -47,8 +54,8 @@ class MEWconnectWalletInterface extends WalletInterface {
 }
 
 class MEWconnectWallet {
-  constructor(state, popupCreator) {
-    this.identifier = mewConnectType;
+  constructor(state, popupCreator, popUpHandler) {
+    this.identifier = 'mew_connect';
     this.isHardware = IS_HARDWARE;
     this.mewConnect = new MEWconnect.Initiator({
       v1Url: V1_SIGNAL_URL,
@@ -57,14 +64,20 @@ class MEWconnectWallet {
       popupCreator: popupCreator
     });
     this.state = state || {};
+    this.popUpHandler = popUpHandler;
+    this.txIds = [];
   }
 
   static setConnectionState(connectionState) {
-    if (!connectionState) MEWconnect.Initiator.connectionState = 'disconnected';
-    else MEWconnect.Initiator.connectionState = connectionState;
+    if (!connectionState)
+      MEWconnect.Initiator.setConnectionState('disconnected');
+    else MEWconnect.Initiator.setConnectionState(connectionState);
+    debug('setConnectionState', MEWconnect.Initiator.connectionState);
   }
 
   static getConnectionState() {
+    debug('getConnectionState', MEWconnect.Initiator.connectionState);
+
     if (!MEWconnect.Initiator.connectionState) return 'disconnected';
     return MEWconnect.Initiator.connectionState;
   }
@@ -78,8 +91,11 @@ class MEWconnectWallet {
     this.mewConnect.on('codeDisplay', qrcodeListener);
     const txSigner = async tx => {
       let tokenInfo;
-      if (tx.data.slice(0, 10) === '0xa9059cbb') {
-        tokenInfo = this.state.network.type.tokens.find(
+      if (
+        tx.data.slice(0, 10) === '0xa9059cbb' ||
+        tx.data.slice(0, 10) === '0x095ea7b3'
+      ) {
+        tokenInfo = this.state.network.tokens.find(
           entry => entry.address.toLowerCase() === tx.to.toLowerCase()
         );
         if (tokenInfo) {
@@ -90,15 +106,17 @@ class MEWconnectWallet {
           };
         }
       }
+
       const networkId = tx.chainId;
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         if (!tx.gasLimit) {
           tx.gasLimit = tx.gas;
         }
         this.mewConnect.sendRtcMessage('signTx', JSON.stringify(tx));
         this.mewConnect.once('signTx', result => {
+          this.mewConnect.removeAllListeners('reject');
           tx = new Transaction(sanitizeHex(result), {
-            common: commonGenerator(this.state.network.type)
+            common: commonGenerator(this.state.network)
           });
           const signedChainId = calculateChainIdFromV(tx.v);
           if (signedChainId !== networkId)
@@ -111,17 +129,28 @@ class MEWconnectWallet {
             );
           resolve(getSignTransactionObject(tx));
         });
+        this.mewConnect.once('reject', () => {
+          debug('signTx rejected');
+          this.mewConnect.removeAllListeners('signTx');
+          reject({ reject: true });
+        });
       });
     };
     const msgSigner = async msg => {
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         const msgHash = hashPersonalMessage(Misc.toBuffer(msg));
         this.mewConnect.sendRtcMessage('signMessage', {
           hash: msgHash.toString('hex'),
           text: msg
         });
         this.mewConnect.once('signMessage', data => {
+          this.mewConnect.removeAllListeners('reject');
           resolve(getBufferFromHex(sanitizeHex(data.sig)));
+        });
+        this.mewConnect.once('reject', () => {
+          debug('signMessage rejected');
+          this.mewConnect.removeAllListeners('signMessage');
+          reject({ reject: true });
         });
       });
     };
@@ -138,14 +167,18 @@ class MEWconnectWallet {
       this.identifier,
       txSigner,
       msgSigner,
-      mewConnect
+      mewConnect,
+      this.popUpHandler
     );
   }
 }
 
-const createWallet = async (state, popupCreator) => {
-  console.log(MEWconnectWallet); // todo remove dev item
-  const _MEWconnectWallet = new MEWconnectWallet(state, popupCreator);
+const createWallet = async (state, popupCreator, popUpHandler) => {
+  const _MEWconnectWallet = new MEWconnectWallet(
+    state,
+    popupCreator,
+    popUpHandler
+  );
   createWallet.connectionState = _MEWconnectWallet.connectionState;
   const _tWallet = await _MEWconnectWallet.init();
   return _tWallet;
@@ -154,10 +187,6 @@ createWallet.errorHandler = errorHandler;
 const signalerConnect = (url, mewConnect) => {
   return new Promise(resolve => {
     mewConnect.initiatorStart(url);
-    // future extension
-    // mewConnect.on('AuthRejected', () => {
-    //   reject();
-    // });
     mewConnect.on('RtcConnectedEvent', () => {
       mewConnect.sendRtcMessage('address', '');
       mewConnect.once('address', data => {
@@ -167,7 +196,7 @@ const signalerConnect = (url, mewConnect) => {
 
     mewConnect.on('RtcDisconnectEvent', () => {
       MEWconnectWallet.setConnectionState('disconnected');
-      mewConnect
+      mewConnect;
     });
   });
 };

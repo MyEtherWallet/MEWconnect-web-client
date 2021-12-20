@@ -1,8 +1,5 @@
 'use strict';
-
 import queryString from 'query-string';
-// uncomment below to run tests
-// import WebSocket from 'promise-ws';
 import 'isomorphic-ws';
 import debugLogger from 'debug';
 
@@ -20,6 +17,11 @@ export default class WebsocketConnection {
       1: 'OPEN',
       2: 'CLOSING',
       3: 'CLOSED'
+    };
+
+    this.keepAlive = {
+      ping: 'ping',
+      pong: 'pong'
     };
   }
 
@@ -84,6 +86,9 @@ export default class WebsocketConnection {
 
   onOpen() {
     debug(`websocket onopen = ${this.getSocketState()}`);
+    // this.pinger = setInterval(() => {
+    //   this.send(this.keepAlive.ping)
+    // }, 5000)
   }
 
   /**
@@ -122,6 +127,9 @@ export default class WebsocketConnection {
         debugPeer('parsedMessage: message data', parsedMessage.data);
       }
 
+      if (parsedMessage.signal === 'ping' || parsedMessage.signal === 'pong') {
+        return;
+      }
       const signal = parsedMessage.signal;
       const data = parsedMessage.data;
       debug(`onMessage Signal: ${signal}`);
@@ -143,6 +151,9 @@ export default class WebsocketConnection {
 
   onClose() {
     debug(`websocket onClose = ${this.getSocketState()}`);
+    if (this.listeners['onClose']) {
+      this.listeners['onClose'].call(this);
+    }
   }
 
   /**

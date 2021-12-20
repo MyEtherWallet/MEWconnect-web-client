@@ -1,5 +1,5 @@
-import createLogger from 'logging';
 import debugLogger from 'debug';
+import { V1endpoint, V2endpoint } from '../config';
 
 import wrtc from 'wrtc';
 import io from 'socket.io-client';
@@ -8,7 +8,6 @@ import MewConnectCommon from '../MewConnectCommon';
 const debug = debugLogger('MEWconnect:initiator-V1');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances-V1');
 const debugStages = debugLogger('MEWconnect:initiator-stages-V1');
-const logger = createLogger('MewConnectInitiator-V1');
 
 export default class MewConnectInitiatorV1 extends MewConnectCommon {
   constructor(options = {}) {
@@ -21,8 +20,9 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
       this.activePeerId = '';
       this.allPeerIds = [];
       this.peersCreated = [];
-      this.Url = options.url || 'wss://connect.mewapi.io';
-      this.v2Url = options.v2Url || 'wss://connect2.mewapi.io/staging';
+
+      this.Url = options.url || V1endpoint;
+      this.v2Url = options.v2Url || V2endpoint;
 
       this.turnTest = options.turnTest;
 
@@ -46,16 +46,9 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
       this.lifeCycle = this.jsonDetails.lifeCycle;
       this.stunServers = options.stunServers || this.jsonDetails.stunSrvers;
       this.iceStates = this.jsonDetails.iceConnectionState;
-      // Socket is abandoned.  disconnect.
       this.timer = null;
-      setTimeout(() => {
-        if (this.socket) {
-          this.socketDisconnect();
-        }
-      }, 120000);
-      debug(this.signals); // todo remove dev item
+      debug(this.signals);
     } catch (e) {
-      debug(e); // todo remove dev item
       debug('constructor error:', e);
     }
   }
@@ -99,6 +92,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     this.socket.on(this.signals.connect, () => {
       debug(': SOCKET CONNECTED');
       this.socketConnected = true;
+      this.emit('SOCKET_CONNECTED');
     });
 
     this.socketOn(this.signals.confirmation, this.beginRtcSequence.bind(this)); // response
@@ -205,7 +199,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
   // A connection pair exists, create and send WebRTC OFFER
   async beginRtcSequence(data) {
     this.emit('socketPaired');
-    debug(data); // todo remove dev item
+    debug(data);
     debug('sendOffer: SOCKET CONFIRMATION');
     this.emit('beginRtcSequence', 'V1');
     // this.connPath = source;
@@ -222,7 +216,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
   }
 
   initiatorStartRTC(socket, options) {
-    debug('initiatorStartRTC'); // todo remove dev item
+    debug('initiatorStartRTC');
     const webRtcConfig = options.webRtcConfig || {};
 
     const webRtcServers = webRtcConfig.servers || this.stunServers;
@@ -266,8 +260,8 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
   }
 
   async onSignal(data) {
-    debug('onSignal'); // todo remove dev item
-    debug(data); // todo remove dev item
+    debug('onSignal');
+    debug(data);
     const encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(data));
     this.uiCommunicator(this.lifeCycle.sendOffer);
     this.socketEmit(this.signals.offerSignal, {
@@ -279,13 +273,12 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
 
   // Handle the WebRTC ANSWER from the opposite (mobile) peer
   async recieveAnswer(data) {
-    debug('recieveAnswer', data); // todo remove dev item
+    debug('recieveAnswer', data);
     try {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
       this.webRtcCommunication.receiveAnswer(JSON.parse(plainTextOffer));
-      // this.rtcRecieveAnswer({ data: plainTextOffer });
     } catch (e) {
-      logger.error(e);
+      console.error(e);
     }
   }
 

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,user-scalable=no"
+    />
+    <meta name="theme-color" content="#000000" />
+    <title>MEWconnect</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+      /*  ---------------------------------------*/
+      #mew-connect-notice-img {
+        position: relative;
+        top: 10px;
+        left: 5px;
+        width: 23.2px;
+        height: 23.2px;
+      }
+
+      .hidden {
+        visibility: hidden;
+      }
+
+      .shown {
+        visibility: visible;
+      }
+
+      #mew-connect-notice {
+        visibility: hidden; /* Hidden by default. Visible on click */
+        min-width: 250px; /* Set a default minimum width */
+        min-height: 110px;
+        /*margin-left: -125px; !* Divide value of min-width by 2 *!*/
+        background-color: white;
+        color: #000000; /* White text color */
+        text-align: center; /* Centered text */
+        border-radius: 15px; /* Rounded borders */
+        border: rgba(0, 0, 0, 0.1) solid 1px;
+        /*margin: 15px; !* Padding *!*/
+        position: fixed; /* Sit on top of the screen */
+        z-index: 999999999999999; /* Add a z-index if needed */
+        right: 30px; /* Center the snackbar */
+        top: 30px; /* 30px from the bottom */
+        box-shadow: 0px 16px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      #mew-connect-notice-label-text {
+        width: 78px;
+        height: 16px;
+        color: rgb(95, 99, 104);
+        font-size: 14px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+        letter-spacing: 0.37px;
+        line-height: 14px;
+        padding-top: 15px;
+        padding-left: 10px;
+      }
+
+      #mew-connect-notice-text {
+        width: 200px;
+        text-align: left;
+        padding: 10px 20px;
+        font-family: 'Roboto', sans-serif;
+        font-size: 16px;
+        font-weight: normal;
+        height: 38px;
+        letter-spacing: 0.43px;
+      }
+
+      #mew-connect-notice-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: #050f19;
+        cursor: pointer;
+      }
+
+      #mew-connect-notice-label-container {
+        position: relative;
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        background: rgb(249, 250, 251);
+        /*background: orange;*/
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        text-align: left;
+        box-sizing: border-box;
+        /*margin-bottom: 16px;*/
+        display: flex;
+        flex-direction: row;
+        flex-flow: row wrap;
+        justify-content: left;
+        padding-bottom: 10px;
+      }
+
+      /* Show the snackbar when clicking on a button (class added with JavaScript) */
+      #mew-connect-notice.show {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadein-mew-connect-notice 0.5s,
+          fadeout-mew-connect-notice 0.5s 3.5s;
+        animation: fadein-mew-connect-notice 0.5s,
+          fadeout-mew-connect-notice 0.5s 3.5s;
+      }
+
+      #mew-connect-notice.show-persistent {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadein-mew-connect-notice 0.5s,
+          fadeout-mew-connect-notice 0.5s 5.5s;
+        animation: fadein-mew-connect-notice 0.5s,
+          fadeout-mew-connect-notice 0.5s 5.5s;
+      }
+
+      #mew-connect-notice.show-persistent-leave {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadeout-mew-connect-notice 0.5s 1.5s;
+        animation: fadeout-mew-connect-notice 0.5s 1.5s;
+      }
+
+      #mew-connect-notice.show-in {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadein-mew-connect-notice 0.5s;
+        animation: fadein-mew-connect-notice 0.5s;
+      }
+
+      #mew-connect-notice.show-out {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadeout-mew-connect-notice 0.5s;
+        animation: fadeout-mew-connect-notice 0.5s;
+      }
+
+      /* Animations to fade the snackbar in and out */
+      @-webkit-keyframes fadein-mew-connect-notice {
+        from {
+          top: 0;
+          opacity: 0;
+        }
+        to {
+          top: 30px;
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadein-mew-connect-notice {
+        from {
+          top: 0;
+          opacity: 0;
+        }
+        to {
+          top: 30px;
+          opacity: 1;
+        }
+      }
+
+      @-webkit-keyframes fadeout-mew-connect-notice {
+        from {
+          top: 30px;
+          opacity: 1;
+        }
+        to {
+          top: 0;
+          opacity: 0;
+        }
+      }
+
+      @keyframes fadeout-mew-connect-notice {
+        from {
+          top: 30px;
+          opacity: 1;
+        }
+        to {
+          top: 0;
+          opacity: 0;
+        }
+      }
+
+      @keyframes WalletLinkNotificationProgressBar {
+        0% {
+          left: 0;
+          width: 0%;
+          background-image: linear-gradient(
+            to right,
+            rgba(22, 82, 240, 0) 0%,
+            rgba(22, 82, 240, 1) 100%
+          );
+        }
+        25% {
+          left: 0;
+          width: 100%;
+        }
+        50% {
+          left: 100%;
+          width: 0%;
+          background-image: linear-gradient(
+            to right,
+            rgba(22, 82, 240, 0) 0%,
+            rgba(22, 82, 240, 1) 100%
+          );
+        }
+        50.01% {
+          background-image: linear-gradient(
+            to left,
+            rgba(22, 82, 240, 0) 0%,
+            rgba(22, 82, 240, 1) 100%
+          );
+        }
+        75% {
+          left: 0;
+          width: 100%;
+        }
+        100% {
+          left: 0;
+          width: 0%;
+          background-image: linear-gradient(
+            to left,
+            rgba(22, 82, 240, 0) 0%,
+            rgba(22, 82, 240, 1) 100%
+          );
+        }
+      }
+    </style>
+  </head>
+
+  <body style="background-color: aqua">
+    <div id="mew-connect-notice" class="show">
+      <div id="mew-connect-notice-label-container">
+        <div id="mew-connect-notice-close">
+          X
+        </div>
+        <img id="mew-connect-notice-img" src="rawImages/spaceman.png" />
+        <span id="mew-connect-notice-label-text">MEW wallet</span>
+      </div>
+
+      <div id="mew-connect-notice-text">
+        Check your phone to approve transaction
+      </div>
+    </div>
+    <script>
+      const channel = new BroadcastChannel('refresh-channel');
+      const refreshContainer = window.document.getElementById(
+        'refresh-container'
+      );
+      const refreshButton = window.document.getElementById('refresh');
+
+      refreshButton.addEventListener('click', () => {
+        channel.postMessage('refresh');
+      });
+      setTimeout(() => {
+        refreshContainer.className = refreshContainer.className.replace(
+          'hidden',
+          ''
+        );
+      }, 5000);
+    </script>
+  </body>
+</html>

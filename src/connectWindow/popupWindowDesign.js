@@ -1,193 +1,409 @@
 const cssStyles = `
-    .outer-container{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      box-sizing: border-box;
-      bottom: 0;
-      color: #050f19;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      left: 0;
-      position: absolute;
-      right: 0;
-      text-align: center;
-      top: 0;
-    }
-    .container{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      text-align: center;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      flex-shrink: 0;
-      justify-content: center;
-      margin-left: auto;
-      margin-right: auto;
-      padding-bottom: 16px;
-      padding-top: 16px;
-      width: 256px;
-    }
-    .qr-code{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      text-align: center;
-      box-sizing: border-box;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-      display: inline-block;
-      padding: 16px 16px 0 16px;
-    }
-    .text-one{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      text-align: center;
-      box-sizing: border-box;
-      font-size: 20px;
-      margin-bottom: 0;
-      margin-top: 0;
-    }
-    .text-two{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      text-align: center;
-      box-sizing: border-box;
-      font-size: 13px;
-      font-weight: normal;
-      margin-bottom: 16px;
-      margin-top: 0;
-      opacity: 0.8;
-    }
-    .list-style{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      box-sizing: border-box;
-      font-size: 13px;
-      line-height: 1.5;
-      list-style-position: inside;
-      margin-bottom: 16px;
-      margin-top: 16px;
-      padding: 0;
-      text-align: left;
-    }
-    .bottom-container{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      text-align: center;
-      box-sizing: border-box;
-      flex-grow: 0;
-      flex-shrink: 0;
-      margin-bottom: 16px;
-    }
-    .bottom-container-text{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      box-sizing: border-box;
-      font-size: 13px;
-      margin: 0;
-      opacity: 0.5;
-      text-align: center;
-    }
-    .bottom-container-text-old{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
-      color: #050f19;
-      box-sizing: border-box;
-      font-size: 13px;
-      margin: 0;
-      opacity: 0.5;
-      padding: 16px;
-      text-align: center;
-    }
-    
-    .refreshIcon {
-      justify-content: center;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .hidden{
-    display: none;
-    }
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+      .outer-container-mew-modal {
+        font-family: 'Roboto', sans-serif;
+        box-sizing: border-box;
+        bottom: 0;
+        color: #050f19;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        left: 0;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        top: 0;
+        min-width: 450px;
+        max-width: 450px;
+        max-height: 558px;
+      }
+      
+      .container-mew-modal {
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        text-align: center;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        flex-shrink: 0;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+        padding-bottom: 16px;
+        padding-top: 16px;
+        position: relative;
+        max-width: 450px;
+        max-height: 404px;
+        width: 100%;
+        top: 0;
+      }
+      
+      .upper-text {
+        position: relative;
+        left: 0;
+        bottom: 15px;
+      }
+      
+     .close-mew-modal{
+        position: absolute;
+        padding-top: 10px;
+        right: 10px !important;
+        top: 0;
+        width: 20px;
+        cursor: pointer;
+        z-index: 10;
+      }
+      
+      .mew-qr-code {
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        height: 210px;
+        width: 210px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        box-sizing: border-box;
+        background-color: white;
+        border-radius: 8px;
+        display: inline-block;
+      }
+      .mew-text-one {
+        min-width: 380px;
+        height: 30px;
+        color: rgba(0, 0, 0);
+        font-size: 24px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+        text-align: center;
+        letter-spacing: 0.3px;
+        line-height: 30px;
+        box-sizing: border-box;
+        padding-bottom: 8px;
+      }
+      .mew-text-two {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.55);
+        font-weight: normal;
+        height: 16px;
+        letter-spacing: 0.17px;
+        text-align: center;
+        min-width: 265px;
+        padding-top: 8px;
+      }
+      .mew-list-style {
+        width: 278px;
+        height: 48px;
+        color: rgba(0, 0, 0, 0.55);
+        font-size: 12px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: normal;
+        letter-spacing: 0.15px;
+        line-height: 16px;
+        margin-left: 20px;
+        list-style-position: outside;
+        text-align: left;
+        position: relative;
+        left: 30px
+      }
+      .mew-list-style li {
+        margin-left: 0;
+        padding-left: 10px;
+      }
+      .mew-bottom-background {
+        position: absolute;
+        bottom: 0;
+        right: 64px;
+        border-radius: 0 0 16px 16px;
+        background: rgb(249, 250, 251);
+        text-align: center;
+        padding-top: 25px;
+        padding-bottom: 15px;
+        max-width: 450px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .bottom-container-mew-modal {
+        position: relative;
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        text-align: center;
+        box-sizing: border-box;
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: row;
+        flex-flow: row wrap;
+        justify-content: center;
+        left: -15px;
+        
+      }
+
+      .bottom-container-mew-modal > .left {
+        margin-right: 15px;
+      }
+
+      .bottom-container-mew-modal > .center {
+        margin-right: 15px;
+      }
+
+      .bottom-container-mew-modal > .right {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .bottom-container-mew-modal > .left-img {
+        padding-right: 10px;
+      }
+
+      .bottom-container-mew-modal-text {
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        box-sizing: border-box;
+        font-size: 13px;
+        margin: 0;
+        opacity: 0.5;
+        text-align: left;
+      }
+      .bottom-container-mew-modal-text-old {
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        box-sizing: border-box;
+        font-size: 13px;
+        margin: 0;
+        opacity: 0.5;
+        padding: 16px;
+        text-align: center;
+      }
+
+      .spaceman-background {
+        background-color: white;
+        border-radius: 10px;
+      }
+
+      p {
+        margin: 0;
+        padding-bottom: 5px;
+      }
+
+      .mew-bottom {
+        color: rgba(0, 0, 0, 0.55);
+        font-size: 12px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: lighter;
+        letter-spacing: 0.15px;
+      }
+      
+      .bottom-link {
+      text-decoration: none;
+       color: rgba(5, 192, 165);
+       cursor: pointer;
+      }
+      
+      #refresh-container-mew-modal {
+      background: #33c7b0;
+      border-radius: 5px;
+      padding: 5px;
+      }
+      
+      #refresh-container-mew-modal:hover {
+      background: #238677;
+      }
+
+      .refreshIcon {
+        padding-top: 5px;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+        cursor: pointer;
+        color: #fffff;
+      }
+
+      .mew-hidden {
+        display: none;
+      }
+      
+      .mew-get-text {
+        width: 265px;
+        height: 16px;
+        color: rgb(0, 0, 0);
+        font-size: 14px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: normal;
+        letter-spacing: 0.17px;
+      }
+      
+      .mew-camera-icon {
+          opacity: 0.54;
+          position: relative;
+          bottom: -2px;
+          height: 14px;
+          width: 14px;
+        }
+        
+        #mew-google-link:hover {
+        cursor: pointer;
+        }
+        
+        #mew-apple-link:hover {
+        cursor: pointer;
+        }
+        
+        .mew-warn-color {
+        color: orange;
+        }
+        
+        .loader-mew,
+        .loader-mew:after {
+          border-radius: 50%;
+          width: 10em;
+          height: 10em;
+        }
+        .loader-mew {
+          margin: 20px auto;
+          font-size: 10px;
+          position: relative;
+          text-indent: -9999em;
+          border-top: 1em solid rgba(166,183,183, 0.2);
+          border-right: 1em solid rgba(166,183,183, 0.2);
+          border-bottom: 1em solid rgba(166,183,183, 0.2);
+          border-left: 1em solid rgba(8, 165, 178, 1);
+          -webkit-transform: translateZ(0);
+          -ms-transform: translateZ(0);
+          transform: translateZ(0);
+          -webkit-animation: load8 1.1s infinite linear;
+          animation: load8 1.1s infinite linear;
+        }
+        @-webkit-keyframes load8 {
+          0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+          }
+          100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+          }
+        }
+        @keyframes load8 {
+          0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+          }
+          100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+          }
+        }
     `;
-// <button id="refresh" style="display: none">Refresh code</button>
-const htmlDesign = (refresh, image) => {
-  let middlePart = '';
-  const beginningPart = `
-      <html>
-      <head>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
-        <meta name="theme-color" content="#000000"/>
-        <title>MEWconnect</title>
-      </head>
 
-        <body>
-          <div class="outer-container">
-            <div class="container">
-            <h3 class="text-one">Scan QR Code</h3>
-            <h4 class="text-two">To connect mobile wallet</h4>
-            <div class="qr-code">
-              <canvas id="canvas"></canvas>
-            </div>
-            <div id="refresh-container" class="refreshIcon hidden">
-            <img id="refresh" src="${refresh}"/>
-            </div>
-            
-              <ol class="list-style">
-                <li>Open compatible wallet app</li>
-                <li>Find and open the QR scanner</li>
-                <li>Scan this QR code</li>
-              </ol>
-            </div>
-            <div class="bottom-container">
-            
-            <h5 class="bottom-container-text">Powered by</h5>
-             MEWconnect
+const htmlDesign = (
+  refresh,
+  image,
+  playStore,
+  appStore,
+  camera,
+  iconImage,
+  iosLink,
+  androidLink
+) => {
+  return `
+    <div class="outer-container-mew-modal">
+      <div class="container-mew-modal">
+              <div class="close-mew-modal" id="close-mew-modal" aria-label="close modal" data-close>
+          <img src="${iconImage}" height="17" width="11"/>
+        </div>
+      <div class="upper-text">
 
-`;
-  if (!image) {
-    // eslint-disable-next-line no-console
-    console.log(image); // todo remove dev item
-    middlePart = 'MEWconnect';
-  } else {
-    middlePart = `
-             <img src="${image}" />
-`;
-  }
+        <p class="mew-text-one">Connect to MEW&nbsp;wallet app</p>
+        <p class="mew-text-two">Scan this code to connect</p>
+       </div>
+        <div id="qr-failure"></div>
+        <div id="qr-code-connecting-mew" class="mew-hidden"><div class="loader-mew"></div><h4>Connecting...</h4> Creating encrypted peer-to-peer connection </div>
+        <div id="qr-code-display-container-mew" class="mew-qr-code">
+          <canvas id="canvas-for-mewconnect-qr-code"></canvas>
+        </div>
+        <div id="refresh-container" class="refreshIcon mew-hidden">
+          Try Again <img id="refresh" src="${refresh}" />
+        </div>
 
-  const endingPart = `           </div>
+        <ol class="mew-list-style">
+          <li>Open MEW wallet app on your mobile device</li>
+          <li class="with-image">Click <img class="mew-camera-icon" src="${camera}"> icon in the top right corner</li>
+          <li>Scan this code to connect</li>
+        </ol>
+      </div>
+      <div class="mew-bottom-background">
+        <div class="bottom-container-mew-modal">
+          <div class="left">
+            <img
+              class="spaceman-background"
+              src="${image}"
+              height="58"
+              width="58"
+            />
           </div>
-          <script>
-          const channel = new BroadcastChannel('refresh-channel');
-          const refreshContainer = window.document.getElementById("refresh-container")
-          const refreshButton = window.document.getElementById("refresh");
-          
-          refreshButton.addEventListener("click", () => {
-            channel.postMessage("refresh");
-          })
-          setTimeout(() => {
-            refreshContainer.className = refreshContainer.className.replace('hidden', '');
-          }, 5000)
+          <div class="center">
+            <div class="right">
+              <p class="mew-get-text">Don't have MEW&nbsp;wallet app?</p>
+              <p id="popupsBlocked" class="mew-warn-color"></p>
+                      <a href="${iosLink}" target="_blank" id="appStore">               <img
+                  id="mew-apple-link"
+                  class="left-img"
+                  src="${appStore}"
+                  height="40"
+                  width="120"
+                /></a>
 
-</script>
-        </body>
-      </html>`;
+                      <a href="${androidLink}" target="_blank" id="playStore">                <img
+                  id="mew-google-link"
+                  src="${playStore}"
+                  height="40"
+                  width="135"
+                /></a>
 
-  return beginningPart + middlePart + endingPart;
+
+
+            </div>
+          </div>
+
+        </div>
+        <div class="mew-bottom">
+          Powered by <a href="https://myetherwallet.github.io/MEWconnect-Protocol-Documentation/" target="_blank" id="proto-link" class="bottom-link">MEWconnect protocol</a> <br />
+          brought to you by <a href="https://www.myetherwallet.com/" target="_blank" id="mew-link" class="bottom-link">MyEtherWallet</a>
+        </div>
+      </div>
+    </div>
+
+`;
 };
 
 const noticetext = `
 
-        div#Notifications.hidden {
-          visibility: hidden; 
-        }
-        
-        div#Notifications.shown {
-          visibility: visible; 
-        }
-        
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+
+      div#Notifications.mew-hidden {
+        visibility: hidden;
+      }
+      
+      div#Notifications.mew-hidden {
+        visibility: hidden;
+      }
+
+      div#qrcodeError.shown {
+        visibility: visible;
+      }
+      
+      div#qrcodeError.mew-hidden {
+        visibility: hidden;
+      }
+      div#retry-button-mew.mew-hidden {
+        display: none;
+      }
+
       #Notifications,
       #Notifications * {
 
@@ -212,34 +428,11 @@ const noticetext = `
         background-position-y: 0;
         background-repeat: repeat;
         background-size: auto auto;
-        border: 0;
-        border-style: none;
-        border-width: medium;
-        border-color: inherit;
-        border-bottom: 0;
-        border-bottom-color: inherit;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-        border-bottom-style: none;
-        border-bottom-width: medium;
         border-collapse: separate;
         border-image: none;
-        border-left: 0;
-        border-left-color: inherit;
-        border-left-style: none;
-        border-left-width: medium;
-        border-radius: 0;
-        border-right: 0;
-        border-right-color: inherit;
-        border-right-style: none;
-        border-right-width: medium;
         border-spacing: 0;
-        border-top: 0;
-        border-top-color: inherit;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        border-top-style: none;
-        border-top-width: medium;
+        border-radius: 0;
+        border: medium none inherit;
         bottom: auto;
         box-shadow: none;
         box-sizing: border-box;
@@ -254,7 +447,6 @@ const noticetext = `
         column-rule: medium none currentColor;
         column-rule-color: currentColor;
         column-rule-style: none;
-        column-rule-width: none;
         column-span: 1;
         column-width: auto;
         content: normal;
@@ -265,9 +457,7 @@ const noticetext = `
         display: inline;
         empty-cells: show;
         float: none;
-        font: normal;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
-        Arial, sans-serif;
+        font-family: 'Roboto', sans-serif;
         font-size: medium;
         font-style: normal;
         font-variant: normal;
@@ -277,33 +467,19 @@ const noticetext = `
         left: auto;
         letter-spacing: normal;
         line-height: normal;
-        list-style: none;
-        list-style-image: none;
-        list-style-position: outside;
-        list-style-type: disc;
+        list-style: disc outside none;
         margin: 0;
-        margin-bottom: 0;
-        margin-left: 0;
-        margin-right: 0;
-        margin-top: 0;
         max-height: none;
         max-width: none;
         min-height: 0;
         min-width: 0;
         opacity: 1;
         orphans: 0;
-        outline: 0;
-        outline-color: invert;
-        outline-style: none;
-        outline-width: medium;
+        outline: invert none medium;
         overflow: visible;
         overflow-x: visible;
         overflow-y: visible;
         padding: 0;
-        padding-bottom: 0;
-        padding-left: 0;
-        padding-right: 0;
-        padding-top: 0;
         page-break-after: auto;
         page-break-before: auto;
         page-break-inside: auto;
@@ -345,8 +521,8 @@ const noticetext = `
       }
 
       #Notifications * {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
-        Arial, sans-serif;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
         box-sizing: border-box;
       }
 
@@ -392,6 +568,7 @@ const noticetext = `
       }
 
       #Notifications .NotificationContent {
+        background-color: rgb(249, 250, 251);
         display: flex;
         flex-direction: row;
         padding: 8px 8px 8px 16px;
@@ -430,10 +607,10 @@ const noticetext = `
           rgba(22, 82, 240, 0) 0%,
           rgba(51, 199, 176, 1) 100%
         );
-        animation: WalletLinkNotificationProgressBar 2s linear infinite;
+        animation: MewNotificationProgressBar 2s linear infinite;
       }
 
-      @keyframes WalletLinkNotificationProgressBar {
+      @keyframes MewNotificationProgressBar {
         0% {
           left: 0;
           width: 0%;
@@ -526,29 +703,176 @@ const noticetext = `
       #Notifications .NotificationButton:active {
         opacity: 0.6;
       }
+
+      #Notifications .NotificationContent .spaceman-background {
+        background-color: rgb(249, 250, 251);
+        border-radius: 10px;
+        height: 50px;
+        width: 50px;
+      }
       `;
 
-const windowInformer = `
-<div class="Notification Notificationshow NotificationExpand">
-      <div class="NotificationBox">
-        <div class="NotificationContent">
-          <div class="NotificationMessage">Requesting to connect to your wallet...</div>
-        </div>
-        <div class="NotificationProgressBar"></div>
-        <div class="NotificationActions">
-          <div class="NotificationAction"><span
-            class="NotificationButtonInfo NotificationButtonInfo1">Don’t see the popup?</span>
-            <button id="NotificationButton1" class="NotificationButton NotificationButton1">Show
-                                                                   window
-            </button>
+const windowInformer = spaceman => {
+  return `
+      <div class="Notification Notificationshow NotificationExpand">
+        <div class="NotificationBox">
+          <div class="NotificationContent">
+            <img
+              class="spaceman-background"
+              src="${spaceman}"
+            />
+            <div class="NotificationMessage">Requesting to connect using MEW wallet</div>
           </div>
-          <div class="NotificationAction"><span
-            class="NotificationButtonInfo NotificationButtonInfo2">Made a mistake?</span>
-            <button id="NotificationButton2" class="NotificationButton NotificationButton2">Cancel
-            </button>
+          <div class="NotificationProgressBar"></div>
+          <div class="NotificationActions">
+            <div class="NotificationAction"><span
+              class="NotificationButtonInfo NotificationButtonInfo1">Don’t see the popup?</span>
+              <button id="NotificationButton1" class="NotificationButton NotificationButton1">Show
+                                                                                              window
+              </button>
+            </div>
+            <div class="NotificationAction"><span
+              class="NotificationButtonInfo NotificationButtonInfo2">Made a mistake?</span>
+              <button id="NotificationButton2" class="NotificationButton NotificationButton2">Cancel
+              </button>
+            </div>
+            <div id="retry-button-mew" class="NotificationAction mew-hidden"><span
+              class="NotificationButtonInfo NotificationButtonInfo2">Refresh QRcode and </span>
+              <button id="NotificationButton3" class="NotificationButton NotificationButton2">Try Again
+              </button>
+            </div>
+              <div id="qrcodeError" class="NotificationError mew-hidden"><span
+              class="NotificationButtonInfo NotificationButtonInfo2">Failed to generate QR code. Please cancel and retry.</span>
+            </div>
           </div>
         </div>
       </div>
+`;
+};
+
+const modalFrame = innerContent => {
+  return `
+    <div class="mew-wallet-modal is-visible" id="mew-wallet-modal"></div>
+    <div class="mew-wallet-modal-container-mew-modal is-visible" id="mew-wallet-modal-container">
+      <div class="mew-wallet-modal-dialog is-visible" id="mew-mobile-modal-dialog">
+        <section class="mew-wallet-modal-content">
+        ${innerContent}
+        </section>
+      </div>
     </div>
 `;
-export { cssStyles, htmlDesign, noticetext, windowInformer };
+};
+
+const modalCSS = (additionalCss = '') => {
+  return `
+${additionalCss}
+
+      #mew-mobile-modal-dialog section.mew-wallet-modal-content{
+        position: fixed;
+        min-width: 448px;
+        max-width: 448px;
+        min-height: 558px;
+        max-height: 558px;
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
+      }
+            
+      .mew-wallet-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background: black;
+        cursor: default;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.35s ease-in;
+      }
+
+      .mew-wallet-modal.is-visible {
+        visibility: visible;
+        opacity: 0.25;
+        z-index: 999999;
+      }
+
+      div.mew-wallet-modal-dialog {
+        position: fixed;
+        background: rgb(255, 255, 255);
+        border-radius: 16px;
+        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05),
+        0px 3px 6px 0px rgba(0, 0, 0, 0.05),
+        0px 8px 16px 0px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        min-width: 448px;
+        max-width: 448px;
+        min-height: 558px;
+        max-height: 558px;
+        overflow: auto;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 999999;
+      }
+
+      .mew-wallet-modal-container-mew-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background-color: transparent;
+        cursor: default;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.35s ease-in;
+        z-index: 999999;
+      }
+
+      div.mew-wallet-modal-container-mew-modal.is-visible {
+        visibility: visible;
+        opacity: 1;
+        background-color: transparent;
+      }
+
+      div.mew-wallet-modal-dialog.is-visible {
+        visibility: visible;
+        opacity: 1;
+        z-index: 99999999999999;
+      }
+
+      .mew-wallet-modal-dialog > * {
+       /* padding: 1rem; */
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .modal-header .close-modal {
+        font-size: 1.5rem;
+      }
+
+`;
+};
+export {
+  cssStyles,
+  htmlDesign,
+  noticetext,
+  windowInformer,
+  modalFrame,
+  modalCSS
+};

@@ -201,7 +201,7 @@ export default class Receiver {
    * @param  {Function} fn - Callback function to perform
    */
   onRTC(signal, fn) {
-    console.log('onRTC', signal); // todo remove dev item
+    debug('onRTC', signal);
     this.peer.on(signal, fn)
   }
 }

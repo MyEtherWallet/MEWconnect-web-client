@@ -3,6 +3,13 @@
 const _ = require('underscore');
 const errors = require('web3-core-helpers').errors;
 
+const isNode =
+  Object.prototype.toString.call(
+    typeof process !== 'undefined' ? process : 0
+  ) === '[object process]';
+const isRN =
+  typeof navigator !== 'undefined' && navigator.product === 'ReactNative';
+
 let Ws = null;
 let _btoa = null;
 let parseURL = null;
@@ -10,14 +17,33 @@ Ws = function(url, protocols) {
   if (protocols) return new window.WebSocket(url, protocols);
   return new window.WebSocket(url);
 };
-_btoa = btoa;
-parseURL = function(url) {
-  return new URL(url);
-};
+if (isNode || isRN) {
+  _btoa = function(str) {
+    return Buffer.from(str).toString('base64');
+  };
+  const url = require('url');
+  if (url.URL) {
+    const newURL = url.URL;
+    parseURL = function(url) {
+      return new newURL(url);
+    };
+  } else {
+    parseURL = require('url').parse;
+  }
+} else {
+  _btoa = btoa.bind(window);
+  parseURL = function(url) {
+    return new URL(url);
+  };
+}
+
 const WebsocketProvider = function WebsocketProvider(url, options) {
   const _this = this;
   this.responseCallbacks = {};
   this.notificationCallbacks = [];
+  this.closeCallbacks = [];
+  this.disconnectCallbacks = [];
+  this.accountsChangedCallbacks = [];
 
   options = options || {};
   this._customTimeout = options.timeout;
@@ -63,7 +89,23 @@ const WebsocketProvider = function WebsocketProvider(url, options) {
           if (_.isFunction(callback)) callback(result);
         });
       } else if (_this.responseCallbacks[id]) {
-        _this.responseCallbacks[id](null, result);
+        if (!result.error) {
+          _this.responseCallbacks[id](null, result);
+        } else {
+          if (
+            result.error.message === 'subscription not found' &&
+            options.subscriptionNotFoundNoThrow
+          ) {
+            // eslint-disable-next-line
+            console.warn('subscription not found');
+            if (!result.result) {
+              result.result = 'subscription not found';
+            }
+            _this.responseCallbacks[id](null, result);
+          } else {
+            _this.responseCallbacks[id](result);
+          }
+        }
         delete _this.responseCallbacks[id];
       }
     });
@@ -144,6 +186,7 @@ WebsocketProvider.prototype._addResponseCallback = function(payload, callback) {
 };
 WebsocketProvider.prototype._timeout = function() {
   for (const key in this.responseCallbacks) {
+    // eslint-disable-next-line
     if (this.responseCallbacks.hasOwnProperty(key)) {
       this.responseCallbacks[key](errors.InvalidConnection('on WS'));
       delete this.responseCallbacks[key];
@@ -152,7 +195,6 @@ WebsocketProvider.prototype._timeout = function() {
 };
 WebsocketProvider.prototype.send = function(payload, callback) {
   const _this = this;
-
   if (this.connection.readyState === this.connection.CONNECTING) {
     setTimeout(function() {
       _this.send(payload, callback);
@@ -193,18 +235,67 @@ WebsocketProvider.prototype.on = function(type, callback) {
       break;
 
     case 'accountsChanged':
+      this.accountsChangedCallbacks.push(callback);
       this.accountsChanged = callback;
+      break;
+    case 'disconnected':
+      this.disconnectedCallback = callback;
+      break;
+    case 'disconnect':
+      this.disconnectCallbacks.push(callback);
+      // this.disconnectCallback = callback;
+      break;
+    case 'close':
+      this.closeCallbacks.push(callback);
+      // this.closeCallback = callback;
+      break;
+  }
+};
+
+WebsocketProvider.prototype.emit = function(type, data) {
+  if (typeof type !== 'string')
+    throw new Error('The first parameter type must be a function.');
+
+  switch (type) {
+    case 'accountsChanged':
+      this.accountsChangedCallbacks.forEach(function(callback) {
+        if (_.isFunction(callback)) callback(data);
+      });
+      break;
+    case 'disconnect':
+      this.disconnectCallbacks.forEach(function(callback) {
+        if (_.isFunction(callback)) callback(data);
+      });
+      break;
+    case 'close':
+      this.closeCallbacks.forEach(function(callback) {
+        if (_.isFunction(callback)) callback(data);
+      });
       break;
   }
 };
 
 WebsocketProvider.prototype.removeListener = function(type, callback) {
   const _this = this;
-
   switch (type) {
     case 'data':
       this.notificationCallbacks.forEach(function(cb, index) {
         if (cb === callback) _this.notificationCallbacks.splice(index, 1);
+      });
+      break;
+    case 'accountsChanged':
+      this.accountsChangedCallbacks.forEach(function(cb, index) {
+        if (cb === callback) _this.accountsChangedCallbacks.splice(index, 1);
+      });
+      break;
+    case 'disconnect':
+      this.disconnectCallbacks.forEach(function(cb, index) {
+        if (cb === callback) _this.disconnectCallbacks.splice(index, 1);
+      });
+      break;
+    case 'close':
+      this.closeCallbacks.forEach(function(cb, index) {
+        if (cb === callback) _this.closeCallbacks.splice(index, 1);
       });
       break;
   }

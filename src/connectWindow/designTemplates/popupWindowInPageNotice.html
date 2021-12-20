@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,user-scalable=no"
+    />
+    <meta name="theme-color" content="#000000" />
+    <title>MEWconnect</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+      div#Notifications-mew.hidden {
+        visibility: hidden;
+      }
+
+      div#Notifications-mew.shown {
+        visibility: visible;
+      }
+
+      #Notifications-mew,
+      #Notifications-mew * {
+        animation: none;
+        animation-delay: 0;
+        animation-direction: normal;
+        animation-duration: 0;
+        animation-fill-mode: none;
+        animation-iteration-count: 1;
+        animation-name: none;
+        animation-play-state: running;
+        animation-timing-function: ease;
+        backface-visibility: visible;
+        background: 0;
+        background-attachment: scroll;
+        background-clip: border-box;
+        background-color: transparent;
+        background-image: none;
+        background-origin: padding-box;
+        background-position: 0 0;
+        background-position-x: 0;
+        background-position-y: 0;
+        background-repeat: repeat;
+        background-size: auto auto;
+        border-collapse: separate;
+        border-image: none;
+        border-spacing: 0;
+        border-radius: 0;
+        border: medium none inherit;
+        bottom: auto;
+        box-shadow: none;
+        box-sizing: border-box;
+        caption-side: top;
+        clear: none;
+        clip: auto;
+        color: inherit;
+        columns: auto;
+        column-count: auto;
+        column-fill: balance;
+        column-gap: normal;
+        column-rule: medium none currentColor;
+        column-rule-color: currentColor;
+        column-rule-style: none;
+        column-span: 1;
+        column-width: auto;
+        content: normal;
+        counter-increment: none;
+        counter-reset: none;
+        cursor: auto;
+        direction: ltr;
+        display: inline;
+        empty-cells: show;
+        float: none;
+        font-family: 'Roboto', sans-serif;
+        font-size: medium;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: normal;
+        height: auto;
+        hyphens: none;
+        left: auto;
+        letter-spacing: normal;
+        line-height: normal;
+        list-style: disc outside none;
+        margin: 0;
+        max-height: none;
+        max-width: none;
+        min-height: 0;
+        min-width: 0;
+        opacity: 1;
+        orphans: 0;
+        outline: invert none medium;
+        overflow: visible;
+        overflow-x: visible;
+        overflow-y: visible;
+        padding: 0;
+        page-break-after: auto;
+        page-break-before: auto;
+        page-break-inside: auto;
+        perspective: none;
+        perspective-origin: 50% 50%;
+        pointer-events: auto;
+        position: static;
+        quotes: '\201C''\201D''\2018''\2019';
+        right: auto;
+        tab-size: 8;
+        table-layout: auto;
+        text-align: inherit;
+        text-align-last: auto;
+        text-decoration: none;
+        text-decoration-color: inherit;
+        text-decoration-line: none;
+        text-decoration-style: solid;
+        text-indent: 0;
+        text-shadow: none;
+        text-transform: none;
+        top: auto;
+        transform: none;
+        transform-style: flat;
+        transition: none;
+        transition-delay: 0s;
+        transition-duration: 0s;
+        transition-property: none;
+        transition-timing-function: ease;
+        unicode-bidi: normal;
+        vertical-align: baseline;
+        white-space: normal;
+        widows: 0;
+        width: auto;
+        word-spacing: normal;
+        z-index: 9999999999;
+        all: initial;
+        all: unset;
+      }
+
+      #Notifications-mew * {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+        box-sizing: border-box;
+      }
+
+      #Notifications-mew {
+        position: fixed;
+        top: 0;
+        right: 0;
+        text-align: right;
+        z-index: 2147483647;
+      }
+
+      #Notifications-mew style {
+        display: none;
+      }
+
+      #Notifications-mew .Notification {
+        display: block;
+        margin: 8px 16px 0 16px;
+      }
+
+      #Notifications-mew .NotificationBox {
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        color: black;
+        margin: 0;
+        font-size: 14px;
+        box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06),
+          0px 0px 8px rgba(0, 0, 0, 0.04);
+        border-radius: 16px;
+        transition: opacity 0.25s, transform 0.25s;
+        opacity: 0;
+        transform: translateX(25%);
+        text-align: left;
+        overflow: hidden;
+      }
+
+      #Notifications-mew .Notificationshow .NotificationBox {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      #Notifications-mew .NotificationContent {
+        background-color: rgb(249, 250, 251);
+        display: flex;
+        flex-direction: row;
+        padding: 8px 8px 8px 16px;
+        align-items: center;
+        user-select: none;
+        cursor: pointer;
+      }
+
+      #Notifications-mew .NotificationMessage {
+        display: block;
+        color: black;
+        line-height: 1.5;
+      }
+
+      #Notifications-mew .NotificationChevron {
+        display: block;
+        margin-left: 8px;
+        transition: transform 0.05s;
+      }
+
+      #Notifications-mew .NotificationProgressBar {
+        display: block;
+        height: 2px;
+        position: relative;
+      }
+
+      #Notifications-mew .NotificationProgressBar::before {
+        display: block;
+        position: absolute;
+        content: '';
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(
+          to right,
+          rgba(22, 82, 240, 0) 0%,
+          rgba(51, 199, 176, 1) 100%
+        );
+        animation: WalletLinkNotificationProgressBar 2s linear infinite;
+      }
+
+      @keyframes WalletLinkNotificationProgressBar {
+        0% {
+          left: 0;
+          width: 0%;
+          background-image: linear-gradient(
+            to right,
+            rgba(22, 82, 240, 0) 0%,
+            rgba(51, 199, 176, 1) 100%
+          );
+        }
+        25% {
+          left: 0;
+          width: 100%;
+        }
+        50% {
+          left: 100%;
+          width: 0%;
+          background-image: linear-gradient(
+            to right,
+            rgba(22, 82, 240, 0) 0%,
+            rgba(51, 199, 176, 1) 100%
+          );
+        }
+        50.01% {
+          background-image: linear-gradient(
+            to left,
+            rgba(22, 82, 240, 0) 0%,
+            rgba(51, 199, 176, 1) 100%
+          );
+        }
+        75% {
+          left: 0;
+          width: 100%;
+        }
+        100% {
+          left: 0;
+          width: 0%;
+          background-image: linear-gradient(
+            to left,
+            rgba(22, 82, 240, 0) 0%,
+            rgba(51, 199, 176, 1) 100%
+          );
+        }
+      }
+
+      #Notifications-mew .NotificationExpand .NotificationProgressBar {
+        margin-bottom: -1px;
+      }
+
+      #Notifications-mew .NotificationExpand .NotificationChevron {
+        transform: rotateZ(180deg);
+      }
+
+      #Notifications-mew .NotificationActions {
+        display: none;
+        flex-direction: column;
+        border-top: 1px solid #f5f7f8;
+        padding: 8px 16px;
+      }
+
+      #Notifications-mew .NotificationExpand .NotificationActions {
+        display: flex;
+      }
+
+      #Notifications-mew .NotificationAction {
+        color: #888;
+        margin: 8px 0;
+      }
+
+      #Notifications-mew .NotificationButtonInfo {
+        margin: 0 8px 0 0;
+      }
+
+      #Notifications-mew .NotificationButton {
+        color: #33c7b0;
+        -webkit-text-fill-color: #33c7b0;
+        cursor: pointer;
+        display: inline;
+        margin: 0;
+        padding: 0;
+        -webkit-appearance: none;
+        transition: opacity 0.25s;
+      }
+
+      #Notifications-mew .NotificationButton:active {
+        opacity: 0.6;
+      }
+
+      #Notifications-mew .NotificationContent .spaceman-background {
+        background-color: rgb(249, 250, 251);
+        border-radius: 10px;
+        height: 50px;
+        width: 50px;
+      }
+    </style>
+  </head>
+
+  <body style="background-color: aqua">
+    <div id="Notifications-mew">
+      <div class="Notification Notificationshow NotificationExpand">
+        <div class="NotificationBox">
+          <div class="NotificationContent">
+            <img class="spaceman-background" src="rawImages/spaceman.png" />
+            <div class="NotificationMessage">
+              Requesting to connect using MEW wallet
+            </div>
+          </div>
+          <div class="NotificationProgressBar"></div>
+          <div class="NotificationActions">
+            <div class="NotificationAction">
+              <span class="NotificationButtonInfo NotificationButtonInfo1"
+                >Don’t see the popup?</span
+              >
+              <button
+                id="NotificationButton1"
+                class="NotificationButton NotificationButton1"
+              >
+                Show window
+              </button>
+            </div>
+            <div class="NotificationAction">
+              <span class="NotificationButtonInfo NotificationButtonInfo2"
+                >Made a mistake?</span
+              >
+              <button
+                id="NotificationButton2"
+                class="NotificationButton NotificationButton2"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const channel = new BroadcastChannel('refresh-channel');
+      const refreshContainer = window.document.getElementById(
+        'refresh-container'
+      );
+      const refreshButton = window.document.getElementById('refresh');
+
+      refreshButton.addEventListener('click', () => {
+        channel.postMessage('refresh');
+      });
+      setTimeout(() => {
+        refreshContainer.className = refreshContainer.className.replace(
+          'hidden',
+          ''
+        );
+      }, 5000);
+    </script>
+  </body>
+</html>

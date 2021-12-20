@@ -2,11 +2,9 @@
 
 // Libs //
 import Initiator from '../../src/connectClient/MewConnectInitiator';
-import MewConnectCrypto from '../../src/connectClient/MewConnectCrypto';
 import Receiver from '@clients/receiverV1';
 import ReceiverTurn from '@clients/receiverV1Turn';
-import { rtcSignals, roles } from '@signals';
-import { stunServers, websocketURL } from '@config';
+import { rtcSignals } from '@signals';
 const signals = {
   attemptingTurn: 'attemptingTurn',
   turnToken: 'turnToken',
@@ -64,11 +62,6 @@ let receiver;
 
 // WebRTC Offer/Answer //
 let webRTCOffer;
-let webRTCAnswer;
-
-// ICE Servers //
-let iceServers;
-
 /*
 ===================================================================================
   Test "Member Functions"
@@ -81,9 +74,6 @@ let iceServers;
  *
  * @param  {Function} done - Callback function to perform (usually passing a test)
  */
-const pass = async done => {
-  setTimeout(done, process.env.CONNECTION_TIMEOUT);
-};
 
 /*
 ===================================================================================
@@ -93,7 +83,7 @@ const pass = async done => {
 describe('Pairing', () => {
   it('Should connect', async done => {
     try {
-      initiator = new Initiator({version: 'V1'});
+      initiator = new Initiator({ version: 'V1' });
       receiver = new Receiver();
 
       const websocketURL = 'wss://connect.mewapi.io';
@@ -110,30 +100,27 @@ describe('Pairing', () => {
       await receiver.connect(websocketURL);
 
       receiver.on(signals.confirmation, stuff => {
-        if(!silent) console.log('receiver', signals.confirmation, stuff); // todo remove dev item
+        if (!silent) console.log('receiver', signals.confirmation, stuff); // todo remove dev item
       });
 
       receiver.on(signals.offerSignal, async data => {
-        if(!silent) console.log('receiver', signals.offerSignal, data); // todo remove dev item
+        if (!silent) console.log('receiver', signals.offerSignal, data); // todo remove dev item
       });
 
       receiver.on('address', stuff => {
-         if(!silent) console.log('receiver', rtcSignals.data, stuff); // todo remove dev item
+        if (!silent) console.log('receiver', rtcSignals.data, stuff); // todo remove dev item
       });
 
       receiver.on(rtcSignals.connect, stuff => {
         receiver.sendRTC('address');
-        if(!silent) console.log('receiver', rtcSignals.connect, stuff); // todo remove dev item
+        if (!silent) console.log('receiver', rtcSignals.connect, stuff); // todo remove dev item
       });
 
       receiver.on(signals.offer, async data => {
-        if(!silent) console.log('receiver', signals.offer, data); // todo remove dev item
+        if (!silent) console.log('receiver', signals.offer, data); // todo remove dev item
         webRTCOffer = await receiver.decrypt(data.data);
         const answer = await receiver.answer(webRTCOffer);
         const message = { data: answer };
-
-
-
 
         receiver.on('RtcConnectedEvent', () => {
           console.log('RtcConnectedEvent'); // todo remove dev item
@@ -144,15 +131,14 @@ describe('Pairing', () => {
 
       initiator.on('RtcConnectedEvent', () => {
         console.log('RtcConnectedEvent'); // todo remove dev item
-        if(!silent) console.log('Initiator rtc connected event'); // todo remove dev item
+        if (!silent) console.log('Initiator rtc connected event'); // todo remove dev item
         initiator.rtcSend({ type: 'address', data: '' });
       });
 
-      initiator.on('address', (data) => {
-        if(!silent) console.log('initiator: address', data); // todo remove dev item
+      initiator.on('address', data => {
+        if (!silent) console.log('initiator: address', data); // todo remove dev item
         done();
       });
-
     } catch (e) {
       // console.log(e); // todo remove dev item
       done.fail(e);
@@ -162,7 +148,7 @@ describe('Pairing', () => {
   xit('Should use Ice Servers', async done => {
     try {
       let firstView = true;
-      initiator = new Initiator({turnTest: true});
+      initiator = new Initiator({ turnTest: true });
       receiver = new ReceiverTurn();
 
       const websocketURL = 'wss://connect.mewapi.io';
@@ -178,9 +164,7 @@ describe('Pairing', () => {
       );
       await receiver.connect(websocketURL);
 
-
       receiver.on(signals.confirmation, stuff => {
-
         if (firstView) {
           initiator.socketV1Emit(signals.tryTurn);
           // initiator.socketV1Emit(signals.tryTurn);
@@ -190,7 +174,7 @@ describe('Pairing', () => {
           firstView = false;
           return;
         }
-        if(!silent) console.log('receiver', signals.confirmation, stuff); // todo remove dev item
+        if (!silent) console.log('receiver', signals.confirmation, stuff); // todo remove dev item
       });
 
       // receiver.on(signals.offerSignal, async data => {
@@ -198,15 +182,15 @@ describe('Pairing', () => {
       // });
 
       receiver.on(signals.attemptingTurn, async data => {
-        if(!silent) console.log('receiver attempting turn', data); // todo remove dev item
+        if (!silent) console.log('receiver attempting turn', data); // todo remove dev item
       });
 
-      receiver.on(signals.turnToken, async data => {
-        if(!silent) console.log('receiver attempting turn'); // todo remove dev item
+      receiver.on(signals.turnToken, async () => {
+        if (!silent) console.log('receiver attempting turn'); // todo remove dev item
       });
 
       receiver.on(signals.offer, async data => {
-        if(!silent) console.log('receiver', signals.offer, data); // todo remove dev item
+        if (!silent) console.log('receiver', signals.offer, data); // todo remove dev item
         if (firstView) {
           initiator.disconnectRTC();
           console.log(signals.tryTurn); // todo remove dev item
@@ -220,30 +204,28 @@ describe('Pairing', () => {
         const message = { data: answer };
         receiver.onRTC(rtcSignals.connect, stuff => {
           receiver.sendRTC('address');
-          if(!silent) console.log('receiver', rtcSignals.connect, stuff); // todo remove dev item
+          if (!silent) console.log('receiver', rtcSignals.connect, stuff); // todo remove dev item
         });
 
         receiver.onRTC(rtcSignals.data, stuff => {
-          if(!silent) console.log('receiver', rtcSignals.data, stuff); // todo remove dev item
+          if (!silent) console.log('receiver', rtcSignals.data, stuff); // todo remove dev item
           done();
         });
         receiver.send(signals.answerSignal, message);
       });
 
       initiator.on('RtcConnectedEvent', () => {
-        if(!silent) console.log('Initiator rtc connected event'); // todo remove dev item
+        if (!silent) console.log('Initiator rtc connected event'); // todo remove dev item
         initiator.rtcSend({ type: 'address', data: '' });
       });
 
-      initiator.on('address', (data) => {
-        if(!silent) console.log('initiator: address', data); // todo remove dev item
+      initiator.on('address', data => {
+        if (!silent) console.log('initiator: address', data); // todo remove dev item
         done();
       });
-
     } catch (e) {
       // console.log(e); // todo remove dev item
       done.fail(e);
     }
   }, 35000);
-
 });

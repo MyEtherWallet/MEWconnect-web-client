@@ -1,107 +1,189 @@
 const notifierCSS = elementId => {
   return `
     /* The snackbar - position it at the bottom and in the middle of the screen */
-        #${elementId}-img {
-          height: 25%;
-          width: 75%;
+      #${elementId}-img {
+        position: relative;
+        top: 10px;
+        left: 5px;
+        width: 23.2px;
+        height: 23.2px;
+      }
+
+      .hidden {
+        visibility: hidden;
+      }
+
+      .shown {
+        visibility: visible;
+      }
+
+      #${elementId} {
+        visibility: hidden; /* Hidden by default. Visible on click */
+        min-width: 250px; /* Set a default minimum width */
+        min-height: 110px;
+        /*margin-left: -125px; !* Divide value of min-width by 2 *!*/
+        background-color: white;
+        color: #000000; /* White text color */
+        text-align: center; /* Centered text */
+        border-radius: 15px; /* Rounded borders */
+        border: rgba(0, 0, 0, 0.1) solid 1px;
+        /*margin: 15px; !* Padding *!*/
+        position: fixed; /* Sit on top of the screen */
+        z-index: 999999999999999; /* Add a z-index if needed */
+        right: 30px; /* Center the snackbar */
+        top: 30px; /* 30px from the bottom */
+        box-shadow: 0px 16px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      #${elementId}-label-text {
+        width: 78px;
+        height: 16px;
+        color: rgb(95, 99, 104);
+        font-size: 14px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+        letter-spacing: 0.37px;
+        line-height: 14px;
+        padding-top: 15px;
+        padding-left: 12px;
+      }
+      
+       #${elementId}-text{
+        width:200px;
+        text-align: left;
+        padding: 10px 20px;
+        font-family: 'Roboto', sans-serif;
+        font-size: 16px;
+        font-weight: normal;
+        height: 38px;
+        letter-spacing: 0.43px;
+      }
+      
+      .mew-connect-notifier-created-tx-link{
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        height: 38px;
+        color: rgb(95, 99, 104);
+      }
+
+      #${elementId}-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: rgb(95, 99, 104);;
+        cursor: pointer;
+      }
+
+      #${elementId}-label-container {
+        position: relative;
+        font-family: 'Roboto', sans-serif;
+        color: rgb(95, 99, 104);;
+        background: rgb(249, 250, 251);
+        /*background: orange;*/
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        text-align: left;
+        box-sizing: border-box;
+        /*margin-bottom: 16px;*/
+        display: flex;
+        flex-direction: row;
+        flex-flow: row wrap;
+        justify-content: left;
+        padding-bottom: 10px;
+      }
+
+      /* Show the snackbar when clicking on a button (class added with JavaScript) */
+      #${elementId}.show {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadein-${elementId} 0.5s,
+          fadeout-${elementId} 0.5s 3.5s;
+        animation: fadein-${elementId} 0.5s,
+          fadeout-${elementId} 0.5s 3.5s;
+      }
+
+      #${elementId}.show-persistent {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadein-${elementId} 0.5s,
+          fadeout-${elementId} 0.5s 5.5s;
+        animation: fadein-${elementId} 0.5s,
+          fadeout-${elementId} 0.5s 5.5s;
+      }
+
+      #${elementId}.show-persistent-leave {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadeout-${elementId} 0.5s 1.5s;
+        animation: fadeout-${elementId} 0.5s 1.5s;
+      }
+
+      #${elementId}.show-in {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadein-${elementId} 0.5s;
+        animation: fadein-${elementId} 0.5s;
+      }
+
+      #${elementId}.show-out {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadeout-${elementId} 0.5s;
+        animation: fadeout-${elementId} 0.5s;
+      }
+
+      /* Animations to fade the snackbar in and out */
+      @-webkit-keyframes fadein-${elementId} {
+        from {
+          top: 0;
+          opacity: 0;
         }
-        
-        .hidden {
-          visibility: hidden; 
+        to {
+          top: 30px;
+          opacity: 1;
         }
-        
-        .shown {
-          visibility: visible; 
+      }
+
+      @keyframes fadein-${elementId} {
+        from {
+          top: 0;
+          opacity: 0;
         }
-        
-        #${elementId} {
-          visibility: hidden; /* Hidden by default. Visible on click */
-          min-width: 250px; /* Set a default minimum width */
-          margin-left: -125px; /* Divide value of min-width by 2 */
-          background-color: white;
-          color: #000000; /* White text color */
-          text-align: center; /* Centered text */
-          border-radius: 15px; /* Rounded borders */
-          border: rgba(5, 158, 135, 1) solid 4px;
-          padding: 16px; /* Padding */
-          position: fixed; /* Sit on top of the screen */
-          z-index: 999999999999999; /* Add a z-index if needed */
-          right: 30px; /* Center the snackbar */
-          top: 30px; /* 30px from the bottom */
-          box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.1);
+        to {
+          top: 30px;
+          opacity: 1;
         }
-        
-        #${elementId}-close {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          color: #1ca1f1;
-          cursor: pointer;
+      }
+
+      @-webkit-keyframes fadeout-${elementId} {
+        from {
+          top: 30px;
+          opacity: 1;
         }
-        
-        /* Show the snackbar when clicking on a button (class added with JavaScript) */
-        #${elementId}.show {
-          visibility: visible; /* Show the snackbar */
-          /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-          However, delay the fade out process for 2.5 seconds */
-          -webkit-animation: fadein-${elementId} 0.5s, fadeout-${elementId} 0.5s 3.5s;
-          animation: fadein-${elementId} 0.5s, fadeout-${elementId} 0.5s 3.5s;
+        to {
+          top: 0;
+          opacity: 0;
         }
-        
-        #${elementId}.show-persistent {
-          visibility: visible; /* Show the snackbar */
-          /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-          However, delay the fade out process for 2.5 seconds */
-          -webkit-animation: fadein-${elementId} 0.5s, fadeout-${elementId} 0.5s 5.5s;
-          animation: fadein-${elementId} 0.5s, fadeout-${elementId} 0.5s 5.5s;
+      }
+
+      @keyframes fadeout-${elementId} {
+        from {
+          top: 30px;
+          opacity: 1;
         }
-        
-        #${elementId}.show-persistent-leave {
-          visibility: visible; /* Show the snackbar */
-          /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-          However, delay the fade out process for 2.5 seconds */
-          -webkit-animation: fadeout-${elementId} 0.5s 1.5s;
-          animation: fadeout-${elementId} 0.5s 1.5s;
+        to {
+          top: 0;
+          opacity: 0;
         }
-        
-        #${elementId}.show-in {
-          visibility: visible; /* Show the snackbar */
-          /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-          However, delay the fade out process for 2.5 seconds */
-          -webkit-animation: fadein-${elementId} 0.5s;
-          animation: fadein-${elementId} 0.5s;
-        }
-        
-        #${elementId}.show-out {
-          visibility: visible; /* Show the snackbar */
-          /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-          However, delay the fade out process for 2.5 seconds */
-          -webkit-animation: fadeout-${elementId} 0.5s;
-          animation: fadeout-${elementId} 0.5s;
-        }
-        
-        /* Animations to fade the snackbar in and out */
-        @-webkit-keyframes fadein-${elementId} {
-          from {top: 0; opacity: 0;}
-          to {top: 30px; opacity: 1;}
-        }
-        
-        @keyframes fadein-${elementId} {
-          from {top: 0; opacity: 0;}
-          to {top: 30px; opacity: 1;}
-        }
-        
-        @-webkit-keyframes fadeout-${elementId} {
-          from {top: 30px; opacity: 1;}
-          to {top: 0; opacity: 0;}
-        }
-        
-        @keyframes fadeout-${elementId} {
-          from {top: 30px; opacity: 1;}
-          to {top: 0; opacity: 0;}
-        }
-        
-          @keyframes WalletLinkNotificationProgressBar {
+      }
+
+      @keyframes WalletLinkNotificationProgressBar {
         0% {
           left: 0;
           width: 0%;
@@ -146,6 +228,195 @@ const notifierCSS = elementId => {
         }
       }
     `;
+};
+
+const connectedNotifierCSS = elementId => {
+  return `      
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+      /*  ---------------------------------------*/
+      #${elementId}-img {
+        width: 43.5px;
+        height: 43.5px;
+        background-color: white;
+        border-radius: 10px;
+        grid-column-start: 1;
+        grid-column-end: 1;
+        margin-top: 16px;
+        justify-self: center;
+      }
+
+      .hidden {
+        visibility: hidden;
+      }
+
+      .shown {
+        visibility: visible;
+      }
+
+      .${elementId}-big{
+        color: white;
+        font-size: 14px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.37px;
+        line-height: 14px;
+        padding-bottom: 4px;
+      }
+
+      .${elementId}-label-text{
+        color: white;
+        font-size: 12px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+        letter-spacing: 0.37px;
+        line-height: 12px;
+        padding-bottom: 4px;
+      }
+
+      .${elementId}-vertical-flex{
+        padding-top: 15px;
+        align-content: start;
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start
+      }
+
+      #${elementId} {
+        display: grid;
+        grid-template-columns:  30% auto;
+        background: rgb(5, 192, 165);
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.05),
+          0px 4px 8px 0px rgba(0, 0, 0, 0.09);
+        visibility: hidden; /* Hidden by default. Visible on click */
+        min-width: 240px; /* Set a default minimum width */
+        min-height: 77px;
+        color: #000000; /* White text color */
+        text-align: center; /* Centered text */
+        position: fixed; /* Sit on top of the screen */
+       /* z-index: 9999999999999;  Add a z-index if needed */
+        right: 30px; /* Center the snackbar */
+        top: 30px; /* 30px from the bottom */
+      }
+
+      #${elementId}-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: white;
+        cursor: pointer;
+      }
+
+      #${elementId}-label-container {
+        position: relative;
+        grid-column-start: 2;
+        grid-column-end: 2;
+        font-family: 'Roboto', sans-serif;
+        color: #050f19;
+        text-align: left;
+        box-sizing: border-box;
+        /*margin-bottom: 16px;*/
+        display: flex;
+        flex-direction: row;
+        flex-flow: row wrap;
+        justify-content: left;
+        padding-bottom: 10px;
+      }
+
+      /* Show the snackbar when clicking on a button (class added with JavaScript) */
+      #${elementId}.show {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadein-${elementId} 0.5s,
+          fadeout-${elementId} 0.5s 3.5s;
+        animation: fadein-${elementId} 0.5s,
+          fadeout-${elementId} 0.5s 3.5s;
+      }
+
+      #${elementId}.show-persistent {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadein-${elementId} 0.5s,
+          fadeout-${elementId} 0.5s 5.5s;
+        animation: fadein-${elementId} 0.5s,
+          fadeout-${elementId} 0.5s 5.5s;
+      }
+
+      #${elementId}.show-persistent-leave {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadeout-${elementId} 0.5s 1.5s;
+        animation: fadeout-${elementId} 0.5s 1.5s;
+      }
+
+      #${elementId}.show-in {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadein-${elementId} 0.5s;
+        animation: fadein-${elementId} 0.5s;
+      }
+
+      #${elementId}.show-out {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadeout-${elementId} 0.5s;
+        animation: fadeout-${elementId} 0.5s;
+      }
+
+      /* Animations to fade the snackbar in and out */
+      @-webkit-keyframes fadein-${elementId} {
+        from {
+          top: 0;
+          opacity: 0;
+        }
+        to {
+          top: 30px;
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadein-${elementId} {
+        from {
+          top: 0;
+          opacity: 0;
+        }
+        to {
+          top: 30px;
+          opacity: 1;
+        }
+      }
+
+      @-webkit-keyframes fadeout-${elementId} {
+        from {
+          top: 30px;
+          opacity: 1;
+        }
+        to {
+          top: 0;
+          opacity: 0;
+        }
+      }
+
+      @keyframes fadeout-${elementId} {
+        from {
+          top: 30px;
+          opacity: 1;
+        }
+        to {
+          top: 0;
+          opacity: 0;
+        }
+      }
+
+`;
 };
 
 const WindowInformerCSS = `
@@ -308,7 +579,7 @@ const WindowInformerCSS = `
         widows: 0;
         width: auto;
         word-spacing: normal;
-        z-index: 9999999999;
+        z-index: 999999999;
         all: initial;
         all: unset;
 
@@ -497,4 +768,4 @@ const WindowInformerCSS = `
         opacity: 0.6;
       }
       `;
-export { notifierCSS, WindowInformerCSS };
+export { notifierCSS, connectedNotifierCSS, WindowInformerCSS };
