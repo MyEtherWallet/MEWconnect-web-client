@@ -316,7 +316,7 @@ function _nonIterableSpread() {
 
 var name = "@myetherwallet/mewconnect-web-client";
 var homepage = "https://github.com/myetherwallet/MEWconnect-web-client";
-var version = "2.2.0-beta.13";
+var version = "2.2.0-beta.14";
 var main = "dist/cjs/index.js";
 var module$1 = "dist/esm/index.js";
 var scripts = {
@@ -2795,7 +2795,7 @@ var PopUpCreator = /*#__PURE__*/function (_EventEmitter) {
       if (document.querySelector('.mew-wallet-modal') && document.querySelector('.mew-wallet-modal-container-mew-modal')) {
         document.querySelector('.mew-wallet-modal').classList.remove('is-visible');
         document.querySelector('.mew-wallet-modal-container-mew-modal').classList.remove('is-visible');
-        document.querySelector('.modal-dialog').classList.remove('is-visible');
+        document.querySelector('.mew-wallet-modal-dialog').classList.remove('is-visible');
       }
     }
   }, {
@@ -2807,7 +2807,7 @@ var PopUpCreator = /*#__PURE__*/function (_EventEmitter) {
       if (document.querySelector('.mew-wallet-modal') && document.querySelector('.mew-wallet-modal-container-mew-modal')) {
         document.querySelector('.mew-wallet-modal').classList.add('is-visible');
         document.querySelector('.mew-wallet-modal-container-mew-modal').classList.add('is-visible');
-        document.querySelector('.modal-dialog').classList.add('is-visible');
+        document.querySelector('.mew-wallet-modal-dialog').classList.add('is-visible');
       }
     }
   }, {
@@ -6974,12 +6974,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "$BASED",
-		address: "0x6AfdE9E8732EB8fe6376aE98347e64E2895299D4",
+		address: "0x68A118Ef45063051Eac49c7e647CE5Ace48a68a5",
 		decimals: 18
 	},
 	{
 		symbol: "$BASED",
-		address: "0x68A118Ef45063051Eac49c7e647CE5Ace48a68a5",
+		address: "0x6AfdE9E8732EB8fe6376aE98347e64E2895299D4",
 		decimals: 18
 	},
 	{
@@ -7031,6 +7031,11 @@ var tokens$5 = [
 		symbol: "1211.CX",
 		address: "0xC4CE6cb000d1C435C6D0c28814A2d61120F32B84",
 		decimals: 8
+	},
+	{
+		symbol: "127760",
+		address: "0x3402E15b3EA0f1aEC2679c4Be4c6d051ceF93953",
+		decimals: 18
 	},
 	{
 		symbol: "1810.CX",
@@ -7141,6 +7146,11 @@ var tokens$5 = [
 		symbol: "7E",
 		address: "0x186a33d4dBcd700086A26188DcB74E69bE463665",
 		decimals: 8
+	},
+	{
+		symbol: "8PAY",
+		address: "0xFeea0bDd3D07eb6FE305938878C0caDBFa169042",
+		decimals: 18
 	},
 	{
 		symbol: "9988.CX",
@@ -7358,13 +7368,18 @@ var tokens$5 = [
 		decimals: 6
 	},
 	{
-		symbol: "AceD",
-		address: "0x885e127abA09Bf8FAE058a2895c221B37697c9bE",
+		symbol: "ACE",
+		address: "0xeC5483804e637D45cDe22Fa0869656B64b5AB1ab",
 		decimals: 18
 	},
 	{
 		symbol: "AceD",
 		address: "0x4B3a0c6d668B43F3f07904E124328659b90Bb4Ca",
+		decimals: 18
+	},
+	{
+		symbol: "AceD",
+		address: "0x885e127abA09Bf8FAE058a2895c221B37697c9bE",
 		decimals: 18
 	},
 	{
@@ -7374,13 +7389,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ACH",
-		address: "0xEd04915c23f00A313a544955524EB7DBD823143d",
-		decimals: 8
+		address: "0x13526D323373F4ebFCC71ffb4177EfeAd651C051",
+		decimals: 18
 	},
 	{
 		symbol: "ACH",
-		address: "0x13526D323373F4ebFCC71ffb4177EfeAd651C051",
-		decimals: 18
+		address: "0xEd04915c23f00A313a544955524EB7DBD823143d",
+		decimals: 8
 	},
 	{
 		symbol: "ACO",
@@ -7454,12 +7469,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ADAI",
-		address: "0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d",
+		address: "0x028171bCA77440897B824Ca71D1c56caC55b68A3",
 		decimals: 18
 	},
 	{
 		symbol: "ADAI",
-		address: "0x028171bCA77440897B824Ca71D1c56caC55b68A3",
+		address: "0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d",
 		decimals: 18
 	},
 	{
@@ -7528,9 +7543,19 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
+		symbol: "ADP",
+		address: "0xc314b0E758D5FF74f63e307A86EbfE183C95767b",
+		decimals: 18
+	},
+	{
 		symbol: "ADPT.CX",
 		address: "0x3611BC1a02E79bD50124eDC138389f1F72BAE143",
 		decimals: 8
+	},
+	{
+		symbol: "ADS",
+		address: "0xcfcEcFe2bD2FED07A9145222E8a7ad9Cf1Ccd22A",
+		decimals: 11
 	},
 	{
 		symbol: "ADS.CX",
@@ -7554,13 +7579,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ADX",
-		address: "0xADE00C28244d5CE17D72E40330B1c318cD12B7c3",
-		decimals: 18
+		address: "0x4470BB87d77b963A013DB939BE332f927f2b992e",
+		decimals: 4
 	},
 	{
 		symbol: "ADX",
-		address: "0x4470BB87d77b963A013DB939BE332f927f2b992e",
-		decimals: 4
+		address: "0xADE00C28244d5CE17D72E40330B1c318cD12B7c3",
+		decimals: 18
 	},
 	{
 		symbol: "AE",
@@ -7594,12 +7619,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "AERGO",
-		address: "0xAE31b85Bfe62747d0836B82608B4830361a3d37a",
+		address: "0x91Af0fBB28ABA7E31403Cb457106Ce79397FD4E6",
 		decimals: 18
 	},
 	{
 		symbol: "AERGO",
-		address: "0x91Af0fBB28ABA7E31403Cb457106Ce79397FD4E6",
+		address: "0xAE31b85Bfe62747d0836B82608B4830361a3d37a",
 		decimals: 18
 	},
 	{
@@ -7609,7 +7634,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "AETH",
-		address: "0xE95A203B1a91a908F9B9CE46459d101078c2c3cb",
+		address: "0x3a3A65aAb0dd2A17E3F1947bA16138cd37d08c04",
 		decimals: 18
 	},
 	{
@@ -7619,7 +7644,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "AETH",
-		address: "0x3a3A65aAb0dd2A17E3F1947bA16138cd37d08c04",
+		address: "0xE95A203B1a91a908F9B9CE46459d101078c2c3cb",
 		decimals: 18
 	},
 	{
@@ -7629,12 +7654,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "AFC",
-		address: "0xF576ff0d7e4C1e8F27DbD50321E95E36a965985F",
+		address: "0x14dfFD4F515d4c43493C6c512c78fbC59a8aF254",
 		decimals: 18
 	},
 	{
 		symbol: "AFC",
-		address: "0x14dfFD4F515d4c43493C6c512c78fbC59a8aF254",
+		address: "0xF576ff0d7e4C1e8F27DbD50321E95E36a965985F",
 		decimals: 18
 	},
 	{
@@ -7668,6 +7693,11 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
+		symbol: "AGIX",
+		address: "0x5B7533812759B45C2B44C19e320ba2cD2681b542",
+		decimals: 8
+	},
+	{
 		symbol: "AGN",
 		address: "0x25d9Bef26b6F7018D24d18144fe3C8bFD0d48a53",
 		decimals: 18
@@ -7684,11 +7714,6 @@ var tokens$5 = [
 	},
 	{
 		symbol: "AGS",
-		address: "0xdB2F2bCCe3efa95EDA95a233aF45F3e0d4f00e2A",
-		decimals: 8
-	},
-	{
-		symbol: "AGS",
 		address: "0x7db5454F3500f28171d1f9c7a38527C9cF94e6b2",
 		decimals: 4
 	},
@@ -7696,6 +7721,11 @@ var tokens$5 = [
 		symbol: "AGS",
 		address: "0x843C9AF34F698618F90C898E3967278a260c8d9A",
 		decimals: 4
+	},
+	{
+		symbol: "AGS",
+		address: "0xdB2F2bCCe3efa95EDA95a233aF45F3e0d4f00e2A",
+		decimals: 8
 	},
 	{
 		symbol: "AGVC",
@@ -7819,12 +7849,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ALEPH",
-		address: "0xC0134b5B924c2FCA106eFB33C45446c466FBe03e",
+		address: "0x27702a26126e0B3702af63Ee09aC4d1A084EF628",
 		decimals: 18
 	},
 	{
 		symbol: "ALEPH",
-		address: "0x27702a26126e0B3702af63Ee09aC4d1A084EF628",
+		address: "0xC0134b5B924c2FCA106eFB33C45446c466FBe03e",
 		decimals: 18
 	},
 	{
@@ -7904,12 +7934,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ALMX",
-		address: "0xeB85A7b3FED933eC3B4599F1B4F8F3F838d0BEDf",
+		address: "0x25a3DcABbf0070cb8E5BaAa62D576cF6643afb5b",
 		decimals: 18
 	},
 	{
 		symbol: "ALMX",
-		address: "0x25a3DcABbf0070cb8E5BaAa62D576cF6643afb5b",
+		address: "0xeB85A7b3FED933eC3B4599F1B4F8F3F838d0BEDf",
 		decimals: 18
 	},
 	{
@@ -8144,12 +8174,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ANT",
-		address: "0xa117000000f279D81A1D3cc75430fAA017FA5A2e",
+		address: "0x960b236A07cf122663c4303350609A66A7B288C0",
 		decimals: 18
 	},
 	{
 		symbol: "ANT",
-		address: "0x960b236A07cf122663c4303350609A66A7B288C0",
+		address: "0xa117000000f279D81A1D3cc75430fAA017FA5A2e",
 		decimals: 18
 	},
 	{
@@ -8268,6 +8298,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "APW",
+		address: "0x4104b135DBC9609Fc1A9490E61369036497660c8",
+		decimals: 18
+	},
+	{
 		symbol: "APX",
 		address: "0x1239562AbE89Ff62016AE23d4E6Eef12b915295c",
 		decimals: 18
@@ -8304,12 +8339,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ARC",
-		address: "0xfEE2Fa52DE307316d9D47fFE3781D4CBA2C4f6fD",
+		address: "0xAc709FcB44a43c35F0DA4e3163b117A17F3770f5",
 		decimals: 18
 	},
 	{
 		symbol: "ARC",
-		address: "0xAc709FcB44a43c35F0DA4e3163b117A17F3770f5",
+		address: "0xfEE2Fa52DE307316d9D47fFE3781D4CBA2C4f6fD",
 		decimals: 18
 	},
 	{
@@ -8331,6 +8366,16 @@ var tokens$5 = [
 		symbol: "ARCT",
 		address: "0x1245ef80F4d9e02ED9425375e8F649B9221b31D8",
 		decimals: 8
+	},
+	{
+		symbol: "ARCX",
+		address: "0x1321f1f1aa541A56C31682c57b80ECfCCd9bB288",
+		decimals: 18
+	},
+	{
+		symbol: "ARCX",
+		address: "0xED30Dd7E50EdF3581AD970eFC5D9379Ce2614AdB",
+		decimals: 18
 	},
 	{
 		symbol: "ARD",
@@ -8399,12 +8444,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ARTE",
-		address: "0x5f6E7fb7Fe92EA7822472bB0E8f1BE60D6A4EA50",
+		address: "0x44b6e3e85561ce054aB13Affa0773358D795D36D",
 		decimals: 18
 	},
 	{
 		symbol: "ARTE",
-		address: "0x44b6e3e85561ce054aB13Affa0773358D795D36D",
+		address: "0x5f6E7fb7Fe92EA7822472bB0E8f1BE60D6A4EA50",
 		decimals: 18
 	},
 	{
@@ -8513,6 +8558,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "ATA",
+		address: "0xA2120b9e674d3fC3875f415A7DF52e382F141225",
+		decimals: 18
+	},
+	{
 		symbol: "ATCC",
 		address: "0xdDAaf4A0702a03A4505F2352a1abA001fFc344be",
 		decimals: 18
@@ -8529,12 +8579,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ATH",
-		address: "0x17052d51E954592C1046320c2371AbaB6C73Ef10",
+		address: "0x1543d0F83489e82A1344DF6827B23d541F235A50",
 		decimals: 18
 	},
 	{
 		symbol: "ATH",
-		address: "0x1543d0F83489e82A1344DF6827B23d541F235A50",
+		address: "0x17052d51E954592C1046320c2371AbaB6C73Ef10",
 		decimals: 18
 	},
 	{
@@ -8649,13 +8699,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "AURA",
-		address: "0xCdCFc0f66c522Fd086A1b725ea3c0Eeb9F9e8814",
-		decimals: 18
+		address: "0x8b4F0e7dF51A49F18e77132B010a75Ab191B9C97",
+		decimals: 2
 	},
 	{
 		symbol: "AURA",
-		address: "0x8b4F0e7dF51A49F18e77132B010a75Ab191B9C97",
-		decimals: 2
+		address: "0xCdCFc0f66c522Fd086A1b725ea3c0Eeb9F9e8814",
+		decimals: 18
 	},
 	{
 		symbol: "AUS",
@@ -8674,22 +8724,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "AUSDC",
-		address: "0xBcca60bB61934080951369a648Fb03DF4F96263C",
-		decimals: 6
-	},
-	{
-		symbol: "AUSDC",
 		address: "0x9bA00D6856a4eDF4665BcA2C2309936572473B7E",
 		decimals: 6
 	},
 	{
-		symbol: "AUSDT",
-		address: "0x71fc860F7D3A592A4a98740e39dB31d25db65ae8",
+		symbol: "AUSDC",
+		address: "0xBcca60bB61934080951369a648Fb03DF4F96263C",
 		decimals: 6
 	},
 	{
 		symbol: "AUSDT",
 		address: "0x3Ed3B47Dd13EC9a98b44e6204A523E766B225811",
+		decimals: 6
+	},
+	{
+		symbol: "AUSDT",
+		address: "0x71fc860F7D3A592A4a98740e39dB31d25db65ae8",
 		decimals: 6
 	},
 	{
@@ -8739,12 +8789,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "AWC",
-		address: "0xf649c39E7EFdBAC6c9aDb65c43e87894fC14aEDd",
+		address: "0xaD22f63404f7305e4713CcBd4F296f34770513f4",
 		decimals: 8
 	},
 	{
 		symbol: "AWC",
-		address: "0xaD22f63404f7305e4713CcBd4F296f34770513f4",
+		address: "0xf649c39E7EFdBAC6c9aDb65c43e87894fC14aEDd",
 		decimals: 8
 	},
 	{
@@ -8755,6 +8805,11 @@ var tokens$5 = [
 	{
 		symbol: "AXA",
 		address: "0xF8Ed6c51762208FF26F8f3E4EFd4e06AF2da649C",
+		decimals: 18
+	},
+	{
+		symbol: "AXC",
+		address: "0x37c430c2b5f9Ff85e534873C715871818Ab1623E",
 		decimals: 18
 	},
 	{
@@ -8784,17 +8839,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "AXN",
-		address: "0xda4C5AEA122260e70616E979592735F12FE20499",
-		decimals: 18
-	},
-	{
-		symbol: "AXN",
 		address: "0x71F85B2E46976bD21302B64329868fd15eb0D127",
 		decimals: 18
 	},
 	{
 		symbol: "AXN",
 		address: "0x7D85e23014F84E6E21d5663aCD8751bEF3562352",
+		decimals: 18
+	},
+	{
+		symbol: "AXN",
+		address: "0xda4C5AEA122260e70616E979592735F12FE20499",
 		decimals: 18
 	},
 	{
@@ -8805,6 +8860,11 @@ var tokens$5 = [
 	{
 		symbol: "AXPR",
 		address: "0xdD0020B1D5Ba47A54E2EB16800D73Beb6546f91A",
+		decimals: 18
+	},
+	{
+		symbol: "AXS",
+		address: "0xBB0E17EF65F82Ab018d8EDd776e8DD940327B28b",
 		decimals: 18
 	},
 	{
@@ -8824,12 +8884,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "AZBI",
-		address: "0x82f39cD08A942f344CA7E7034461Cc88c2009199",
+		address: "0x21Efe20be784aC5dA569f72070e64525f95CCAb6",
 		decimals: 18
 	},
 	{
 		symbol: "AZBI",
-		address: "0x21Efe20be784aC5dA569f72070e64525f95CCAb6",
+		address: "0x82f39cD08A942f344CA7E7034461Cc88c2009199",
 		decimals: 18
 	},
 	{
@@ -8894,11 +8954,6 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BAC",
-		address: "0x7Dc59729B0adf4ae34721a1e06ef82a19E690b04",
-		decimals: 8
-	},
-	{
-		symbol: "BAC",
 		address: "0x062e3Be6a7C56A395b1881A0cD69A4923Ade4fa2",
 		decimals: 18
 	},
@@ -8906,6 +8961,11 @@ var tokens$5 = [
 		symbol: "BAC",
 		address: "0x3449FC1Cd036255BA1EB19d65fF4BA2b8903A69a",
 		decimals: 18
+	},
+	{
+		symbol: "BAC",
+		address: "0x7Dc59729B0adf4ae34721a1e06ef82a19E690b04",
+		decimals: 8
 	},
 	{
 		symbol: "BACON",
@@ -8969,6 +9029,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BANK",
+		address: "0x2d94AA3e47d9D5024503Ca8491fcE9A2fB4DA198",
+		decimals: 18
+	},
+	{
+		symbol: "BANK",
 		address: "0xfF19A86c938ACDF34F4FC6F5a8567106647c7A8F",
 		decimals: 0
 	},
@@ -8999,7 +9064,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BAS",
-		address: "0xa7ED29B253D8B4E3109ce07c80fc570f81B63696",
+		address: "0x106538CC16F938776c7c180186975BCA23875287",
 		decimals: 18
 	},
 	{
@@ -9009,7 +9074,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BAS",
-		address: "0x106538CC16F938776c7c180186975BCA23875287",
+		address: "0xa7ED29B253D8B4E3109ce07c80fc570f81B63696",
 		decimals: 18
 	},
 	{
@@ -9050,6 +9115,11 @@ var tokens$5 = [
 	{
 		symbol: "BBA",
 		address: "0x73621534d00D80f675B7e868860f97eDb3C03935",
+		decimals: 18
+	},
+	{
+		symbol: "BBANK",
+		address: "0xF4b5470523cCD314C6B9dA041076e7D79E0Df267",
 		decimals: 18
 	},
 	{
@@ -9134,13 +9204,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BC",
-		address: "0xD73bE539d6B2076BaB83CA6Ba62DfE189aBC6Bbe",
-		decimals: 0
+		address: "0x2ecB13A8c458c379c4d9a7259e202De03c8F3D19",
+		decimals: 18
 	},
 	{
 		symbol: "BC",
-		address: "0x2ecB13A8c458c379c4d9a7259e202De03c8F3D19",
-		decimals: 18
+		address: "0xD73bE539d6B2076BaB83CA6Ba62DfE189aBC6Bbe",
+		decimals: 0
 	},
 	{
 		symbol: "BCA",
@@ -9249,8 +9319,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BCP",
-		address: "0xd26fb114401Ec86887CD09F62eccd95fCf20B571",
-		decimals: 8
+		address: "0x4612021C75809160Be60DB21fBc9D6adD0B32deF",
+		decimals: 18
 	},
 	{
 		symbol: "BCP",
@@ -9261,6 +9331,11 @@ var tokens$5 = [
 		symbol: "BCP",
 		address: "0xE4f726Adc8e89C6a6017F01eadA77865dB22dA14",
 		decimals: 18
+	},
+	{
+		symbol: "BCP",
+		address: "0xd26fb114401Ec86887CD09F62eccd95fCf20B571",
+		decimals: 8
 	},
 	{
 		symbol: "BCPT",
@@ -9284,17 +9359,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BCT",
-		address: "0xf5839F46Ed000d70cbab1FCD03E29E85F3aecD82",
-		decimals: 18
-	},
-	{
-		symbol: "BCT",
 		address: "0x9eC251401eAfB7e98f37A1D911c0AEA02CB63A80",
 		decimals: 18
 	},
 	{
 		symbol: "BCT",
 		address: "0xf0667d12278A5f0519aAa01d91E94D94f7AB0f4d",
+		decimals: 18
+	},
+	{
+		symbol: "BCT",
+		address: "0xf5839F46Ed000d70cbab1FCD03E29E85F3aecD82",
 		decimals: 18
 	},
 	{
@@ -9449,12 +9524,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BEPRO",
-		address: "0xCF3C8Be2e2C42331Da80EF210e9B1b307C03d36A",
+		address: "0x786001c9c5CA6E502dEB8a8a72480d2147891f32",
 		decimals: 18
 	},
 	{
 		symbol: "BEPRO",
-		address: "0x786001c9c5CA6E502dEB8a8a72480d2147891f32",
+		address: "0xCF3C8Be2e2C42331Da80EF210e9B1b307C03d36A",
 		decimals: 18
 	},
 	{
@@ -9509,13 +9584,18 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BFI",
+		address: "0x2b2b0559081c41e962777B5049632fdb30f7E652",
+		decimals: 8
+	},
+	{
+		symbol: "BFI",
 		address: "0xC980be019F2ac10A1C96F964b971A5F44551D318",
 		decimals: 18
 	},
 	{
-		symbol: "BFI",
-		address: "0x2b2b0559081c41e962777B5049632fdb30f7E652",
-		decimals: 8
+		symbol: "BFIE",
+		address: "0x81859801b01764D4f0Fa5E64729f5a6C3b91435b",
+		decimals: 18
 	},
 	{
 		symbol: "BFIL",
@@ -9524,12 +9604,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BFT",
-		address: "0x3779D960261f882750B39C622527822C88c98e13",
+		address: "0x01fF50f8b7f74E4f00580d9596cd3D0d6d6E326f",
 		decimals: 18
 	},
 	{
 		symbol: "BFT",
-		address: "0x01fF50f8b7f74E4f00580d9596cd3D0d6d6E326f",
+		address: "0x3779D960261f882750B39C622527822C88c98e13",
 		decimals: 18
 	},
 	{
@@ -9599,13 +9679,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BHT",
-		address: "0xa4FB385820A9eEF842a419e08F8540Fd7D1BF6e8",
-		decimals: 5
+		address: "0xFC29B6e626B67776675FfF55d5BC0452d042F434",
+		decimals: 18
 	},
 	{
 		symbol: "BHT",
-		address: "0xFC29B6e626B67776675FfF55d5BC0452d042F434",
-		decimals: 18
+		address: "0xa4FB385820A9eEF842a419e08F8540Fd7D1BF6e8",
+		decimals: 5
 	},
 	{
 		symbol: "BHTX",
@@ -9634,17 +9714,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BID",
-		address: "0x811817A87f9b9C00621d6A1A9A3cF8cCf10f4e7f",
-		decimals: 18
-	},
-	{
-		symbol: "BID",
 		address: "0x1dA01e84F3d4e6716F274c987Ae4bEE5DC3C8288",
 		decimals: 18
 	},
 	{
 		symbol: "BID",
 		address: "0x25e1474170c4c0aA64fa98123bdc8dB49D7802fa",
+		decimals: 18
+	},
+	{
+		symbol: "BID",
+		address: "0x811817A87f9b9C00621d6A1A9A3cF8cCf10f4e7f",
 		decimals: 18
 	},
 	{
@@ -9661,6 +9741,11 @@ var tokens$5 = [
 		symbol: "BIDU.CX",
 		address: "0xafc21be9E4d9303D51a61CC5a236619e65E873d9",
 		decimals: 8
+	},
+	{
+		symbol: "BIFI",
+		address: "0x2791BfD60D232150Bff86b39B7146c0eaAA2BA81",
+		decimals: 18
 	},
 	{
 		symbol: "BIG.CX",
@@ -9720,6 +9805,11 @@ var tokens$5 = [
 	{
 		symbol: "BION",
 		address: "0x9b1b1e109fF130b298CF1d47389C47569F5C2932",
+		decimals: 18
+	},
+	{
+		symbol: "BIOS",
+		address: "0xAACa86B876ca011844b5798ECA7a67591A9743C8",
 		decimals: 18
 	},
 	{
@@ -9794,12 +9884,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BITX",
-		address: "0xff2b3353c3015E9f1FBF95B9Bda23F58Aa7cE007",
+		address: "0xA0eD4C4AcbF07C03365d6bbE28150a819AFf700F",
 		decimals: 18
 	},
 	{
 		symbol: "BITX",
-		address: "0xA0eD4C4AcbF07C03365d6bbE28150a819AFf700F",
+		address: "0xff2b3353c3015E9f1FBF95B9Bda23F58Aa7cE007",
+		decimals: 18
+	},
+	{
+		symbol: "BIX",
+		address: "0x009c43B42AEFAC590C719E971020575974122803",
 		decimals: 18
 	},
 	{
@@ -9854,13 +9949,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BKC",
-		address: "0xc88Be04c809856B75E3DfE19eB4dCf0a3B15317a",
-		decimals: 8
+		address: "0x34bdf48A8F753de4822a6CFB1FEE275F9b4D662e",
+		decimals: 18
 	},
 	{
 		symbol: "BKC",
-		address: "0x34bdf48A8F753de4822a6CFB1FEE275F9b4D662e",
-		decimals: 18
+		address: "0xc88Be04c809856B75E3DfE19eB4dCf0a3B15317a",
+		decimals: 8
 	},
 	{
 		symbol: "BKF",
@@ -9890,6 +9985,11 @@ var tokens$5 = [
 	{
 		symbol: "BKX",
 		address: "0x45245bc59219eeaAF6cD3f382e078A461FF9De7B",
+		decimals: 18
+	},
+	{
+		symbol: "BLANK",
+		address: "0x41A3Dba3D677E573636BA691a70ff2D606c29666",
 		decimals: 18
 	},
 	{
@@ -10019,13 +10119,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BMC",
-		address: "0xd945d2031b4C63C0E363304FB771F709b502DC0a",
-		decimals: 18
+		address: "0xDf6Ef343350780BF8C3410BF062e0C015B1DD671",
+		decimals: 8
 	},
 	{
 		symbol: "BMC",
-		address: "0xDf6Ef343350780BF8C3410BF062e0C015B1DD671",
-		decimals: 8
+		address: "0xd945d2031b4C63C0E363304FB771F709b502DC0a",
+		decimals: 18
 	},
 	{
 		symbol: "BMH",
@@ -10064,12 +10164,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BMT",
-		address: "0xf028ADEe51533b1B47BEaa890fEb54a457f51E89",
+		address: "0xc6363C1a05f840bE2d185d7084b28Af84C543d40",
 		decimals: 18
 	},
 	{
 		symbol: "BMT",
-		address: "0xc6363C1a05f840bE2d185d7084b28Af84C543d40",
+		address: "0xf028ADEe51533b1B47BEaa890fEb54a457f51E89",
 		decimals: 18
 	},
 	{
@@ -10084,12 +10184,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BMX",
-		address: "0x986EE2B944c42D017F52Af21c4c69B84DBeA35d8",
+		address: "0x138D02c0C59C6d6ac480218e5585cD97f54E3516",
 		decimals: 18
 	},
 	{
 		symbol: "BMX",
-		address: "0x138D02c0C59C6d6ac480218e5585cD97f54E3516",
+		address: "0x986EE2B944c42D017F52Af21c4c69B84DBeA35d8",
 		decimals: 18
 	},
 	{
@@ -10134,6 +10234,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BNC",
+		address: "0xEf51c9377FeB29856E61625cAf9390bD0B67eA18",
+		decimals: 8
+	},
+	{
+		symbol: "BNC",
 		address: "0xbe5b336eF62D1626940363Cf34bE079e0AB89F20",
 		decimals: 18
 	},
@@ -10141,11 +10246,6 @@ var tokens$5 = [
 		symbol: "BNC",
 		address: "0xdD6Bf56CA2ada24c683FAC50E37783e55B57AF9F",
 		decimals: 12
-	},
-	{
-		symbol: "BNC",
-		address: "0xEf51c9377FeB29856E61625cAf9390bD0B67eA18",
-		decimals: 8
 	},
 	{
 		symbol: "BNF",
@@ -10176,6 +10276,11 @@ var tokens$5 = [
 		symbol: "BNP",
 		address: "0xD27D76A1bA55ce5C0291CCd04feBBe793D22ebF4",
 		decimals: 18
+	},
+	{
+		symbol: "BNS",
+		address: "0x695106Ad73f506f9D0A9650a78019A93149AE07C",
+		decimals: 8
 	},
 	{
 		symbol: "BNSD",
@@ -10234,13 +10339,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BOA",
-		address: "0xfb6bEcd99282d7CA14D0890F3e4F073D9Dd522e9",
-		decimals: 8
+		address: "0xF9c36C7aD7FA0f0862589c919830268d1A2581A1",
+		decimals: 18
 	},
 	{
 		symbol: "BOA",
-		address: "0xF9c36C7aD7FA0f0862589c919830268d1A2581A1",
-		decimals: 18
+		address: "0xfb6bEcd99282d7CA14D0890F3e4F073D9Dd522e9",
+		decimals: 8
 	},
 	{
 		symbol: "BOB",
@@ -10304,12 +10409,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BOND",
+		address: "0x0391D2021f89DC339F60Fff84546EA23E337750f",
+		decimals: 18
+	},
+	{
+		symbol: "BOND",
 		address: "0x5Dc02Ea99285E17656b8350722694c35154DB1E8",
 		decimals: 8
 	},
 	{
-		symbol: "BOND",
-		address: "0x0391D2021f89DC339F60Fff84546EA23E337750f",
+		symbol: "BONDLY",
+		address: "0x91dFbEE3965baAEE32784c2d546B7a0C62F268c9",
 		decimals: 18
 	},
 	{
@@ -10339,13 +10449,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BOOM",
-		address: "0xDB7Eab9bA6be88B869F738f6DEeBa96d49Fe13fd",
-		decimals: 18
+		address: "0x973b569b1d025C41cD9c19cbf8f931175e874DD0",
+		decimals: 8
 	},
 	{
 		symbol: "BOOM",
-		address: "0x973b569b1d025C41cD9c19cbf8f931175e874DD0",
-		decimals: 8
+		address: "0xDB7Eab9bA6be88B869F738f6DEeBa96d49Fe13fd",
+		decimals: 18
 	},
 	{
 		symbol: "BOON",
@@ -10370,6 +10480,16 @@ var tokens$5 = [
 	{
 		symbol: "BORA",
 		address: "0x26fb86579e371c7AEdc461b2DdEF0A8628c93d3B",
+		decimals: 18
+	},
+	{
+		symbol: "BORING",
+		address: "0xBC19712FEB3a26080eBf6f2F7849b417FdD792CA",
+		decimals: 18
+	},
+	{
+		symbol: "BOSON",
+		address: "0xC477D038d5420C6A9e0b031712f61c5120090de9",
 		decimals: 18
 	},
 	{
@@ -10399,12 +10519,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BOX",
-		address: "0xe1A178B681BD05964d3e3Ed33AE731577d9d96dD",
+		address: "0x63f584FA56E60e4D0fE8802b27C7e6E3b33E007f",
 		decimals: 18
 	},
 	{
 		symbol: "BOX",
-		address: "0x63f584FA56E60e4D0fE8802b27C7e6E3b33E007f",
+		address: "0xe1A178B681BD05964d3e3Ed33AE731577d9d96dD",
 		decimals: 18
 	},
 	{
@@ -10450,6 +10570,11 @@ var tokens$5 = [
 	{
 		symbol: "BPLC",
 		address: "0x426FC8BE95573230f6e6bc4af91873F0c67b21b4",
+		decimals: 18
+	},
+	{
+		symbol: "BPT",
+		address: "0x0eC9F76202a7061eB9b3a7D6B59D36215A7e37da",
 		decimals: 18
 	},
 	{
@@ -10589,7 +10714,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BST",
-		address: "0xDf0041891BdA1f911C4243f328F7Cf61b37F965b",
+		address: "0x09463194e7890D226a5FDb226D19ab600b92ee9f",
+		decimals: 4
+	},
+	{
+		symbol: "BST",
+		address: "0x509A38b7a1cC0dcd83Aa9d06214663D9eC7c7F4a",
 		decimals: 18
 	},
 	{
@@ -10599,13 +10729,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BST",
-		address: "0x509A38b7a1cC0dcd83Aa9d06214663D9eC7c7F4a",
+		address: "0xDf0041891BdA1f911C4243f328F7Cf61b37F965b",
 		decimals: 18
-	},
-	{
-		symbol: "BST",
-		address: "0x09463194e7890D226a5FDb226D19ab600b92ee9f",
-		decimals: 4
 	},
 	{
 		symbol: "BST1",
@@ -10673,6 +10798,11 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
+		symbol: "BTC2X-FLI",
+		address: "0x0B498ff89709d3838a063f1dFA463091F9801c2b",
+		decimals: 18
+	},
+	{
 		symbol: "BTC3L",
 		address: "0x7e5F9F248e84EF0B1f63586323e92a0d91B15568",
 		decimals: 18
@@ -10686,6 +10816,11 @@ var tokens$5 = [
 		symbol: "BTCA",
 		address: "0x02725836ebF3eCDb1cDf1c7b02FcbBfaa2736AF8",
 		decimals: 8
+	},
+	{
+		symbol: "BTCA",
+		address: "0x7dB02Aa39A3d0271e4c61C04D03857a10fc922c5",
+		decimals: 10
 	},
 	{
 		symbol: "BTCB",
@@ -10729,12 +10864,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BTCG",
-		address: "0xcDe3Ef6CACF84Ad36d8A6eCcc964f25351296D36",
+		address: "0xb9961EE048ff6e5f14c56cf4057078403759FBB4",
 		decimals: 8
 	},
 	{
 		symbol: "BTCG",
-		address: "0xb9961EE048ff6e5f14c56cf4057078403759FBB4",
+		address: "0xcDe3Ef6CACF84Ad36d8A6eCcc964f25351296D36",
 		decimals: 8
 	},
 	{
@@ -10858,8 +10993,18 @@ var tokens$5 = [
 		decimals: 4
 	},
 	{
+		symbol: "BTD",
+		address: "0xFbdd194376de19a88118e84E279b977f165d01b8",
+		decimals: 18
+	},
+	{
 		symbol: "BTE",
-		address: "0xB5ceAb8559742713c9E3306e72B69A429eBf166B",
+		address: "0x267Ba09FE3a8a16c7dc8A9B07b5F2C4AC0aDf1c0",
+		decimals: 8
+	},
+	{
+		symbol: "BTE",
+		address: "0x6733D909e10DDedB8d6181b213dE32A30cEac7ed",
 		decimals: 18
 	},
 	{
@@ -10869,17 +11014,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BTE",
-		address: "0x267Ba09FE3a8a16c7dc8A9B07b5F2C4AC0aDf1c0",
-		decimals: 8
-	},
-	{
-		symbol: "BTE",
-		address: "0xfD62247943F94C3910A4922af2C62C2D3fAC2a8f",
+		address: "0xB5ceAb8559742713c9E3306e72B69A429eBf166B",
 		decimals: 18
 	},
 	{
 		symbol: "BTE",
-		address: "0x6733D909e10DDedB8d6181b213dE32A30cEac7ed",
+		address: "0xfD62247943F94C3910A4922af2C62C2D3fAC2a8f",
 		decimals: 18
 	},
 	{
@@ -10914,13 +11054,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BTL",
-		address: "0x5EcD84482176db90bb741dDC8C2F9CcC290e29Ce",
-		decimals: 6
+		address: "0x2accaB9cb7a48c3E82286F0b2f8798D201F4eC3f",
+		decimals: 18
 	},
 	{
 		symbol: "BTL",
-		address: "0x2accaB9cb7a48c3E82286F0b2f8798D201F4eC3f",
-		decimals: 18
+		address: "0x5EcD84482176db90bb741dDC8C2F9CcC290e29Ce",
+		decimals: 6
 	},
 	{
 		symbol: "BTL",
@@ -10929,13 +11069,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BTM",
-		address: "0xcB97e65F07DA24D46BcDD078EBebd7C6E6E3d750",
-		decimals: 8
+		address: "0xF82D62d65f0c670Ac4D88AbDf1afEFaC11522A16",
+		decimals: 18
 	},
 	{
 		symbol: "BTM",
-		address: "0xF82D62d65f0c670Ac4D88AbDf1afEFaC11522A16",
-		decimals: 18
+		address: "0xcB97e65F07DA24D46BcDD078EBebd7C6E6E3d750",
+		decimals: 8
 	},
 	{
 		symbol: "BTMC",
@@ -10989,12 +11129,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BTR",
-		address: "0x499A6B77bc25C26bCf8265E2102B1B3dd1617024",
+		address: "0x31FD1a50C467Ae7986e26c72e8650a28940E11DE",
 		decimals: 18
 	},
 	{
 		symbol: "BTR",
-		address: "0xcbf15FB8246F679F9Df0135881CB29a3746f734b",
+		address: "0x499A6B77bc25C26bCf8265E2102B1B3dd1617024",
 		decimals: 18
 	},
 	{
@@ -11004,7 +11144,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BTR",
-		address: "0x31FD1a50C467Ae7986e26c72e8650a28940E11DE",
+		address: "0xcbf15FB8246F679F9Df0135881CB29a3746f734b",
 		decimals: 18
 	},
 	{
@@ -11084,12 +11224,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BUIDL",
-		address: "0xD6F0Bb2A45110f819e908a915237D652Ac7c5AA8",
+		address: "0x7b123f53421b1bF8533339BFBdc7C98aA94163db",
 		decimals: 18
 	},
 	{
 		symbol: "BUIDL",
-		address: "0x7b123f53421b1bF8533339BFBdc7C98aA94163db",
+		address: "0xD6F0Bb2A45110f819e908a915237D652Ac7c5AA8",
 		decimals: 18
 	},
 	{
@@ -11119,13 +11259,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "BURN",
-		address: "0x8515cD0f00aD81996d24b9A9C35121a3b759D6Cd",
-		decimals: 18
+		address: "0x4F7c5BD3F7D62a9C984e265D73A86F5515F3e92B",
+		decimals: 0
 	},
 	{
 		symbol: "BURN",
-		address: "0x4F7c5BD3F7D62a9C984e265D73A86F5515F3e92B",
-		decimals: 0
+		address: "0x8515cD0f00aD81996d24b9A9C35121a3b759D6Cd",
+		decimals: 18
 	},
 	{
 		symbol: "BUSD",
@@ -11135,6 +11275,11 @@ var tokens$5 = [
 	{
 		symbol: "BUT",
 		address: "0xB2E260F12406c401874EcC960893C0f74Cd6aFcd",
+		decimals: 18
+	},
+	{
+		symbol: "BUY",
+		address: "0x31Fdd1c6607F47C14a2821f599211c67AC20FA96",
 		decimals: 18
 	},
 	{
@@ -11369,17 +11514,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CANDY",
-		address: "0xf2EAb3A2034D3f6B63734D2E08262040E3fF7B48",
-		decimals: 18
-	},
-	{
-		symbol: "CANDY",
 		address: "0x50eb346Fc29a80d97563a50146c3FcF9423B5538",
 		decimals: 18
 	},
 	{
 		symbol: "CANDY",
 		address: "0xcD3673aF09e76C74d889aaBab68cA0645566A3a1",
+		decimals: 18
+	},
+	{
+		symbol: "CANDY",
+		address: "0xf2EAb3A2034D3f6B63734D2E08262040E3fF7B48",
 		decimals: 18
 	},
 	{
@@ -11401,6 +11546,11 @@ var tokens$5 = [
 		symbol: "CAPP",
 		address: "0x04F2E7221fdb1B52A68169B25793E51478fF0329",
 		decimals: 2
+	},
+	{
+		symbol: "CAPS",
+		address: "0x03Be5C903c727Ee2C8C4e9bc0AcC860Cca4715e2",
+		decimals: 18
 	},
 	{
 		symbol: "CAR",
@@ -11449,13 +11599,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CAS",
-		address: "0xe8780B48bdb05F928697A5e8155f672ED91462F7",
-		decimals: 18
+		address: "0x779492d3644dDF4495Aa2d80C468E1B7be6AF1d2",
+		decimals: 2
 	},
 	{
 		symbol: "CAS",
-		address: "0x779492d3644dDF4495Aa2d80C468E1B7be6AF1d2",
-		decimals: 2
+		address: "0xe8780B48bdb05F928697A5e8155f672ED91462F7",
+		decimals: 18
 	},
 	{
 		symbol: "CASH",
@@ -11474,12 +11624,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CAT",
-		address: "0x68e14bb5A45B9681327E16E528084B9d962C1a39",
+		address: "0x56ba2Ee7890461f463F7be02aAC3099f6d5811A8",
 		decimals: 18
 	},
 	{
 		symbol: "CAT",
-		address: "0x56ba2Ee7890461f463F7be02aAC3099f6d5811A8",
+		address: "0x68e14bb5A45B9681327E16E528084B9d962C1a39",
 		decimals: 18
 	},
 	{
@@ -11563,6 +11713,11 @@ var tokens$5 = [
 		decimals: 2
 	},
 	{
+		symbol: "CC",
+		address: "0x9e547061A345015869D26C7B6Ee4aB5b63424441",
+		decimals: 18
+	},
+	{
 		symbol: "CC.CX",
 		address: "0x8D4A15C9355b70A2558c99299C6990917758B76e",
 		decimals: 8
@@ -11579,12 +11734,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CCC",
-		address: "0x94Cb815F4b601B00b363B3177B4D8ed8e0EB7cF2",
+		address: "0x0Bc2149d073f62510c99d908F52D0D703dA1F135",
 		decimals: 18
 	},
 	{
 		symbol: "CCC",
-		address: "0x0Bc2149d073f62510c99d908F52D0D703dA1F135",
+		address: "0x28577A6d31559bd265Ce3ADB62d0458550F7b8a7",
 		decimals: 18
 	},
 	{
@@ -11594,7 +11749,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CCC",
-		address: "0x28577A6d31559bd265Ce3ADB62d0458550F7b8a7",
+		address: "0x94Cb815F4b601B00b363B3177B4D8ed8e0EB7cF2",
 		decimals: 18
 	},
 	{
@@ -11639,12 +11794,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CCT",
-		address: "0xfc4b9e2d71a7795102Eb0C0e8b5DA992946a62De",
+		address: "0x336F646F87D9f6bC6Ed42Dd46E8b3fD9DbD15C22",
 		decimals: 18
 	},
 	{
 		symbol: "CCT",
-		address: "0x336F646F87D9f6bC6Ed42Dd46E8b3fD9DbD15C22",
+		address: "0xfc4b9e2d71a7795102Eb0C0e8b5DA992946a62De",
 		decimals: 18
 	},
 	{
@@ -11669,12 +11824,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CDL",
-		address: "0xcb17cD357c7acD594717D899ecb9df540F633F27",
+		address: "0x8a95ca448A52C0ADf0054bB3402dC5e09CD6B232",
 		decimals: 18
 	},
 	{
 		symbol: "CDL",
-		address: "0x8a95ca448A52C0ADf0054bB3402dC5e09CD6B232",
+		address: "0xcb17cD357c7acD594717D899ecb9df540F633F27",
 		decimals: 18
 	},
 	{
@@ -11689,13 +11844,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CDX",
-		address: "0x6fFF3806Bbac52A20e0d79BC538d527f6a22c96b",
-		decimals: 18
+		address: "0x2cb101d7dA0ebaA57D3F2fEf46D7FFB7BB64592B",
+		decimals: 0
 	},
 	{
 		symbol: "CDX",
-		address: "0x2cb101d7dA0ebaA57D3F2fEf46D7FFB7BB64592B",
-		decimals: 0
+		address: "0x6fFF3806Bbac52A20e0d79BC538d527f6a22c96b",
+		decimals: 18
 	},
 	{
 		symbol: "CEEK",
@@ -11706,6 +11861,11 @@ var tokens$5 = [
 		symbol: "CEL",
 		address: "0xaaAEBE6Fe48E54f431b0C390CfaF0b017d09D42d",
 		decimals: 4
+	},
+	{
+		symbol: "CELL",
+		address: "0x26c8AFBBFE1EBaca03C2bB082E69D0476Bffe099",
+		decimals: 18
 	},
 	{
 		symbol: "CELR",
@@ -11759,12 +11919,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CFI",
-		address: "0x63b4f3e3fa4e438698CE330e365E831F7cCD1eF4",
+		address: "0x12FEF5e57bF45873Cd9B62E9DBd7BFb99e32D73e",
 		decimals: 18
 	},
 	{
 		symbol: "CFI",
-		address: "0x12FEF5e57bF45873Cd9B62E9DBd7BFb99e32D73e",
+		address: "0x63b4f3e3fa4e438698CE330e365E831F7cCD1eF4",
 		decimals: 18
 	},
 	{
@@ -11863,6 +12023,11 @@ var tokens$5 = [
 		decimals: 0
 	},
 	{
+		symbol: "CHI",
+		address: "0x6DC02164d75651758aC74435806093E421b64605",
+		decimals: 8
+	},
+	{
 		symbol: "CHIP",
 		address: "0x86AA993FdB0A60C2d548256a862258aB5d352faB",
 		decimals: 18
@@ -11884,12 +12049,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CHR",
-		address: "0x915044526758533dfB918ecEb6e44bc21632060D",
+		address: "0x8A2279d4A90B6fe1C4B30fa660cC9f926797bAA2",
 		decimals: 6
 	},
 	{
 		symbol: "CHR",
-		address: "0x8A2279d4A90B6fe1C4B30fa660cC9f926797bAA2",
+		address: "0x915044526758533dfB918ecEb6e44bc21632060D",
 		decimals: 6
 	},
 	{
@@ -11904,23 +12069,23 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CHT",
-		address: "0x792E0FC822Ac6ff5531E46425f13540f1F68A7A8",
-		decimals: 8
-	},
-	{
-		symbol: "CHT",
 		address: "0x3277dd536471a3cBEB0c9486aCad494C95A31E73",
 		decimals: 18
 	},
 	{
 		symbol: "CHT",
-		address: "0x799d214d7143B766cDd4979cd0280939288ba931",
-		decimals: 2
+		address: "0x3A68B8FF75723134F8E59BDdF7a7e17bDB46DA91",
+		decimals: 18
 	},
 	{
 		symbol: "CHT",
-		address: "0x3A68B8FF75723134F8E59BDdF7a7e17bDB46DA91",
-		decimals: 18
+		address: "0x792E0FC822Ac6ff5531E46425f13540f1F68A7A8",
+		decimals: 8
+	},
+	{
+		symbol: "CHT",
+		address: "0x799d214d7143B766cDd4979cd0280939288ba931",
+		decimals: 2
 	},
 	{
 		symbol: "CHX",
@@ -11956,6 +12121,11 @@ var tokens$5 = [
 		symbol: "CITA",
 		address: "0xB15a0BEcFb3b7DA042F969A8e401C2Ce8B8679d0",
 		decimals: 8
+	},
+	{
+		symbol: "CIV",
+		address: "0x37fE0f067FA808fFBDd12891C0858532CFE7361d",
+		decimals: 18
 	},
 	{
 		symbol: "CJT",
@@ -11994,13 +12164,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CLM",
-		address: "0x0ED8343dfdEE32E38b4c4cE15a3b00A59E90F3dB",
-		decimals: 18
+		address: "0x0B4C2708F052dca413600e237675e4d6778A9375",
+		decimals: 16
 	},
 	{
 		symbol: "CLM",
-		address: "0x0B4C2708F052dca413600e237675e4d6778A9375",
-		decimals: 16
+		address: "0x0ED8343dfdEE32E38b4c4cE15a3b00A59E90F3dB",
+		decimals: 18
 	},
 	{
 		symbol: "CLN",
@@ -12026,6 +12196,11 @@ var tokens$5 = [
 		symbol: "CLT",
 		address: "0x2001f2A0Cf801EcFda622f6C28fb6E10d803D969",
 		decimals: 8
+	},
+	{
+		symbol: "CLV",
+		address: "0x80C62FE4487E1351b47Ba49809EBD60ED085bf52",
+		decimals: 18
 	},
 	{
 		symbol: "CLVS.CX",
@@ -12074,13 +12249,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CMT",
-		address: "0xf85fEea2FdD81d51177F6b8F35F0e6734Ce45F5F",
-		decimals: 18
+		address: "0xeDF12Cd1CeF3C09f599962D1f15A79DE19Df8ebD",
+		decimals: 8
 	},
 	{
 		symbol: "CMT",
-		address: "0xeDF12Cd1CeF3C09f599962D1f15A79DE19Df8ebD",
-		decimals: 8
+		address: "0xf85fEea2FdD81d51177F6b8F35F0e6734Ce45F5F",
+		decimals: 18
 	},
 	{
 		symbol: "CNAB",
@@ -12109,17 +12284,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CND",
-		address: "0xd4c435F5B09F855C3317c8524Cb1F586E42795fa",
+		address: "0x91E84EC6101547C1FA39Dd565dd8b020E3c20CF2",
 		decimals: 18
 	},
 	{
 		symbol: "CND",
-		address: "0x91E84EC6101547C1FA39Dd565dd8b020E3c20CF2",
+		address: "0xd4c435F5B09F855C3317c8524Cb1F586E42795fa",
 		decimals: 18
 	},
 	{
 		symbol: "CNFI",
 		address: "0xEABB8996eA1662cAd2f7fB715127852cd3262Ae9",
+		decimals: 18
+	},
+	{
+		symbol: "CNFT",
+		address: "0x8e2B4badaC15a4ec8c56020f4Ce60faa7558c052",
 		decimals: 18
 	},
 	{
@@ -12199,12 +12379,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CNZ",
-		address: "0xC1965d7D18f37062b18ab3d5D1fE7f69873b30Dd",
+		address: "0x6368A6bcebe2dB1A850f87650dABd29cC642e2dA",
 		decimals: 18
 	},
 	{
 		symbol: "CNZ",
-		address: "0x6368A6bcebe2dB1A850f87650dABd29cC642e2dA",
+		address: "0xC1965d7D18f37062b18ab3d5D1fE7f69873b30Dd",
 		decimals: 18
 	},
 	{
@@ -12229,12 +12409,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "COCOS",
-		address: "0xc4c7Ea4FAB34BD9fb9a5e1B1a98Df76E26E6407c",
+		address: "0x0C6f5F7D555E7518f6841a79436BD2b1Eef03381",
 		decimals: 18
 	},
 	{
 		symbol: "COCOS",
-		address: "0x0C6f5F7D555E7518f6841a79436BD2b1Eef03381",
+		address: "0xc4c7Ea4FAB34BD9fb9a5e1B1a98Df76E26E6407c",
 		decimals: 18
 	},
 	{
@@ -12269,17 +12449,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "COIN",
-		address: "0xeb547ed1D8A3Ff1461aBAa7F0022FED4836E00A4",
-		decimals: 18
-	},
-	{
-		symbol: "COIN",
 		address: "0x87b008E57F640D94Ee44Fd893F0323AF933F9195",
 		decimals: 18
 	},
 	{
 		symbol: "COIN",
 		address: "0xE61fDAF474Fac07063f2234Fb9e60C1163Cfa850",
+		decimals: 18
+	},
+	{
+		symbol: "COIN",
+		address: "0xeb547ed1D8A3Ff1461aBAa7F0022FED4836E00A4",
 		decimals: 18
 	},
 	{
@@ -12349,12 +12529,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CORN",
-		address: "0xa456b515303B2Ce344E9d2601f91270f8c2Fea5E",
+		address: "0x3080ec2A6960432F179c66D388099A48E82e2047",
 		decimals: 18
 	},
 	{
 		symbol: "CORN",
-		address: "0x3080ec2A6960432F179c66D388099A48E82e2047",
+		address: "0xa456b515303B2Ce344E9d2601f91270f8c2Fea5E",
 		decimals: 18
 	},
 	{
@@ -12379,12 +12559,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "COSS",
-		address: "0x9e96604445Ec19fFed9a5e8dd7B50a29C899A10C",
+		address: "0x65292EeadF1426Cd2dF1C4793a3d7519f253913b",
 		decimals: 18
 	},
 	{
 		symbol: "COSS",
-		address: "0x65292EeadF1426Cd2dF1C4793a3d7519f253913b",
+		address: "0x9e96604445Ec19fFed9a5e8dd7B50a29C899A10C",
 		decimals: 18
 	},
 	{
@@ -12434,12 +12614,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "COVER",
-		address: "0x5D8d9F5b96f4438195BE9b99eee6118Ed4304286",
+		address: "0x4688a8b1F292FDaB17E9a90c8Bc379dC1DBd8713",
 		decimals: 18
 	},
 	{
 		symbol: "COVER",
-		address: "0x4688a8b1F292FDaB17E9a90c8Bc379dC1DBd8713",
+		address: "0x5D8d9F5b96f4438195BE9b99eee6118Ed4304286",
 		decimals: 18
 	},
 	{
@@ -12534,6 +12714,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CPT",
+		address: "0x88d50B466BE55222019D71F9E8fAe17f5f45FCA1",
+		decimals: 8
+	},
+	{
+		symbol: "CPT",
 		address: "0x9B62513c8a27290CF6A7A9e29386e600245EA819",
 		decimals: 18
 	},
@@ -12543,13 +12728,13 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "CPT",
-		address: "0x88d50B466BE55222019D71F9E8fAe17f5f45FCA1",
-		decimals: 8
-	},
-	{
 		symbol: "CPY",
 		address: "0xf44745fBd41F6A1ba151df190db0564c5fCc4410",
+		decimals: 18
+	},
+	{
+		symbol: "CQT",
+		address: "0xD417144312DbF50465b1C641d016962017Ef6240",
 		decimals: 18
 	},
 	{
@@ -12589,12 +12774,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CRC",
-		address: "0xF41e5Fbc2F6Aac200Dd8619E121CE1f05D150077",
+		address: "0x223B6e268Eea352572c3D081039DAf00c822A4c5",
 		decimals: 18
 	},
 	{
 		symbol: "CRC",
-		address: "0x223B6e268Eea352572c3D081039DAf00c822A4c5",
+		address: "0xF41e5Fbc2F6Aac200Dd8619E121CE1f05D150077",
 		decimals: 18
 	},
 	{
@@ -12604,12 +12789,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CRD",
-		address: "0xcAaa93712BDAc37f736C323C93D4D5fDEFCc31CC",
+		address: "0x4760e7A401558AA59639161454bb2A41a3c5A90b",
 		decimals: 18
 	},
 	{
 		symbol: "CRD",
-		address: "0x4760e7A401558AA59639161454bb2A41a3c5A90b",
+		address: "0xcAaa93712BDAc37f736C323C93D4D5fDEFCc31CC",
 		decimals: 18
 	},
 	{
@@ -12634,12 +12819,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CRED",
-		address: "0xED7Fa212E100DFb3b13B834233E4B680332a3420",
+		address: "0x672a1AD4f667FB18A333Af13667aa0Af1F5b5bDD",
 		decimals: 18
 	},
 	{
 		symbol: "CRED",
-		address: "0x672a1AD4f667FB18A333Af13667aa0Af1F5b5bDD",
+		address: "0xED7Fa212E100DFb3b13B834233E4B680332a3420",
 		decimals: 18
 	},
 	{
@@ -12679,13 +12864,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CRO",
-		address: "0xDdF993BEbbd397f2a42de7c39F09F9C8e34Ef322",
-		decimals: 18
+		address: "0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b",
+		decimals: 8
 	},
 	{
 		symbol: "CRO",
-		address: "0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b",
-		decimals: 8
+		address: "0xDdF993BEbbd397f2a42de7c39F09F9C8e34Ef322",
+		decimals: 18
 	},
 	{
 		symbol: "CRON.CX",
@@ -12719,12 +12904,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CRT",
-		address: "0xF0da1186a4977226b9135d0613ee72e229EC3F4d",
+		address: "0x2E6C1C08eF1173d2bE02165f91CC8e604eC5A1C3",
 		decimals: 18
 	},
 	{
 		symbol: "CRT",
-		address: "0x2E6C1C08eF1173d2bE02165f91CC8e604eC5A1C3",
+		address: "0xF0da1186a4977226b9135d0613ee72e229EC3F4d",
 		decimals: 18
 	},
 	{
@@ -12854,12 +13039,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CTC",
-		address: "0xa3EE21C306A700E682AbCdfe9BaA6A08F3820419",
+		address: "0xE3Fa177AcecfB86721Cf6f9f4206bd3Bd672D7d5",
 		decimals: 18
 	},
 	{
 		symbol: "CTC",
-		address: "0xE3Fa177AcecfB86721Cf6f9f4206bd3Bd672D7d5",
+		address: "0xa3EE21C306A700E682AbCdfe9BaA6A08F3820419",
 		decimals: 18
 	},
 	{
@@ -12934,6 +13119,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CTX",
+		address: "0x321C2fE4446C7c963dc41Dd58879AF648838f98D",
+		decimals: 18
+	},
+	{
+		symbol: "CTX",
 		address: "0x662aBcAd0b7f345AB7FfB1b1fbb9Df7894f18e66",
 		decimals: 18
 	},
@@ -12956,6 +13146,11 @@ var tokens$5 = [
 		symbol: "CUB",
 		address: "0xa8892bfc33FA44053a9E402B1839966f4FEc74A4",
 		decimals: 18
+	},
+	{
+		symbol: "CUBE",
+		address: "0xDf801468a808a32656D2eD2D2d80B72A129739f4",
+		decimals: 8
 	},
 	{
 		symbol: "CUDOS",
@@ -12984,13 +13179,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "CURA",
-		address: "0x1dABF6Ab0eB8E4208E7E9302CeC7A014068952e4",
-		decimals: 8
+		address: "0x0a4b2d4B48a63088e0897a3F147Ba37f81a27722",
+		decimals: 18
 	},
 	{
 		symbol: "CURA",
-		address: "0x0a4b2d4B48a63088e0897a3F147Ba37f81a27722",
-		decimals: 18
+		address: "0x1dABF6Ab0eB8E4208E7E9302CeC7A014068952e4",
+		decimals: 8
 	},
 	{
 		symbol: "CUSD",
@@ -13018,13 +13213,13 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "cV",
-		address: "0xdA6cb58A0D0C01610a29c5A65c303e13e885887C",
+		symbol: "CV",
+		address: "0x50bC2Ecc0bfDf5666640048038C1ABA7B7525683",
 		decimals: 18
 	},
 	{
-		symbol: "CV",
-		address: "0x50bC2Ecc0bfDf5666640048038C1ABA7B7525683",
+		symbol: "cV",
+		address: "0xdA6cb58A0D0C01610a29c5A65c303e13e885887C",
 		decimals: 18
 	},
 	{
@@ -13108,8 +13303,18 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "CWAP",
+		address: "0xE74dC43867E0cbEB208F1a012fc60DcBbF0E3044",
+		decimals: 18
+	},
+	{
 		symbol: "CWBTC",
 		address: "0xC11b1268C1A384e55C48c2391d8d480264A3A7F4",
+		decimals: 8
+	},
+	{
+		symbol: "CWBTC",
+		address: "0xccF4429DB6322D5C611ee964527D42E5d685DD6a",
 		decimals: 8
 	},
 	{
@@ -13151,6 +13356,11 @@ var tokens$5 = [
 		symbol: "CYBG",
 		address: "0x00b8B059F132009E5a812F27cc42733d135915df",
 		decimals: 18
+	},
+	{
+		symbol: "CYCE",
+		address: "0xEaDD9B69F96140283F9fF75DA5FD33bcF54E6296",
+		decimals: 6
 	},
 	{
 		symbol: "CYCLE",
@@ -13374,13 +13584,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DBT",
-		address: "0xeC79E0eFA4ae3d8B3C9fbCEe21683c7f2e507b66",
-		decimals: 18
+		address: "0xC28D4341Ad8224E1a424558074eF0B4515f424d5",
+		decimals: 0
 	},
 	{
 		symbol: "DBT",
-		address: "0xC28D4341Ad8224E1a424558074eF0B4515f424d5",
-		decimals: 0
+		address: "0xeC79E0eFA4ae3d8B3C9fbCEe21683c7f2e507b66",
+		decimals: 18
 	},
 	{
 		symbol: "DBX.CX",
@@ -13399,12 +13609,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DCA",
-		address: "0xA6281838f4A9c5736b2aa1cba9260D3F879623cA",
+		address: "0x386Faa4703a34a7Fdb19Bec2e14Fd427C9638416",
 		decimals: 18
 	},
 	{
 		symbol: "DCA",
-		address: "0x386Faa4703a34a7Fdb19Bec2e14Fd427C9638416",
+		address: "0xA6281838f4A9c5736b2aa1cba9260D3F879623cA",
 		decimals: 18
 	},
 	{
@@ -13649,12 +13859,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DEV",
-		address: "0x98626E2C9231f03504273d55f397409deFD4a093",
+		address: "0x5cAf454Ba92e6F2c929DF14667Ee360eD9fD5b26",
 		decimals: 18
 	},
 	{
 		symbol: "DEV",
-		address: "0x5cAf454Ba92e6F2c929DF14667Ee360eD9fD5b26",
+		address: "0x98626E2C9231f03504273d55f397409deFD4a093",
 		decimals: 18
 	},
 	{
@@ -13701,6 +13911,11 @@ var tokens$5 = [
 		symbol: "DEXT",
 		address: "0x72D530016E9E0fc23DE6C1f7f487992c879518Dc",
 		decimals: 1
+	},
+	{
+		symbol: "DEXT",
+		address: "0xfB7B4564402E5500dB5bB6d63Ae671302777C75a",
+		decimals: 18
 	},
 	{
 		symbol: "DEXTF",
@@ -13798,6 +14013,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "DFYN",
+		address: "0x9695e0114e12C0d3A3636fAb5A18e6b737529023",
+		decimals: 18
+	},
+	{
 		symbol: "DG",
 		address: "0xEE06A81a695750E71a662B51066F2c74CF4478a0",
 		decimals: 18
@@ -13829,13 +14049,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DGN",
-		address: "0xa063341D10054188e3Cb715Bfb663b37C0c1515e",
-		decimals: 6
+		address: "0x7461C43bb1E96863233D72A09191008ee9217Ee8",
+		decimals: 18
 	},
 	{
 		symbol: "DGN",
-		address: "0x7461C43bb1E96863233D72A09191008ee9217Ee8",
-		decimals: 18
+		address: "0xa063341D10054188e3Cb715Bfb663b37C0c1515e",
+		decimals: 6
 	},
 	{
 		symbol: "DGNN",
@@ -13904,12 +14124,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DHT",
-		address: "0xca1207647Ff814039530D7d35df0e1Dd2e91Fa84",
+		address: "0xcC771a11d368A76E6FA34B3AaB8227297F48fE41",
 		decimals: 18
 	},
 	{
 		symbol: "DHT",
-		address: "0xcC771a11d368A76E6FA34B3AaB8227297F48fE41",
+		address: "0xca1207647Ff814039530D7d35df0e1Dd2e91Fa84",
 		decimals: 18
 	},
 	{
@@ -13944,13 +14164,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DIP",
-		address: "0xc719d010B63E5bbF2C0551872CD5316ED26AcD83",
-		decimals: 18
+		address: "0x97af10D3fc7C70F67711Bf715d8397C6Da79C1Ab",
+		decimals: 12
 	},
 	{
 		symbol: "DIP",
-		address: "0x97af10D3fc7C70F67711Bf715d8397C6Da79C1Ab",
-		decimals: 12
+		address: "0xc719d010B63E5bbF2C0551872CD5316ED26AcD83",
+		decimals: 18
 	},
 	{
 		symbol: "DIRTY",
@@ -14039,13 +14259,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DMT",
-		address: "0x79126d32a86e6663F3aAac4527732d0701c1AE6c",
-		decimals: 18
+		address: "0x2ccbFF3A042c68716Ed2a2Cb0c544A9f1d1935E1",
+		decimals: 8
 	},
 	{
 		symbol: "DMT",
-		address: "0x2ccbFF3A042c68716Ed2a2Cb0c544A9f1d1935E1",
-		decimals: 8
+		address: "0x79126d32a86e6663F3aAac4527732d0701c1AE6c",
+		decimals: 18
 	},
 	{
 		symbol: "DMTC",
@@ -14054,12 +14274,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DNA",
-		address: "0xef6344de1fcfC5F48c30234C16c1389e8CdC572C",
+		address: "0x82b0E50478eeaFde392D45D1259Ed1071B6fDa81",
 		decimals: 18
 	},
 	{
 		symbol: "DNA",
-		address: "0x82b0E50478eeaFde392D45D1259Ed1071B6fDa81",
+		address: "0xef6344de1fcfC5F48c30234C16c1389e8CdC572C",
 		decimals: 18
 	},
 	{
@@ -14078,6 +14298,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "DNXC",
+		address: "0x20a8CEC5fffea65Be7122BCaB2FFe32ED4Ebf03a",
+		decimals: 18
+	},
+	{
 		symbol: "DOB",
 		address: "0xC9aFDea326c109D441519d355756f4e88465f94d",
 		decimals: 8
@@ -14091,6 +14316,11 @@ var tokens$5 = [
 		symbol: "DODO",
 		address: "0x43Dfc4159D86F3A37A5A4B3D4580b888ad7d4DDd",
 		decimals: 18
+	},
+	{
+		symbol: "DOGE",
+		address: "0x4206931337dc273a630d328dA6441786BfaD668f",
+		decimals: 8
 	},
 	{
 		symbol: "DOGEBULL",
@@ -14128,6 +14358,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "DON",
+		address: "0x217ddEad61a42369A266F1Fb754EB5d3EBadc88a",
+		decimals: 18
+	},
+	{
 		symbol: "DONUT",
 		address: "0xC0F9bD5Fa5698B6505F643900FFA515Ea5dF54A9",
 		decimals: 18
@@ -14159,12 +14394,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DOS",
-		address: "0x70861e862E1Ac0C96f853C8231826e469eAd37B1",
+		address: "0x0A913beaD80F321E7Ac35285Ee10d9d922659cB7",
 		decimals: 18
 	},
 	{
 		symbol: "DOS",
-		address: "0x0A913beaD80F321E7Ac35285Ee10d9d922659cB7",
+		address: "0x70861e862E1Ac0C96f853C8231826e469eAd37B1",
 		decimals: 18
 	},
 	{
@@ -14185,6 +14420,11 @@ var tokens$5 = [
 	{
 		symbol: "DOW",
 		address: "0x76974C7B79dC8a6a109Fd71fd7cEb9E40eff5382",
+		decimals: 18
+	},
+	{
+		symbol: "DPET",
+		address: "0xfb62AE373acA027177D1c18Ee0862817f9080d08",
 		decimals: 18
 	},
 	{
@@ -14213,6 +14453,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "DPX",
+		address: "0xEec2bE5c91ae7f8a338e1e5f3b5DE49d07AfdC81",
+		decimals: 18
+	},
+	{
 		symbol: "DPY",
 		address: "0x6C2adC2073994fb2CCC5032cC2906Fa221e9B391",
 		decimals: 18
@@ -14224,8 +14469,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DRC",
-		address: "0xd7f5CABdF696D7d1bf384D7688926A4bdB092c67",
-		decimals: 18
+		address: "0xa150Db9b1Fa65b44799d4dD949D922c0a33Ee606",
+		decimals: 0
 	},
 	{
 		symbol: "DRC",
@@ -14234,8 +14479,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DRC",
-		address: "0xa150Db9b1Fa65b44799d4dD949D922c0a33Ee606",
-		decimals: 0
+		address: "0xd7f5CABdF696D7d1bf384D7688926A4bdB092c67",
+		decimals: 18
 	},
 	{
 		symbol: "DRCT",
@@ -14284,23 +14529,23 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DROP",
+		address: "0x3c75226555FC496168d48B88DF83B95F16771F37",
+		decimals: 0
+	},
+	{
+		symbol: "DROP",
 		address: "0x4672bAD527107471cB5067a887f4656D585a8A31",
 		decimals: 18
 	},
 	{
-		symbol: "DROP",
-		address: "0x3c75226555FC496168d48B88DF83B95F16771F37",
+		symbol: "DRP",
+		address: "0x2799D90C6d44Cb9Aa5fBC377177F16C33E056b82",
 		decimals: 0
 	},
 	{
 		symbol: "DRP",
 		address: "0x621d78f2EF2fd937BFca696CabaF9A779F59B3Ed",
 		decimals: 2
-	},
-	{
-		symbol: "DRP",
-		address: "0x2799D90C6d44Cb9Aa5fBC377177F16C33E056b82",
-		decimals: 0
 	},
 	{
 		symbol: "DRPU",
@@ -14329,12 +14574,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DSD",
-		address: "0xBD2F0Cd039E0BFcf88901C98c0bFAc5ab27566e3",
+		address: "0x1e3a2446C729D34373B87FD2C9CBb39A93198658",
 		decimals: 18
 	},
 	{
 		symbol: "DSD",
-		address: "0x1e3a2446C729D34373B87FD2C9CBb39A93198658",
+		address: "0xBD2F0Cd039E0BFcf88901C98c0bFAc5ab27566e3",
 		decimals: 18
 	},
 	{
@@ -14384,13 +14629,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DTH",
-		address: "0xF4b6664bb81bD7314aE65eAB2eE675505e3E9cB6",
-		decimals: 2
+		address: "0x5adc961D6AC3f7062D2eA45FEFB8D8167d44b190",
+		decimals: 18
 	},
 	{
 		symbol: "DTH",
-		address: "0x5adc961D6AC3f7062D2eA45FEFB8D8167d44b190",
-		decimals: 18
+		address: "0xF4b6664bb81bD7314aE65eAB2eE675505e3E9cB6",
+		decimals: 2
 	},
 	{
 		symbol: "DTOP",
@@ -14429,6 +14674,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DUBI",
+		address: "0xEd7fEA78C393cF7B17B152A8c2D0CD97aC31790B",
+		decimals: 18
+	},
+	{
+		symbol: "DUBI",
 		address: "0xF3D6Af45C6dFeC43216CC3347Ea91fEfBa0849D1",
 		decimals: 18
 	},
@@ -14454,12 +14704,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "DUSD",
-		address: "0x5BC25f649fc4e26069dDF4cF4010F9f706c23831",
+		address: "0x556eA1fE7Cb0964e7De8Dfe6CdE63F1E40908541",
 		decimals: 18
 	},
 	{
 		symbol: "DUSD",
-		address: "0x556eA1fE7Cb0964e7De8Dfe6CdE63F1E40908541",
+		address: "0x5BC25f649fc4e26069dDF4cF4010F9f706c23831",
 		decimals: 18
 	},
 	{
@@ -14481,6 +14731,16 @@ var tokens$5 = [
 		symbol: "DUST",
 		address: "0xbCa3C97837A39099eC3082DF97e28CE91BE14472",
 		decimals: 8
+	},
+	{
+		symbol: "DVF",
+		address: "0xDDdddd4301A082e62E84e43F474f044423921918",
+		decimals: 18
+	},
+	{
+		symbol: "DVI",
+		address: "0x10633216E7E8281e33c86F02Bf8e565a635D9770",
+		decimals: 18
 	},
 	{
 		symbol: "DVP",
@@ -14536,6 +14796,11 @@ var tokens$5 = [
 		symbol: "DXT",
 		address: "0x8dB54ca569D3019A2ba126D03C37c44b5eF81EF6",
 		decimals: 8
+	},
+	{
+		symbol: "DYDX",
+		address: "0x92D6C1e31e14520e676a687F0a93788B716BEff5",
+		decimals: 18
 	},
 	{
 		symbol: "DYP",
@@ -14668,6 +14933,11 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
+		symbol: "ECO",
+		address: "0xC242Eb8e4E27EAE6a2A728A41201152F19595C83",
+		decimals: 18
+	},
+	{
 		symbol: "ECO2",
 		address: "0x17F93475d2A978f527c3f7c44aBf44AdfBa60D5C",
 		decimals: 2
@@ -14733,6 +15003,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "EDEN",
+		address: "0x1559FA1b8F28238FD5D76D9f434ad86FD20D1559",
+		decimals: 18
+	},
+	{
 		symbol: "EDF.CX",
 		address: "0xcfCd67348E28D202bD01B94214a1b366a35cE27b",
 		decimals: 8
@@ -14754,12 +15029,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "EDN",
-		address: "0x89020f0D5C5AF4f3407Eb5Fe185416c457B0e93e",
+		address: "0x05860d453C7974CbF46508c06CBA14e211c629Ce",
 		decimals: 18
 	},
 	{
 		symbol: "EDN",
-		address: "0x05860d453C7974CbF46508c06CBA14e211c629Ce",
+		address: "0x89020f0D5C5AF4f3407Eb5Fe185416c457B0e93e",
 		decimals: 18
 	},
 	{
@@ -14799,12 +15074,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "EDU",
-		address: "0xf263292e14d9D8ECd55B58dAD1F1dF825a874b7c",
+		address: "0x2A22e5cCA00a3D63308fa39f29202eB1b39eEf52",
 		decimals: 18
 	},
 	{
 		symbol: "EDU",
-		address: "0x2A22e5cCA00a3D63308fa39f29202eB1b39eEf52",
+		address: "0xf263292e14d9D8ECd55B58dAD1F1dF825a874b7c",
 		decimals: 18
 	},
 	{
@@ -14833,13 +15108,13 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "eGAS",
-		address: "0xb53A96bcBdD9CF78dfF20BAB6C2be7bAec8f00f8",
+		symbol: "EGAS",
+		address: "0x8BBf4dD0f11B3a535660fD7fCB7158DaEBd3a17E",
 		decimals: 8
 	},
 	{
-		symbol: "EGAS",
-		address: "0x8BBf4dD0f11B3a535660fD7fCB7158DaEBd3a17E",
+		symbol: "eGAS",
+		address: "0xb53A96bcBdD9CF78dfF20BAB6C2be7bAec8f00f8",
 		decimals: 8
 	},
 	{
@@ -14919,12 +15194,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ELD",
-		address: "0xf0C6521b1F8ad9C33a99Aaf056F6C6247A3862BA",
+		address: "0x796E47B85A0d759F300f1de96A3583004235D4D8",
 		decimals: 18
 	},
 	{
 		symbol: "ELD",
-		address: "0x796E47B85A0d759F300f1de96A3583004235D4D8",
+		address: "0xf0C6521b1F8ad9C33a99Aaf056F6C6247A3862BA",
 		decimals: 18
 	},
 	{
@@ -14939,13 +15214,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ELET",
-		address: "0x6c37Bf4f042712C978A73e3fd56D1F5738dD7C43",
-		decimals: 18
+		address: "0x0568025c55c21BDa4BC488F3107ebfc8B3D3Ef2D",
+		decimals: 8
 	},
 	{
 		symbol: "ELET",
-		address: "0x0568025c55c21BDa4BC488F3107ebfc8B3D3Ef2D",
-		decimals: 8
+		address: "0x6c37Bf4f042712C978A73e3fd56D1F5738dD7C43",
+		decimals: 18
 	},
 	{
 		symbol: "ELF",
@@ -15014,13 +15289,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "EMB",
-		address: "0x498D99de4268cebCa264887f591C4bA8Fac042E4",
-		decimals: 18
+		address: "0x28B94F58B11aC945341329dBf2e5EF7F8Bd44225",
+		decimals: 8
 	},
 	{
 		symbol: "EMB",
-		address: "0x28B94F58B11aC945341329dBf2e5EF7F8Bd44225",
-		decimals: 8
+		address: "0x498D99de4268cebCa264887f591C4bA8Fac042E4",
+		decimals: 18
 	},
 	{
 		symbol: "EMB",
@@ -15061,6 +15336,11 @@ var tokens$5 = [
 		symbol: "EMON",
 		address: "0xb67b88a25708a35AE7c2d736D398D268CE4f7F83",
 		decimals: 8
+	},
+	{
+		symbol: "EMON",
+		address: "0xd6A5aB46ead26f49b03bBB1F9EB1Ad5c1767974a",
+		decimals: 18
 	},
 	{
 		symbol: "EMONT",
@@ -15223,6 +15503,16 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
+		symbol: "EPK",
+		address: "0xDaF88906aC1DE12bA2b1D2f7bfC94E9638Ac40c4",
+		decimals: 18
+	},
+	{
+		symbol: "EPS",
+		address: "0x31a217b8065b376B192388b877D26e682044B82b",
+		decimals: 8
+	},
+	{
 		symbol: "EPS",
 		address: "0x50eC35d1E18D439F02Fa895746FC3e1BEF311780",
 		decimals: 18
@@ -15231,11 +15521,6 @@ var tokens$5 = [
 		symbol: "EPS",
 		address: "0x7db711FBE4bAcE5052F4CA19f700413A06e1f732",
 		decimals: 18
-	},
-	{
-		symbol: "EPS",
-		address: "0x31a217b8065b376B192388b877D26e682044B82b",
-		decimals: 8
 	},
 	{
 		symbol: "EPT",
@@ -15275,6 +15560,11 @@ var tokens$5 = [
 	{
 		symbol: "EQUAD",
 		address: "0xC28e931814725BbEB9e670676FaBBCb694Fe7DF2",
+		decimals: 18
+	},
+	{
+		symbol: "EQX",
+		address: "0xBd3de9a069648c84d27d74d701C9fa3253098B15",
 		decimals: 18
 	},
 	{
@@ -15634,12 +15924,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ETHMOONX",
-		address: "0xB1CA7E6714263a64659A3a89E1C313af30fD660A",
+		address: "0x73104e9d3Da91e410A6c211068f7BFfabBbD3e26",
 		decimals: 18
 	},
 	{
 		symbol: "ETHMOONX",
-		address: "0x73104e9d3Da91e410A6c211068f7BFfabBbD3e26",
+		address: "0xB1CA7E6714263a64659A3a89E1C313af30fD660A",
 		decimals: 18
 	},
 	{
@@ -15658,6 +15948,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "ETHPAD",
+		address: "0x8dB1D28Ee0d822367aF8d220C0dc7cB6fe9DC442",
+		decimals: 18
+	},
+	{
 		symbol: "ETHPAY",
 		address: "0xE52e75e8a97546f40991b489E92c68eBb386dc97",
 		decimals: 18
@@ -15669,12 +15964,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ETHRSIAPY",
-		address: "0x9f49ed43C90A540d1cF12f6170aCE8d0B88a14E6",
+		address: "0x136faE4333EA36A24bb751E2d505D6ca4Fd9f00b",
 		decimals: 18
 	},
 	{
 		symbol: "ETHRSIAPY",
-		address: "0x136faE4333EA36A24bb751E2d505D6ca4Fd9f00b",
+		address: "0x9f49ed43C90A540d1cF12f6170aCE8d0B88a14E6",
 		decimals: 18
 	},
 	{
@@ -15709,12 +16004,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ETM",
-		address: "0x8C576b67e1cAa070fc2cC00B615C1F530796dA3e",
+		address: "0x6020Da0F7c1857dBE4431Ec92A15cC318D933eAa",
 		decimals: 18
 	},
 	{
 		symbol: "ETM",
-		address: "0x6020Da0F7c1857dBE4431Ec92A15cC318D933eAa",
+		address: "0x8C576b67e1cAa070fc2cC00B615C1F530796dA3e",
+		decimals: 18
+	},
+	{
+		symbol: "ETR",
+		address: "0x6927C69fb4daf2043fbB1Cb7b86c5661416bea29",
 		decimals: 18
 	},
 	{
@@ -15723,18 +16023,13 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
-		symbol: "ETR",
-		address: "0x6927C69fb4daf2043fbB1Cb7b86c5661416bea29",
+		symbol: "ETY",
+		address: "0x37DB56E0FbA0BE2cbf96e3de3BFF8096b6D59179",
 		decimals: 18
 	},
 	{
 		symbol: "ETY",
 		address: "0x5aCD07353106306a6530ac4D49233271Ec372963",
-		decimals: 18
-	},
-	{
-		symbol: "ETY",
-		address: "0x37DB56E0FbA0BE2cbf96e3de3BFF8096b6D59179",
 		decimals: 18
 	},
 	{
@@ -15754,13 +16049,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "EUM",
-		address: "0x6aB4A7d75B0A42B6Bc83E852daB9E121F9C610Aa",
-		decimals: 18
+		address: "0x3071a55A0F7916d796B54A2d095Db85Df693d956",
+		decimals: 13
 	},
 	{
 		symbol: "EUM",
-		address: "0x3071a55A0F7916d796B54A2d095Db85Df693d956",
-		decimals: 13
+		address: "0x6aB4A7d75B0A42B6Bc83E852daB9E121F9C610Aa",
+		decimals: 18
 	},
 	{
 		symbol: "EUP",
@@ -15778,6 +16073,11 @@ var tokens$5 = [
 		decimals: 6
 	},
 	{
+		symbol: "EURT",
+		address: "0xC581b735A1688071A1746c968e0798D642EDE491",
+		decimals: 6
+	},
+	{
 		symbol: "EURU",
 		address: "0x6c139349ee94eBAaff55eD52d382673C263B22d6",
 		decimals: 18
@@ -15788,9 +16088,14 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "EVAI",
+		address: "0x50f09629d0afDF40398a3F317cc676cA9132055c",
+		decimals: 8
+	},
+	{
 		symbol: "EVC",
-		address: "0xBA14b245d449965BdBeB630ebe135B569474F5b1",
-		decimals: 6
+		address: "0xA8B9cd2577d20224Af856C19aF20040290705932",
+		decimals: 8
 	},
 	{
 		symbol: "EVC",
@@ -15799,8 +16104,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "EVC",
-		address: "0xA8B9cd2577d20224Af856C19aF20040290705932",
-		decimals: 8
+		address: "0xBA14b245d449965BdBeB630ebe135B569474F5b1",
+		decimals: 6
 	},
 	{
 		symbol: "EVC",
@@ -15814,12 +16119,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "EVE",
-		address: "0xEC193241dc1cA3BBe3165de6D37A793585b4504E",
+		address: "0x923108a439C4e8C2315c4f6521E5cE95B44e9B4c",
 		decimals: 18
 	},
 	{
 		symbol: "EVE",
-		address: "0x923108a439C4e8C2315c4f6521E5cE95B44e9B4c",
+		address: "0xEC193241dc1cA3BBe3165de6D37A793585b4504E",
 		decimals: 18
 	},
 	{
@@ -15864,12 +16169,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "EVO",
-		address: "0xefBd6D7deF37ffae990503EcdB1291B2f7E38788",
+		address: "0x442d985EFeBC633b8Bfd14fF99E860A5609a6484",
 		decimals: 18
 	},
 	{
 		symbol: "EVO",
-		address: "0x442d985EFeBC633b8Bfd14fF99E860A5609a6484",
+		address: "0xefBd6D7deF37ffae990503EcdB1291B2f7E38788",
 		decimals: 18
 	},
 	{
@@ -15934,13 +16239,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "EXC",
-		address: "0x9e4C143Bfe35f855624B3F84465AB7401A17A120",
-		decimals: 18
+		address: "0x2c594E1cB006E86C3879b1d8191a8B059AF52bE7",
+		decimals: 8
 	},
 	{
 		symbol: "EXC",
-		address: "0x2c594E1cB006E86C3879b1d8191a8B059AF52bE7",
-		decimals: 8
+		address: "0x9e4C143Bfe35f855624B3F84465AB7401A17A120",
+		decimals: 18
 	},
 	{
 		symbol: "EXCHBEAR",
@@ -15979,13 +16284,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "EXMR",
-		address: "0xc98e0639c6d2EC037A615341c369666B110e80E5",
-		decimals: 8
+		address: "0x331fA6C97c64e47475164b9fC8143b533c5eF529",
+		decimals: 18
 	},
 	{
 		symbol: "EXMR",
-		address: "0x331fA6C97c64e47475164b9fC8143b533c5eF529",
-		decimals: 18
+		address: "0xc98e0639c6d2EC037A615341c369666B110e80E5",
+		decimals: 8
 	},
 	{
 		symbol: "EXN",
@@ -16104,13 +16409,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "FAME",
-		address: "0xF2da15Ae6eF94988534BaD4b9e646f5911CBd487",
-		decimals: 8
+		address: "0x06f65b8CfCb13a9FE37d836fE9708dA38Ecb29B2",
+		decimals: 18
 	},
 	{
 		symbol: "FAME",
-		address: "0x06f65b8CfCb13a9FE37d836fE9708dA38Ecb29B2",
-		decimals: 18
+		address: "0xF2da15Ae6eF94988534BaD4b9e646f5911CBd487",
+		decimals: 8
 	},
 	{
 		symbol: "FAN",
@@ -16184,6 +16489,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "FCL",
+		address: "0xF4d861575ecC9493420A3f5a14F85B13f0b50EB3",
+		decimals: 18
+	},
+	{
+		symbol: "FCL",
 		address: "0xeC1cad815B5e8F0f86bb8fB2ADd2774886e79CF0",
 		decimals: 18
 	},
@@ -16204,13 +16514,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "FDT",
-		address: "0xb2A01Ad9738450f082e5238e43b17fE80781FaAE",
-		decimals: 18
+		address: "0x0f86b24dA64e16d9B21585a8734B8b0c94a43C18",
+		decimals: 8
 	},
 	{
 		symbol: "FDT",
-		address: "0x0f86b24dA64e16d9B21585a8734B8b0c94a43C18",
-		decimals: 8
+		address: "0xb2A01Ad9738450f082e5238e43b17fE80781FaAE",
+		decimals: 18
 	},
 	{
 		symbol: "FDX",
@@ -16228,9 +16538,19 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "FEAR",
+		address: "0x88A9A52F944315D5B4e917b9689e65445C401E83",
+		decimals: 18
+	},
+	{
 		symbol: "FEG",
 		address: "0x389999216860AB8E0175387A0c90E5c52522C945",
 		decimals: 9
+	},
+	{
+		symbol: "FEI",
+		address: "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
+		decimals: 18
 	},
 	{
 		symbol: "FER",
@@ -16249,12 +16569,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "FET",
-		address: "0x296b3Fc8e3CC768F834152586e5Ad708BFE8F163",
+		address: "0x1D287CC25dAD7cCaF76a26bc660c5F7C8E2a05BD",
 		decimals: 18
 	},
 	{
 		symbol: "FET",
-		address: "0x1D287CC25dAD7cCaF76a26bc660c5F7C8E2a05BD",
+		address: "0x296b3Fc8e3CC768F834152586e5Ad708BFE8F163",
 		decimals: 18
 	},
 	{
@@ -16274,13 +16594,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "FEX",
-		address: "0x271220FbEFD584A6b0A6ad457721C076321646a1",
-		decimals: 18
+		address: "0x1C1C14A6B5074905Ce5d367B0A7E098b58EbFD47",
+		decimals: 8
 	},
 	{
 		symbol: "FEX",
-		address: "0x1C1C14A6B5074905Ce5d367B0A7E098b58EbFD47",
-		decimals: 8
+		address: "0x271220FbEFD584A6b0A6ad457721C076321646a1",
+		decimals: 18
 	},
 	{
 		symbol: "FF",
@@ -16319,13 +16639,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "FIC",
-		address: "0x2f01D47c239B7EaCCd746604fDba49A84367d2DA",
-		decimals: 8
+		address: "0x0DD83B5013b2ad7094b1A7783d96ae0168f82621",
+		decimals: 18
 	},
 	{
 		symbol: "FIC",
-		address: "0x0DD83B5013b2ad7094b1A7783d96ae0168f82621",
-		decimals: 18
+		address: "0x2f01D47c239B7EaCCd746604fDba49A84367d2DA",
+		decimals: 8
 	},
 	{
 		symbol: "FICO",
@@ -16364,17 +16684,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "FIN",
-		address: "0xAA3F8E382cB01cae98A7f37A170F3D218c38E3EC",
+		address: "0x1Dd7B2878B6d5671Ed602e60818b0D9A0CD1CDF7",
 		decimals: 18
 	},
 	{
 		symbol: "FIN",
-		address: "0x1Dd7B2878B6d5671Ed602e60818b0D9A0CD1CDF7",
+		address: "0xAA3F8E382cB01cae98A7f37A170F3D218c38E3EC",
 		decimals: 18
 	},
 	{
 		symbol: "FIND",
 		address: "0xDF859C9878Ef5e742d7BbE3C22a496c088C89Fa9",
+		decimals: 18
+	},
+	{
+		symbol: "FIRE",
+		address: "0x125F9d5daa039bDB79D36bAff667e9E0bbcEA998",
 		decimals: 18
 	},
 	{
@@ -16386,11 +16711,6 @@ var tokens$5 = [
 		symbol: "FIRE",
 		address: "0xF921ae2DAC5fa128DC0F6168Bf153ea0943d2D43",
 		decimals: 8
-	},
-	{
-		symbol: "FIRE",
-		address: "0x125F9d5daa039bDB79D36bAff667e9E0bbcEA998",
-		decimals: 18
 	},
 	{
 		symbol: "FIRST",
@@ -16436,6 +16756,11 @@ var tokens$5 = [
 		symbol: "FLEX",
 		address: "0x6D45640F5D0B75280647f2F37CCD19c1167f833c",
 		decimals: 4
+	},
+	{
+		symbol: "FLEX",
+		address: "0xFcF8eda095e37A41e002E266DaAD7efC1579bc0A",
+		decimals: 18
 	},
 	{
 		symbol: "FLIK",
@@ -16489,12 +16814,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "FLX",
-		address: "0x70b147E01E9285E7cE68B9BA437Fe3a9190E756a",
+		address: "0x6243d8CEA23066d098a15582d81a598b4e8391F4",
 		decimals: 18
 	},
 	{
 		symbol: "FLX",
-		address: "0x6243d8CEA23066d098a15582d81a598b4e8391F4",
+		address: "0x70b147E01E9285E7cE68B9BA437Fe3a9190E756a",
 		decimals: 18
 	},
 	{
@@ -16528,6 +16853,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "FMT",
+		address: "0x99c6e435eC259A7E8d65E1955C9423DB624bA54C",
+		decimals: 18
+	},
+	{
 		symbol: "FNB",
 		address: "0x47b28F365Bf4CB38DB4B6356864BDE7bc4B35129",
 		decimals: 18
@@ -16548,19 +16878,24 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "FNK",
+		address: "0xB5FE099475d3030DDe498c3BB6F3854F762A48Ad",
+		decimals: 18
+	},
+	{
 		symbol: "FNKOS",
 		address: "0x0707681F344dEB24184037fC0228856F2137B02E",
 		decimals: 18
 	},
 	{
 		symbol: "FNL",
-		address: "0xe5869a1Ade66F0174C0FaE6cD6cc303C54D7c738",
-		decimals: 18
+		address: "0x4c5601164e2048a4154DE91Fa5e0B07E626CaB7F",
+		decimals: 3
 	},
 	{
 		symbol: "FNL",
-		address: "0x4c5601164e2048a4154DE91Fa5e0B07E626CaB7F",
-		decimals: 3
+		address: "0xe5869a1Ade66F0174C0FaE6cD6cc303C54D7c738",
+		decimals: 18
 	},
 	{
 		symbol: "FNSP",
@@ -16655,6 +16990,11 @@ var tokens$5 = [
 	{
 		symbol: "FOXT",
 		address: "0xFbe878CED08132bd8396988671b450793C44bC12",
+		decimals: 18
+	},
+	{
+		symbol: "FOXX",
+		address: "0x31D457E7bcFf5Bc9A5Ef86E6a5eA1DB5b5C3BFB0",
 		decimals: 18
 	},
 	{
@@ -16754,6 +17094,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "FST",
+		address: "0x0E192d382a36De7011F795Acc4391Cd302003606",
+		decimals: 18
+	},
+	{
+		symbol: "FST",
 		address: "0x310c93dfc1C5E34CDF51678103f63C41762089CD",
 		decimals: 6
 	},
@@ -16774,12 +17119,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "FTB",
-		address: "0x71c25Dd74A8bF4fb393Cb06623aA43a5376D1431",
+		address: "0x1E71034C89dD191ACcB27dC35f18a3d8b6f91311",
 		decimals: 18
 	},
 	{
 		symbol: "FTB",
-		address: "0x1E71034C89dD191ACcB27dC35f18a3d8b6f91311",
+		address: "0x71c25Dd74A8bF4fb393Cb06623aA43a5376D1431",
 		decimals: 18
 	},
 	{
@@ -16788,14 +17133,14 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "FTC",
-		address: "0xe6f74dcfa0E20883008d8C16b6d9a329189D0C30",
-		decimals: 2
-	},
-	{
 		symbol: "ftc",
 		address: "0x26aC29dC25806199373cb4884AA9E077a0587c5b",
 		decimals: 18
+	},
+	{
+		symbol: "FTC",
+		address: "0xe6f74dcfa0E20883008d8C16b6d9a329189D0C30",
+		decimals: 2
 	},
 	{
 		symbol: "FTCH.CX",
@@ -16919,6 +17264,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "FWB",
+		address: "0x35bD01FC9d6D5D81CA9E055Db88Dc49aa2c699A8",
+		decimals: 18
+	},
+	{
+		symbol: "FWB",
 		address: "0x7d91e637589EC3Bb54D8213a9e92Dc6E8D12da91",
 		decimals: 4
 	},
@@ -17018,6 +17368,11 @@ var tokens$5 = [
 		decimals: 10
 	},
 	{
+		symbol: "GAINS",
+		address: "0xd9b312D77Bc7BEd9B9CecB56636300bED4Fe5Ce9",
+		decimals: 18
+	},
+	{
 		symbol: "GALA",
 		address: "0x15D4c048F83bd7e37d49eA4C83a07267Ec4203dA",
 		decimals: 8
@@ -17094,18 +17449,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "GBT",
-		address: "0xD8Bd3958725F216Eb236E9DC65B169DE48101C6A",
-		decimals: 8
-	},
-	{
-		symbol: "GBT",
 		address: "0x7585F835ae2d522722d2684323a0ba83401f32f5",
 		decimals: 18
 	},
 	{
-		symbol: "GBX",
-		address: "0x8A2A3F3ffb78880838f9d7603601f837F72C2Ec9",
-		decimals: 18
+		symbol: "GBT",
+		address: "0xD8Bd3958725F216Eb236E9DC65B169DE48101C6A",
+		decimals: 8
 	},
 	{
 		symbol: "GBX",
@@ -17113,13 +17463,23 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
-		symbol: "GC",
-		address: "0x8Eb38715604b938812DEC25A0A1bc05B4becB9ca",
+		symbol: "GBX",
+		address: "0x8A2A3F3ffb78880838f9d7603601f837F72C2Ec9",
+		decimals: 18
+	},
+	{
+		symbol: "GBYTE",
+		address: "0x31F69dE127C8A0fF10819C0955490a4Ae46fcc2a",
 		decimals: 18
 	},
 	{
 		symbol: "GC",
 		address: "0x486A72811ae65C4C814Ba929d6da35497d21296f",
+		decimals: 18
+	},
+	{
+		symbol: "GC",
+		address: "0x8Eb38715604b938812DEC25A0A1bc05B4becB9ca",
 		decimals: 18
 	},
 	{
@@ -17254,13 +17614,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "GENE",
-		address: "0x884181554dfA9e578d36379919C05C25dC4a15bB",
-		decimals: 18
+		address: "0x6DD4e4Aad29A40eDd6A409b9c1625186C9855b4D",
+		decimals: 8
 	},
 	{
 		symbol: "GENE",
-		address: "0x6DD4e4Aad29A40eDd6A409b9c1625186C9855b4D",
-		decimals: 8
+		address: "0x884181554dfA9e578d36379919C05C25dC4a15bB",
+		decimals: 18
 	},
 	{
 		symbol: "GENES",
@@ -17308,6 +17668,11 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
+		symbol: "GFARM2",
+		address: "0x831091dA075665168E01898c6DAC004A867f1e1B",
+		decimals: 18
+	},
+	{
 		symbol: "GFC",
 		address: "0x6667A56d8fCB35448eE8514936e6D6c4CcC86E97",
 		decimals: 8
@@ -17329,23 +17694,23 @@ var tokens$5 = [
 	},
 	{
 		symbol: "GGC",
-		address: "0x7F969C4D388Ca0AE39A4FdDB1A6f89878CA2fBf8",
-		decimals: 18
-	},
-	{
-		symbol: "GGC",
 		address: "0x1BE7cFD61aA8dAaa9FF2F3b8820888f09462d037",
 		decimals: 8
 	},
 	{
-		symbol: "GHC",
-		address: "0xaD584f8B2d721aDbd28F587274aa4EBE488b3Ba8",
+		symbol: "GGC",
+		address: "0x7F969C4D388Ca0AE39A4FdDB1A6f89878CA2fBf8",
 		decimals: 18
 	},
 	{
 		symbol: "GHC",
 		address: "0x415f07C7C57b1A213767eD8E3EB4B321Fa04Bb7c",
 		decimals: 6
+	},
+	{
+		symbol: "GHC",
+		address: "0xaD584f8B2d721aDbd28F587274aa4EBE488b3Ba8",
+		decimals: 18
 	},
 	{
 		symbol: "GHD",
@@ -17369,13 +17734,18 @@ var tokens$5 = [
 	},
 	{
 		symbol: "GHT",
+		address: "0x50625b636dAB619BF6AF75f693Dc486E56C2a694",
+		decimals: 10
+	},
+	{
+		symbol: "GHT",
 		address: "0xbe30F684d62C9F7883a75A29c162c332c0d98f23",
 		decimals: 18
 	},
 	{
-		symbol: "GHT",
-		address: "0x50625b636dAB619BF6AF75f693Dc486E56C2a694",
-		decimals: 10
+		symbol: "GHX",
+		address: "0x728f30fa2f100742C7949D1961804FA8E0B1387d",
+		decimals: 18
 	},
 	{
 		symbol: "gif",
@@ -17464,16 +17834,6 @@ var tokens$5 = [
 	},
 	{
 		symbol: "GMC",
-		address: "0xa311856B777Df090D2D3D8C306CaAf6e4DfD9AE9",
-		decimals: 18
-	},
-	{
-		symbol: "GMC",
-		address: "0xcC3693C52d4e4fFC1910d90cDd8C52F66Bc83262",
-		decimals: 4
-	},
-	{
-		symbol: "GMC",
 		address: "0x2e9EF342F50A10e87DdaD06d0FC6D3f0223726c9",
 		decimals: 18
 	},
@@ -17484,8 +17844,18 @@ var tokens$5 = [
 	},
 	{
 		symbol: "GMC",
+		address: "0xa311856B777Df090D2D3D8C306CaAf6e4DfD9AE9",
+		decimals: 18
+	},
+	{
+		symbol: "GMC",
 		address: "0xa6272359bc37f61AF398071B65C8934ACA744d53",
 		decimals: 18
+	},
+	{
+		symbol: "GMC",
+		address: "0xcC3693C52d4e4fFC1910d90cDd8C52F66Bc83262",
+		decimals: 4
 	},
 	{
 		symbol: "GMCI",
@@ -17501,6 +17871,11 @@ var tokens$5 = [
 		symbol: "GME.CX",
 		address: "0x79f9ef8429B24E3cB0929eAaa5FABfCC3B15F86D",
 		decimals: 8
+	},
+	{
+		symbol: "GMEE",
+		address: "0xD9016A907Dc0ECfA3ca425ab20B6b785B42F2373",
+		decimals: 18
 	},
 	{
 		symbol: "GMM",
@@ -17589,12 +17964,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "GOLDX",
-		address: "0xeAb43193CF0623073Ca89DB9B712796356FA7414",
+		address: "0x355C665e101B9DA58704A8fDDb5FeeF210eF20c0",
 		decimals: 18
 	},
 	{
 		symbol: "GOLDX",
-		address: "0x355C665e101B9DA58704A8fDDb5FeeF210eF20c0",
+		address: "0xeAb43193CF0623073Ca89DB9B712796356FA7414",
 		decimals: 18
 	},
 	{
@@ -17619,7 +17994,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "GOT",
-		address: "0x8678b5FB41d87F4BEC43B3142Bce852366100336",
+		address: "0x423b5F62b328D0D6D44870F4Eee316befA0b2dF5",
 		decimals: 18
 	},
 	{
@@ -17629,7 +18004,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "GOT",
-		address: "0x423b5F62b328D0D6D44870F4Eee316befA0b2dF5",
+		address: "0x8678b5FB41d87F4BEC43B3142Bce852366100336",
 		decimals: 18
 	},
 	{
@@ -17729,22 +18104,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "GRT",
-		address: "0x620fA2993046A53dF1f365fa3fDC9e6c7763AF96",
-		decimals: 8
-	},
-	{
-		symbol: "GRT",
-		address: "0xc944E90C64B2c07662A292be6244BDf05Cda44a7",
-		decimals: 18
-	},
-	{
-		symbol: "GRT",
 		address: "0x1fB6bccc7Da51aa32e96118B8A33226d2Ae16517",
 		decimals: 8
 	},
 	{
 		symbol: "GRT",
+		address: "0x620fA2993046A53dF1f365fa3fDC9e6c7763AF96",
+		decimals: 8
+	},
+	{
+		symbol: "GRT",
 		address: "0xb83Cd8d39462B761bb0092437d38b37812dd80A2",
+		decimals: 18
+	},
+	{
+		symbol: "GRT",
+		address: "0xc944E90C64B2c07662A292be6244BDf05Cda44a7",
 		decimals: 18
 	},
 	{
@@ -17799,12 +18174,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "GTC",
-		address: "0xDe30da39c46104798bB5aA3fe8B9e0e1F348163F",
+		address: "0xB70835D7822eBB9426B56543E391846C107bd32C",
 		decimals: 18
 	},
 	{
 		symbol: "GTC",
-		address: "0xB70835D7822eBB9426B56543E391846C107bd32C",
+		address: "0xDe30da39c46104798bB5aA3fe8B9e0e1F348163F",
 		decimals: 18
 	},
 	{
@@ -17919,13 +18294,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "GXC",
-		address: "0x58ca3065C0F24C7c96Aee8d6056b5B5deCf9c2f8",
-		decimals: 10
+		address: "0x2e93FE8d550a7B7E7b2e561cd45ceBccbAa79358",
+		decimals: 5
 	},
 	{
 		symbol: "GXC",
-		address: "0x2e93FE8d550a7B7E7b2e561cd45ceBccbAa79358",
-		decimals: 5
+		address: "0x58ca3065C0F24C7c96Aee8d6056b5B5deCf9c2f8",
+		decimals: 10
 	},
 	{
 		symbol: "GXC",
@@ -17941,6 +18316,11 @@ var tokens$5 = [
 		symbol: "GXVC",
 		address: "0x22F0AF8D78851b72EE799e05F54A77001586B18A",
 		decimals: 10
+	},
+	{
+		symbol: "GYEN",
+		address: "0xC08512927D12348F6620a698105e1BAac6EcD911",
+		decimals: 6
 	},
 	{
 		symbol: "GZB",
@@ -17984,6 +18364,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "HAI",
+		address: "0x05Fb86775Fd5c16290f1E838F5caaa7342bD9a63",
+		decimals: 8
+	},
+	{
+		symbol: "HAI",
 		address: "0x136723300aef2aAB4b7cF52c3Eaac6F997e12a68",
 		decimals: 8
 	},
@@ -18001,6 +18386,16 @@ var tokens$5 = [
 		symbol: "HAND",
 		address: "0x48C1B2f3eFA85fbafb2ab951bF4Ba860a08cdBB7",
 		decimals: 0
+	},
+	{
+		symbol: "HANU",
+		address: "0x72E5390EDb7727E3d4e3436451DADafF675dBCC0",
+		decimals: 12
+	},
+	{
+		symbol: "HAPI",
+		address: "0xD9c2D319Cd7e6177336b0a9c93c21cb48d84Fb54",
+		decimals: 18
 	},
 	{
 		symbol: "HAPPY",
@@ -18023,6 +18418,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "HAUS",
+		address: "0xf2051511B9b121394FA75B8F7d4E7424337af687",
+		decimals: 18
+	},
+	{
 		symbol: "HAUT",
 		address: "0x3142daD33B1c6e1371D8627365f2ee2095eb6b37",
 		decimals: 18
@@ -18034,12 +18434,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "HB",
-		address: "0xE2492F8D2A2618d8709Ca99b1d8d75713Bd84089",
+		address: "0x877C7dEb5eB1fc5faAd30C71E3a6E39DC8b1519F",
 		decimals: 18
 	},
 	{
 		symbol: "HB",
-		address: "0x877C7dEb5eB1fc5faAd30C71E3a6E39DC8b1519F",
+		address: "0xE2492F8D2A2618d8709Ca99b1d8d75713Bd84089",
 		decimals: 18
 	},
 	{
@@ -18064,12 +18464,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "HBX",
-		address: "0x6fE355c62C6faf6946cE888fFABa9fD12355ae27",
+		address: "0x2793A23341012e0970Cf478bAB08606B56504C3E",
 		decimals: 18
 	},
 	{
 		symbol: "HBX",
-		address: "0x2793A23341012e0970Cf478bAB08606B56504C3E",
+		address: "0x6fE355c62C6faf6946cE888fFABa9fD12355ae27",
 		decimals: 18
 	},
 	{
@@ -18089,13 +18489,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "HD",
-		address: "0xD4Cdd5e54CcEddA7e9408B31759c9F9CEECbB3eC",
-		decimals: 2
+		address: "0x6ce654aC973D326F89f0685E7459542641410eD9",
+		decimals: 18
 	},
 	{
 		symbol: "HD",
-		address: "0x6ce654aC973D326F89f0685E7459542641410eD9",
-		decimals: 18
+		address: "0xD4Cdd5e54CcEddA7e9408B31759c9F9CEECbB3eC",
+		decimals: 2
 	},
 	{
 		symbol: "HDAO",
@@ -18229,11 +18629,6 @@ var tokens$5 = [
 	},
 	{
 		symbol: "HEX",
-		address: "0x96006F60B452526481a26eab55265ECdf82E7361",
-		decimals: 18
-	},
-	{
-		symbol: "HEX",
 		address: "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
 		decimals: 8
 	},
@@ -18243,18 +18638,23 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "HEX",
+		address: "0x96006F60B452526481a26eab55265ECdf82E7361",
+		decimals: 18
+	},
+	{
 		symbol: "HEX2T",
 		address: "0xEd1199093b1aBd07a368Dd1C0Cdc77D8517BA2A0",
 		decimals: 18
 	},
 	{
 		symbol: "HEY",
-		address: "0xe9C9e7E1DaBea830C958C39D6b25964a6F52143A",
+		address: "0xC3884E677E0A3953072a7Fc63e158e98313bF97b",
 		decimals: 18
 	},
 	{
 		symbol: "HEY",
-		address: "0xC3884E677E0A3953072a7Fc63e158e98313bF97b",
+		address: "0xe9C9e7E1DaBea830C958C39D6b25964a6F52143A",
 		decimals: 18
 	},
 	{
@@ -18463,6 +18863,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "HOGE",
+		address: "0xfAd45E47083e4607302aa43c65fB3106F1cd7607",
+		decimals: 9
+	},
+	{
 		symbol: "HOLD",
 		address: "0xD6e1401a079922469e9b965Cb090ea6fF64C6839",
 		decimals: 18
@@ -18524,12 +18929,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "HOT",
-		address: "0x9AF839687F6C94542ac5ece2e317dAAE355493A1",
+		address: "0x6c6EE5e31d828De241282B9606C8e98Ea48526E2",
 		decimals: 18
 	},
 	{
 		symbol: "HOT",
-		address: "0x6c6EE5e31d828De241282B9606C8e98Ea48526E2",
+		address: "0x9AF839687F6C94542ac5ece2e317dAAE355493A1",
 		decimals: 18
 	},
 	{
@@ -18549,13 +18954,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "HP",
-		address: "0xab55bDEF7057B76482914e79f037999f4eBb6bF1",
-		decimals: 8
+		address: "0x5a4B14aea23A605aBc463f04a6B8Aaf52Dd3e7C6",
+		decimals: 18
 	},
 	{
 		symbol: "HP",
-		address: "0x5a4B14aea23A605aBc463f04a6B8Aaf52Dd3e7C6",
-		decimals: 18
+		address: "0xab55bDEF7057B76482914e79f037999f4eBb6bF1",
+		decimals: 8
 	},
 	{
 		symbol: "HPAY",
@@ -18684,8 +19089,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "HTX",
-		address: "0xeDbcC06B603ea1f512720A4073a62CC4fdefCb86",
-		decimals: 0
+		address: "0x38A0df9a08d18dc06CD91Fc7Ec94a0AcdF28D994",
+		decimals: 2
 	},
 	{
 		symbol: "HTX",
@@ -18694,8 +19099,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "HTX",
-		address: "0x38A0df9a08d18dc06CD91Fc7Ec94a0AcdF28D994",
-		decimals: 2
+		address: "0xeDbcC06B603ea1f512720A4073a62CC4fdefCb86",
+		decimals: 0
 	},
 	{
 		symbol: "HUB",
@@ -18784,7 +19189,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "HXY",
-		address: "0xf3A2ace8e48751c965eA0A1D064303AcA53842b9",
+		address: "0x0FFF95D5ab18c763c42C209F137C47354af104a8",
 		decimals: 8
 	},
 	{
@@ -18794,7 +19199,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "HXY",
-		address: "0x0FFF95D5ab18c763c42C209F137C47354af104a8",
+		address: "0xf3A2ace8e48751c965eA0A1D064303AcA53842b9",
 		decimals: 8
 	},
 	{
@@ -18809,12 +19214,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "HYDRO",
-		address: "0xEBBdf302c940c6bfd49C6b165f457fdb324649bc",
+		address: "0x946112efaB61C3636CBD52DE2E1392D7A75A6f01",
 		decimals: 18
 	},
 	{
 		symbol: "HYDRO",
-		address: "0x946112efaB61C3636CBD52DE2E1392D7A75A6f01",
+		address: "0xEBBdf302c940c6bfd49C6b165f457fdb324649bc",
 		decimals: 18
 	},
 	{
@@ -18883,13 +19288,13 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "IBTC",
-		address: "0xD6014EA05BDe904448B743833dDF07c3C7837481",
+		symbol: "iBTC",
+		address: "0x2B143041a6F8BE9dCC66E9110178a264A223A3bd",
 		decimals: 18
 	},
 	{
-		symbol: "iBTC",
-		address: "0x2B143041a6F8BE9dCC66E9110178a264A223A3bd",
+		symbol: "IBTC",
+		address: "0xD6014EA05BDe904448B743833dDF07c3C7837481",
 		decimals: 18
 	},
 	{
@@ -18905,6 +19310,11 @@ var tokens$5 = [
 	{
 		symbol: "ICD",
 		address: "0x3c20d67b6B1aE0985F913aBb7397babc2fBb1A1F",
+		decimals: 18
+	},
+	{
+		symbol: "ICE",
+		address: "0xf16e81dce15B08F326220742020379B855B87DF9",
 		decimals: 18
 	},
 	{
@@ -19118,6 +19528,11 @@ var tokens$5 = [
 		decimals: 2
 	},
 	{
+		symbol: "IDV",
+		address: "0x92Ec47DF1AA167806dFa4916D9Cfb99da6953b8F",
+		decimals: 18
+	},
+	{
 		symbol: "IDX",
 		address: "0x8427760A577F7F2F91a7bA7a3c7826C92A950727",
 		decimals: 8
@@ -19158,13 +19573,8 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "IETH",
-		address: "0xA9859874e1743A32409f75bB11549892138BBA1E",
-		decimals: 18
-	},
-	{
 		symbol: "iETH",
-		address: "0x9Dde7cdd09dbed542fC422d18d89A589fA9fD4C0",
+		address: "0x77f973FCaF871459aa58cd81881Ce453759281bC",
 		decimals: 18
 	},
 	{
@@ -19174,7 +19584,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "iETH",
-		address: "0x77f973FCaF871459aa58cd81881Ce453759281bC",
+		address: "0x9Dde7cdd09dbed542fC422d18d89A589fA9fD4C0",
+		decimals: 18
+	},
+	{
+		symbol: "IETH",
+		address: "0xA9859874e1743A32409f75bB11549892138BBA1E",
 		decimals: 18
 	},
 	{
@@ -19283,14 +19698,14 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "IMBTC",
-		address: "0x3212b29E33587A00FB1C83346f5dBFA69A458923",
-		decimals: 8
-	},
-	{
 		symbol: "imBTC",
 		address: "0x17d8CBB6Bce8cEE970a4027d1198F6700A7a6c24",
 		decimals: 18
+	},
+	{
+		symbol: "IMBTC",
+		address: "0x3212b29E33587A00FB1C83346f5dBFA69A458923",
+		decimals: 8
 	},
 	{
 		symbol: "IMC",
@@ -19309,13 +19724,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "IMT",
-		address: "0x22E5F62D0FA19974749faa194e3d3eF6d89c08d7",
-		decimals: 0
+		address: "0x13119E34E140097a507B07a5564bDe1bC375D9e6",
+		decimals: 18
 	},
 	{
 		symbol: "IMT",
-		address: "0x13119E34E140097a507B07a5564bDe1bC375D9e6",
-		decimals: 18
+		address: "0x22E5F62D0FA19974749faa194e3d3eF6d89c08d7",
+		decimals: 0
 	},
 	{
 		symbol: "IMT",
@@ -19374,22 +19789,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "INEX",
-		address: "0xa2D77f8353cB2AFD709Aba4a967257511ECFf716",
-		decimals: 8
-	},
-	{
-		symbol: "INEX",
 		address: "0xDAC2bd8fbAae386EB50f084b82a04815Dd8b0A60",
 		decimals: 8
 	},
 	{
-		symbol: "INF",
-		address: "0x4C6584dDCdFaB7110c7b1bE47749Bde8edc9c0c9",
-		decimals: 18
+		symbol: "INEX",
+		address: "0xa2D77f8353cB2AFD709Aba4a967257511ECFf716",
+		decimals: 8
 	},
 	{
 		symbol: "INF",
 		address: "0x00E150D741Eda1d49d341189CAE4c08a73a49C95",
+		decimals: 18
+	},
+	{
+		symbol: "INF",
+		address: "0x4C6584dDCdFaB7110c7b1bE47749Bde8edc9c0c9",
 		decimals: 18
 	},
 	{
@@ -19438,6 +19853,11 @@ var tokens$5 = [
 		decimals: 10
 	},
 	{
+		symbol: "INST",
+		address: "0x6f40d4A6237C257fff2dB00FA0510DeEECd303eb",
+		decimals: 18
+	},
+	{
 		symbol: "INSTAR",
 		address: "0xc72fe8e3Dd5BeF0F9f31f259399F301272eF2a2D",
 		decimals: 18
@@ -19454,13 +19874,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "INT",
-		address: "0xeDE7518b8f90cbca48b551e5658b20513937d622",
-		decimals: 8
+		address: "0x0b76544F6C413a555F309Bf76260d1E02377c02A",
+		decimals: 6
 	},
 	{
 		symbol: "INT",
-		address: "0x0b76544F6C413a555F309Bf76260d1E02377c02A",
-		decimals: 6
+		address: "0xeDE7518b8f90cbca48b551e5658b20513937d622",
+		decimals: 8
 	},
 	{
 		symbol: "INTBTC",
@@ -19504,13 +19924,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "INX",
-		address: "0x84fE25f3921f3426395c883707950d0c00367576",
-		decimals: 18
+		address: "0x018d7D179350f1Bb9853D04982820E37ccE13a92",
+		decimals: 8
 	},
 	{
 		symbol: "INX",
-		address: "0x018d7D179350f1Bb9853D04982820E37ccE13a92",
-		decimals: 8
+		address: "0x84fE25f3921f3426395c883707950d0c00367576",
+		decimals: 18
 	},
 	{
 		symbol: "INXT",
@@ -19523,8 +19943,18 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "IOI",
+		address: "0x8B3870Df408fF4D7C3A26DF852D41034eDa11d81",
+		decimals: 6
+	},
+	{
 		symbol: "IONC",
 		address: "0xbC647aAd10114B89564c0a7aabE542bd0cf2C5aF",
+		decimals: 18
+	},
+	{
+		symbol: "IONX",
+		address: "0x02D3A27Ac3f55d5D91Fb0f52759842696a864217",
 		decimals: 18
 	},
 	{
@@ -19623,6 +20053,11 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
+		symbol: "IQ",
+		address: "0x579CEa1889991f68aCc35Ff5c3dd0621fF29b0C9",
+		decimals: 18
+	},
+	{
 		symbol: "IQF",
 		address: "0x15223C63A203731db1a2eBfE5277a55F77a453b9",
 		decimals: 8
@@ -19664,12 +20099,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ISP",
-		address: "0xC8807f0f5BA3fa45FfBdc66928d71c5289249014",
+		address: "0x3db1678170418D1014012f855E2DdA492f35C289",
 		decimals: 18
 	},
 	{
 		symbol: "ISP",
-		address: "0x3db1678170418D1014012f855E2DdA492f35C289",
+		address: "0xC8807f0f5BA3fa45FfBdc66928d71c5289249014",
 		decimals: 18
 	},
 	{
@@ -19684,22 +20119,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "IST",
-		address: "0x7a4d70528c0B8d376C206b0Fb2c9dB1d26315c2d",
-		decimals: 18
-	},
-	{
-		symbol: "IST",
 		address: "0x44A41d8feC3877297edC40122f3DE783861cd9af",
 		decimals: 8
 	},
 	{
-		symbol: "IST34",
-		address: "0x55675E0d2551a34c2E3C68FA83B5108527957fDd",
+		symbol: "IST",
+		address: "0x7a4d70528c0B8d376C206b0Fb2c9dB1d26315c2d",
 		decimals: 18
 	},
 	{
 		symbol: "IST34",
 		address: "0x0cF713b11C9b986EC40D65bD4F7fbd50F6ff2d64",
+		decimals: 18
+	},
+	{
+		symbol: "IST34",
+		address: "0x55675E0d2551a34c2E3C68FA83B5108527957fDd",
 		decimals: 18
 	},
 	{
@@ -19788,13 +20223,13 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
-		symbol: "IXTZ",
-		address: "0xc2992b2C22238F296c2f429ee2f7AfB462Ed1750",
+		symbol: "iXTZ",
+		address: "0x8deef89058090ac5655A99EEB451a4f9183D1678",
 		decimals: 18
 	},
 	{
-		symbol: "iXTZ",
-		address: "0x8deef89058090ac5655A99EEB451a4f9183D1678",
+		symbol: "IXTZ",
+		address: "0xc2992b2C22238F296c2f429ee2f7AfB462Ed1750",
 		decimals: 18
 	},
 	{
@@ -20088,6 +20523,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "KaiInu",
+		address: "0xe5a09784b16E1065C37dF14c6e2f06fDcE317a1b",
+		decimals: 9
+	},
+	{
 		symbol: "KAIJU",
 		address: "0x58a5d3e4873A75B07fB3c7CF477EeBc44ea73B3B",
 		decimals: 4
@@ -20149,12 +20589,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "KAT",
-		address: "0xA858bC1b71a895Ee83B92F149616F9B3F6Afa0FB",
+		address: "0x88FCFBc22C6d3dBaa25aF478C578978339BDe77a",
 		decimals: 18
 	},
 	{
 		symbol: "KAT",
-		address: "0x88FCFBc22C6d3dBaa25aF478C578978339BDe77a",
+		address: "0xA858bC1b71a895Ee83B92F149616F9B3F6Afa0FB",
 		decimals: 18
 	},
 	{
@@ -20199,12 +20639,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "KCH",
-		address: "0xdB80734b094a3F964DEdfD10e8946753aE0AC04c",
+		address: "0x28C391FbF3F5E10fb3Fb8D6b2728419d3037409B",
 		decimals: 18
 	},
 	{
 		symbol: "KCH",
-		address: "0x28C391FbF3F5E10fb3Fb8D6b2728419d3037409B",
+		address: "0xdB80734b094a3F964DEdfD10e8946753aE0AC04c",
 		decimals: 18
 	},
 	{
@@ -20274,12 +20714,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "KEY",
-		address: "0x4Cd988AfBad37289BAAf53C13e98E2BD46aAEa8c",
+		address: "0x4CC19356f2D37338b9802aa8E8fc58B0373296E7",
 		decimals: 18
 	},
 	{
 		symbol: "KEY",
-		address: "0x4CC19356f2D37338b9802aa8E8fc58B0373296E7",
+		address: "0x4Cd988AfBad37289BAAf53C13e98E2BD46aAEa8c",
 		decimals: 18
 	},
 	{
@@ -20316,6 +20756,11 @@ var tokens$5 = [
 		symbol: "KICK",
 		address: "0x27695E09149AdC738A978e9A678F99E4c39e9eb9",
 		decimals: 8
+	},
+	{
+		symbol: "KICK",
+		address: "0x824a50dF33AC1B41Afc52f4194E2e8356C17C3aC",
+		decimals: 10
 	},
 	{
 		symbol: "KICK",
@@ -20420,6 +20865,11 @@ var tokens$5 = [
 	{
 		symbol: "KMX",
 		address: "0x9b8C184439245B7bb24a5B2EC51Ec81c39589E8A",
+		decimals: 18
+	},
+	{
+		symbol: "KNC",
+		address: "0xdeFA4e8a7bcBA345F687a2f1456F5Edd9CE97202",
 		decimals: 18
 	},
 	{
@@ -20564,12 +21014,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "KRS",
-		address: "0xdfB410994b66778Bd6cC2C82E8ffe4f7B2870006",
+		address: "0x229A569B673D908cee8920658AE7BCaD68e7d01D",
 		decimals: 18
 	},
 	{
 		symbol: "KRS",
-		address: "0x229A569B673D908cee8920658AE7BCaD68e7d01D",
+		address: "0xdfB410994b66778Bd6cC2C82E8ffe4f7B2870006",
 		decimals: 18
 	},
 	{
@@ -20819,12 +21269,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "LCT",
-		address: "0x4A37A91eec4C97F9090CE66d21D3B3Aadf1aE5aD",
+		address: "0x05C7065d644096a4E4C3FE24AF86e36dE021074b",
 		decimals: 18
 	},
 	{
 		symbol: "LCT",
-		address: "0x05C7065d644096a4E4C3FE24AF86e36dE021074b",
+		address: "0x4A37A91eec4C97F9090CE66d21D3B3Aadf1aE5aD",
 		decimals: 18
 	},
 	{
@@ -20876,6 +21326,11 @@ var tokens$5 = [
 		symbol: "LEAD",
 		address: "0x1dD80016e3d4ae146Ee2EBB484e8edD92dacC4ce",
 		decimals: 18
+	},
+	{
+		symbol: "LED",
+		address: "0x041A36b015486941Ce8d5f2C7ff2E88f97390640",
+		decimals: 4
 	},
 	{
 		symbol: "LEDU",
@@ -21004,12 +21459,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "LGC",
-		address: "0x3b3A5557F119106270017A7662488C1FF6312A6b",
+		address: "0x2bc8B955F6a0Ed5a9D4146DED61aEC0bB74EcF67",
 		decimals: 18
 	},
 	{
 		symbol: "LGC",
-		address: "0x2bc8B955F6a0Ed5a9D4146DED61aEC0bB74EcF67",
+		address: "0x3b3A5557F119106270017A7662488C1FF6312A6b",
 		decimals: 18
 	},
 	{
@@ -21034,12 +21489,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "LGO",
-		address: "0x123aB195DD38B1b40510d467a6a359b201af056f",
+		address: "0x0a50C93c762fDD6E56D86215C24AaAD43aB629aa",
 		decimals: 8
 	},
 	{
 		symbol: "LGO",
-		address: "0x0a50C93c762fDD6E56D86215C24AaAD43aB629aa",
+		address: "0x123aB195DD38B1b40510d467a6a359b201af056f",
 		decimals: 8
 	},
 	{
@@ -21059,12 +21514,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "LIB",
-		address: "0x3FD2E747CEA0E8A78f1827ea2FfD3334628A600b",
+		address: "0x0bf6261297198D91D4FA460242C69232146A5703",
 		decimals: 18
 	},
 	{
 		symbol: "LIB",
-		address: "0x0bf6261297198D91D4FA460242C69232146A5703",
+		address: "0x3FD2E747CEA0E8A78f1827ea2FfD3334628A600b",
 		decimals: 18
 	},
 	{
@@ -21179,13 +21634,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "LIQ",
-		address: "0x72CA0501427BB8f089c1c4F767cb17d017e803a9",
-		decimals: 18
+		address: "0x44Fd55aEB7420b4fD275e19d6f0674a6f91AD356",
+		decimals: 8
 	},
 	{
 		symbol: "LIQ",
-		address: "0x44Fd55aEB7420b4fD275e19d6f0674a6f91AD356",
-		decimals: 8
+		address: "0x72CA0501427BB8f089c1c4F767cb17d017e803a9",
+		decimals: 18
 	},
 	{
 		symbol: "LIQ",
@@ -21204,12 +21659,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "LIT",
-		address: "0x763Fa6806e1acf68130D2D0f0df754C93cC546B2",
-		decimals: 18
+		address: "0x2e3C062E16c1a3a04Ddc5003c62E294305d83684",
+		decimals: 2
 	},
 	{
 		symbol: "LIT",
-		address: "0xb59490aB09A0f526Cc7305822aC65f2Ab12f9723",
+		address: "0x763Fa6806e1acf68130D2D0f0df754C93cC546B2",
 		decimals: 18
 	},
 	{
@@ -21219,8 +21674,18 @@ var tokens$5 = [
 	},
 	{
 		symbol: "LIT",
-		address: "0x2e3C062E16c1a3a04Ddc5003c62E294305d83684",
-		decimals: 2
+		address: "0xb59490aB09A0f526Cc7305822aC65f2Ab12f9723",
+		decimals: 18
+	},
+	{
+		symbol: "LITH",
+		address: "0x188E817B02e635D482AE4D81e25DdA98A97C4a42",
+		decimals: 18
+	},
+	{
+		symbol: "LITH",
+		address: "0xf8A4A419c2d7140e49eF952a7e7Ae1Bd4A8b6B9C",
+		decimals: 18
 	},
 	{
 		symbol: "LIVE",
@@ -21284,12 +21749,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "LNC",
-		address: "0x6BEB418Fc6E1958204aC8baddCf109B8E9694966",
+		address: "0x63e634330A20150DbB61B15648bC73855d6CCF07",
 		decimals: 18
 	},
 	{
 		symbol: "LNC",
-		address: "0x63e634330A20150DbB61B15648bC73855d6CCF07",
+		address: "0x6BEB418Fc6E1958204aC8baddCf109B8E9694966",
 		decimals: 18
 	},
 	{
@@ -21340,6 +21805,11 @@ var tokens$5 = [
 	{
 		symbol: "LOC",
 		address: "0x5e3346444010135322268a4630d2ED5F8D09446c",
+		decimals: 18
+	},
+	{
+		symbol: "LOCG",
+		address: "0x60Eb57d085C59932d5fAa6c6026268A4386927d0",
 		decimals: 18
 	},
 	{
@@ -21484,12 +21954,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "LRC",
-		address: "0xEF68e7C694F40c8202821eDF525dE3782458639f",
+		address: "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD",
 		decimals: 18
 	},
 	{
 		symbol: "LRC",
-		address: "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD",
+		address: "0xEF68e7C694F40c8202821eDF525dE3782458639f",
 		decimals: 18
 	},
 	{
@@ -21504,12 +21974,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "LST",
-		address: "0x6b9F1F092E0B10015a4391A80cD3E6B6cefD1728",
+		address: "0x355376d6471E09A4FfCA8790F50DA625630c5270",
 		decimals: 18
 	},
 	{
 		symbol: "LST",
-		address: "0x355376d6471E09A4FfCA8790F50DA625630c5270",
+		address: "0x4de2573e27E648607B50e1Cfff921A33E4A34405",
 		decimals: 18
 	},
 	{
@@ -21519,7 +21989,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "LST",
-		address: "0x4de2573e27E648607B50e1Cfff921A33E4A34405",
+		address: "0x6b9F1F092E0B10015a4391A80cD3E6B6cefD1728",
 		decimals: 18
 	},
 	{
@@ -21529,13 +21999,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "LT",
-		address: "0xbEa9BA2527f584B9543D1fdf402493bF23EF156f",
-		decimals: 18
+		address: "0x48F3726C787Bdc36Bb00c978E701879cEEd185A4",
+		decimals: 4
 	},
 	{
 		symbol: "LT",
-		address: "0x48F3726C787Bdc36Bb00c978E701879cEEd185A4",
-		decimals: 4
+		address: "0xbEa9BA2527f584B9543D1fdf402493bF23EF156f",
+		decimals: 18
 	},
 	{
 		symbol: "LTB",
@@ -21734,13 +22204,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MAC",
-		address: "0xc3e2de0b661cF58F66BdE8E896905399ded58af5",
-		decimals: 0
+		address: "0x77dBa24943F348d9C3ce4D9dF0675CaA7Bb550bf",
+		decimals: 6
 	},
 	{
 		symbol: "MAC",
-		address: "0x77dBa24943F348d9C3ce4D9dF0675CaA7Bb550bf",
-		decimals: 6
+		address: "0xc3e2de0b661cF58F66BdE8E896905399ded58af5",
+		decimals: 0
 	},
 	{
 		symbol: "MACH",
@@ -21903,6 +22373,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "MATTER",
+		address: "0x9B99CcA871Be05119B2012fd4474731dd653FEBe",
+		decimals: 18
+	},
+	{
 		symbol: "MAVC",
 		address: "0x621E3b71D07b51242bcca167928e184235A4bb87",
 		decimals: 18
@@ -21914,18 +22389,18 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MAYA",
-		address: "0x294caEC1E7C1B674F409514AF529aF02E67CdB56",
-		decimals: 18
-	},
-	{
-		symbol: "MAYA",
 		address: "0x14468FF6b324f1C5A869e62B9C442846e7D0baf1",
 		decimals: 18
 	},
 	{
-		symbol: "MB",
-		address: "0x8D8129963291740dDDd917ab01af18c7aed4BA58",
+		symbol: "MAYA",
+		address: "0x294caEC1E7C1B674F409514AF529aF02E67CdB56",
 		decimals: 18
+	},
+	{
+		symbol: "MB",
+		address: "0x421291c62344278642a1Ea917cDca23EfFd01416",
+		decimals: 2
 	},
 	{
 		symbol: "MB",
@@ -21934,8 +22409,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MB",
-		address: "0x421291c62344278642a1Ea917cDca23EfFd01416",
-		decimals: 2
+		address: "0x8D8129963291740dDDd917ab01af18c7aed4BA58",
+		decimals: 18
 	},
 	{
 		symbol: "MBABA",
@@ -21949,8 +22424,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MBC",
-		address: "0xB63ffE88c2903080cCf9AB14EfA56A11E3e01273",
-		decimals: 18
+		address: "0x47aF9FD69AdC231E674140c81811a640dD92dC51",
+		decimals: 8
 	},
 	{
 		symbol: "MBC",
@@ -21959,8 +22434,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MBC",
-		address: "0x47aF9FD69AdC231E674140c81811a640dD92dC51",
-		decimals: 8
+		address: "0xB63ffE88c2903080cCf9AB14EfA56A11E3e01273",
+		decimals: 18
 	},
 	{
 		symbol: "MBCASH",
@@ -22034,13 +22509,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MCB",
-		address: "0x4e352cF164E64ADCBad318C3a1e222E9EBa4Ce42",
-		decimals: 18
+		address: "0x03A6d45820Edb4e66e41Ece0Dc96170E875A1d16",
+		decimals: 8
 	},
 	{
 		symbol: "MCB",
-		address: "0x03A6d45820Edb4e66e41Ece0Dc96170E875A1d16",
-		decimals: 8
+		address: "0x4e352cF164E64ADCBad318C3a1e222E9EBa4Ce42",
+		decimals: 18
 	},
 	{
 		symbol: "MCD.CX",
@@ -22050,6 +22525,11 @@ var tokens$5 = [
 	{
 		symbol: "MCH",
 		address: "0xA4e7414FCba1AF15203030C6daAC630df8F16AEa",
+		decimals: 18
+	},
+	{
+		symbol: "MCHC",
+		address: "0xD69F306549e9d96f183B1AecA30B8f4353c2ECC3",
 		decimals: 18
 	},
 	{
@@ -22129,22 +22609,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MDS",
-		address: "0x92B7e4409dCf8C439f313eD1f05fdC0550d18DDd",
-		decimals: 18
-	},
-	{
-		symbol: "MDS",
 		address: "0x66186008C1050627F979d464eABb258860563dbE",
 		decimals: 18
 	},
 	{
-		symbol: "MDT",
-		address: "0x814e0908b12A99FeCf5BC101bB5d0b8B5cDf7d26",
+		symbol: "MDS",
+		address: "0x92B7e4409dCf8C439f313eD1f05fdC0550d18DDd",
 		decimals: 18
 	},
 	{
 		symbol: "MDT",
 		address: "0x4Dfd148B532e934a2a26eA65689cf6268753e130",
+		decimals: 18
+	},
+	{
+		symbol: "MDT",
+		address: "0x814e0908b12A99FeCf5BC101bB5d0b8B5cDf7d26",
 		decimals: 18
 	},
 	{
@@ -22154,12 +22634,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MDX",
-		address: "0x9d03393d297E42C135625D450C814892505F1a84",
+		address: "0x947AEb02304391f8fbE5B25D7D98D649b57b1788",
 		decimals: 18
 	},
 	{
 		symbol: "MDX",
-		address: "0x947AEb02304391f8fbE5B25D7D98D649b57b1788",
+		address: "0x9d03393d297E42C135625D450C814892505F1a84",
 		decimals: 18
 	},
 	{
@@ -22230,6 +22710,11 @@ var tokens$5 = [
 	{
 		symbol: "mETH",
 		address: "0xdF9307DFf0a1B57660F60f9457D32027a55ca0B2",
+		decimals: 18
+	},
+	{
+		symbol: "METIS",
+		address: "0x9E32b13ce7f2E80A01932B42553652E053D6ed8e",
 		decimals: 18
 	},
 	{
@@ -22314,12 +22799,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MFTU",
-		address: "0xbA745513ACEbcBb977497C569D4F7d340f2A936B",
+		address: "0x05D412CE18F24040bB3Fa45CF2C69e506586D8e8",
 		decimals: 18
 	},
 	{
 		symbol: "MFTU",
-		address: "0x05D412CE18F24040bB3Fa45CF2C69e506586D8e8",
+		address: "0xbA745513ACEbcBb977497C569D4F7d340f2A936B",
+		decimals: 18
+	},
+	{
+		symbol: "MGC",
+		address: "0x0BBa19f02B9fbDCa23D783cCc3f78C0A06544073",
 		decimals: 18
 	},
 	{
@@ -22331,11 +22821,6 @@ var tokens$5 = [
 		symbol: "MGC",
 		address: "0xa6EB54102F20095679882Db4C84E72E65Ab782A4",
 		decimals: 8
-	},
-	{
-		symbol: "MGC",
-		address: "0x0BBa19f02B9fbDCa23D783cCc3f78C0A06544073",
-		decimals: 18
 	},
 	{
 		symbol: "MGM.CX",
@@ -22489,12 +22974,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MIS",
+		address: "0x4b4D2e899658FB59b1D518b68fe836B100ee8958",
+		decimals: 18
+	},
+	{
+		symbol: "MIS",
 		address: "0xCD1cb16a67937ff8Af5D726e2681010cE1E9891a",
 		decimals: 8
 	},
 	{
-		symbol: "MIS",
-		address: "0x4b4D2e899658FB59b1D518b68fe836B100ee8958",
+		symbol: "MIST",
+		address: "0x88ACDd2a6425c3FaAE4Bc9650Fd7E27e0Bebb7aB",
 		decimals: 18
 	},
 	{
@@ -22569,11 +23059,6 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MKT",
-		address: "0x7939882b54fcf0bCAe6b53dEc39Ad6e806176442",
-		decimals: 8
-	},
-	{
-		symbol: "MKT",
 		address: "0x16558553E4647ca500c3718C56C356eDB6F9b11C",
 		decimals: 6
 	},
@@ -22581,6 +23066,11 @@ var tokens$5 = [
 		symbol: "MKT",
 		address: "0x508F36BAAc673fE9E213e69f0F75CBcFEB015917",
 		decimals: 18
+	},
+	{
+		symbol: "MKT",
+		address: "0x7939882b54fcf0bCAe6b53dEc39Ad6e806176442",
+		decimals: 8
 	},
 	{
 		symbol: "MLC",
@@ -22614,6 +23104,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MM",
+		address: "0x6B4c7A5e3f0B99FCD83e9c089BDDD6c7FCe5c611",
+		decimals: 18
+	},
+	{
+		symbol: "MM",
 		address: "0xcd23Ef2cBa177A1B5f5D3818d055868E4B599d18",
 		decimals: 18
 	},
@@ -22634,12 +23129,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MNE",
-		address: "0x426CA1eA2406c07d75Db9585F22781c096e3d0E0",
+		address: "0x1a95B271B0535D15fa49932Daba31BA612b52946",
 		decimals: 8
 	},
 	{
 		symbol: "MNE",
-		address: "0x1a95B271B0535D15fa49932Daba31BA612b52946",
+		address: "0x426CA1eA2406c07d75Db9585F22781c096e3d0E0",
 		decimals: 8
 	},
 	{
@@ -22724,12 +23219,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MOON",
-		address: "0xba7CDd0953E8f950317dda347A716f162713B226",
+		address: "0x68a3637bA6E75c0f66B61A42639c4e9fCD3D4824",
 		decimals: 18
 	},
 	{
 		symbol: "MOON",
-		address: "0x68a3637bA6E75c0f66B61A42639c4e9fCD3D4824",
+		address: "0xba7CDd0953E8f950317dda347A716f162713B226",
 		decimals: 18
 	},
 	{
@@ -22745,6 +23240,11 @@ var tokens$5 = [
 	{
 		symbol: "MOONSHIT",
 		address: "0xf5312DA58ab6C1706D651ED9FCd3Ca000c3a25b7",
+		decimals: 18
+	},
+	{
+		symbol: "MOOV",
+		address: "0x24EC2Ca132abf8F6f8a6E24A1B97943e31f256a7",
 		decimals: 18
 	},
 	{
@@ -22768,14 +23268,19 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "MOVI",
-		address: "0x623B925b0A57a24EA8dE301F2E3E692cE903f0c3",
-		decimals: 0
+		symbol: "MOVE",
+		address: "0x3FA729B4548beCBAd4EaB6EF18413470e6D5324C",
+		decimals: 18
 	},
 	{
 		symbol: "MOVI",
 		address: "0x06F979E4F04ec565Ae8d7479a94C60dEF8846832",
 		decimals: 6
+	},
+	{
+		symbol: "MOVI",
+		address: "0x623B925b0A57a24EA8dE301F2E3E692cE903f0c3",
+		decimals: 0
 	},
 	{
 		symbol: "MOVIE",
@@ -22799,17 +23304,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MPH",
-		address: "0x8888801aF4d980682e47f1A9036e589479e835C5",
+		address: "0x6369c3DadfC00054A42BA8B2c09c48131dd4Aa38",
 		decimals: 18
 	},
 	{
 		symbol: "MPH",
-		address: "0x6369c3DadfC00054A42BA8B2c09c48131dd4Aa38",
+		address: "0x8888801aF4d980682e47f1A9036e589479e835C5",
 		decimals: 18
 	},
 	{
 		symbol: "MPL",
 		address: "0x218f1De2Ea9AE3e9FDEa347b6E707EbfdA2D6233",
+		decimals: 18
+	},
+	{
+		symbol: "MPL",
+		address: "0x33349B282065b0284d756F0577FB39c158F935e6",
 		decimals: 18
 	},
 	{
@@ -22969,12 +23479,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MTC",
-		address: "0xdfdc0D82d96F8fd40ca0CFB4A288955bECEc2088",
+		address: "0x905E337c6c8645263D3521205Aa37bf4d034e745",
 		decimals: 18
 	},
 	{
 		symbol: "MTC",
-		address: "0x905E337c6c8645263D3521205Aa37bf4d034e745",
+		address: "0xdfdc0D82d96F8fd40ca0CFB4A288955bECEc2088",
 		decimals: 18
 	},
 	{
@@ -23039,6 +23549,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MTV",
+		address: "0x6226e00bCAc68b0Fe55583B90A1d727C14fAB77f",
+		decimals: 18
+	},
+	{
+		symbol: "MTV",
 		address: "0x8aa688AB789d1848d131C65D98CEAA8875D97eF1",
 		decimals: 18
 	},
@@ -23069,12 +23584,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MUSD",
-		address: "0xe2f2a5C287993345a840Db3B0845fbC70f5935a5",
+		address: "0xA52383B665b91DCe42dD4b6d1E0Fb37d3EFFe489",
 		decimals: 18
 	},
 	{
 		symbol: "MUSD",
-		address: "0xA52383B665b91DCe42dD4b6d1E0Fb37d3EFFe489",
+		address: "0xe2f2a5C287993345a840Db3B0845fbC70f5935a5",
 		decimals: 18
 	},
 	{
@@ -23119,12 +23634,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MVC",
-		address: "0xB17DF9a3B09583a9bDCf757d6367171476D4D8a3",
+		address: "0x581911b360B6eB3a14eF295a83a91DC2bCE2D6f7",
 		decimals: 18
 	},
 	{
 		symbol: "MVC",
-		address: "0x581911b360B6eB3a14eF295a83a91DC2bCE2D6f7",
+		address: "0xB17DF9a3B09583a9bDCf757d6367171476D4D8a3",
 		decimals: 18
 	},
 	{
@@ -23136,6 +23651,11 @@ var tokens$5 = [
 		symbol: "MVG",
 		address: "0x71396a6410249725C5609646c4e449C6c4d41E27",
 		decimals: 0
+	},
+	{
+		symbol: "MVI",
+		address: "0x72e364F2ABdC788b7E918bc238B21f109Cd634D7",
+		decimals: 18
 	},
 	{
 		symbol: "MVIXY",
@@ -23164,13 +23684,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MWT",
-		address: "0xC118ab211227a35386718804a1fD14946d42643f",
-		decimals: 18
+		address: "0x82A6A22d68fFba4057d5b49F93dE5C05e4416bd1",
+		decimals: 8
 	},
 	{
 		symbol: "MWT",
-		address: "0x82A6A22d68fFba4057d5b49F93dE5C05e4416bd1",
-		decimals: 8
+		address: "0xC118ab211227a35386718804a1fD14946d42643f",
+		decimals: 18
 	},
 	{
 		symbol: "MX",
@@ -23234,13 +23754,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "MYST",
-		address: "0xa645264C5603E96c3b0B078cdab68733794B0A71",
-		decimals: 8
+		address: "0x4Cf89ca06ad997bC732Dc876ed2A7F26a9E7f361",
+		decimals: 18
 	},
 	{
 		symbol: "MYST",
-		address: "0x4Cf89ca06ad997bC732Dc876ed2A7F26a9E7f361",
-		decimals: 18
+		address: "0xa645264C5603E96c3b0B078cdab68733794B0A71",
+		decimals: 8
 	},
 	{
 		symbol: "MYTH",
@@ -23364,12 +23884,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "NCC",
-		address: "0x9344b383b1D59b5ce3468B234DAB43C7190ba735",
+		address: "0x5d48F293BaED247A2D0189058bA37aa238bD4725",
 		decimals: 18
 	},
 	{
 		symbol: "NCC",
-		address: "0x5d48F293BaED247A2D0189058bA37aa238bD4725",
+		address: "0x9344b383b1D59b5ce3468B234DAB43C7190ba735",
 		decimals: 18
 	},
 	{
@@ -23384,12 +23904,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "NCOV",
-		address: "0xb80112E516DAbcaC6Ab4665f1BD650996403156C",
+		address: "0x10Ef64cb79Fd4d75d4Aa7e8502d95C42124e434b",
 		decimals: 18
 	},
 	{
 		symbol: "NCOV",
-		address: "0x10Ef64cb79Fd4d75d4Aa7e8502d95C42124e434b",
+		address: "0xb80112E516DAbcaC6Ab4665f1BD650996403156C",
 		decimals: 18
 	},
 	{
@@ -23420,6 +23940,11 @@ var tokens$5 = [
 	{
 		symbol: "NDX",
 		address: "0x1966d718A565566e8E202792658D7b5Ff4ECe469",
+		decimals: 18
+	},
+	{
+		symbol: "NDX",
+		address: "0x86772b1409b61c639EaAc9Ba0AcfBb6E238e5F83",
 		decimals: 18
 	},
 	{
@@ -23533,18 +24058,28 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "NFD",
+		address: "0xDFDb7f72c1F195C5951a234e8DB9806EB0635346",
+		decimals: 18
+	},
+	{
 		symbol: "NFLX.CX",
 		address: "0x0A3Dc37762f0102175fD43d3871D7FA855626146",
 		decimals: 8
 	},
 	{
 		symbol: "NFT",
-		address: "0xcB8d1260F9c92A3A545d409466280fFdD7AF7042",
+		address: "0xE3BEbAAfa32767A7eE6102664079F11801586E1C",
 		decimals: 18
 	},
 	{
 		symbol: "NFT",
-		address: "0xE3BEbAAfa32767A7eE6102664079F11801586E1C",
+		address: "0xEF40B859D21e4d566a3d713e756197c021BffaAa",
+		decimals: 6
+	},
+	{
+		symbol: "NFT",
+		address: "0xcB8d1260F9c92A3A545d409466280fFdD7AF7042",
 		decimals: 18
 	},
 	{
@@ -23573,6 +24108,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "NGM",
+		address: "0xed0d5747A9AB03a75fBfEC3228cd55848245B75d",
+		decimals: 6
+	},
+	{
 		symbol: "NGOT",
 		address: "0x1EbD8d3Ca115451b9B6BbaA7Ee2F7B0F96E49fD8",
 		decimals: 5
@@ -23589,22 +24129,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "NIO",
-		address: "0xCc2AD789f459Bc73e5Fb33364964B658a62C1Ee7",
-		decimals: 8
-	},
-	{
-		symbol: "NIO",
 		address: "0x5554e04e76533E1d14c52f05beEF6c9d329E1E30",
 		decimals: 0
 	},
 	{
-		symbol: "NIOX",
-		address: "0xc813EA5e3b48BEbeedb796ab42A30C5599b01740",
-		decimals: 4
+		symbol: "NIO",
+		address: "0xCc2AD789f459Bc73e5Fb33364964B658a62C1Ee7",
+		decimals: 8
 	},
 	{
 		symbol: "NIOX",
 		address: "0x9cEc335cf6922eeb5A563C871D1F09f2cf264230",
+		decimals: 4
+	},
+	{
+		symbol: "NIOX",
+		address: "0xc813EA5e3b48BEbeedb796ab42A30C5599b01740",
 		decimals: 4
 	},
 	{
@@ -23829,12 +24369,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "NTK",
-		address: "0x69BEaB403438253f13b6e92Db91F7FB849258263",
+		address: "0x5D4d57cd06Fa7fe99e26fdc481b468f77f05073C",
 		decimals: 18
 	},
 	{
 		symbol: "NTK",
-		address: "0x5D4d57cd06Fa7fe99e26fdc481b468f77f05073C",
+		address: "0x69BEaB403438253f13b6e92Db91F7FB849258263",
 		decimals: 18
 	},
 	{
@@ -23939,13 +24479,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "NVT",
-		address: "0x7b6F71c8B123b38aa8099e0098bEC7fbc35B8a13",
-		decimals: 8
+		address: "0x09D8b66C48424324b25754A873e290caE5dca439",
+		decimals: 18
 	},
 	{
 		symbol: "NVT",
-		address: "0x09D8b66C48424324b25754A873e290caE5dca439",
-		decimals: 18
+		address: "0x7b6F71c8B123b38aa8099e0098bEC7fbc35B8a13",
+		decimals: 8
 	},
 	{
 		symbol: "NVZN",
@@ -24028,6 +24568,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "O3",
+		address: "0xEe9801669C6138E84bD50dEB500827b776777d28",
+		decimals: 18
+	},
+	{
 		symbol: "OA",
 		address: "0x534479D1F4E31bC8F3265009b2B05f89DC3B9aF1",
 		decimals: 8
@@ -24063,6 +24608,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "OBC",
+		address: "0x43E577338d6C07bc92a06C8CA4B781470515dFA8",
+		decimals: 18
+	},
+	{
 		symbol: "OBE",
 		address: "0xa497A35C26d019b61fF05ad090323bc8690a1ECd",
 		decimals: 18
@@ -24084,12 +24634,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "OCC",
-		address: "0x2F109021aFe75B949429fe30523Ee7C0D5B27207",
+		address: "0x0235fE624e044A05eeD7A43E16E3083bc8A4287A",
 		decimals: 18
 	},
 	{
 		symbol: "OCC",
-		address: "0x0235fE624e044A05eeD7A43E16E3083bc8A4287A",
+		address: "0x2F109021aFe75B949429fe30523Ee7C0D5B27207",
 		decimals: 18
 	},
 	{
@@ -24099,12 +24649,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "OCEAN",
-		address: "0x985dd3D42De1e256d09e1c10F112bCCB8015AD41",
+		address: "0x967da4048cD07aB37855c090aAF366e4ce1b9F48",
 		decimals: 18
 	},
 	{
 		symbol: "OCEAN",
-		address: "0x967da4048cD07aB37855c090aAF366e4ce1b9F48",
+		address: "0x985dd3D42De1e256d09e1c10F112bCCB8015AD41",
 		decimals: 18
 	},
 	{
@@ -24139,13 +24689,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ODC",
-		address: "0x70438034810b12798b1568b9D72792E073919a12",
-		decimals: 18
+		address: "0x49e90537D5eF6778fd000D1F05be20134F9f6dC6",
+		decimals: 8
 	},
 	{
 		symbol: "ODC",
-		address: "0x49e90537D5eF6778fd000D1F05be20134F9f6dC6",
-		decimals: 8
+		address: "0x70438034810b12798b1568b9D72792E073919a12",
+		decimals: 18
 	},
 	{
 		symbol: "ODDZ",
@@ -24244,12 +24794,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "OIL",
-		address: "0xaE6eb6F6c0A1694968b9f78a4316319C27B0964b",
+		address: "0x0275E1001e293C46CFe158B3702AADe0B99f88a5",
 		decimals: 18
 	},
 	{
 		symbol: "OIL",
-		address: "0x0275E1001e293C46CFe158B3702AADe0B99f88a5",
+		address: "0xaE6eb6F6c0A1694968b9f78a4316319C27B0964b",
 		decimals: 18
 	},
 	{
@@ -24329,12 +24879,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "OM",
-		address: "0x3593D125a4f7849a1B059E64F4517A86Dd60c95d",
+		address: "0x2baEcDf43734F22FD5c152DB08E3C27233F0c7d2",
 		decimals: 18
 	},
 	{
 		symbol: "OM",
-		address: "0x2baEcDf43734F22FD5c152DB08E3C27233F0c7d2",
+		address: "0x3593D125a4f7849a1B059E64F4517A86Dd60c95d",
 		decimals: 18
 	},
 	{
@@ -24374,12 +24924,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ONE",
-		address: "0x946551DD05C5Abd7CC808927480225ce36D8c475",
+		address: "0x4D807509aECe24C0fa5A102b6a3B059Ec6E14392",
 		decimals: 18
 	},
 	{
 		symbol: "ONE",
-		address: "0x4D807509aECe24C0fa5A102b6a3B059Ec6E14392",
+		address: "0x946551DD05C5Abd7CC808927480225ce36D8c475",
 		decimals: 18
 	},
 	{
@@ -24448,6 +24998,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "OOE",
+		address: "0x7778360F035C589fCE2f4eA5786CbD8B36e5396B",
+		decimals: 18
+	},
+	{
 		symbol: "OPA",
 		address: "0x3fE2eF1DFb1595195768627d16751D552586dce8",
 		decimals: 10
@@ -24504,12 +25059,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "OPT",
-		address: "0x7D25d9f10Cd224EcCe0Bc824A2eC800Db81C01d7",
+		address: "0x4FE5851C9af07df9e5AD8217aFAE1ea72737Ebda",
 		decimals: 18
 	},
 	{
 		symbol: "OPT",
-		address: "0x4FE5851C9af07df9e5AD8217aFAE1ea72737Ebda",
+		address: "0x7D25d9f10Cd224EcCe0Bc824A2eC800Db81C01d7",
 		decimals: 18
 	},
 	{
@@ -24559,13 +25114,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ORC",
-		address: "0x6C86228D240c22d4F4744654026326895351B2eC",
-		decimals: 8
+		address: "0x662b67d00A13FAf93254714DD601F5Ed49Ef2F51",
+		decimals: 18
 	},
 	{
 		symbol: "ORC",
-		address: "0x662b67d00A13FAf93254714DD601F5Ed49Ef2F51",
-		decimals: 18
+		address: "0x6C86228D240c22d4F4744654026326895351B2eC",
+		decimals: 8
 	},
 	{
 		symbol: "ORCA",
@@ -24638,13 +25193,18 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "OSC",
-		address: "0x60a640e2D10E020fee94217707bfa9543c8b59E0",
+		symbol: "OS",
+		address: "0xFdB29741F239a2406AE287913Ef12415160378d3",
 		decimals: 18
 	},
 	{
 		symbol: "OSC",
 		address: "0x24700A297960E8477Ce3CA6C58b70a7Af3410398",
+		decimals: 18
+	},
+	{
+		symbol: "OSC",
+		address: "0x60a640e2D10E020fee94217707bfa9543c8b59E0",
 		decimals: 18
 	},
 	{
@@ -24689,17 +25249,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "OUSD",
+		address: "0x2A8e1E676Ec238d8A992307B495b45B3fEAa5e86",
+		decimals: 18
+	},
+	{
+		symbol: "OUSD",
 		address: "0x7c0AFD49D40Ec308d49E2926E5c99B037d54EE7e",
 		decimals: 18
 	},
 	{
 		symbol: "OUSD",
 		address: "0xD2d01dd6Aa7a2F5228c7c17298905A7C7E1dfE81",
-		decimals: 18
-	},
-	{
-		symbol: "OUSD",
-		address: "0x2A8e1E676Ec238d8A992307B495b45B3fEAa5e86",
 		decimals: 18
 	},
 	{
@@ -24794,12 +25354,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PAID",
-		address: "0x8c8687fC965593DFb2F0b4EAeFD55E9D8df348df",
+		address: "0x1614F18Fc94f47967A3Fbe5FfcD46d4e7Da3D787",
 		decimals: 18
 	},
 	{
 		symbol: "PAID",
-		address: "0x1614F18Fc94f47967A3Fbe5FfcD46d4e7Da3D787",
+		address: "0x8c8687fC965593DFb2F0b4EAeFD55E9D8df348df",
 		decimals: 18
 	},
 	{
@@ -24824,12 +25384,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PAMP",
-		address: "0xF0FAC7104aAC544e4a7CE1A55ADF2B5a25c65bD1",
+		address: "0xCe833222051740Aa5427D089A46fF3918763107f",
 		decimals: 18
 	},
 	{
 		symbol: "PAMP",
-		address: "0xCe833222051740Aa5427D089A46fF3918763107f",
+		address: "0xF0FAC7104aAC544e4a7CE1A55ADF2B5a25c65bD1",
+		decimals: 18
+	},
+	{
+		symbol: "PAN",
+		address: "0x03b828cCA6594dc0a21c814bd8c944104BB03223",
 		decimals: 18
 	},
 	{
@@ -24840,11 +25405,6 @@ var tokens$5 = [
 	{
 		symbol: "PAN",
 		address: "0xD56daC73A4d6766464b38ec6D91eB45Ce7457c44",
-		decimals: 18
-	},
-	{
-		symbol: "PAN",
-		address: "0x03b828cCA6594dc0a21c814bd8c944104BB03223",
 		decimals: 18
 	},
 	{
@@ -24859,12 +25419,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PAR",
-		address: "0x68037790A0229e9Ce6EaA8A99ea92964106C4703",
+		address: "0x1BeEF31946fbbb40B877a72E4ae04a8D1A5Cee06",
 		decimals: 18
 	},
 	{
 		symbol: "PAR",
-		address: "0x1BeEF31946fbbb40B877a72E4ae04a8D1A5Cee06",
+		address: "0x68037790A0229e9Ce6EaA8A99ea92964106C4703",
 		decimals: 18
 	},
 	{
@@ -24879,12 +25439,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PASS",
-		address: "0x77761e63C05aeE6648FDaeaa9B94248351AF9bCd",
+		address: "0x6C4522F0035bED2180B40f4c5d9DbAab64B41325",
 		decimals: 18
 	},
 	{
 		symbol: "PASS",
-		address: "0x6C4522F0035bED2180B40f4c5d9DbAab64B41325",
+		address: "0x77761e63C05aeE6648FDaeaa9B94248351AF9bCd",
 		decimals: 18
 	},
 	{
@@ -24933,11 +25493,6 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "PAX",
-		address: "0x8E870D67F660D95d5be530380D0eC0bd388289E1",
-		decimals: 18
-	},
-	{
 		symbol: "PAXCURVE",
 		address: "0xD905e2eaeBe188fc92179b6350807D8bd91Db0D8",
 		decimals: 18
@@ -24959,12 +25514,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PAY",
-		address: "0xB97048628DB6B661D4C2aA833e95Dbe1A905B280",
+		address: "0x3CA660B3200A89641aBF895CF051eb42dAfb01ef",
 		decimals: 18
 	},
 	{
 		symbol: "PAY",
-		address: "0x3CA660B3200A89641aBF895CF051eb42dAfb01ef",
+		address: "0xB97048628DB6B661D4C2aA833e95Dbe1A905B280",
 		decimals: 18
 	},
 	{
@@ -24994,13 +25549,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PBC",
-		address: "0xad808ba4Eb817A968889ec0e93130c4fDE8e71B8",
-		decimals: 8
+		address: "0x31DDd688D6CdA430aad84142b2cD8c019d88094D",
+		decimals: 18
 	},
 	{
 		symbol: "PBC",
-		address: "0x31DDd688D6CdA430aad84142b2cD8c019d88094D",
-		decimals: 18
+		address: "0xad808ba4Eb817A968889ec0e93130c4fDE8e71B8",
+		decimals: 8
 	},
 	{
 		symbol: "PBF.CX",
@@ -25084,12 +25639,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PCL",
-		address: "0x3618516F45CD3c913F81F9987AF41077932Bc40d",
+		address: "0x0F02e27745e3b6e9e1310d19469e2b5D7B5eC99A",
 		decimals: 8
 	},
 	{
 		symbol: "PCL",
-		address: "0x0F02e27745e3b6e9e1310d19469e2b5D7B5eC99A",
+		address: "0x3618516F45CD3c913F81F9987AF41077932Bc40d",
 		decimals: 8
 	},
 	{
@@ -25138,6 +25693,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "PDEX",
+		address: "0xF59ae934f6fe444afC309586cC60a84a0F89Aaea",
+		decimals: 18
+	},
+	{
 		symbol: "PDF",
 		address: "0x6CcD05F73a54359A257fc5649c598A3DE75905e7",
 		decimals: 18
@@ -25164,11 +25724,6 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PEAK",
-		address: "0xA2A8Dec9d963e2fE7a5aB8469586B07eF53bb505",
-		decimals: 18
-	},
-	{
-		symbol: "PEAK",
 		address: "0x630d98424eFe0Ea27fB1b3Ab7741907DFFEaAd78",
 		decimals: 8
 	},
@@ -25176,6 +25731,11 @@ var tokens$5 = [
 		symbol: "PEAK",
 		address: "0x633eE3fbE5ffc05bD44Ecd8240732fF9ef9Dee1d",
 		decimals: 8
+	},
+	{
+		symbol: "PEAK",
+		address: "0xA2A8Dec9d963e2fE7a5aB8469586B07eF53bb505",
+		decimals: 18
 	},
 	{
 		symbol: "PEC",
@@ -25393,13 +25953,13 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "Pigx",
-		address: "0x86F654CEBb9bAE068d0C4398D1E337b351E6523B",
+		symbol: "PIGX",
+		address: "0x47E820dF943170b0e31F9E18ECD5bDd67b77FF1f",
 		decimals: 18
 	},
 	{
-		symbol: "PIGX",
-		address: "0x47E820dF943170b0e31F9E18ECD5bDd67b77FF1f",
+		symbol: "Pigx",
+		address: "0x86F654CEBb9bAE068d0C4398D1E337b351E6523B",
 		decimals: 18
 	},
 	{
@@ -25414,12 +25974,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PIPT",
-		address: "0xb2B9335791346E94245DCd316A9C9ED486E6dD7f",
+		address: "0x26607aC599266b21d13c7aCF7942c7701a8b699c",
 		decimals: 18
 	},
 	{
 		symbol: "PIPT",
-		address: "0x26607aC599266b21d13c7aCF7942c7701a8b699c",
+		address: "0xb2B9335791346E94245DCd316A9C9ED486E6dD7f",
 		decimals: 18
 	},
 	{
@@ -25494,12 +26054,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PLA",
+		address: "0x0198f46f520F33cd4329bd4bE380a25a90536CD5",
+		decimals: 18
+	},
+	{
+		symbol: "PLA",
 		address: "0x307d45Afbb7E84F82ef3D251A6bb0F00Edf632E4",
 		decimals: 18
 	},
 	{
 		symbol: "PLA",
-		address: "0x8c32E8c6487C35DEfF3d65bcDA73f86Db8a1Fa67",
+		address: "0x3a4f40631a4f906c2BaD353Ed06De7A5D3fCb430",
 		decimals: 18
 	},
 	{
@@ -25509,7 +26074,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PLA",
-		address: "0x0198f46f520F33cd4329bd4bE380a25a90536CD5",
+		address: "0x8c32E8c6487C35DEfF3d65bcDA73f86Db8a1Fa67",
 		decimals: 18
 	},
 	{
@@ -25524,13 +26089,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PLAY",
-		address: "0xE477292f1B3268687A29376116B0ED27A9c76170",
-		decimals: 18
+		address: "0x6F6DEb5db0C4994A8283A01D6CFeEB27Fc3bBe9C",
+		decimals: 0
 	},
 	{
 		symbol: "PLAY",
-		address: "0x6F6DEb5db0C4994A8283A01D6CFeEB27Fc3bBe9C",
-		decimals: 0
+		address: "0xE477292f1B3268687A29376116B0ED27A9c76170",
+		decimals: 18
 	},
 	{
 		symbol: "PLBT",
@@ -25554,12 +26119,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PLG",
-		address: "0xBa069Ee53b8B531F3AB117c92ca09A204C9E6285",
+		address: "0x85ca6710D0F1D511d130f6935eDDA88ACBD921bD",
 		decimals: 18
 	},
 	{
 		symbol: "PLG",
-		address: "0x85ca6710D0F1D511d130f6935eDDA88ACBD921bD",
+		address: "0xBa069Ee53b8B531F3AB117c92ca09A204C9E6285",
 		decimals: 18
 	},
 	{
@@ -25599,12 +26164,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PLTC",
-		address: "0x5979F50f1D4c08f9A53863C2f39A7B0492C38d0f",
+		address: "0x429D83Bb0DCB8cdd5311e34680ADC8B12070a07f",
 		decimals: 18
 	},
 	{
 		symbol: "PLTC",
-		address: "0x429D83Bb0DCB8cdd5311e34680ADC8B12070a07f",
+		address: "0x5979F50f1D4c08f9A53863C2f39A7B0492C38d0f",
 		decimals: 18
 	},
 	{
@@ -25619,13 +26184,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PLX",
-		address: "0xb3203DB25a01fa7950a860B42b899Ad7Da52DDD6",
-		decimals: 8
+		address: "0x59BE937f05cf2c406b61c42C6c82a093fA54edfE",
+		decimals: 9
 	},
 	{
 		symbol: "PLX",
-		address: "0x59BE937f05cf2c406b61c42C6c82a093fA54edfE",
-		decimals: 9
+		address: "0xb3203DB25a01fa7950a860B42b899Ad7Da52DDD6",
+		decimals: 8
 	},
 	{
 		symbol: "PMA",
@@ -25678,13 +26243,18 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "PNT",
-		address: "0x89Ab32156e46F46D02ade3FEcbe5Fc4243B9AAeD",
+		symbol: "PNODE",
+		address: "0xAF691508BA57d416f895e32a1616dA1024e882D2",
 		decimals: 18
 	},
 	{
 		symbol: "PNT",
 		address: "0x53066cdDBc0099eb6c96785d9b3DF2AAeEDE5DA3",
+		decimals: 18
+	},
+	{
+		symbol: "PNT",
+		address: "0x89Ab32156e46F46D02ade3FEcbe5Fc4243B9AAeD",
 		decimals: 18
 	},
 	{
@@ -25764,13 +26334,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "POOL",
-		address: "0x779B7b713C86e3E6774f5040D9cCC2D43ad375F8",
-		decimals: 8
+		address: "0x0cEC1A9154Ff802e7934Fc916Ed7Ca50bDE6844e",
+		decimals: 18
 	},
 	{
 		symbol: "POOL",
-		address: "0x0cEC1A9154Ff802e7934Fc916Ed7Ca50bDE6844e",
-		decimals: 18
+		address: "0x779B7b713C86e3E6774f5040D9cCC2D43ad375F8",
+		decimals: 8
 	},
 	{
 		symbol: "POOLZ",
@@ -25894,12 +26464,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PRE",
-		address: "0xEC213F83defB583af3A000B1c0ada660b1902A0F",
+		address: "0x88A3E4F35D64aAD41A6d4030ac9AFE4356cB84fA",
 		decimals: 18
 	},
 	{
 		symbol: "PRE",
-		address: "0x88A3E4F35D64aAD41A6d4030ac9AFE4356cB84fA",
+		address: "0xEC213F83defB583af3A000B1c0ada660b1902A0F",
+		decimals: 18
+	},
+	{
+		symbol: "PREMIA",
+		address: "0x6399C842dD2bE3dE30BF99Bc7D1bBF6Fa3650E70",
 		decimals: 18
 	},
 	{
@@ -25999,17 +26574,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PRPS",
+		address: "0xE40C374d8805b1dD58CDcEFf998A2F6920Cb52FD",
+		decimals: 18
+	},
+	{
+		symbol: "PRPS",
 		address: "0xb628Bc994e39CE264ECa6f6EE1620909816A9F12",
 		decimals: 18
 	},
 	{
 		symbol: "PRQ",
-		address: "0xFE2786D7D1cCAb8B015f6Ef7392F67d778f8d8D7",
+		address: "0x362bc847A3a9637d3af6624EeC853618a43ed7D2",
 		decimals: 18
 	},
 	{
 		symbol: "PRQ",
-		address: "0x362bc847A3a9637d3af6624EeC853618a43ed7D2",
+		address: "0xFE2786D7D1cCAb8B015f6Ef7392F67d778f8d8D7",
 		decimals: 18
 	},
 	{
@@ -26019,12 +26599,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PRS",
-		address: "0xe0D95530820aAfc51b1d98023AA1Ff000b78d8b2",
+		address: "0x163733bcc28dbf26B41a8CfA83e369b5B3af741b",
 		decimals: 18
 	},
 	{
 		symbol: "PRS",
-		address: "0x163733bcc28dbf26B41a8CfA83e369b5B3af741b",
+		address: "0xe0D95530820aAfc51b1d98023AA1Ff000b78d8b2",
 		decimals: 18
 	},
 	{
@@ -26035,6 +26615,11 @@ var tokens$5 = [
 	{
 		symbol: "PRSTX",
 		address: "0x00ad22AB1006FC282674887aFF1114e5aD14077d",
+		decimals: 18
+	},
+	{
+		symbol: "PRT",
+		address: "0x6D0F5149c502faf215C89ab306ec3E50b15e2892",
 		decimals: 18
 	},
 	{
@@ -26064,12 +26649,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PSK",
-		address: "0x3F84c4184b35c488F7fe4A12469610C9B1CB03C9",
+		address: "0x1c5F43710a1776b0Ea7191b7Ead75D4B98D69858",
 		decimals: 18
 	},
 	{
 		symbol: "PSK",
-		address: "0x1c5F43710a1776b0Ea7191b7Ead75D4B98D69858",
+		address: "0x3F84c4184b35c488F7fe4A12469610C9B1CB03C9",
 		decimals: 18
 	},
 	{
@@ -26079,23 +26664,23 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PST",
-		address: "0xE3feDAeCD47aa8EAb6b23227b0eE56F092C967a9",
+		address: "0x5d4ABC77B8405aD177d8ac6682D584ecbFd46CEc",
 		decimals: 18
 	},
 	{
 		symbol: "PST",
-		address: "0x5d4ABC77B8405aD177d8ac6682D584ecbFd46CEc",
+		address: "0xE3feDAeCD47aa8EAb6b23227b0eE56F092C967a9",
+		decimals: 18
+	},
+	{
+		symbol: "PT",
+		address: "0x66497A283E0a007bA3974e837784C6AE323447de",
 		decimals: 18
 	},
 	{
 		symbol: "PT",
 		address: "0xE26d6d83d8607AB016E3f8a5B00D91B0C9731840",
 		decimals: 8
-	},
-	{
-		symbol: "PT",
-		address: "0x66497A283E0a007bA3974e837784C6AE323447de",
-		decimals: 18
 	},
 	{
 		symbol: "PTC",
@@ -26159,13 +26744,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PTS",
-		address: "0x540e5fFF293f523Acd26291b5bC7ac5713991FEb",
-		decimals: 8
+		address: "0x16b00b9d7b54406625EED1044E009b5a4B3AD710",
+		decimals: 18
 	},
 	{
 		symbol: "PTS",
-		address: "0x16b00b9d7b54406625EED1044E009b5a4B3AD710",
-		decimals: 18
+		address: "0x540e5fFF293f523Acd26291b5bC7ac5713991FEb",
+		decimals: 8
 	},
 	{
 		symbol: "PTT",
@@ -26203,13 +26788,23 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "PUSD",
+		address: "0x38D389C300357A26Beec198F3893fbA54FDe69C5",
+		decimals: 18
+	},
+	{
 		symbol: "pUSD",
 		address: "0x93d3296cac208422BF587c3597D116e809870f2b",
 		decimals: 8
 	},
 	{
-		symbol: "PUSD",
-		address: "0x38D389C300357A26Beec198F3893fbA54FDe69C5",
+		symbol: "PUSH",
+		address: "0xf418588522d5dd018b425E472991E52EBBeEEEEE",
+		decimals: 18
+	},
+	{
+		symbol: "PUSSY",
+		address: "0x9196E18Bc349B1F64Bc08784eaE259525329a1ad",
 		decimals: 18
 	},
 	{
@@ -26264,13 +26859,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "PXL",
-		address: "0xF88951D7B676798705fd3a362ba5B1DBca2B233b",
-		decimals: 18
+		address: "0x9BC0B36CdEdADB9ae906F53bdEa6deBe20b81b8E",
+		decimals: 0
 	},
 	{
 		symbol: "PXL",
-		address: "0x9BC0B36CdEdADB9ae906F53bdEa6deBe20b81b8E",
-		decimals: 0
+		address: "0xF88951D7B676798705fd3a362ba5B1DBca2B233b",
+		decimals: 18
 	},
 	{
 		symbol: "PXP",
@@ -26464,13 +27059,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "QTC",
-		address: "0x923C90B98ee834D118c85DDf44906EE1769Df648",
-		decimals: 6
+		address: "0x19131a8aE42E32c747c1EAd318Fadb98B0be45B7",
+		decimals: 18
 	},
 	{
 		symbol: "QTC",
-		address: "0x19131a8aE42E32c747c1EAd318Fadb98B0be45B7",
-		decimals: 18
+		address: "0x923C90B98ee834D118c85DDf44906EE1769Df648",
+		decimals: 6
 	},
 	{
 		symbol: "QTCON",
@@ -26578,6 +27173,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "RAINI",
+		address: "0xeB953eDA0DC65e3246f43DC8fa13f35623bDd5eD",
+		decimals: 18
+	},
+	{
 		symbol: "RAISE",
 		address: "0x10bA8C420e912bF07BEdaC03Aa6908720db04e0c",
 		decimals: 18
@@ -26615,6 +27215,11 @@ var tokens$5 = [
 	{
 		symbol: "RARE",
 		address: "0x93dfaf57D986B9cA77Df9376c50878E013D9c7C8",
+		decimals: 18
+	},
+	{
+		symbol: "RARE",
+		address: "0xba5BDe662c17e2aDFF1075610382B9B691296350",
 		decimals: 18
 	},
 	{
@@ -26674,7 +27279,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "RBC",
-		address: "0xF5078213B8D39E0eEC2011d9486C17ddF07eA003",
+		address: "0xA4EED63db85311E22dF4473f87CcfC3DaDCFA3E3",
 		decimals: 18
 	},
 	{
@@ -26684,7 +27289,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "RBC",
-		address: "0xA4EED63db85311E22dF4473f87CcfC3DaDCFA3E3",
+		address: "0xF5078213B8D39E0eEC2011d9486C17ddF07eA003",
 		decimals: 18
 	},
 	{
@@ -26794,12 +27399,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "REAL",
-		address: "0x9214eC02CB71CbA0ADA6896b8dA260736a67ab10",
+		address: "0x6b4389Afb3e243A65668B7311fA9Ef092A8a3B64",
 		decimals: 18
 	},
 	{
 		symbol: "REAL",
-		address: "0x6b4389Afb3e243A65668B7311fA9Ef092A8a3B64",
+		address: "0x9214eC02CB71CbA0ADA6896b8dA260736a67ab10",
 		decimals: 18
 	},
 	{
@@ -26949,13 +27554,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "RES",
-		address: "0xEBBBE2ae55C9B2E21B09239362f3eee69455934d",
-		decimals: 8
+		address: "0x0a9f693FcE6F00A51A8e0db4351B5a8078B4242e",
+		decimals: 5
 	},
 	{
 		symbol: "RES",
-		address: "0x0a9f693FcE6F00A51A8e0db4351B5a8078B4242e",
-		decimals: 5
+		address: "0xEBBBE2ae55C9B2E21B09239362f3eee69455934d",
+		decimals: 8
 	},
 	{
 		symbol: "RESH",
@@ -26971,6 +27576,11 @@ var tokens$5 = [
 		symbol: "REV",
 		address: "0x2ef52Ed7De8c5ce03a4eF0efbe9B7450F2D7Edc9",
 		decimals: 6
+	},
+	{
+		symbol: "REVO",
+		address: "0x155040625D7ae3e9caDA9a73E3E44f76D3Ed1409",
+		decimals: 18
 	},
 	{
 		symbol: "REVV",
@@ -27004,13 +27614,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "RFR",
-		address: "0xe0bDaafD0aAb238c55d68ad54E616305D4a21772",
-		decimals: 9
+		address: "0xd0929d411954c47438dc1d871dd6081F5C5e149c",
+		decimals: 4
 	},
 	{
 		symbol: "RFR",
-		address: "0xd0929d411954c47438dc1d871dd6081F5C5e149c",
-		decimals: 4
+		address: "0xe0bDaafD0aAb238c55d68ad54E616305D4a21772",
+		decimals: 9
 	},
 	{
 		symbol: "RFUEL",
@@ -27248,6 +27858,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "ROCKI",
+		address: "0xFf44b937788215ecA197BAaf9AF69dbdC214aa04",
+		decimals: 18
+	},
+	{
 		symbol: "ROCKS",
 		address: "0x0829d2d5cC09d3d341E813c821B0cfAE272D9fb2",
 		decimals: 18
@@ -27399,12 +28014,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "RSV",
-		address: "0x1C5857e110CD8411054660F60B5De6a6958CfAE2",
+		address: "0x196f4727526eA7FB1e17b2071B3d8eAA38486988",
 		decimals: 18
 	},
 	{
 		symbol: "RSV",
-		address: "0x196f4727526eA7FB1e17b2071B3d8eAA38486988",
+		address: "0x1C5857e110CD8411054660F60B5De6a6958CfAE2",
 		decimals: 18
 	},
 	{
@@ -27484,12 +28099,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "RUNE",
-		address: "0xdEE02D94be4929d26f67B64Ada7aCf1914007F10",
+		address: "0x3155BA85D5F96b2d030a4966AF206230e46849cb",
 		decimals: 18
 	},
 	{
 		symbol: "RUNE",
-		address: "0x3155BA85D5F96b2d030a4966AF206230e46849cb",
+		address: "0xdEE02D94be4929d26f67B64Ada7aCf1914007F10",
+		decimals: 18
+	},
+	{
+		symbol: "RVP",
+		address: "0x17EF75AA22dD5f6C2763b8304Ab24f40eE54D48a",
 		decimals: 18
 	},
 	{
@@ -27639,13 +28259,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SAT",
-		address: "0xc56b13ebbCFfa67cFb7979b900b736b3fb480D78",
-		decimals: 8
+		address: "0x1F0F468Ee03A6D99CD8A09dd071494a83Dc1c0e5",
+		decimals: 4
 	},
 	{
 		symbol: "SAT",
-		address: "0x1F0F468Ee03A6D99CD8A09dd071494a83Dc1c0e5",
-		decimals: 4
+		address: "0xc56b13ebbCFfa67cFb7979b900b736b3fb480D78",
+		decimals: 8
 	},
 	{
 		symbol: "SATA",
@@ -27688,13 +28308,13 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
-		symbol: "SBNB",
-		address: "0x617aeCB6137B5108D1E7D4918e3725C8cEbdB848",
+		symbol: "sBNB",
+		address: "0x013AE307648f529aa72c5767A334DDd37aaB43c3",
 		decimals: 18
 	},
 	{
-		symbol: "sBNB",
-		address: "0x013AE307648f529aa72c5767A334DDd37aaB43c3",
+		symbol: "SBNB",
+		address: "0x617aeCB6137B5108D1E7D4918e3725C8cEbdB848",
 		decimals: 18
 	},
 	{
@@ -27709,12 +28329,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SBTC",
-		address: "0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6",
+		address: "0xb8e103b60A33597136EA9511F46b6dBeB643a3a5",
 		decimals: 18
 	},
 	{
 		symbol: "SBTC",
-		address: "0xb8e103b60A33597136EA9511F46b6dBeB643a3a5",
+		address: "0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6",
 		decimals: 18
 	},
 	{
@@ -27744,7 +28364,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SCC",
-		address: "0xe6b75a1960f91Bfa7010DEC8543685eaD67F8cFf",
+		address: "0x355a458d555151D3B27F94227960Ade1504E526a",
 		decimals: 18
 	},
 	{
@@ -27759,12 +28379,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SCC",
-		address: "0x355a458d555151D3B27F94227960Ade1504E526a",
+		address: "0x86696431D6ACA9bae5CE6536ECF5D437F2e6Dba2",
 		decimals: 18
 	},
 	{
 		symbol: "SCC",
-		address: "0x86696431D6ACA9bae5CE6536ECF5D437F2e6Dba2",
+		address: "0xe6b75a1960f91Bfa7010DEC8543685eaD67F8cFf",
 		decimals: 18
 	},
 	{
@@ -27853,6 +28473,11 @@ var tokens$5 = [
 		decimals: 4
 	},
 	{
+		symbol: "SDAO",
+		address: "0x993864E43Caa7F7F12953AD6fEb1d1Ca635B875F",
+		decimals: 18
+	},
+	{
 		symbol: "SDASH",
 		address: "0xfE33ae95A9f0DA8A845aF33516EDc240DCD711d6",
 		decimals: 18
@@ -27908,6 +28533,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "SEFI",
+		address: "0x773258b03c730F84aF10dFcB1BfAa7487558B8Ac",
+		decimals: 6
+	},
+	{
 		symbol: "SEL",
 		address: "0x2974963051F3A3237e16841dEa7126250098D8F5",
 		decimals: 0
@@ -27915,11 +28545,6 @@ var tokens$5 = [
 	{
 		symbol: "SELF",
 		address: "0x67ab11058eF23D0a19178f61A050D3c38F81Ae21",
-		decimals: 18
-	},
-	{
-		symbol: "SELF",
-		address: "0xd4dd48fa7eCa5CdE1B31F780774C9563186F91C0",
 		decimals: 18
 	},
 	{
@@ -27933,6 +28558,11 @@ var tokens$5 = [
 		decimals: 6
 	},
 	{
+		symbol: "SELF",
+		address: "0xd4dd48fa7eCa5CdE1B31F780774C9563186F91C0",
+		decimals: 18
+	},
+	{
 		symbol: "SEMI",
 		address: "0x6D7917864003a9bb13CBbEC8F1CdD4E36dDf6fc8",
 		decimals: 18
@@ -27943,14 +28573,14 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "SENSE",
-		address: "0x6745fAB6801e376cD24F03572B9C9B0D4EdDDCcf",
-		decimals: 8
-	},
-	{
 		symbol: "sense",
 		address: "0x4cA74185532DC1789527194e5B9c866dD33F4E82",
 		decimals: 18
+	},
+	{
+		symbol: "SENSE",
+		address: "0x6745fAB6801e376cD24F03572B9C9B0D4EdDDCcf",
+		decimals: 8
 	},
 	{
 		symbol: "SENSO",
@@ -27984,11 +28614,6 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SET",
-		address: "0xe06eda7435bA749b047380CEd49121ddE93334Ae",
-		decimals: 0
-	},
-	{
-		symbol: "SET",
 		address: "0x0a2D9370cF74Da3FD3dF5d764e394Ca8205C50B6",
 		decimals: 18
 	},
@@ -27996,6 +28621,11 @@ var tokens$5 = [
 		symbol: "SET",
 		address: "0xFA75b65E52A6CBC5503f45f4AbBA2C5df4688875",
 		decimals: 18
+	},
+	{
+		symbol: "SET",
+		address: "0xe06eda7435bA749b047380CEd49121ddE93334Ae",
+		decimals: 0
 	},
 	{
 		symbol: "SETC",
@@ -28010,6 +28640,11 @@ var tokens$5 = [
 	{
 		symbol: "SETH",
 		address: "0x78B039921E84E726EB72E7b1212bb35504c645cA",
+		decimals: 18
+	},
+	{
+		symbol: "SETH2",
+		address: "0xFe2e637202056d30016725477c5da089Ab0A043A",
 		decimals: 18
 	},
 	{
@@ -28119,8 +28754,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SGT",
-		address: "0xd248B0D48E44aaF9c49aea0312be7E13a6dc1468",
-		decimals: 1
+		address: "0x616C281CD8effF8c0354723BE399c809e97A7bf4",
+		decimals: 18
 	},
 	{
 		symbol: "SGT",
@@ -28129,8 +28764,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SGT",
-		address: "0x616C281CD8effF8c0354723BE399c809e97A7bf4",
-		decimals: 18
+		address: "0xd248B0D48E44aaF9c49aea0312be7E13a6dc1468",
+		decimals: 1
 	},
 	{
 		symbol: "SHAKE",
@@ -28174,12 +28809,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SHFT",
+		address: "0xb17C88bDA07D28B3838E0c1dE6a30eAfBCF52D85",
+		decimals: 18
+	},
+	{
+		symbol: "SHFT",
 		address: "0xcba3eAe7f55D0F423AF43cC85E67ab0fBF87B61C",
 		decimals: 18
 	},
 	{
 		symbol: "SHIB",
 		address: "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
+		decimals: 18
+	},
+	{
+		symbol: "SHIELD",
+		address: "0x60b3BC37593853c04410c4F07fE4D6748245BF77",
 		decimals: 18
 	},
 	{
@@ -28219,12 +28864,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SHR",
-		address: "0xd98F75b1A3261dab9eEd4956c93F33749027a964",
+		address: "0xEE5fE244406F35d9B4dDb488a64D51456630beFC",
 		decimals: 2
 	},
 	{
 		symbol: "SHR",
-		address: "0xEE5fE244406F35d9B4dDb488a64D51456630beFC",
+		address: "0xd98F75b1A3261dab9eEd4956c93F33749027a964",
 		decimals: 2
 	},
 	{
@@ -28288,6 +28933,11 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
+		symbol: "SIH",
+		address: "0x6D728fF862Bfe74be2aba30537E992A24F259a22",
+		decimals: 18
+	},
+	{
 		symbol: "SILK",
 		address: "0x4C1e085d8c2D2a8377834d0D7b38f12cc5b86898",
 		decimals: 18
@@ -28349,13 +28999,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SKE",
-		address: "0xD3f89750010eAE391d2e40e3B3F9d638C7635279",
-		decimals: 18
+		address: "0x13DB74B3cf512F65C4b91683940B4f3955E05085",
+		decimals: 8
 	},
 	{
 		symbol: "SKE",
-		address: "0x13DB74B3cf512F65C4b91683940B4f3955E05085",
-		decimals: 8
+		address: "0xD3f89750010eAE391d2e40e3B3F9d638C7635279",
+		decimals: 18
 	},
 	{
 		symbol: "SKEIN",
@@ -28383,18 +29033,23 @@ var tokens$5 = [
 		decimals: 6
 	},
 	{
+		symbol: "SKING",
+		address: "0x4e8a9D0BF525d78fd9E0c88710099f227F6924cf",
+		decimals: 9
+	},
+	{
 		symbol: "SKL",
 		address: "0x00c83aeCC790e8a4453e5dD3B0B4b3680501a7A7",
 		decimals: 18
 	},
 	{
 		symbol: "SKM",
-		address: "0xd99b8A7fA48E25Cce83B81812220A3E03Bf64e5f",
+		address: "0x048Fe49BE32adfC9ED68C37D32B5ec9Df17b3603",
 		decimals: 18
 	},
 	{
 		symbol: "SKM",
-		address: "0x048Fe49BE32adfC9ED68C37D32B5ec9Df17b3603",
+		address: "0xd99b8A7fA48E25Cce83B81812220A3E03Bf64e5f",
 		decimals: 18
 	},
 	{
@@ -28419,7 +29074,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SKRP",
-		address: "0xfdFE8b7aB6CF1bD1E3d14538Ef40686296C42052",
+		address: "0x324A48eBCbB46e61993931eF9D35F6697CD2901b",
 		decimals: 18
 	},
 	{
@@ -28429,18 +29084,18 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SKRP",
-		address: "0x324A48eBCbB46e61993931eF9D35F6697CD2901b",
+		address: "0xfdFE8b7aB6CF1bD1E3d14538Ef40686296C42052",
+		decimals: 18
+	},
+	{
+		symbol: "SKT",
+		address: "0x82bdfb4C6F488fC47700ceF12C448a2F13F8fF4F",
 		decimals: 18
 	},
 	{
 		symbol: "SKT",
 		address: "0xA7c8d7a1C894E51dbB7c680B5B1dBdc845BFbDAB",
 		decimals: 5
-	},
-	{
-		symbol: "SKT",
-		address: "0x82bdfb4C6F488fC47700ceF12C448a2F13F8fF4F",
-		decimals: 18
 	},
 	{
 		symbol: "SKULL",
@@ -28479,13 +29134,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SLINK",
-		address: "0xbBC455cb4F1B9e4bFC4B73970d360c8f032EfEE6",
-		decimals: 18
+		address: "0x10Bae51262490B4f4AF41e12eD52A0E744c1137A",
+		decimals: 9
 	},
 	{
 		symbol: "SLINK",
-		address: "0x10Bae51262490B4f4AF41e12eD52A0E744c1137A",
-		decimals: 9
+		address: "0xbBC455cb4F1B9e4bFC4B73970d360c8f032EfEE6",
+		decimals: 18
 	},
 	{
 		symbol: "SLM",
@@ -28514,13 +29169,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SLT",
-		address: "0x851017523AE205adc9195e7F97D029f4Cfe7794c",
-		decimals: 9
+		address: "0x7A5fF295Dc8239d5C2374E4D894202aAF029Cab6",
+		decimals: 3
 	},
 	{
 		symbol: "SLT",
-		address: "0x7A5fF295Dc8239d5C2374E4D894202aAF029Cab6",
-		decimals: 3
+		address: "0x851017523AE205adc9195e7F97D029f4Cfe7794c",
+		decimals: 9
 	},
 	{
 		symbol: "SLT",
@@ -28599,7 +29254,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SMT",
-		address: "0x7aa82EC1cbD3769d2Ea55cD3B7957b786d0EFF49",
+		address: "0x2dCFAAc11c9EebD8C6C42103Fe9e2a6AD237aF27",
+		decimals: 18
+	},
+	{
+		symbol: "SMT",
+		address: "0x55F93985431Fc9304077687a35A1BA103dC1e081",
 		decimals: 18
 	},
 	{
@@ -28609,12 +29269,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SMT",
-		address: "0x55F93985431Fc9304077687a35A1BA103dC1e081",
+		address: "0x7aa82EC1cbD3769d2Ea55cD3B7957b786d0EFF49",
 		decimals: 18
 	},
 	{
 		symbol: "SMT",
-		address: "0x2dCFAAc11c9EebD8C6C42103Fe9e2a6AD237aF27",
+		address: "0xB17548c7B510427baAc4e267BEa62e800b247173",
 		decimals: 18
 	},
 	{
@@ -28809,11 +29469,6 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SOUL",
-		address: "0xBb1f24C0c1554b9990222f036b0AaD6Ee4CAec29",
-		decimals: 18
-	},
-	{
-		symbol: "SOUL",
 		address: "0x72DC3D52b7EF107a7CFFb6953eaa8A2aD6a204Cd",
 		decimals: 6
 	},
@@ -28821,6 +29476,11 @@ var tokens$5 = [
 		symbol: "SOUL",
 		address: "0x79C75E2e8720B39e258F41c37cC4f309E0b0fF80",
 		decimals: 8
+	},
+	{
+		symbol: "SOUL",
+		address: "0xBb1f24C0c1554b9990222f036b0AaD6Ee4CAec29",
+		decimals: 18
 	},
 	{
 		symbol: "SOVC",
@@ -28864,12 +29524,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SPAZ",
-		address: "0x8F9bfe5b6A5C3fEa8c64ad41a5Cf6f60Ec4aa47c",
+		address: "0x810908B285f85Af668F6348cD8B26D76B3EC12e1",
 		decimals: 8
 	},
 	{
 		symbol: "SPAZ",
-		address: "0x810908B285f85Af668F6348cD8B26D76B3EC12e1",
+		address: "0x8F9bfe5b6A5C3fEa8c64ad41a5Cf6f60Ec4aa47c",
 		decimals: 8
 	},
 	{
@@ -28924,13 +29584,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SPICE",
-		address: "0x1fDaB294EDA5112B7d066ED8F2E4E562D5bCc664",
-		decimals: 18
+		address: "0x0324dd195D0Cd53F9F07bEe6a48eE7a20bad738f",
+		decimals: 8
 	},
 	{
 		symbol: "SPICE",
-		address: "0x0324dd195D0Cd53F9F07bEe6a48eE7a20bad738f",
-		decimals: 8
+		address: "0x1fDaB294EDA5112B7d066ED8F2E4E562D5bCc664",
+		decimals: 18
 	},
 	{
 		symbol: "SPIKE",
@@ -29133,6 +29793,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "STACK",
+		address: "0x56A86d648c435DC707c8405B78e2Ae8eB4E60Ba4",
+		decimals: 18
+	},
+	{
 		symbol: "STACS",
 		address: "0x286708f069225905194673755F12359e6afF6FE1",
 		decimals: 18
@@ -29153,19 +29818,24 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "STARL",
+		address: "0x8E6cd950Ad6ba651F6DD608Dc70e5886B1AA6B24",
+		decimals: 18
+	},
+	{
 		symbol: "STASH",
 		address: "0x965F109d31CCb77005858DEfaE0Ebaf7B4381652",
 		decimals: 18
 	},
 	{
 		symbol: "STB",
-		address: "0x3154da898943Fc7151bc77F16E43C0C47b5E452d",
-		decimals: 18
+		address: "0x09BcA6eBAb05Ee2ae945BE4edA51393d94Bf7b99",
+		decimals: 4
 	},
 	{
 		symbol: "STB",
-		address: "0x09BcA6eBAb05Ee2ae945BE4edA51393d94Bf7b99",
-		decimals: 4
+		address: "0x3154da898943Fc7151bc77F16E43C0C47b5E452d",
+		decimals: 18
 	},
 	{
 		symbol: "STB",
@@ -29179,12 +29849,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "STC",
-		address: "0x9a005c9a89BD72a4Bd27721E7a09A3c11D2b03C4",
+		address: "0x629aEe55ed49581C33ab27f9403F7992A289ffd5",
 		decimals: 18
 	},
 	{
 		symbol: "STC",
-		address: "0x629aEe55ed49581C33ab27f9403F7992A289ffd5",
+		address: "0x9a005c9a89BD72a4Bd27721E7a09A3c11D2b03C4",
 		decimals: 18
 	},
 	{
@@ -29199,12 +29869,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "STETH",
-		address: "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
+		address: "0xDFe66B14D37C77F4E9b180cEb433d1b164f0281D",
 		decimals: 18
 	},
 	{
 		symbol: "STETH",
-		address: "0xDFe66B14D37C77F4E9b180cEb433d1b164f0281D",
+		address: "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
 		decimals: 18
 	},
 	{
@@ -29229,8 +29899,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "STM",
-		address: "0x302ce6674A16b54bA1B8A49FED64C471EdE6C174",
-		decimals: 0
+		address: "0x0E22734e078d6e399BCeE40a549DB591C4EA46cB",
+		decimals: 18
 	},
 	{
 		symbol: "STM",
@@ -29239,8 +29909,8 @@ var tokens$5 = [
 	},
 	{
 		symbol: "STM",
-		address: "0x0E22734e078d6e399BCeE40a549DB591C4EA46cB",
-		decimals: 18
+		address: "0x302ce6674A16b54bA1B8A49FED64C471EdE6C174",
+		decimals: 0
 	},
 	{
 		symbol: "STM.CX",
@@ -29258,13 +29928,23 @@ var tokens$5 = [
 		decimals: 4
 	},
 	{
-		symbol: "STONK",
-		address: "0xb60Fde5D798236fBF1e2697B2A0645380921FccF",
+		symbol: "STN",
+		address: "0xe63d6B308BCe0F6193AeC6b7E6eBa005f41e36AB",
+		decimals: 18
+	},
+	{
+		symbol: "STND",
+		address: "0x9040e237C3bF18347bb00957Dc22167D0f2b999d",
 		decimals: 18
 	},
 	{
 		symbol: "STONK",
 		address: "0xb4058411967D5046f3510943103805be61f0600E",
+		decimals: 18
+	},
+	{
+		symbol: "STONK",
+		address: "0xb60Fde5D798236fBF1e2697B2A0645380921FccF",
 		decimals: 18
 	},
 	{
@@ -29285,6 +29965,11 @@ var tokens$5 = [
 	{
 		symbol: "STORM",
 		address: "0xD0a4b8946Cb52f0661273bfbC6fD0E0C75Fc6433",
+		decimals: 18
+	},
+	{
+		symbol: "STOS",
+		address: "0x08c32b0726C5684024ea6e141C50aDe9690bBdcc",
 		decimals: 18
 	},
 	{
@@ -29348,8 +30033,8 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "sTRX",
-		address: "0xf2E08356588EC5cd9E437552Da87C0076b4970B0",
+		symbol: "STRX",
+		address: "0x0944d2C41FEF3088467287e208E5bBB622A0c09C",
 		decimals: 18
 	},
 	{
@@ -29358,8 +30043,8 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "STRX",
-		address: "0x0944d2C41FEF3088467287e208E5bBB622A0c09C",
+		symbol: "sTRX",
+		address: "0xf2E08356588EC5cd9E437552Da87C0076b4970B0",
 		decimals: 18
 	},
 	{
@@ -29438,8 +30123,8 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "SURF",
-		address: "0xEa319e87Cf06203DAe107Dd8E5672175e3Ee976c",
+		symbol: "SURE",
+		address: "0xcb86c6A22CB56B6cf40CaFEDb06BA0DF188a416E",
 		decimals: 18
 	},
 	{
@@ -29448,8 +30133,8 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "SUSD",
-		address: "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51",
+		symbol: "SURF",
+		address: "0xEa319e87Cf06203DAe107Dd8E5672175e3Ee976c",
 		decimals: 18
 	},
 	{
@@ -29458,8 +30143,18 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "SUSD",
+		address: "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51",
+		decimals: 18
+	},
+	{
 		symbol: "SUSHI",
 		address: "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2",
+		decimals: 18
+	},
+	{
+		symbol: "SUTER",
+		address: "0xAA2ce7Ae64066175E0B90497CE7d9c190c315DB4",
 		decimals: 18
 	},
 	{
@@ -29475,6 +30170,11 @@ var tokens$5 = [
 	{
 		symbol: "SVD",
 		address: "0xbdEB4b83251Fb146687fa19D1C660F99411eefe3",
+		decimals: 18
+	},
+	{
+		symbol: "SVS",
+		address: "0x7ca62545a380e7d71F8F5CFa14B9211002075930",
 		decimals: 18
 	},
 	{
@@ -29494,12 +30194,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "SWAP",
-		address: "0xCC4304A31d09258b0029eA7FE63d032f52e44EFe",
+		address: "0xC958e9FB59724f8b0927426a8836F1158F0d03cf",
 		decimals: 18
 	},
 	{
 		symbol: "SWAP",
-		address: "0xC958e9FB59724f8b0927426a8836F1158F0d03cf",
+		address: "0xCC4304A31d09258b0029eA7FE63d032f52e44EFe",
 		decimals: 18
 	},
 	{
@@ -29530,6 +30230,11 @@ var tokens$5 = [
 	{
 		symbol: "SWGB",
 		address: "0x92eF4FFBfe0Df030837b65d7FcCFE1ABd6549579",
+		decimals: 18
+	},
+	{
+		symbol: "SWINGBY",
+		address: "0x8287C7b963b405b7B8D467DB9d79eEC40625b13A",
 		decimals: 18
 	},
 	{
@@ -29793,6 +30498,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "TBC",
+		address: "0xeAF7D8395CCE52DAef138d39a1CEfA51b97C15aE",
+		decimals: 18
+	},
+	{
 		symbol: "TBC2",
 		address: "0xFACCD5Fc83c3E4C3c1AC1EF35D15adf06bCF209C",
 		decimals: 8
@@ -29854,27 +30564,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TCFX",
-		address: "0x36dCffe069a3F2878Fab2A46D81e83D462d0cBF7",
-		decimals: 18
-	},
-	{
-		symbol: "TCFX",
 		address: "0x031E0C6A7C91DF1BC171D33ccCc6988fd2DDEB6f",
 		decimals: 18
 	},
 	{
-		symbol: "TCH",
-		address: "0x9972A0F24194447E73a7e8b6CD26a52e02DDfAD5",
-		decimals: 0
-	},
-	{
-		symbol: "TCH",
-		address: "0x3B4B29C4c1872a60D09937686bD2b358Db9Dee8a",
+		symbol: "TCFX",
+		address: "0x36dCffe069a3F2878Fab2A46D81e83D462d0cBF7",
 		decimals: 18
 	},
 	{
 		symbol: "TCH",
-		address: "0xCd475371E39c0d94e82FCCc9dD0ea710D0dc0C0B",
+		address: "0x3B4B29C4c1872a60D09937686bD2b358Db9Dee8a",
 		decimals: 18
 	},
 	{
@@ -29884,7 +30584,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TCH",
+		address: "0x9972A0F24194447E73a7e8b6CD26a52e02DDfAD5",
+		decimals: 0
+	},
+	{
+		symbol: "TCH",
 		address: "0x9B39A0B97319a9bd5fed217c1dB7b030453bac91",
+		decimals: 18
+	},
+	{
+		symbol: "TCH",
+		address: "0xCd475371E39c0d94e82FCCc9dD0ea710D0dc0C0B",
 		decimals: 18
 	},
 	{
@@ -29924,6 +30634,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TCP",
+		address: "0x06576eB3B212d605B797dC15523d9Dc9F4F66DB4",
+		decimals: 18
+	},
+	{
+		symbol: "TCP",
 		address: "0x331A4589516EAE384eA5F557853AF6aF73B9534e",
 		decimals: 18
 	},
@@ -29949,13 +30664,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TDC",
-		address: "0xc769506C9411821f62AEBc13a98D002561FB3a1f",
-		decimals: 10
+		address: "0xDF18a53C2eeb81635C306c555D7A844e42bf7134",
+		decimals: 0
 	},
 	{
 		symbol: "TDC",
-		address: "0xDF18a53C2eeb81635C306c555D7A844e42bf7134",
-		decimals: 0
+		address: "0xc769506C9411821f62AEBc13a98D002561FB3a1f",
+		decimals: 10
 	},
 	{
 		symbol: "TDE",
@@ -29989,13 +30704,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TEAM",
-		address: "0xb05AF453011d7ad68a92b0065FFD9d1277eD2741",
-		decimals: 18
+		address: "0x1c79ab32C66aCAa1e9E81952B8AAa581B43e54E7",
+		decimals: 4
 	},
 	{
 		symbol: "TEAM",
-		address: "0x1c79ab32C66aCAa1e9E81952B8AAa581B43e54E7",
-		decimals: 4
+		address: "0xb05AF453011d7ad68a92b0065FFD9d1277eD2741",
+		decimals: 18
 	},
 	{
 		symbol: "TEAM.CX",
@@ -30119,17 +30834,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TGBP",
+		address: "0x00000000441378008EA67F4284A57932B1c000a5",
+		decimals: 18
+	},
+	{
+		symbol: "TGBP",
 		address: "0x106d8fB5775a57ae38A2FFB1441eb0963e09dBa7",
 		decimals: 18
 	},
 	{
 		symbol: "TGBP",
-		address: "0x7BD33c6DAf9ba1bdbC7652fabDC7B308f41668c5",
-		decimals: 18
-	},
-	{
-		symbol: "TGBP",
-		address: "0x00000000441378008EA67F4284A57932B1c000a5",
+		address: "0x137ceE63f06ca413Ca51D485fE98B0d12bAcFA14",
 		decimals: 18
 	},
 	{
@@ -30139,7 +30854,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TGBP",
-		address: "0x8511dC1Dece6FaF58f696AAC265Fef18Da7D7a05",
+		address: "0x7BD33c6DAf9ba1bdbC7652fabDC7B308f41668c5",
 		decimals: 18
 	},
 	{
@@ -30149,18 +30864,18 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TGBP",
-		address: "0x137ceE63f06ca413Ca51D485fE98B0d12bAcFA14",
-		decimals: 18
-	},
-	{
-		symbol: "TGT",
-		address: "0xf96AA656eC0E0Ac163590DB372B430Cf3C0d61cA",
+		address: "0x8511dC1Dece6FaF58f696AAC265Fef18Da7D7a05",
 		decimals: 18
 	},
 	{
 		symbol: "TGT",
 		address: "0xAc3Da587eac229C9896D919aBC235CA4Fd7f72c1",
 		decimals: 1
+	},
+	{
+		symbol: "TGT",
+		address: "0xf96AA656eC0E0Ac163590DB372B430Cf3C0d61cA",
+		decimals: 18
 	},
 	{
 		symbol: "TGT.CX",
@@ -30284,12 +30999,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TICO",
-		address: "0x7F4B2A690605A7cbb66F7AA6885EbD906a5e2E9E",
+		address: "0x36B60a425b82483004487aBc7aDcb0002918FC56",
 		decimals: 8
 	},
 	{
 		symbol: "TICO",
-		address: "0x36B60a425b82483004487aBc7aDcb0002918FC56",
+		address: "0x7F4B2A690605A7cbb66F7AA6885EbD906a5e2E9E",
 		decimals: 8
 	},
 	{
@@ -30315,6 +31030,11 @@ var tokens$5 = [
 	{
 		symbol: "TIG",
 		address: "0xEee2d00Eb7DEB8Dd6924187f5AA3496B7d06E62A",
+		decimals: 18
+	},
+	{
+		symbol: "TIK",
+		address: "0x0922F1D808aDc3A4444BEd2F73fAC53a1A2A5859",
 		decimals: 18
 	},
 	{
@@ -30354,23 +31074,23 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TITAN",
-		address: "0x3A8cCCB969a61532d1E6005e2CE12C200caeCe87",
-		decimals: 18
-	},
-	{
-		symbol: "TITAN",
 		address: "0x29Ff774B920b8FF581108d0c12E5073dF5158E8a",
 		decimals: 18
 	},
 	{
-		symbol: "TIX",
-		address: "0xEa1f346faF023F974Eb5adaf088BbCdf02d761F4",
+		symbol: "TITAN",
+		address: "0x3A8cCCB969a61532d1E6005e2CE12C200caeCe87",
 		decimals: 18
 	},
 	{
 		symbol: "TIX",
 		address: "0x39b23f14528Fb000E8C46ad75DF2dB9a3Ee49422",
 		decimals: 8
+	},
+	{
+		symbol: "TIX",
+		address: "0xEa1f346faF023F974Eb5adaf088BbCdf02d761F4",
+		decimals: 18
 	},
 	{
 		symbol: "TKA",
@@ -30409,13 +31129,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TKX",
-		address: "0x667102BD3413bFEaa3Dffb48fa8288819E480a88",
-		decimals: 8
+		address: "0x058Ef0Ba85E053e55d357C8A95BC6Ea7458Def8a",
+		decimals: 18
 	},
 	{
 		symbol: "TKX",
-		address: "0x058Ef0Ba85E053e55d357C8A95BC6Ea7458Def8a",
-		decimals: 18
+		address: "0x667102BD3413bFEaa3Dffb48fa8288819E480a88",
+		decimals: 8
 	},
 	{
 		symbol: "TLB",
@@ -30514,12 +31234,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TMT",
-		address: "0xB9cB7905981198ADd8059114B3b7dc7042B52f7b",
+		address: "0x6F02055E3541DD74A1aBD8692116c22fFAFaDc5D",
 		decimals: 18
 	},
 	{
 		symbol: "TMT",
-		address: "0x6F02055E3541DD74A1aBD8692116c22fFAFaDc5D",
+		address: "0xB9cB7905981198ADd8059114B3b7dc7042B52f7b",
 		decimals: 18
 	},
 	{
@@ -30588,6 +31308,11 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
+		symbol: "TOKE",
+		address: "0x2e9d63788249371f1DFC918a52f8d799F4a38C94",
+		decimals: 18
+	},
+	{
 		symbol: "TOKIO",
 		address: "0x3aBA9f23E857E6DbC4062a2eD4DBB041025B59b0",
 		decimals: 18
@@ -30629,12 +31354,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TON",
-		address: "0x6a6c2adA3Ce053561C2FbC3eE211F23d9b8C520a",
+		address: "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
 		decimals: 18
 	},
 	{
 		symbol: "TON",
-		address: "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+		address: "0x6a6c2adA3Ce053561C2FbC3eE211F23d9b8C520a",
+		decimals: 18
+	},
+	{
+		symbol: "TONE",
+		address: "0x2Ab6Bb8408ca3199B8Fa6C92d5b455F820Af03c4",
 		decimals: 18
 	},
 	{
@@ -30683,6 +31413,11 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
+		symbol: "TORG",
+		address: "0xCfa0885131F602D11D4DA248D2c65A62063567A9",
+		decimals: 18
+	},
+	{
 		symbol: "TORI",
 		address: "0xc71E20E54ADfC415f79bF0A8F11122917920050E",
 		decimals: 18
@@ -30728,6 +31463,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "TOWER",
+		address: "0x1C9922314ED1415c95b9FD453c3818fd41867d0B",
+		decimals: 18
+	},
+	{
 		symbol: "TPD",
 		address: "0x2a6AaC80905912aC1E769e28cdA3807A4d20b3b6",
 		decimals: 18
@@ -30736,6 +31476,11 @@ var tokens$5 = [
 		symbol: "TPP",
 		address: "0x11dD5dDdD1bd9b2Df6fF908FBcf8Db09CefED29B",
 		decimals: 12
+	},
+	{
+		symbol: "TPT",
+		address: "0x4161725D019690a3E0de50f6bE67b07a86A9fAe1",
+		decimals: 4
 	},
 	{
 		symbol: "TPT",
@@ -30779,7 +31524,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TRB",
-		address: "0x901F8679a6EF435d533732f5eA49bb82d568BE99",
+		address: "0x0Ba45A8b5d5575935B8158a88C631E9F9C95a2e5",
 		decimals: 18
 	},
 	{
@@ -30789,7 +31534,7 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TRB",
-		address: "0x0Ba45A8b5d5575935B8158a88C631E9F9C95a2e5",
+		address: "0x901F8679a6EF435d533732f5eA49bb82d568BE99",
 		decimals: 18
 	},
 	{
@@ -30799,12 +31544,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TRC",
-		address: "0xdB52a87cda28EdA00f8aDd1C79c9DB4a50a70457",
+		address: "0xcB3F902bf97626391bF8bA87264bbC3DC13469be",
 		decimals: 18
 	},
 	{
 		symbol: "TRC",
-		address: "0xcB3F902bf97626391bF8bA87264bbC3DC13469be",
+		address: "0xdB52a87cda28EdA00f8aDd1C79c9DB4a50a70457",
 		decimals: 18
 	},
 	{
@@ -30821,6 +31566,11 @@ var tokens$5 = [
 		symbol: "TRCT",
 		address: "0x30ceCB5461A449A90081F5a5F55db4e048397BAB",
 		decimals: 8
+	},
+	{
+		symbol: "TRDG",
+		address: "0x92a42Db88Ed0F02c71D439e55962Ca7CAB0168b5",
+		decimals: 9
 	},
 	{
 		symbol: "TRDS",
@@ -30850,6 +31600,11 @@ var tokens$5 = [
 	{
 		symbol: "TRIAS",
 		address: "0x3A856d4effa670C54585a5D523e96513e148e95d",
+		decimals: 18
+	},
+	{
+		symbol: "TRIBE",
+		address: "0xc7283b66Eb1EB5FB86327f08e1B5816b0720212B",
 		decimals: 18
 	},
 	{
@@ -30899,13 +31654,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TRU",
-		address: "0xaD9355F782c6Ec75F134B93304b8F9a691a4432a",
-		decimals: 18
+		address: "0x4C19596f5aAfF459fA38B0f7eD92F11AE6543784",
+		decimals: 8
 	},
 	{
 		symbol: "TRU",
-		address: "0x4C19596f5aAfF459fA38B0f7eD92F11AE6543784",
-		decimals: 8
+		address: "0xaD9355F782c6Ec75F134B93304b8F9a691a4432a",
+		decimals: 18
 	},
 	{
 		symbol: "TRUE",
@@ -30939,13 +31694,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TRUST",
-		address: "0x57700244B20f84799a31c6C96DadFF373ca9D6c5",
-		decimals: 18
+		address: "0x0EE815F8BE0B0259E2657C8b8d1E57Bd3D60F26b",
+		decimals: 6
 	},
 	{
 		symbol: "TRUST",
-		address: "0x0EE815F8BE0B0259E2657C8b8d1E57Bd3D60F26b",
-		decimals: 6
+		address: "0x57700244B20f84799a31c6C96DadFF373ca9D6c5",
+		decimals: 18
 	},
 	{
 		symbol: "TRV",
@@ -31044,6 +31799,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TST",
+		address: "0x9EEAb220E44410C16aC80C12830bC11AF7dD5C6E",
+		decimals: 18
+	},
+	{
+		symbol: "TST",
 		address: "0xD9baE39c725A1864b1133Ad0eF1640d02f79B78c",
 		decimals: 18
 	},
@@ -31058,11 +31818,6 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "TST",
-		address: "0x9EEAb220E44410C16aC80C12830bC11AF7dD5C6E",
-		decimals: 18
-	},
-	{
 		symbol: "TSW",
 		address: "0x6B87999bE87358065bBdE41e8a0fe0B7b1cd2514",
 		decimals: 18
@@ -31074,12 +31829,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "TTC",
-		address: "0xaFf4ABDc75f07387401ba9bC0f75EBe4c734B4c9",
+		address: "0x9389434852b94bbaD4c8AfEd5B7BDBc5Ff0c2275",
 		decimals: 18
 	},
 	{
 		symbol: "TTC",
-		address: "0x9389434852b94bbaD4c8AfEd5B7BDBc5Ff0c2275",
+		address: "0xaFf4ABDc75f07387401ba9bC0f75EBe4c734B4c9",
 		decimals: 18
 	},
 	{
@@ -31334,12 +32089,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "UCN",
-		address: "0xAAf37055188Feee4869dE63464937e683d61b2a1",
+		address: "0x1b76d0364e803fB94c1d5cA9Faf55f05Ee494731",
 		decimals: 18
 	},
 	{
 		symbol: "UCN",
-		address: "0x1b76d0364e803fB94c1d5cA9Faf55f05Ee494731",
+		address: "0xAAf37055188Feee4869dE63464937e683d61b2a1",
 		decimals: 18
 	},
 	{
@@ -31355,6 +32110,11 @@ var tokens$5 = [
 	{
 		symbol: "UDAI",
 		address: "0x4aD0b81f92B16624BBcF46FC0030cFBBf8d02376",
+		decimals: 18
+	},
+	{
+		symbol: "UDO",
+		address: "0xea3983Fc6D0fbbC41fb6F6091f68F3e08894dC06",
 		decimals: 18
 	},
 	{
@@ -31398,6 +32158,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "UFO",
+		address: "0x249e38Ea4102D0cf8264d3701f1a0E39C4f2DC3B",
+		decimals: 18
+	},
+	{
 		symbol: "UFR",
 		address: "0xEA097A2b1dB00627B2Fa17460Ad260c016016977",
 		decimals: 18
@@ -31433,18 +32198,23 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "UJENNY",
+		address: "0xa499648fD0e80FD911972BbEb069e4c20e68bF22",
+		decimals: 18
+	},
+	{
 		symbol: "UKG",
 		address: "0x24692791Bc444c5Cd0b81e3CBCaba4b04Acd1F3B",
 		decimals: 18
 	},
 	{
 		symbol: "ULT",
-		address: "0xE884cc2795b9c45bEeac0607DA9539Fd571cCF85",
+		address: "0x09617F6fD6cF8A71278ec86e23bBab29C04353a7",
 		decimals: 18
 	},
 	{
 		symbol: "ULT",
-		address: "0x09617F6fD6cF8A71278ec86e23bBab29C04353a7",
+		address: "0xE884cc2795b9c45bEeac0607DA9539Fd571cCF85",
 		decimals: 18
 	},
 	{
@@ -31469,13 +32239,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "UMC",
-		address: "0xd3EC111e4E33C0a1c32e3AD0BE976214d30Dc37E",
-		decimals: 18
+		address: "0x190fB342aa6a15eB82903323ae78066fF8616746",
+		decimals: 6
 	},
 	{
 		symbol: "UMC",
-		address: "0x190fB342aa6a15eB82903323ae78066fF8616746",
-		decimals: 6
+		address: "0xd3EC111e4E33C0a1c32e3AD0BE976214d30Dc37E",
+		decimals: 18
 	},
 	{
 		symbol: "UMKA",
@@ -31523,6 +32293,16 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "UNFI",
+		address: "0x441761326490cACF7aF299725B6292597EE822c2",
+		decimals: 18
+	},
+	{
+		symbol: "UNI",
+		address: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+		decimals: 18
+	},
+	{
 		symbol: "UNI",
 		address: "0x2730d6FdC86C95a74253BefFaA8306B40feDecbb",
 		decimals: 8
@@ -31538,13 +32318,18 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "UNI",
-		address: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+		symbol: "UNI-V2",
+		address: "0x989ebc2B7E1E16F1ecECd9A4Fad931618c12CE36",
 		decimals: 18
 	},
 	{
 		symbol: "UNI-V2",
-		address: "0x989ebc2B7E1E16F1ecECd9A4Fad931618c12CE36",
+		address: "0xe71458296ce66f7E8C8DF694569b519013f3BD3c",
+		decimals: 18
+	},
+	{
+		symbol: "UNIC",
+		address: "0x94E0BAb2F6Ab1F19F4750E42d7349f2740513aD5",
 		decimals: 18
 	},
 	{
@@ -31559,12 +32344,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "UNIFI",
-		address: "0x9E78b8274e1D6a76a0dBbf90418894DF27cBCEb5",
+		address: "0x0eF3b2024ae079e6dBC2b37435cE30d2731F0101",
 		decimals: 18
 	},
 	{
 		symbol: "UNIFI",
-		address: "0x0eF3b2024ae079e6dBC2b37435cE30d2731F0101",
+		address: "0x9E78b8274e1D6a76a0dBbf90418894DF27cBCEb5",
 		decimals: 18
 	},
 	{
@@ -31669,17 +32454,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "UPP",
-		address: "0xCe25b4271cc4d937A7D9BF75B2068A7892b9961D",
+		address: "0xC86D054809623432210c107af2e3F619DcFbf652",
 		decimals: 18
 	},
 	{
 		symbol: "UPP",
-		address: "0xC86D054809623432210c107af2e3F619DcFbf652",
+		address: "0xCe25b4271cc4d937A7D9BF75B2068A7892b9961D",
 		decimals: 18
 	},
 	{
 		symbol: "UPT",
 		address: "0x6CA88Cc8D9288f5cAD825053B6A1B179B05c76fC",
+		decimals: 18
+	},
+	{
+		symbol: "UPUNK",
+		address: "0x8d2BFfCbB19Ff14A698C424FbcDcFd17aab9b905",
 		decimals: 18
 	},
 	{
@@ -31699,12 +32489,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "UQC",
-		address: "0xD01DB73E047855Efb414e6202098C4Be4Cd2423B",
+		address: "0x8806926Ab68EB5a7b909DcAf6FdBe5d93271D6e2",
 		decimals: 18
 	},
 	{
 		symbol: "UQC",
-		address: "0x8806926Ab68EB5a7b909DcAf6FdBe5d93271D6e2",
+		address: "0xD01DB73E047855Efb414e6202098C4Be4Cd2423B",
 		decimals: 18
 	},
 	{
@@ -31718,19 +32508,24 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "URUS",
+		address: "0x6c5fbc90E4D78F70Cc5025dB005B39B03914fC0c",
+		decimals: 18
+	},
+	{
 		symbol: "USD",
 		address: "0x44086035439E676c02D411880FcCb9837CE37c57",
+		decimals: 18
+	},
+	{
+		symbol: "uSD",
+		address: "0x84841e552A021224de716b7Be89747bb2D62D642",
 		decimals: 18
 	},
 	{
 		symbol: "USD",
 		address: "0xd233D1f6FD11640081aBB8db125f722b5dc729dc",
 		decimals: 9
-	},
-	{
-		symbol: "uSD",
-		address: "0x84841e552A021224de716b7Be89747bb2D62D642",
-		decimals: 18
 	},
 	{
 		symbol: "USD++",
@@ -31774,12 +32569,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "USDF",
-		address: "0x3d61e677944204Cd1002202912a2B7a43A8E2823",
+		address: "0x05462671C05aDc39A6521fA60D5e9443e9E9d2B9",
 		decimals: 9
 	},
 	{
 		symbol: "USDF",
-		address: "0x05462671C05aDc39A6521fA60D5e9443e9E9d2B9",
+		address: "0x3d61e677944204Cd1002202912a2B7a43A8E2823",
 		decimals: 9
 	},
 	{
@@ -31789,13 +32584,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "USDG",
-		address: "0xF906997808F73B09C1007B98Ab539b189282b192",
-		decimals: 3
+		address: "0x4AB30B965A8Ef0F512DA064B5e574d9Ad73c0e79",
+		decimals: 18
 	},
 	{
 		symbol: "USDG",
-		address: "0x4AB30B965A8Ef0F512DA064B5e574d9Ad73c0e79",
-		decimals: 18
+		address: "0xF906997808F73B09C1007B98Ab539b189282b192",
+		decimals: 3
 	},
 	{
 		symbol: "USDK",
@@ -31820,6 +32615,11 @@ var tokens$5 = [
 	{
 		symbol: "USDP",
 		address: "0x1456688345527bE1f37E9e627DA0837D6f08C925",
+		decimals: 18
+	},
+	{
+		symbol: "USDP",
+		address: "0x8E870D67F660D95d5be530380D0eC0bd388289E1",
 		decimals: 18
 	},
 	{
@@ -31884,12 +32684,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "UST",
-		address: "0xa47c8bf37f92aBed4A126BDA807A7b7498661acD",
+		address: "0xCDA4377806cb09f226Aa4840A9df8B5C2B7744EC",
 		decimals: 18
 	},
 	{
 		symbol: "UST",
-		address: "0xCDA4377806cb09f226Aa4840A9df8B5C2B7744EC",
+		address: "0xa47c8bf37f92aBed4A126BDA807A7b7498661acD",
 		decimals: 18
 	},
 	{
@@ -31904,12 +32704,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "UTK",
-		address: "0xdc9Ac3C20D1ed0B540dF9b1feDC10039Df13F99c",
+		address: "0x70a72833d6bF7F508C8224CE59ea1Ef3d0Ea3A38",
 		decimals: 18
 	},
 	{
 		symbol: "UTK",
-		address: "0x70a72833d6bF7F508C8224CE59ea1Ef3d0Ea3A38",
+		address: "0xdc9Ac3C20D1ed0B540dF9b1feDC10039Df13F99c",
 		decimals: 18
 	},
 	{
@@ -31971,6 +32771,11 @@ var tokens$5 = [
 		symbol: "UWBTC",
 		address: "0x3aF5Ba94C29a8407785f5f6d90eF5d69a8EB2436",
 		decimals: 8
+	},
+	{
+		symbol: "UWL",
+		address: "0xdbDD6F355A37b94e6C7D32fef548e98A280B8Df5",
+		decimals: 18
 	},
 	{
 		symbol: "UWTC",
@@ -32078,6 +32883,11 @@ var tokens$5 = [
 		decimals: 8
 	},
 	{
+		symbol: "VEMP",
+		address: "0xcFEB09C3c5F0f78aD72166D55f9e6E9A60e96eEC",
+		decimals: 18
+	},
+	{
 		symbol: "VEN",
 		address: "0xD850942eF8811f2A866692A623011bDE52a462C1",
 		decimals: 18
@@ -32109,17 +32919,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "VETH",
-		address: "0x75572098dc462F976127f59F8c97dFa291f81d8b",
-		decimals: 18
-	},
-	{
-		symbol: "VETH",
 		address: "0x01217729940055011F17BeFE6270e6E59B7d0337",
 		decimals: 18
 	},
 	{
 		symbol: "VETH",
 		address: "0x4Ba6dDd7b89ed838FEd25d208D4f644106E34279",
+		decimals: 18
+	},
+	{
+		symbol: "VETH",
+		address: "0x75572098dc462F976127f59F8c97dFa291f81d8b",
 		decimals: 18
 	},
 	{
@@ -32164,6 +32974,11 @@ var tokens$5 = [
 	},
 	{
 		symbol: "VGX",
+		address: "0x3C4B6E6e1eA3D4863700D7F76b36B7f3D3f13E3d",
+		decimals: 8
+	},
+	{
+		symbol: "VGX",
 		address: "0x5Af2Be193a6ABCa9c8817001F45744777Db30756",
 		decimals: 8
 	},
@@ -32204,12 +33019,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "VIDT",
-		address: "0xfeF4185594457050cC9c23980d301908FE057Bb1",
+		address: "0x445f51299Ef3307dBD75036dd896565F5B4BF7A5",
 		decimals: 18
 	},
 	{
 		symbol: "VIDT",
-		address: "0x445f51299Ef3307dBD75036dd896565F5B4BF7A5",
+		address: "0xfeF4185594457050cC9c23980d301908FE057Bb1",
 		decimals: 18
 	},
 	{
@@ -32339,12 +33154,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "VMC",
-		address: "0xd811250b7fE83150cBB3d70a892fCE6189fB3e08",
+		address: "0xa3AFe717038d4E12133d84088754811220aF9329",
 		decimals: 18
 	},
 	{
 		symbol: "VMC",
-		address: "0xa3AFe717038d4E12133d84088754811220aF9329",
+		address: "0xd811250b7fE83150cBB3d70a892fCE6189fB3e08",
 		decimals: 18
 	},
 	{
@@ -32434,13 +33249,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "VOC",
-		address: "0xc3bC9Eb71f75Ec439A6b6C8E8b746fCF5b62F703",
-		decimals: 18
+		address: "0xB1cfB2421F6F12EBdA4F9b8d0336518c82e63b2c",
+		decimals: 8
 	},
 	{
 		symbol: "VOC",
-		address: "0xB1cfB2421F6F12EBdA4F9b8d0336518c82e63b2c",
-		decimals: 8
+		address: "0xc3bC9Eb71f75Ec439A6b6C8E8b746fCF5b62F703",
+		decimals: 18
 	},
 	{
 		symbol: "VOCO",
@@ -32484,12 +33299,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "VRA",
-		address: "0xdF1D6405df92d981a2fB3ce68F6A03baC6C0E41F",
+		address: "0xF411903cbC70a74d22900a5DE66A2dda66507255",
 		decimals: 18
 	},
 	{
 		symbol: "VRA",
-		address: "0xF411903cbC70a74d22900a5DE66A2dda66507255",
+		address: "0xdF1D6405df92d981a2fB3ce68F6A03baC6C0E41F",
 		decimals: 18
 	},
 	{
@@ -32514,12 +33329,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "VRS",
-		address: "0xAbC430136A4dE71c9998242de8c1b4B97D2b9045",
+		address: "0x92E78dAe1315067a8819EFD6dCA432de9DCdE2e9",
 		decimals: 6
 	},
 	{
 		symbol: "VRS",
-		address: "0x92E78dAe1315067a8819EFD6dCA432de9DCdE2e9",
+		address: "0xAbC430136A4dE71c9998242de8c1b4B97D2b9045",
 		decimals: 6
 	},
 	{
@@ -32529,22 +33344,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "VRX",
-		address: "0x87DE305311D5788e8da38D19bb427645b09CB4e5",
-		decimals: 18
-	},
-	{
-		symbol: "VRX",
 		address: "0x7252fDbB1097C7089D93b0fBDf3494aECf2c92A0",
 		decimals: 8
 	},
 	{
-		symbol: "VSF",
-		address: "0xBA3a79D758f19eFe588247388754b8e4d6EddA81",
+		symbol: "VRX",
+		address: "0x87DE305311D5788e8da38D19bb427645b09CB4e5",
 		decimals: 18
 	},
 	{
 		symbol: "VSF",
 		address: "0xAC9ce326e95f51B5005e9fE1DD8085a01F18450c",
+		decimals: 18
+	},
+	{
+		symbol: "VSF",
+		address: "0xBA3a79D758f19eFe588247388754b8e4d6EddA81",
 		decimals: 18
 	},
 	{
@@ -32773,6 +33588,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "WCFG",
+		address: "0xc221b7E65FfC80DE234bbB6667aBDd46593D34F0",
+		decimals: 18
+	},
+	{
 		symbol: "WCK",
 		address: "0x09fE5f0236F0Ea5D930197DCE254d77B04128075",
 		decimals: 18
@@ -32878,6 +33698,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "WGR",
+		address: "0xC237868a9c5729bdF3173dDDacaa336a0a5BB6e0",
+		decimals: 8
+	},
+	{
 		symbol: "WGTG",
 		address: "0xECe935DE3CCb9E78ADD846BeA5638E0Eb52E71Fb",
 		decimals: 18
@@ -32919,11 +33744,6 @@ var tokens$5 = [
 	},
 	{
 		symbol: "WIC",
-		address: "0x62CD07D414Ec50B68C7EcAa863a23d344f2d062f",
-		decimals: 0
-	},
-	{
-		symbol: "WIC",
 		address: "0x4f878C0852722b0976A955d68B376E4Cd4Ae99E5",
 		decimals: 8
 	},
@@ -32931,6 +33751,11 @@ var tokens$5 = [
 		symbol: "WIC",
 		address: "0x5e4ABE6419650CA839Ce5BB7Db422b881a6064bB",
 		decimals: 18
+	},
+	{
+		symbol: "WIC",
+		address: "0x62CD07D414Ec50B68C7EcAa863a23d344f2d062f",
+		decimals: 0
 	},
 	{
 		symbol: "WIDE",
@@ -32954,17 +33779,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "WILD",
+		address: "0x08A75dbC7167714CeaC1a8e43a8d643A4EDd625a",
+		decimals: 18
+	},
+	{
+		symbol: "WILD",
 		address: "0x2a3bFF78B79A009976EeA096a51A948a3dC00e34",
 		decimals: 18
 	},
 	{
 		symbol: "WILD",
-		address: "0xFbcFD010d007d10D49f516bB738F4aED12880225",
+		address: "0xD3C00772B24D997A812249ca637a921e81357701",
 		decimals: 18
 	},
 	{
 		symbol: "WILD",
-		address: "0xD3C00772B24D997A812249ca637a921e81357701",
+		address: "0xFbcFD010d007d10D49f516bB738F4aED12880225",
 		decimals: 18
 	},
 	{
@@ -32994,12 +33824,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "WIS",
-		address: "0xFA12040497bC7B6077Ea125Bad27dAA8b74E7eDC",
+		address: "0xDecade1c6Bf2cD9fb89aFad73e4a519C867adcF5",
 		decimals: 18
 	},
 	{
 		symbol: "WIS",
-		address: "0xDecade1c6Bf2cD9fb89aFad73e4a519C867adcF5",
+		address: "0xFA12040497bC7B6077Ea125Bad27dAA8b74E7eDC",
 		decimals: 18
 	},
 	{
@@ -33009,23 +33839,23 @@ var tokens$5 = [
 	},
 	{
 		symbol: "WISH",
-		address: "0x1b22C32cD936cB97C28C5690a0695a82Abf688e6",
+		address: "0x13de0b0C1507D424fAd4c6212830A0b2e59587c5",
 		decimals: 18
 	},
 	{
 		symbol: "WISH",
-		address: "0x13de0b0C1507D424fAd4c6212830A0b2e59587c5",
+		address: "0x1b22C32cD936cB97C28C5690a0695a82Abf688e6",
+		decimals: 18
+	},
+	{
+		symbol: "WIT",
+		address: "0x0BE4A987fd8Dcbd2FfF64BA4131d3A208307F667",
 		decimals: 18
 	},
 	{
 		symbol: "WIT",
 		address: "0xE13Ef257cF4D5Df928ca11d230427C037666d466",
 		decimals: 6
-	},
-	{
-		symbol: "WIT",
-		address: "0x0BE4A987fd8Dcbd2FfF64BA4131d3A208307F667",
-		decimals: 18
 	},
 	{
 		symbol: "WITT",
@@ -33039,22 +33869,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "WIZ",
-		address: "0x7a82C573B378CEEa29772aFB93891f0d0afA93b7",
-		decimals: 18
-	},
-	{
-		symbol: "WIZ",
 		address: "0x2F9b6779c37DF5707249eEb3734BbfC94763fBE2",
 		decimals: 18
 	},
 	{
-		symbol: "WLEO",
-		address: "0x73A9fb46e228628f8f9BB9004eCa4f4F529D3998",
-		decimals: 3
+		symbol: "WIZ",
+		address: "0x7a82C573B378CEEa29772aFB93891f0d0afA93b7",
+		decimals: 18
 	},
 	{
 		symbol: "WLEO",
 		address: "0x352c0F76Cfd34Ab3A2724ef67F46cf4D3f61192B",
+		decimals: 3
+	},
+	{
+		symbol: "WLEO",
+		address: "0x73A9fb46e228628f8f9BB9004eCa4f4F529D3998",
 		decimals: 3
 	},
 	{
@@ -33218,6 +34048,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "WPP",
+		address: "0x1955d744F9435522Be508D1Ba60E3c12D0690B6A",
+		decimals: 18
+	},
+	{
 		symbol: "WPR",
 		address: "0x4CF488387F035FF08c371515562CBa712f9015d4",
 		decimals: 18
@@ -33353,6 +34188,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "WXT",
+		address: "0xa02120696c7B8fE16C09C749E4598819b2B0E915",
+		decimals: 18
+	},
+	{
 		symbol: "WXTZ",
 		address: "0xA3865E64121537b5b59B5e239Db4aCBe6F36aa74",
 		decimals: 18
@@ -33401,6 +34241,11 @@ var tokens$5 = [
 		symbol: "XAGM.CX",
 		address: "0x386358639244Ed385ECEe3F46DAe26E6ab616031",
 		decimals: 8
+	},
+	{
+		symbol: "XAI",
+		address: "0x35e78b3982E87ecfD5b3f3265B601c046cDBe232",
+		decimals: 18
 	},
 	{
 		symbol: "XAMP",
@@ -33466,6 +34311,11 @@ var tokens$5 = [
 		symbol: "XBTC",
 		address: "0xECbF566944250ddE88322581024E611419715f7A",
 		decimals: 9
+	},
+	{
+		symbol: "XCAD",
+		address: "0x7659CE147D0e714454073a5dd7003544234b6Aa0",
+		decimals: 18
 	},
 	{
 		symbol: "XCC",
@@ -33583,6 +34433,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "XEND",
+		address: "0xE4CFE9eAa8Cdb0942A80B7bC68fD8Ab0F6D44903",
+		decimals: 18
+	},
+	{
 		symbol: "XES",
 		address: "0xA017ac5faC5941f95010b12570B812C974469c2C",
 		decimals: 18
@@ -33649,13 +34504,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "XGG",
-		address: "0xf6b6AA0Ef0f5Edc2C1c5d925477F97eAF66303e7",
-		decimals: 8
+		address: "0x06B179e292f080871825beD5D722162fD96B4c95",
+		decimals: 18
 	},
 	{
 		symbol: "XGG",
-		address: "0x06B179e292f080871825beD5D722162fD96B4c95",
-		decimals: 18
+		address: "0xf6b6AA0Ef0f5Edc2C1c5d925477F97eAF66303e7",
+		decimals: 8
 	},
 	{
 		symbol: "XGM",
@@ -33664,12 +34519,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "XGP",
-		address: "0xd8dc1070B5510583728eE2AFD6934877ea2dE474",
+		address: "0xD9dc38F1C0f551f949A81CF7269a017e48B1D5A4",
 		decimals: 18
 	},
 	{
 		symbol: "XGP",
-		address: "0xD9dc38F1C0f551f949A81CF7269a017e48B1D5A4",
+		address: "0xd8dc1070B5510583728eE2AFD6934877ea2dE474",
 		decimals: 18
 	},
 	{
@@ -33998,18 +34853,23 @@ var tokens$5 = [
 		decimals: 9
 	},
 	{
+		symbol: "XRUNE",
+		address: "0x69fa0feE221AD11012BAb0FdB45d444D3D2Ce71c",
+		decimals: 18
+	},
+	{
 		symbol: "XRX",
 		address: "0x5f12f33d0A36Fd369e4FfFAE3D82Eff9160013ce",
 		decimals: 8
 	},
 	{
 		symbol: "XSC",
-		address: "0x4df2c7ec048f69BBA12098BF71a15aFeeAAf0c4B",
+		address: "0x0F513fFb4926ff82D7F60A05069047AcA295C413",
 		decimals: 18
 	},
 	{
 		symbol: "XSC",
-		address: "0x0F513fFb4926ff82D7F60A05069047AcA295C413",
+		address: "0x4df2c7ec048f69BBA12098BF71a15aFeeAAf0c4B",
 		decimals: 18
 	},
 	{
@@ -34054,12 +34914,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "XT",
-		address: "0xeF65887a05415bF6316204b5ffB350d4d1a19BBA",
+		address: "0x4BE10dA47A07716af28Ad199FbE020501BddD7aF",
 		decimals: 18
 	},
 	{
 		symbol: "XT",
-		address: "0x4BE10dA47A07716af28Ad199FbE020501BddD7aF",
+		address: "0xeF65887a05415bF6316204b5ffB350d4d1a19BBA",
 		decimals: 18
 	},
 	{
@@ -34074,12 +34934,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "XTK",
-		address: "0xF96459323030137703483B46fD59A71D712BF0aa",
-		decimals: 6
+		address: "0x7F3EDcdD180Dbe4819Bd98FeE8929b5cEdB3AdEB",
+		decimals: 18
 	},
 	{
 		symbol: "XTK",
 		address: "0xBFf0E42EEC4223fBd12260F47f3348D29876db42",
+		decimals: 6
+	},
+	{
+		symbol: "XTK",
+		address: "0xF96459323030137703483B46fD59A71D712BF0aa",
 		decimals: 6
 	},
 	{
@@ -34158,6 +35023,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "XYZ",
+		address: "0x618679dF9EfCd19694BB1daa8D00718Eacfa2883",
+		decimals: 18
+	},
+	{
 		symbol: "YAB",
 		address: "0x52A7a5B50A567cA6c0a4F85E74b98142eba43f49",
 		decimals: 0
@@ -34189,13 +35059,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "YAP",
-		address: "0x32b666599411F4721De6724c968ED9B3D1cABD79",
-		decimals: 8
+		address: "0x245392ee7Ce736eC6A0908B67dC5d0a218230005",
+		decimals: 18
 	},
 	{
 		symbol: "YAP",
-		address: "0x245392ee7Ce736eC6A0908B67dC5d0a218230005",
-		decimals: 18
+		address: "0x32b666599411F4721De6724c968ED9B3D1cABD79",
+		decimals: 8
 	},
 	{
 		symbol: "YAT",
@@ -34259,12 +35129,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "yDAI",
-		address: "0xC2cB1040220768554cf699b0d863A3cd4324ce32",
+		address: "0x16de59092dAE5CcF4A1E6439D611fd0653f0Bd01",
 		decimals: 18
 	},
 	{
 		symbol: "yDAI",
-		address: "0x16de59092dAE5CcF4A1E6439D611fd0653f0Bd01",
+		address: "0xC2cB1040220768554cf699b0d863A3cd4324ce32",
 		decimals: 18
 	},
 	{
@@ -34409,12 +35279,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "YFF",
-		address: "0x8Be6a6158f6B8a19fe60569C757d16e546C2296D",
+		address: "0x05074b439211739bd952e1092127f17AFD0dE204",
 		decimals: 18
 	},
 	{
 		symbol: "YFF",
-		address: "0x05074b439211739bd952e1092127f17AFD0dE204",
+		address: "0x8Be6a6158f6B8a19fe60569C757d16e546C2296D",
 		decimals: 18
 	},
 	{
@@ -34509,12 +35379,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "YFIII",
-		address: "0x649eBF73043Ffcc70A59855ecd8a568FD996415a",
+		address: "0x4be40bc9681D0A7C24A99b4c92F85B9053Fc2A45",
 		decimals: 18
 	},
 	{
 		symbol: "YFIII",
-		address: "0x4be40bc9681D0A7C24A99b4c92F85B9053Fc2A45",
+		address: "0x649eBF73043Ffcc70A59855ecd8a568FD996415a",
 		decimals: 18
 	},
 	{
@@ -34584,17 +35454,17 @@ var tokens$5 = [
 	},
 	{
 		symbol: "YFN",
+		address: "0x13cea0680b3FFecB835758046CC1dfE9080dBAd5",
+		decimals: 18
+	},
+	{
+		symbol: "YFN",
 		address: "0x3709AE438E0557976296051F431256F386De370C",
 		decimals: 18
 	},
 	{
 		symbol: "YFN",
 		address: "0x3DD66732113Af9981A861Cf489431533aebA33B8",
-		decimals: 18
-	},
-	{
-		symbol: "YFN",
-		address: "0x13cea0680b3FFecB835758046CC1dfE9080dBAd5",
 		decimals: 18
 	},
 	{
@@ -34654,12 +35524,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "YFT",
-		address: "0x9cD39dA8f25ec50cF2Ee260e464aC23EA23F6bb0",
+		address: "0x26B3038a7Fc10b36c426846a9086Ef87328dA702",
 		decimals: 18
 	},
 	{
 		symbol: "YFT",
-		address: "0x26B3038a7Fc10b36c426846a9086Ef87328dA702",
+		address: "0x9cD39dA8f25ec50cF2Ee260e464aC23EA23F6bb0",
 		decimals: 18
 	},
 	{
@@ -34669,12 +35539,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "YFUEL",
-		address: "0xbD301BE09eB78Df47019aa833D29eDc5D815D838",
+		address: "0x09df6A5ca936Be45f5Ae45C7e58C9b4602011fcd",
 		decimals: 18
 	},
 	{
 		symbol: "YFUEL",
-		address: "0x09df6A5ca936Be45f5Ae45C7e58C9b4602011fcd",
+		address: "0xbD301BE09eB78Df47019aa833D29eDc5D815D838",
 		decimals: 18
 	},
 	{
@@ -34685,6 +35555,11 @@ var tokens$5 = [
 	{
 		symbol: "YG",
 		address: "0xD811e485cB4ab1FAd56233dE4464Fb5d1C9f3E99",
+		decimals: 18
+	},
+	{
+		symbol: "YGG",
+		address: "0x25f8087EAD173b73D6e8B84329989A8eEA16CF73",
 		decimals: 18
 	},
 	{
@@ -34699,12 +35574,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "YKZ",
-		address: "0xcd453276f4db9c38855056a036C4A99A8cac7b8d",
+		address: "0x87047986E8e4961c11d2EdcD94285E3A1331d97B",
 		decimals: 18
 	},
 	{
 		symbol: "YKZ",
-		address: "0x87047986E8e4961c11d2EdcD94285E3A1331d97B",
+		address: "0xcd453276f4db9c38855056a036C4A99A8cac7b8d",
 		decimals: 18
 	},
 	{
@@ -34724,17 +35599,22 @@ var tokens$5 = [
 	},
 	{
 		symbol: "YLD",
-		address: "0xDcB01cc464238396E213a6fDd933E36796eAfF9f",
-		decimals: 18
-	},
-	{
-		symbol: "YLD",
 		address: "0x7F927f984177323c4ac49E6b1d398E40cd1A78F6",
 		decimals: 2
 	},
 	{
 		symbol: "YLD",
+		address: "0xDcB01cc464238396E213a6fDd933E36796eAfF9f",
+		decimals: 18
+	},
+	{
+		symbol: "YLD",
 		address: "0xF94b5C5651c888d928439aB6514B93944eEE6F48",
+		decimals: 18
+	},
+	{
+		symbol: "YLDY",
+		address: "0x88cb253d4C8caB8CDF7948A9251Db85a13669E23",
 		decimals: 18
 	},
 	{
@@ -34933,8 +35813,8 @@ var tokens$5 = [
 		decimals: 6
 	},
 	{
-		symbol: "yUSDT",
-		address: "0xE6354ed5bC4b393a5Aad09f21c46E101e692d447",
+		symbol: "YUSDT",
+		address: "0x0622769D566B3c4C1C58cA4FAbee8E60bb3163e5",
 		decimals: 6
 	},
 	{
@@ -34943,13 +35823,18 @@ var tokens$5 = [
 		decimals: 6
 	},
 	{
-		symbol: "YUSDT",
-		address: "0x0622769D566B3c4C1C58cA4FAbee8E60bb3163e5",
+		symbol: "yUSDT",
+		address: "0xE6354ed5bC4b393a5Aad09f21c46E101e692d447",
 		decimals: 6
 	},
 	{
 		symbol: "YVAULT-LP-YCURVE",
 		address: "0x5dbcF33D8c2E976c6b560249878e6F1491Bca25c",
+		decimals: 18
+	},
+	{
+		symbol: "YVBOOST",
+		address: "0x9d409a0A012CFbA9B15F6D4B36Ac57A46966Ab9a",
 		decimals: 18
 	},
 	{
@@ -35014,12 +35899,12 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ZB",
-		address: "0xBd0793332e9fB844A52a205A233EF27a5b34B927",
+		address: "0x182A603541a4483c308475147D621bbB4E2587c6",
 		decimals: 18
 	},
 	{
 		symbol: "ZB",
-		address: "0x182A603541a4483c308475147D621bbB4E2587c6",
+		address: "0xBd0793332e9fB844A52a205A233EF27a5b34B927",
 		decimals: 18
 	},
 	{
@@ -35078,13 +35963,18 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
-		symbol: "ZDC",
-		address: "0x7A2810d3d859Ed03ede523eB801a3B43B5e8979C",
+		symbol: "ZCX",
+		address: "0xC52C326331E9Ce41F04484d3B5E5648158028804",
 		decimals: 18
 	},
 	{
 		symbol: "ZDC",
 		address: "0x1cF402135d7Bd27Dc9d21C03Ae2D8375BC43E9eC",
+		decimals: 18
+	},
+	{
+		symbol: "ZDC",
+		address: "0x7A2810d3d859Ed03ede523eB801a3B43B5e8979C",
 		decimals: 18
 	},
 	{
@@ -35183,6 +36073,11 @@ var tokens$5 = [
 		decimals: 4
 	},
 	{
+		symbol: "ZIG",
+		address: "0x7BeBd226154E865954A87650FAefA8F485d36081",
+		decimals: 18
+	},
+	{
 		symbol: "ZIK",
 		address: "0xE7750c38c9a10D877650C0D99d1717bB28A5C42e",
 		decimals: 18
@@ -35264,13 +36159,13 @@ var tokens$5 = [
 	},
 	{
 		symbol: "ZNT",
-		address: "0xE95990825AAB1a7f0Af4cc648f76a3Bcc99F25B2",
-		decimals: 18
+		address: "0x138fd9A2B4b283676109d5E76cf3b83de7d15F25",
+		decimals: 8
 	},
 	{
 		symbol: "ZNT",
-		address: "0x138fd9A2B4b283676109d5E76cf3b83de7d15F25",
-		decimals: 8
+		address: "0xE95990825AAB1a7f0Af4cc648f76a3Bcc99F25B2",
+		decimals: 18
 	},
 	{
 		symbol: "ZOM",
@@ -35290,6 +36185,11 @@ var tokens$5 = [
 	{
 		symbol: "ZOMBIE",
 		address: "0xd55BD2C12B30075b325Bc35aEf0B46363B3818f8",
+		decimals: 18
+	},
+	{
+		symbol: "ZOOM",
+		address: "0x69cf3091C91EB72DB05E45C76e58225177dEA742",
 		decimals: 18
 	},
 	{
@@ -35647,6 +36547,16 @@ var tokens$3 = [
 		decimals: 8
 	},
 	{
+		symbol: "ALEPH",
+		address: "0x27702a26126e0B3702af63Ee09aC4d1A084EF628",
+		decimals: 18
+	},
+	{
+		symbol: "ALEPH",
+		address: "0xC0134b5B924c2FCA106eFB33C45446c466FBe03e",
+		decimals: 18
+	},
+	{
 		symbol: "amAAVE",
 		address: "0x1d2a0E5EC8E5bBDCA5CB219e649B565d8e5c3360",
 		decimals: 18
@@ -35687,6 +36597,11 @@ var tokens$3 = [
 		decimals: 18
 	},
 	{
+		symbol: "anyDAI",
+		address: "0x9b17bAADf0f21F03e35249e0e59723F34994F806",
+		decimals: 18
+	},
+	{
 		symbol: "ARIA20",
 		address: "0x46F48FbdedAa6F5500993BEDE9539ef85F4BeE8e",
 		decimals: 18
@@ -35714,6 +36629,11 @@ var tokens$3 = [
 	{
 		symbol: "BTU",
 		address: "0xFdc26CDA2d2440d0E83CD1DeE8E8bE48405806DC",
+		decimals: 18
+	},
+	{
+		symbol: "BULLv20",
+		address: "0x177BA0cac51bFC7eA24BAd39d81dcEFd59d74fAa",
 		decimals: 18
 	},
 	{
@@ -35807,6 +36727,11 @@ var tokens$3 = [
 		decimals: 18
 	},
 	{
+		symbol: "EMON",
+		address: "0xd6A5aB46ead26f49b03bBB1F9EB1Ad5c1767974a",
+		decimals: 18
+	},
+	{
 		symbol: "FISH",
 		address: "0x3a3Df212b7AA91Aa0402B9035b098891d276572B",
 		decimals: 18
@@ -35814,6 +36739,11 @@ var tokens$3 = [
 	{
 		symbol: "FRAX",
 		address: "0x104592a158490a9228070E0A8e5343B499e125D0",
+		decimals: 18
+	},
+	{
+		symbol: "FRM",
+		address: "0xE5CAeF4Af8780E59Df925470b050Fb23C43CA68C",
 		decimals: 18
 	},
 	{
@@ -35842,6 +36772,11 @@ var tokens$3 = [
 		decimals: 18
 	},
 	{
+		symbol: "Guard",
+		address: "0x948d2a81086A075b3130BAc19e4c6DEe1D2E3fE8",
+		decimals: 18
+	},
+	{
 		symbol: "HAWK",
 		address: "0x69CBC7449ee102eB792f1656744bF1A7c1bACB7e",
 		decimals: 18
@@ -35860,6 +36795,11 @@ var tokens$3 = [
 		symbol: "IGG",
 		address: "0xe6FC6C7CB6d2c31b359A49A33eF08aB87F4dE7CE",
 		decimals: 6
+	},
+	{
+		symbol: "IQ",
+		address: "0x0e37d70b51ffA2B98b4D34a5712C5291115464e3",
+		decimals: 18
 	},
 	{
 		symbol: "IRON",
@@ -35902,6 +36842,11 @@ var tokens$3 = [
 		decimals: 18
 	},
 	{
+		symbol: "MM",
+		address: "0x5647Fe4281F8F6F01E84BCE775AD4b828A7b8927",
+		decimals: 18
+	},
+	{
 		symbol: "mOCEAN",
 		address: "0x282d8efCe846A88B159800bd4130ad77443Fa1A1",
 		decimals: 18
@@ -35937,6 +36882,11 @@ var tokens$3 = [
 		decimals: 18
 	},
 	{
+		symbol: "O3",
+		address: "0xEe9801669C6138E84bD50dEB500827b776777d28",
+		decimals: 18
+	},
+	{
 		symbol: "OM",
 		address: "0xC3Ec80343D2bae2F8E680FDADDe7C17E71E114ea",
 		decimals: 18
@@ -35954,6 +36904,11 @@ var tokens$3 = [
 	{
 		symbol: "PLOT",
 		address: "0xe82808eaA78339b06a691fd92E1Be79671cAd8D3",
+		decimals: 18
+	},
+	{
+		symbol: "POLYCUB",
+		address: "0x50D809c74e0B8e49e7B4c65BB3109AbE3Ff4C1C1",
 		decimals: 18
 	},
 	{
@@ -35979,6 +36934,41 @@ var tokens$3 = [
 	{
 		symbol: "RBAL",
 		address: "0x03247a4368A280bEc8133300cD930A3a61d604f6",
+		decimals: 18
+	},
+	{
+		symbol: "renBCH",
+		address: "0xc3fEd6eB39178A541D274e6Fc748d48f0Ca01CC3",
+		decimals: 8
+	},
+	{
+		symbol: "renBTC",
+		address: "0xDBf31dF14B66535aF65AaC99C32e9eA844e14501",
+		decimals: 8
+	},
+	{
+		symbol: "renFIL",
+		address: "0xc4Ace9278e7E01755B670C0838c3106367639962",
+		decimals: 18
+	},
+	{
+		symbol: "renZEC",
+		address: "0x31a0D1A199631D244761EEba67e8501296d2E383",
+		decimals: 8
+	},
+	{
+		symbol: "REVO",
+		address: "0x678e5f70b6b582dfADB3dBD68AF17801d34555c5",
+		decimals: 18
+	},
+	{
+		symbol: "ROUTE",
+		address: "0x16ECCfDbb4eE1A85A33f3A9B21175Cd7Ae753dB4",
+		decimals: 18
+	},
+	{
+		symbol: "RSD",
+		address: "0x61Ed1C66239d29Cc93C8597c6167159e8F69a823",
 		decimals: 18
 	},
 	{
@@ -36027,6 +37017,11 @@ var tokens$3 = [
 		decimals: 18
 	},
 	{
+		symbol: "TKN",
+		address: "0x7E9D8f07A64e363e97A648904a89fb4cd5fB94CD",
+		decimals: 18
+	},
+	{
 		symbol: "UBT",
 		address: "0x7FBc10850caE055B27039aF31bD258430e714c62",
 		decimals: 8
@@ -36034,6 +37029,11 @@ var tokens$3 = [
 	{
 		symbol: "UNI",
 		address: "0xb33EaAd8d922B1083446DC23f610c2567fB5180f",
+		decimals: 18
+	},
+	{
+		symbol: "upUSDT",
+		address: "0xCb5f72d37685C3D5aD0bB5F982443BC8FcdF570E",
 		decimals: 18
 	},
 	{
@@ -36075,6 +37075,11 @@ var tokens$3 = [
 		symbol: "WOLF",
 		address: "0x8f18dC399594b451EdA8c5da02d0563c0b2d0f16",
 		decimals: 9
+	},
+	{
+		symbol: "WOOFY",
+		address: "0xD0660cD418a64a1d44E9214ad8e459324D8157f1",
+		decimals: 12
 	},
 	{
 		symbol: "WRX",
@@ -36157,6 +37162,36 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "ADS",
+		address: "0xcfcEcFe2bD2FED07A9145222E8a7ad9Cf1Ccd22A",
+		decimals: 11
+	},
+	{
+		symbol: "ADX",
+		address: "0x6bfF4Fb161347ad7de4A625AE5aa3A1CA7077819",
+		decimals: 18
+	},
+	{
+		symbol: "AFLO",
+		address: "0x1051a014E4b3F2bD08E5A7e52522f0F71628162B",
+		decimals: 18
+	},
+	{
+		symbol: "AIMX",
+		address: "0x348e62131fce2F4e0d5ead3Fe1719Bc039B380A9",
+		decimals: 18
+	},
+	{
+		symbol: "AIOZ",
+		address: "0x33d08D8C7a168333a85285a68C0042b39fC3741D",
+		decimals: 18
+	},
+	{
+		symbol: "ALICE",
+		address: "0xAC51066d7bEC65Dc4589368da368b212745d63E8",
+		decimals: 6
+	},
+	{
 		symbol: "ALLOY",
 		address: "0x5eF5994fA33FF4eB6c82d51ee1DC145c546065Bd",
 		decimals: 18
@@ -36207,6 +37242,21 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "ARN",
+		address: "0xBA5F11b16B155792Cf3B2E6880E8706859A8AEB6",
+		decimals: 18
+	},
+	{
+		symbol: "ARNX",
+		address: "0x0C37Bcf456bC661C14D596683325623076D7e283",
+		decimals: 18
+	},
+	{
+		symbol: "ATA",
+		address: "0xA2120b9e674d3fC3875f415A7DF52e382F141225",
+		decimals: 18
+	},
+	{
 		symbol: "ATOM",
 		address: "0x0Eb3a705fc54725037CC9e008bDede697f62F335",
 		decimals: 18
@@ -36214,6 +37264,11 @@ var tokens$2 = [
 	{
 		symbol: "AUTO",
 		address: "0xa184088a740c695E156F91f5cC086a06bb78b827",
+		decimals: 18
+	},
+	{
+		symbol: "AXS",
+		address: "0x715D400F88C167884bbCc41C5FeA407ed4D2f8A0",
 		decimals: 18
 	},
 	{
@@ -36254,6 +37309,11 @@ var tokens$2 = [
 	{
 		symbol: "bBAG",
 		address: "0x1AD0132D8B5Ef3cEBDA1A9692f36AC30be871b6b",
+		decimals: 18
+	},
+	{
+		symbol: "BBANK",
+		address: "0xF4b5470523cCD314C6B9dA041076e7D79E0Df267",
 		decimals: 18
 	},
 	{
@@ -36357,6 +37417,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "BLANK",
+		address: "0xAec7e1f531Bb09115103C53ba76829910Ec48966",
+		decimals: 18
+	},
+	{
 		symbol: "bLEO",
 		address: "0x6421531AF54C7B14Ea805719035EBf1e3661c44A",
 		decimals: 3
@@ -36369,6 +37434,11 @@ var tokens$2 = [
 	{
 		symbol: "BLUE",
 		address: "0x36C0556c2B15aED79F842675Ff030782738eF9e8",
+		decimals: 18
+	},
+	{
+		symbol: "BLZ",
+		address: "0x935a544Bf5816E3A7C13DB2EFe3009Ffda0aCdA2",
 		decimals: 18
 	},
 	{
@@ -36487,6 +37557,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "BTT",
+		address: "0x8595F9dA7b868b1822194fAEd312235E43007b49",
+		decimals: 18
+	},
+	{
 		symbol: "BUNNY",
 		address: "0xC9849E6fdB743d08fAeE3E34dd2D1bc69EA11a51",
 		decimals: 18
@@ -36517,6 +37592,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "C98",
+		address: "0xaEC945e04baF28b135Fa7c640f624f8D90F1C3a6",
+		decimals: 18
+	},
+	{
 		symbol: "Cake",
 		address: "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
 		decimals: 18
@@ -36534,6 +37614,11 @@ var tokens$2 = [
 	{
 		symbol: "CCAKE",
 		address: "0xc7091AA18598b87588e37501b6Ce865263CD67Ce",
+		decimals: 18
+	},
+	{
+		symbol: "CHAIN",
+		address: "0x35DE111558F691F77f791fb0c08b2D6B931A9d47",
 		decimals: 18
 	},
 	{
@@ -36557,6 +37642,11 @@ var tokens$2 = [
 		decimals: 8
 	},
 	{
+		symbol: "CLV",
+		address: "0x09E889BB4D5b474f561db0491C38702F367A4e4d",
+		decimals: 18
+	},
+	{
 		symbol: "COMP",
 		address: "0x52CE071Bd9b1C4B00A0b92D298c512478CaD67e8",
 		decimals: 18
@@ -36570,6 +37660,11 @@ var tokens$2 = [
 		symbol: "COS",
 		address: "0x96Dd399F9c3AFda1F194182F71600F1B65946501",
 		decimals: 18
+	},
+	{
+		symbol: "COVAL",
+		address: "0x3D658390460295FB963f54dC0899cfb1c30776Df",
+		decimals: 8
 	},
 	{
 		symbol: "CPX",
@@ -36727,6 +37822,11 @@ var tokens$2 = [
 		decimals: 6
 	},
 	{
+		symbol: "CTSI",
+		address: "0x8dA443F84fEA710266C8eB6bC34B71702d033EF2",
+		decimals: 18
+	},
+	{
 		symbol: "CUB",
 		address: "0x50D809c74e0B8e49e7B4c65BB3109AbE3Ff4C1C1",
 		decimals: 18
@@ -36739,6 +37839,11 @@ var tokens$2 = [
 	{
 		symbol: "CYC",
 		address: "0x810EE35443639348aDbbC467b33310d2AB43c168",
+		decimals: 18
+	},
+	{
+		symbol: "CYF",
+		address: "0xdB33d49b5a41A97D296B7242a96ebd8AC77B3Bb8",
 		decimals: 18
 	},
 	{
@@ -36755,6 +37860,16 @@ var tokens$2 = [
 		symbol: "DANGO",
 		address: "0x0957C57C9EB7744850dCC95db5A06eD4a246236E",
 		decimals: 6
+	},
+	{
+		symbol: "DAO",
+		address: "0x22f3997A5DF5a80e29871FEd24fE3E85741F5E82",
+		decimals: 18
+	},
+	{
+		symbol: "DART",
+		address: "0x5a4623F305A8d7904ED68638AF3B4328678edDBF",
+		decimals: 18
 	},
 	{
 		symbol: "DDIM",
@@ -36787,6 +37902,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "DG",
+		address: "0x9Fdc3ae5c814b79dcA2556564047C5e7e5449C19",
+		decimals: 18
+	},
+	{
 		symbol: "DIESEL",
 		address: "0xe1eA2E1907d93F154234CE3b5A7418faf175fE11",
 		decimals: 18
@@ -36808,8 +37928,18 @@ var tokens$2 = [
 	},
 	{
 		symbol: "DOGE",
+		address: "0x4206931337dc273a630d328dA6441786BfaD668f",
+		decimals: 8
+	},
+	{
+		symbol: "DOGE",
 		address: "0xbA2aE424d960c26247Dd6c32edC70B295c744C43",
 		decimals: 8
+	},
+	{
+		symbol: "DOS",
+		address: "0x70861e862E1Ac0C96f853C8231826e469eAd37B1",
+		decimals: 18
 	},
 	{
 		symbol: "DOS",
@@ -36822,8 +37952,38 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "DPET",
+		address: "0xfb62AE373acA027177D1c18Ee0862817f9080d08",
+		decimals: 18
+	},
+	{
+		symbol: "DSLA",
+		address: "0x1861C9058577C3b48e73d91d6f25C18B17FBFFE0",
+		decimals: 18
+	},
+	{
+		symbol: "DUCK",
+		address: "0x6aB6d61428fde76768D7b45D8BFeec19c6eF91A8",
+		decimals: 18
+	},
+	{
 		symbol: "DUSK",
 		address: "0xB2BD0749DBE21f623d9BABa856D3B0f0e1BFEc9C",
+		decimals: 18
+	},
+	{
+		symbol: "DYP",
+		address: "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17",
+		decimals: 18
+	},
+	{
+		symbol: "DYT",
+		address: "0x740623d2c797b7D8D1EcB98e9b4Afcf99Ec31E14",
+		decimals: 18
+	},
+	{
+		symbol: "EARN",
+		address: "0x63a18BC38D1101DB7F0efCbCBdCbe927A5879039",
 		decimals: 18
 	},
 	{
@@ -36872,6 +38032,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "EQZ",
+		address: "0x1Da87b114f35E1DC91F72bF57fc07A768Ad40Bb0",
+		decimals: 18
+	},
+	{
 		symbol: "ERC20",
 		address: "0x58730ae0FAA10d73b0cDdb5e7b87C3594f7a20CB",
 		decimals: 18
@@ -36889,6 +38054,16 @@ var tokens$2 = [
 	{
 		symbol: "ETHb",
 		address: "0xc5137E8e017799e71A65e0cFe3F340d719AF17D3",
+		decimals: 18
+	},
+	{
+		symbol: "ETHPAD",
+		address: "0x8dB1D28Ee0d822367aF8d220C0dc7cB6fe9DC442",
+		decimals: 18
+	},
+	{
+		symbol: "FARA",
+		address: "0xF4Ed363144981D3A65f42e7D0DC54FF9EEf559A1",
 		decimals: 18
 	},
 	{
@@ -36937,6 +38112,11 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "FRAX",
+		address: "0x29cED01C447166958605519F10DcF8b0255fB379",
+		decimals: 18
+	},
+	{
 		symbol: "FREE",
 		address: "0x12e34cDf6A031a10FE241864c32fB03a4FDaD739",
 		decimals: 18
@@ -36982,6 +38162,16 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "FXF",
+		address: "0x8a40c222996f9F3431f63Bf80244C36822060f12",
+		decimals: 18
+	},
+	{
+		symbol: "FXS",
+		address: "0xDE2F075f6F14EB9D96755b24E416A53E736Ca363",
+		decimals: 18
+	},
+	{
 		symbol: "GEN",
 		address: "0xB0F2939A1c0e43683E5954c9Fe142F7df9F8D967",
 		decimals: 18
@@ -36992,8 +38182,23 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "GLQ",
+		address: "0x9F9c8ec3534c3cE16F928381372BfbFBFb9F4D24",
+		decimals: 18
+	},
+	{
+		symbol: "GMC",
+		address: "0xa6272359bc37f61AF398071B65C8934ACA744d53",
+		decimals: 18
+	},
+	{
 		symbol: "GMT",
 		address: "0x99e92123eB77Bc8f999316f622e5222498438784",
+		decimals: 18
+	},
+	{
+		symbol: "GNY",
+		address: "0xe4A4Ad6E0B773f47D28f548742a23eFD73798332",
 		decimals: 18
 	},
 	{
@@ -37017,8 +38222,18 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "HAI",
+		address: "0xaA9E582e5751d703F85912903bacADdFed26484C",
+		decimals: 8
+	},
+	{
 		symbol: "HAKKA",
 		address: "0x1D1eb8E8293222e1a29d2C0E4cE6C0Acfd89AaaC",
+		decimals: 18
+	},
+	{
+		symbol: "HAPI",
+		address: "0xD9c2D319Cd7e6177336b0a9c93c21cb48d84Fb54",
 		decimals: 18
 	},
 	{
@@ -37032,6 +38247,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "HERO",
+		address: "0xD40bEDb44C081D2935eebA6eF5a3c8A31A1bBE13",
+		decimals: 18
+	},
+	{
 		symbol: "HOGL",
 		address: "0x182c763a4b2Fbd18C9B5f2D18102a0dDd9D5DF26",
 		decimals: 18
@@ -37039,6 +38259,16 @@ var tokens$2 = [
 	{
 		symbol: "HPS",
 		address: "0xeDa21B525Ac789EaB1a08ef2404dd8505FfB973D",
+		decimals: 18
+	},
+	{
+		symbol: "HTX",
+		address: "0x38A0df9a08d18dc06CD91Fc7Ec94a0AcdF28D994",
+		decimals: 8
+	},
+	{
+		symbol: "HUB",
+		address: "0x8e9A29e7Ed21DB7c5B2E1cd75e676dA0236dfB45",
 		decimals: 18
 	},
 	{
@@ -37064,6 +38294,11 @@ var tokens$2 = [
 	{
 		symbol: "IOTX",
 		address: "0x9678E42ceBEb63F23197D726B29b1CB20d0064E5",
+		decimals: 18
+	},
+	{
+		symbol: "IQ",
+		address: "0x0e37d70b51ffA2B98b4D34a5712C5291115464e3",
 		decimals: 18
 	},
 	{
@@ -37110,6 +38345,11 @@ var tokens$2 = [
 		symbol: "KaiInu",
 		address: "0xe5a09784b16E1065C37dF14c6e2f06fDcE317a1b",
 		decimals: 9
+	},
+	{
+		symbol: "KCAL",
+		address: "0x14EB60F5f270B059B0c788De0Ddc51Da86f8a06d",
+		decimals: 10
 	},
 	{
 		symbol: "KEBAB",
@@ -37192,6 +38432,16 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "MAAPL",
+		address: "0x900AEb8c40b26A8f8DfAF283F884b03EE7Abb3Ec",
+		decimals: 18
+	},
+	{
+		symbol: "mAMZN",
+		address: "0x3947B992DC0147D2D89dF0392213781b04B25075",
+		decimals: 18
+	},
+	{
 		symbol: "MARSH",
 		address: "0x2FA5dAF6Fe0708fBD63b1A7D1592577284f52256",
 		decimals: 18
@@ -37202,6 +38452,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "MASK",
+		address: "0x2eD9a5C8C13b93955103B9a7C167B67Ef4d568a3",
+		decimals: 18
+	},
+	{
 		symbol: "MATH",
 		address: "0xF218184Af829Cf2b0019F8E6F0b2423498a36983",
 		decimals: 18
@@ -37209,6 +38464,11 @@ var tokens$2 = [
 	{
 		symbol: "MATTER",
 		address: "0x1C9491865a1DE77C5b6e19d2E6a5F1D7a6F2b25F",
+		decimals: 18
+	},
+	{
+		symbol: "MBABA",
+		address: "0xcA2f75930912B85d8B2914Ad06166483c0992945",
 		decimals: 18
 	},
 	{
@@ -37242,6 +38502,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "MDX",
+		address: "0x9C65AB58d8d978DB963e63f2bfB7121627e3a739",
+		decimals: 18
+	},
+	{
 		symbol: "MEOWTH",
 		address: "0xE561479bEbEE0e606c19bB1973Fc4761613e3C42",
 		decimals: 18
@@ -37249,6 +38514,16 @@ var tokens$2 = [
 	{
 		symbol: "MGB",
 		address: "0xF78839B9e972Cf15014843A7Ca5ebf1E321A284c",
+		decimals: 18
+	},
+	{
+		symbol: "mGOOGL",
+		address: "0x62D71B23bF15218C7d2D7E48DBbD9e9c650B173f",
+		decimals: 18
+	},
+	{
+		symbol: "MIAU",
+		address: "0x1658AeD6C7dbaB2Ddbd8f5D898b0e9eAb0305813",
 		decimals: 18
 	},
 	{
@@ -37262,6 +38537,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "MIR",
+		address: "0x5B6DcF557E2aBE2323c48445E8CC948910d8c2c9",
+		decimals: 18
+	},
+	{
 		symbol: "MKR",
 		address: "0x5f0Da599BB2ccCfcf6Fdfd7D81743B6020864350",
 		decimals: 18
@@ -37269,6 +38549,16 @@ var tokens$2 = [
 	{
 		symbol: "MLA",
 		address: "0xbDDD7D426274fc5F370817C80C06b86D651963e4",
+		decimals: 18
+	},
+	{
+		symbol: "MM",
+		address: "0xBF05279F9Bf1CE69bBFEd670813b7e431142Afa4",
+		decimals: 18
+	},
+	{
+		symbol: "MMSFT",
+		address: "0x0ab06caa3Ca5d6299925EfaA752A2D2154ECE929",
 		decimals: 18
 	},
 	{
@@ -37307,6 +38597,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "MQQQ",
+		address: "0x1Cb4183Ac708e07511Ac57a2E45A835F048D7C56",
+		decimals: 18
+	},
+	{
 		symbol: "MRAT",
 		address: "0x6D949f9297A522c0f97C232CC209a67Bd7CfA471",
 		decimals: 9
@@ -37314,6 +38609,11 @@ var tokens$2 = [
 	{
 		symbol: "MSC",
 		address: "0x8C784C49097Dcc637b93232e15810D53871992BF",
+		decimals: 18
+	},
+	{
+		symbol: "MSLV",
+		address: "0x211e763d0b9311c08EC92D72DdC20AB024b6572A",
 		decimals: 18
 	},
 	{
@@ -37325,6 +38625,36 @@ var tokens$2 = [
 		symbol: "MTF",
 		address: "0x95Ea82A63ee70f3cB141eC55ea4a37339746eB32",
 		decimals: 8
+	},
+	{
+		symbol: "MTR",
+		address: "0x29E9fDF5933824ad21Bc6dbb8BF156EFA3735e32",
+		decimals: 18
+	},
+	{
+		symbol: "MTRG",
+		address: "0xBd2949F67DcdC549c6Ebe98696449Fa79D988A9F",
+		decimals: 18
+	},
+	{
+		symbol: "MTSLA",
+		address: "0xF215A127A196e3988C09d052e16BcFD365Cd7AA3",
+		decimals: 18
+	},
+	{
+		symbol: "MTV",
+		address: "0x8aa688AB789d1848d131C65D98CEAA8875D97eF1",
+		decimals: 18
+	},
+	{
+		symbol: "MTWTR",
+		address: "0x7426Ab52A0e057691E2544fae9C8222e958b2cfB",
+		decimals: 18
+	},
+	{
+		symbol: "MUSO",
+		address: "0x9cDDF33466cE007676C827C76E799F5109f1843C",
+		decimals: 18
 	},
 	{
 		symbol: "NANA",
@@ -37345,6 +38675,11 @@ var tokens$2 = [
 		symbol: "NEON",
 		address: "0x94026f0227cE0c9611e8a228f114F9F19CC3Fa87",
 		decimals: 18
+	},
+	{
+		symbol: "NFT",
+		address: "0x711D17c6EEE1Fa812db7A9e2EB9971e5D6252A05",
+		decimals: 6
 	},
 	{
 		symbol: "NFTART",
@@ -37382,6 +38717,11 @@ var tokens$2 = [
 		decimals: 8
 	},
 	{
+		symbol: "O3",
+		address: "0xEe9801669C6138E84bD50dEB500827b776777d28",
+		decimals: 18
+	},
+	{
 		symbol: "OCT",
 		address: "0x49277cC5be56b519901E561096bfD416277b4F6d",
 		decimals: 8
@@ -37392,14 +38732,29 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "OM",
+		address: "0xF78D2e7936F5Fe18308A3B2951A93b6c4a41F5e2",
+		decimals: 18
+	},
+	{
 		symbol: "ONT",
 		address: "0xFd7B3A77848f1C2D67E05E54d78d174a0C850335",
+		decimals: 18
+	},
+	{
+		symbol: "OOE",
+		address: "0x9029FdFAe9A03135846381c7cE16595C3554e10A",
 		decimals: 18
 	},
 	{
 		symbol: "OPERAND",
 		address: "0x7Cb2f28505E733F60C0db208AfaA321c792F6Cf4",
 		decimals: 8
+	},
+	{
+		symbol: "ORAI",
+		address: "0x4c11249814f11b9346808179Cf06e71ac328c1b5",
+		decimals: 18
 	},
 	{
 		symbol: "PALM",
@@ -37462,6 +38817,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "PMON",
+		address: "0x1796ae0b0fa4862485106a0de9b654eFE301D0b2",
+		decimals: 18
+	},
+	{
 		symbol: "PNL",
 		address: "0x16A62C9955ca1BA52e0ECA9ee4c3992204Eb0915",
 		decimals: 18
@@ -37482,6 +38842,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "POLS",
+		address: "0x83e6f1E41cdd28eAcEB20Cb649155049Fac3D5Aa",
+		decimals: 18
+	},
+	{
 		symbol: "POODL",
 		address: "0x4a68C250486a116DC8D6A0C5B0677dE07cc09C5D",
 		decimals: 9
@@ -37489,6 +38854,11 @@ var tokens$2 = [
 	{
 		symbol: "pOPIUM",
 		address: "0x566cedD201F67E542A6851A2959c1a449a041945",
+		decimals: 18
+	},
+	{
+		symbol: "PRNTR",
+		address: "0x016c8dA9D916905a00eF26a2e7dC2EE67B6020cF",
 		decimals: 18
 	},
 	{
@@ -37502,8 +38872,23 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "PRQ",
+		address: "0xd21d29B38374528675C34936bf7d5Dd693D2a577",
+		decimals: 18
+	},
+	{
+		symbol: "PVM",
+		address: "0x71afF23750db1f4edbE32C942157a478349035b2",
+		decimals: 18
+	},
+	{
 		symbol: "QUAM",
 		address: "0x1AdE17B4B38B472B5259BbC938618226dF7b5Ca8",
+		decimals: 18
+	},
+	{
+		symbol: "RAINI",
+		address: "0xeB953eDA0DC65e3246f43DC8fa13f35623bDd5eD",
 		decimals: 18
 	},
 	{
@@ -37519,6 +38904,11 @@ var tokens$2 = [
 	{
 		symbol: "RAZE",
 		address: "0x65e66a61D0a8F1e686C2D6083ad611a10D84D97A",
+		decimals: 18
+	},
+	{
+		symbol: "RAZOR",
+		address: "0x50DE6856358Cc35f3A9a57eAAA34BD4cB707d2cd",
 		decimals: 18
 	},
 	{
@@ -37560,6 +38950,31 @@ var tokens$2 = [
 		symbol: "renZEC",
 		address: "0x695FD30aF473F2960e81Dc9bA7cB67679d35EDb7",
 		decimals: 8
+	},
+	{
+		symbol: "REVO",
+		address: "0x155040625D7ae3e9caDA9a73E3E44f76D3Ed1409",
+		decimals: 18
+	},
+	{
+		symbol: "REVO",
+		address: "0x678e5f70b6b582dfADB3dBD68AF17801d34555c5",
+		decimals: 18
+	},
+	{
+		symbol: "RFOX",
+		address: "0x0a3A21356793B49154Fd3BbE91CBc2A16c0457f5",
+		decimals: 18
+	},
+	{
+		symbol: "ROCKS",
+		address: "0x0829d2d5cC09d3d341E813c821B0cfAE272D9fb2",
+		decimals: 18
+	},
+	{
+		symbol: "ROOM",
+		address: "0xAd4f86a25bbc20FfB751f2FAC312A0B4d8F88c64",
+		decimals: 18
 	},
 	{
 		symbol: "RSD",
@@ -37632,14 +39047,29 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "SAVE",
+		address: "0xc1eEcf1f4AF8EB9a2a19f6C26B434aA96ce859e1",
+		decimals: 18
+	},
+	{
 		symbol: "sBDO",
 		address: "0x0d9319565be7f53CeFE84Ad201Be3f40feAE2740",
+		decimals: 18
+	},
+	{
+		symbol: "SCIFI",
+		address: "0x1fDaB294EDA5112B7d066ED8F2E4E562D5bCc664",
 		decimals: 18
 	},
 	{
 		symbol: "SEA",
 		address: "0xFB52FC1f90Dd2B070B9Cf7ad68ac3d68905643fa",
 		decimals: 18
+	},
+	{
+		symbol: "SFH",
+		address: "0x2b2b0559081c41e962777B5049632fdb30f7E652",
+		decimals: 0
 	},
 	{
 		symbol: "SFP",
@@ -37659,6 +39089,11 @@ var tokens$2 = [
 	{
 		symbol: "SHIELD",
 		address: "0x60b3BC37593853c04410c4F07fE4D6748245BF77",
+		decimals: 18
+	},
+	{
+		symbol: "SKILL",
+		address: "0x154A9F9cbd3449AD22FDaE23044319D6eF2a1Fab",
 		decimals: 18
 	},
 	{
@@ -37687,6 +39122,11 @@ var tokens$2 = [
 		decimals: 8
 	},
 	{
+		symbol: "SOUL",
+		address: "0x79C75E2e8720B39e258F41c37cC4f309E0b0fF80",
+		decimals: 8
+	},
+	{
 		symbol: "SOUP",
 		address: "0x94F559aE621F1c810F31a6a620Ad7376776fe09E",
 		decimals: 18
@@ -37703,6 +39143,11 @@ var tokens$2 = [
 	},
 	{
 		symbol: "SPARTA",
+		address: "0x3910db0600eA925F63C36DdB1351aB6E2c6eb102",
+		decimals: 18
+	},
+	{
+		symbol: "SPARTA",
 		address: "0xE4Ae305ebE1AbE663f261Bc00534067C80ad677C",
 		decimals: 18
 	},
@@ -37710,6 +39155,11 @@ var tokens$2 = [
 		symbol: "SPG",
 		address: "0x3aabCf53A1930A42E18D938C019E83Ebee50a849",
 		decimals: 9
+	},
+	{
+		symbol: "SPI",
+		address: "0x78A18Db278F9c7c9657F61dA519e6Ef43794DD5D",
+		decimals: 18
 	},
 	{
 		symbol: "SPOOL",
@@ -37742,8 +39192,23 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "STRONG",
+		address: "0x990f341946A3fdB507aE7e52d17851B87168017c",
+		decimals: 18
+	},
+	{
 		symbol: "SUPER",
 		address: "0x51BA0b044d96C3aBfcA52B64D733603CCC4F0d4D",
+		decimals: 18
+	},
+	{
+		symbol: "SURE",
+		address: "0x9b17bAADf0f21F03e35249e0e59723F34994F806",
+		decimals: 18
+	},
+	{
+		symbol: "SUSHI",
+		address: "0x947950BcC74888a40Ffa2593C5798F11Fc9124C4",
 		decimals: 18
 	},
 	{
@@ -37794,6 +39259,11 @@ var tokens$2 = [
 	{
 		symbol: "TFF",
 		address: "0x2d69c55baEcefC6ec815239DA0a985747B50Db6E",
+		decimals: 18
+	},
+	{
+		symbol: "TIK",
+		address: "0x0922F1D808aDc3A4444BEd2F73fAC53a1A2A5859",
 		decimals: 18
 	},
 	{
@@ -37884,6 +39354,21 @@ var tokens$2 = [
 	{
 		symbol: "UBXT",
 		address: "0xBbEB90cFb6FAFa1F69AA130B7341089AbeEF5811",
+		decimals: 18
+	},
+	{
+		symbol: "UFT",
+		address: "0x2645d5f59D952ef2317C8e0AaA5A61c392cCd44d",
+		decimals: 18
+	},
+	{
+		symbol: "UMB",
+		address: "0x6fC13EACE26590B80cCCAB1ba5d51890577D83B2",
+		decimals: 18
+	},
+	{
+		symbol: "UNFI",
+		address: "0x728C5baC3C3e370E372Fc4671f9ef6916b814d8B",
 		decimals: 18
 	},
 	{
@@ -38072,6 +39557,16 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "WILD",
+		address: "0x089165ac9a7Bf61833Da86268F34A01652543466",
+		decimals: 18
+	},
+	{
+		symbol: "WOO",
+		address: "0x4691937a7508860F876c9c0a2a617E7d9E945D4B",
+		decimals: 18
+	},
+	{
 		symbol: "WOOP",
 		address: "0x8b303d5BbfBbf46F1a4d9741E491e06986894e18",
 		decimals: 18
@@ -38147,6 +39642,16 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "YFO",
+		address: "0xAc0C8dA4A4748d8d821A0973d00b157aA78C473D",
+		decimals: 18
+	},
+	{
+		symbol: "YOP",
+		address: "0xAE1eaAE3F627AAca434127644371b67B18444051",
+		decimals: 8
+	},
+	{
 		symbol: "yPANDA",
 		address: "0x9806aec346064183b5cE441313231DFf89811f7A",
 		decimals: 8
@@ -38169,6 +39674,11 @@ var tokens$2 = [
 	{
 		symbol: "ZEFI",
 		address: "0x0288D3E353fE2299F11eA2c2e1696b4A648eCC07",
+		decimals: 18
+	},
+	{
+		symbol: "ZEFU",
+		address: "0xB1e9157c2Fdcc5a856C8DA8b2d89b6C32b3c1229",
 		decimals: 18
 	},
 	{

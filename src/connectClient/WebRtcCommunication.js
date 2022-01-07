@@ -1,12 +1,12 @@
-import debugLogger from 'debug';
+//import debugLogger from 'debug';
 import SimplePeer from 'simple-peer';
 import { isBrowser } from 'browser-or-node';
 import uuid from 'uuid/v4';
 import MewConnectCommon from './MewConnectCommon';
 
-const debug = debugLogger('MEWconnect:webRTC-communication');
-const debugPeer = debugLogger('MEWconnectVerbose:peer-instances');
-const debugStages = debugLogger('MEWconnect:peer-stages');
+const debug = console.log; //debugLogger('MEWconnect:webRTC-communication');
+const debugPeer = console.log; //debugLogger('MEWconnectVerbose:peer-instances');
+const debugStages = console.log; //debugLogger('MEWconnect:peer-stages');
 
 export default class WebRtcCommunication extends MewConnectCommon {
   constructor(mewCrypto) {
@@ -137,6 +137,8 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.fallbackTimer();
     this.setActivePeerId();
     this.p = new this.Peer(simpleOptions);
+    console.log('peer options', simpleOptions);
+    this.p.on(this.rtcEvents.signal, this.signalListener.bind(this));
     const peerID = this.getActivePeerId();
     this.answerReceived[peerID] = false;
     this.p.peerInstanceId = peerID;
@@ -145,7 +147,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.p.on(this.rtcEvents.connect, this.onConnect.bind(this, peerID));
     this.p.on(this.rtcEvents.close, this.onClose.bind(this, peerID));
     this.p.on(this.rtcEvents.data, this.onData.bind(this, peerID));
-    this.p.on(this.rtcEvents.signal, this.signalListener.bind(this));
     debug(`active PEER_ID: ${this.p.peerInstanceId}`);
     this.p._pc.addEventListener(
       'iceconnectionstatechange',
@@ -165,15 +166,18 @@ export default class WebRtcCommunication extends MewConnectCommon {
   }
 
   signalListener(data) {
+    debug('webRTC setup signal received->>>>>>>>>>>', data);
     if (this.canSignal) {
       this.canSignal = !this.canSignal;
       ++this.offersSent;
-      debug('webRTC setup signal received');
+      // data.sdp = data.sdp.replace('127.0.0.1', '47.229.249.186');
+
       this.emit('signal', data);
     }
   }
 
   receiveAnswer(plainTextOffer) {
+    console.log(plainTextOffer);
     debug('receiveAnswer for version: ', this.usingVersion);
     this.fallbackTimer();
     if (this.tryingTurn && this.usingVersion === 'V1') {
@@ -201,7 +205,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
       debug(`active PEER_ID: ${this.p.peerInstanceId}`);
       try {
         this.answerReceived[this.p.peerInstanceId] = true;
-        this.p.signal(plainTextOffer);
+        this.p.signal(plainTextOffer, '-----------------------');
         debug('webRTC answer received and processed');
       } catch (e) {
         // eslint-disable-next-line

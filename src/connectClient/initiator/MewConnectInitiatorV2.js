@@ -1,14 +1,13 @@
-import debugLogger from 'debug';
+//import debugLogger from 'debug';
 import uuid from 'uuid/v4';
 import WebSocket from '../websocketWrapper';
-import wrtc from 'wrtc';
+//import wrtc from 'wrtc';
 import MewConnectCommon from '../MewConnectCommon';
 import { stunServers } from '../config';
 
-const debug = debugLogger('MEWconnect:initiator-V2');
-const debugTurn = debugLogger('MEWconnect:turn-V2');
-const debugStages = debugLogger('MEWconnect:initiator-stages-V2');
-
+const debug = console.log; //debugLogger('MEWconnect:initiator-V2');
+const debugTurn = console.log; //debugLogger('MEWconnect:turn-V2');
+const debugStages = console.log; //debugLogger('MEWconnect:initiator-stages-V2');
 export default class MewConnectInitiatorV2 extends MewConnectCommon {
   constructor(options = {}) {
     super('V2');
@@ -55,7 +54,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
       // WebRTC options
       this.iceTransportPolicy = 'all';
-      this.trickle = true;
+      this.trickle = false;
     } catch (e) {
       debug('constructor error:', e);
     }
@@ -155,6 +154,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     }
   }
   async connect(websocketURL, options = null) {
+    console.log(websocketURL);
     try {
       if (typeof jest !== 'undefined' && this.connId === null) {
         // for tests only
@@ -372,12 +372,12 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
         servers: this.stunServers,
         webRtcConfig: {
           initiator: true,
-          trickle: this.trickle,
+          trickle: false,
           iceTransportPolicy: this.iceTransportPolicy,
           config: {
             iceServers: this.stunServers
-          },
-          wrtc: wrtc
+          }
+          //   wrtc: wrtc
         }
       };
 
@@ -453,13 +453,13 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
       this.iceServers = null;
       const defaultOptions = {
-        initiator: this.trickle,
-        trickle: this.trickle,
+        initiator: true,
+        trickle: false,
         // iceTransportPolicy: 'all', //'relay',
         config: {
           iceServers: webRtcServers
-        },
-        wrtc: wrtc
+        }
+        // wrtc: wrtc
       };
 
       //
@@ -596,7 +596,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     try {
       this.emit('retryingViaTurn');
       this.states = this.setResetStates();
-      debugTurn('Retrying via TURN v2');
+      debugTurn('Retrying via TURN v2', data);
       this.iceServers = null;
       const options = {
         servers: data.iceServers.map(obj => {
@@ -607,7 +607,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
         webRtcConfig: {
           initiator: true,
           trickle: false,
-          iceTransportPolicy: 'relay',
+          //  iceTransportPolicy: 'relay',
           config: {
             iceServers: data.iceServers.map(obj => {
               const newObject = {};
@@ -616,11 +616,12 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
               ];
               return newObject;
             })
-          },
-          wrtc: wrtc
+          }
+          //wrtc: wrtc
         }
       };
-      debug('turn info arrived and begin turn'); // todo remove dev item
+      //options.webRtcConfig.config.iceServers.shift();
+      debug('turn info arrived and begin turn', options); // todo remove dev item
       this.initiatorStartRTC(options);
     } catch (e) {
       debugTurn('retryViaTurn error:', e);
