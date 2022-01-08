@@ -1,4 +1,4 @@
-import * as packageJSON from '../../package.json';
+const packageJSON = require('../../package.json');
 
 const env = 'production';
 const version = packageJSON.version;
