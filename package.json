@@ -30,7 +30,6 @@
     "@rollup/plugin-json": "^4.1.0",
     "bignumber.js": "^9.0.0",
     "browser-or-node": "^1.2.1",
-    "core-js": "^3.4.4",
     "debug": "^4.0.1",
     "detect-browser": "^3.0.1",
     "eccrypto": "^1.1.6",
