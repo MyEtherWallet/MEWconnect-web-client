@@ -136,6 +136,9 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.canSignal = !this.canSignal;
     this.fallbackTimer();
     this.setActivePeerId();
+    if (this.p !== null) {
+      this.p.destroy();
+    }
     this.p = new this.Peer(simpleOptions);
     const peerID = this.getActivePeerId();
     this.answerReceived[peerID] = false;
@@ -247,8 +250,8 @@ export default class WebRtcCommunication extends MewConnectCommon {
       debugStages(' TRY TURN V2');
       this.tryingTurn = true;
       try {
+        console.log('here', 1);
         this.useFallback();
-        // this.uiCommunicator(this.lifeCycle.UsingFallback);
       } catch (e) {
         // eslint-disable-next-line
         console.error(e);
@@ -276,6 +279,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   useFallback() {
     if (!this.connected) {
+      console.log('here', 4);
       this.emit(this.lifeCycle.UsingFallback, this.activeInitiatorId);
     }
   }
@@ -307,6 +311,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
         !this.turnDisabled
       ) {
         this.turnDisabled = true;
+        console.log('here', 2);
         this.useFallback();
       }
     }
@@ -414,6 +419,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     }
 
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
+      console.log('here', 3);
       this.useFallback();
     } else {
       if (!this.isAlive()) {

@@ -22,8 +22,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.Url = options.url || 'wss://connect2.mewapi.io/staging';
       this.active = true;
       this.turnTest = options.turnTest;
-
-      this.p = null;
       this.socketConnected = false;
       this.socketV1Connected = false;
       this.connected = false;
@@ -63,6 +61,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     this.webRtcCommunication.on(this.lifeCycle.UsingFallback, id => {
       debug('USING TURN FALLBACK', id, this.initiatorId);
       if (this.initiatorId === id) {
+        console.log('lifecycle fallback');
         this.useFallback();
       } else {
         this.socketDisconnect();
@@ -80,10 +79,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   isAlive() {
-    if (this.p !== null) {
-      return this.p.connected && !this.p.destroyed;
-    }
-    return false;
+    return this.webRtcCommunication.isAlive();
   }
 
   setWebRtc(webRtcCommunication) {
@@ -184,25 +180,13 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   async useFallback() {
+    console.log('retry', this.retryCount);
     this.retryCount++;
 
     if (this.retryCount >= 4) {
       this.emit('showRefresh');
       return;
-    } //prevent infinite retries
-    // prevent multiple requests
-    // There is a disconnect between the app expectation and the client.  Possibly
-    // if(!this.start){
-    //   this.start = Date.now();
-    //   this.socketEmit(this.signals.tryTurn, { connId: this.connId });
-    // }
-    // const tyrAgain =
-    //   (Date.now() - this.start) / 1000 > 30;
-    // if(tyrAgain){
-    //   this.start = Date.now();
-    //   this.socketEmit(this.signals.tryTurn, { connId: this.connId });
-    // }
-    // right now the app needs multiple sends to catch the app in the right state
+    }
     if (!this.credentialsRequested) {
       this.credentialsRequested = true;
       this.socketEmit(this.signals.tryTurn, { connId: this.connId });
@@ -394,6 +378,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     this.offersSent.push(data.sdp);
     // App was waiting for turn data and not sending back an answer
     this.offerTimer = setTimeout(() => {
+      console.log('offer timeout');
       this.useFallback();
     }, 5000);
     debug('sendOffer', this.initiatorId);
@@ -473,7 +458,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
       debug(`initiatorStartRTC - options: ${simpleOptions}`);
       this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
-      // this.p = new this.Peer(simpleOptions);
       const peerID = this.webRtcCommunication.getActivePeerId();
       this.setActivePeerId(peerID);
       this.webRtcCommunication.once(
@@ -540,6 +524,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     debug(err.code);
     debug('error', err);
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
+      console.log('on error retyr');
       this.useFallback();
     } else if (!this.connected && this.tryingTurn && !this.turnDisabled) {
       this.emit('ShowReload');
