@@ -57,16 +57,13 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     } catch (e) {
       debug('constructor error:', e);
     }
-
     this.webRtcCommunication.on(this.lifeCycle.UsingFallback, id => {
       debug('USING TURN FALLBACK', id, this.initiatorId);
       if (this.initiatorId === id) {
-        console.log('lifecycle fallback');
         this.useFallback();
       } else {
         this.socketDisconnect();
         this.isActiveInstance = false;
-        // this.webRtcCommunication.off('data', this.onData.bind(this, ''));
       }
     });
   }
@@ -180,9 +177,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   async useFallback() {
-    console.log('retry', this.retryCount);
     this.retryCount++;
-
     if (this.retryCount >= 4) {
       this.emit('showRefresh');
       return;
@@ -378,7 +373,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     this.offersSent.push(data.sdp);
     // App was waiting for turn data and not sending back an answer
     this.offerTimer = setTimeout(() => {
-      console.log('offer timeout');
       this.useFallback();
     }, 5000);
     debug('sendOffer', this.initiatorId);
@@ -386,7 +380,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.emit('sendingOffer');
       debug('SIGNAL', JSON.stringify(data));
       const encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(data));
-      // this.uiCommunicator(this.lifeCycle.sendOffer);
       this.states.offer = true;
       this.socketEmit(this.signals.offerSignal, {
         data: encryptedSend,
@@ -524,7 +517,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
     debug(err.code);
     debug('error', err);
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
-      console.log('on error retyr');
       this.useFallback();
     } else if (!this.connected && this.tryingTurn && !this.turnDisabled) {
       this.emit('ShowReload');

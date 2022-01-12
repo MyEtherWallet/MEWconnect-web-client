@@ -20,7 +20,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.answersReceived = [];
     this.offersSent = -1;
     this.turnTimer = null;
-    this.turnWaitTime = 5000;
+    this.turnWaitTime = 2000;
     this.enableTimer = true;
     this.tryingTurn = false;
     this.connected = false;
@@ -162,7 +162,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
   onConnect(peerID) {
     debug('onConnect', peerID);
     this.connected = true;
-    // this.emit('connect', peerID);
     this.emit(this.jsonDetails.lifeCycle.RtcConnectedEvent, peerID);
     this.clearExtraOnConnection();
   }
@@ -240,7 +239,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
   // Handle Socket Attempting Turn informative signal
   // Provide Notice that initial WebRTC connection failed and the fallback method will be used
   willAttemptTurn() {
-    this.uiCommunicator(this.lifeCycle.UsingFallback, this.activeInitiatorId);
     if (!this.connected && this.tryingTurn && this.usingVersion === 'V2') {
       this.refreshQrTimer();
       this.refreshEnabled = false;
@@ -250,7 +248,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
       debugStages(' TRY TURN V2');
       this.tryingTurn = true;
       try {
-        console.log('here', 1);
         this.useFallback();
       } catch (e) {
         // eslint-disable-next-line
@@ -279,7 +276,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
 
   useFallback() {
     if (!this.connected) {
-      console.log('here', 4);
       this.emit(this.lifeCycle.UsingFallback, this.activeInitiatorId);
     }
   }
@@ -311,7 +307,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
         !this.turnDisabled
       ) {
         this.turnDisabled = true;
-        console.log('here', 2);
         this.useFallback();
       }
     }
@@ -419,7 +414,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
     }
 
     if (!this.connected && !this.tryingTurn && !this.turnDisabled) {
-      console.log('here', 3);
       this.useFallback();
     } else {
       if (!this.isAlive()) {
