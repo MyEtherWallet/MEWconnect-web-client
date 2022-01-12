@@ -291,129 +291,8 @@ function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
-var name = "@myetherwallet/mewconnect-web-client";
-var homepage = "https://github.com/myetherwallet/MEWconnect-web-client";
-var version = "2.2.0-beta.13";
-var main = "dist/cjs/index.js";
-var module = "dist/esm/index.js";
-var scripts = {
-	start: "./node_modules/.bin/vue-cli-service serve  --https example/app/src/main.js",
-	"test:jest": "npx jest --detectOpenHandles --forceExit --runInBand",
-	"test:browser": "npx opn ./tests/browser/browser_test.html",
-	"test:old": "npm run buildBrowserTest && npm run test:jest && npm run test:browser",
-	test: "npm run test:jest",
-	buildBrowserTest: "webpack --config tests/browser/webpack.config.js",
-	"buildBrowserTest:watch": "webpack --config tests/browser/webpack.config.js -w",
-	build: "npx npm-force-resolutions && npm install && npm run lint && rimraf dist/ && npx rollup -c",
-	"build:dev": "rimraf dist/ && npx rollup -c",
-	lint: "npx eslint --fix 'src/**.js'",
-	"update:mainlist": "node src/connectProvider/fetchLists/fetchMainLists.js",
-	"update:lists": "npm run update:mainlist && node src/connectProvider/fetchLists/index.js",
-	prepublishOnly: "npm install && npm run update:lists && npm run build",
-	prepack: "npm run build",
-	ci: "npm install && npm run update:lists && npm run build"
-};
-var gitHooks = {
-	"pre-commit": "npm run lint"
-};
-var dependencies = {
-	"@rollup/plugin-babel": "^5.3.0",
-	"@rollup/plugin-commonjs": "^20.0.0",
-	"@rollup/plugin-json": "^4.1.0",
-	"bignumber.js": "^9.0.0",
-	"browser-or-node": "^1.2.1",
-	"core-js": "^3.4.4",
-	debug: "^4.0.1",
-	"detect-browser": "^3.0.1",
-	eccrypto: "^1.1.6",
-	"eth-sig-util": "^3.0.1",
-	"ethereumjs-common": "^1.5.0",
-	"ethereumjs-tx": "^2.1.2",
-	"ethereumjs-utils": "^5.2.5",
-	"ethjs-unit": "^0.1.6",
-	events: "^3.1.0",
-	"isomorphic-ws": "^4.0.1",
-	logging: "^3.2.0",
-	mocha: "^5.2.0",
-	"node-fetch": "^2.6.0",
-	platform: "^1.3.5",
-	"promise-ws": "^1.0.0-1",
-	qrcode: "^1.4.4",
-	"query-string": "^6.10.1",
-	secp256k1: "^3.8.0",
-	"simple-peer": "^9.6.2",
-	"socket.io-client": "^2.3.0",
-	store: "^2.0.12",
-	underscore: "latest",
-	uuid: "^3.4.0",
-	vue: "^2.6.10",
-	web3: "1.5.0",
-	"web3-core-helpers": "1.5.0",
-	"web3-core-method": "1.5.0",
-	"web3-core-requestmanager": "1.5.0",
-	"web3-utils": "1.5.0",
-	"webrtc-adapter": "^6.4.3",
-	wrtc: "^0.4.6",
-	ws: "^7.5.3"
-};
-var devDependencies = {
-	"@babel/core": "^7.8.4",
-	"@babel/plugin-external-helpers": "^7.8.3",
-	"@babel/plugin-transform-async-to-generator": "^7.8.3",
-	"@babel/plugin-transform-regenerator": "^7.8.3",
-	"@babel/plugin-transform-runtime": "^7.8.3",
-	"@babel/plugin-transform-spread": "^7.8.3",
-	"@babel/preset-env": "^7.8.4",
-	"@rollup/plugin-image": "^2.1.0",
-	"@vue/cli-plugin-babel": "^4.1.0",
-	"@vue/cli-plugin-eslint": "^4.2.3",
-	"@vue/cli-service": "^4.1.0",
-	"@vue/eslint-config-prettier": "^4.0.1",
-	axios: "^0.21.1",
-	"babel-core": "^7.0.0-bridge.0",
-	"babel-eslint": "^10.0.3",
-	"babel-jest": "^25.1.0",
-	"babel-preset-es2015-rollup": "^3.0.0",
-	chai: "^4.2.0",
-	"clean-webpack-plugin": "^3.0.0",
-	eslint: "^6.8.0",
-	"eslint-config-airbnb-base": "^13.2.0",
-	"eslint-config-prettier": "^3.0.1",
-	"eslint-plugin-import": "^2.20.1",
-	"eslint-plugin-security": "^1.4.0",
-	"eslint-plugin-vue": "^6.2.1",
-	jest: "^25.2.3",
-	"node-sass": "^4.12.0",
-	nyc: "^15.0.0",
-	opn: "^5.5.0",
-	"opn-cli": "^3.1.0",
-	"regenerator-runtime": "^0.13.3",
-	rimraf: "^2.7.1",
-	rollup: "^2.56.2",
-	"rollup-plugin-json": "^3.1.0",
-	"sass-loader": "^8.0.0",
-	"style-loader": "^1.1.3",
-	"svg-inline-loader": "^0.8.0",
-	"url-loader": "^3.0.0",
-	"vue-template-compiler": "^2.6.10",
-	yorkie: "^2.0.0"
-};
-var resolutions = {
-	"xmlhttprequest-ssl": "1.6.1"
-};
-var packageJson = {
-	name: name,
-	homepage: homepage,
-	version: version,
-	main: main,
-	module: module,
-	scripts: scripts,
-	gitHooks: gitHooks,
-	dependencies: dependencies,
-	devDependencies: devDependencies,
-	resolutions: resolutions
-};
-
+var packageJSON = require('../../package.json');
+packageJSON.version;
 var V1endpoint = 'https://connect.mewapi.io';
 var V2endpoint = 'wss://connect2.mewapi.io/staging';
 var stunServers = [{
@@ -1207,7 +1086,6 @@ var MewConnectInitiatorV2 = /*#__PURE__*/function (_MewConnectCommon) {
       _this.Url = options.url || 'wss://connect2.mewapi.io/staging';
       _this.active = true;
       _this.turnTest = options.turnTest;
-      _this.p = null;
       _this.socketConnected = false;
       _this.socketV1Connected = false;
       _this.connected = false;
@@ -1233,8 +1111,7 @@ var MewConnectInitiatorV2 = /*#__PURE__*/function (_MewConnectCommon) {
       _this.timer = null;
       _this.retryCount = 0; // WebRTC options
 
-      _this.iceTransportPolicy = 'all';
-      _this.trickle = true;
+      _this.trickle = false;
     } catch (e) {
       debug$c('constructor error:', e);
     }
@@ -1247,7 +1124,7 @@ var MewConnectInitiatorV2 = /*#__PURE__*/function (_MewConnectCommon) {
       } else {
         _this.socketDisconnect();
 
-        _this.isActiveInstance = false; // this.webRtcCommunication.off('data', this.onData.bind(this, ''));
+        _this.isActiveInstance = false;
       }
     });
 
@@ -1265,11 +1142,7 @@ var MewConnectInitiatorV2 = /*#__PURE__*/function (_MewConnectCommon) {
   }, {
     key: "isAlive",
     value: function isAlive() {
-      if (this.p !== null) {
-        return this.p.connected && !this.p.destroyed;
-      }
-
-      return false;
+      return this.webRtcCommunication.isAlive();
     }
   }, {
     key: "setWebRtc",
@@ -1470,20 +1343,6 @@ var MewConnectInitiatorV2 = /*#__PURE__*/function (_MewConnectCommon) {
                 return _context4.abrupt("return");
 
               case 4:
-                //prevent infinite retries
-                // prevent multiple requests
-                // There is a disconnect between the app expectation and the client.  Possibly
-                // if(!this.start){
-                //   this.start = Date.now();
-                //   this.socketEmit(this.signals.tryTurn, { connId: this.connId });
-                // }
-                // const tyrAgain =
-                //   (Date.now() - this.start) / 1000 > 30;
-                // if(tyrAgain){
-                //   this.start = Date.now();
-                //   this.socketEmit(this.signals.tryTurn, { connId: this.connId });
-                // }
-                // right now the app needs multiple sends to catch the app in the right state
                 if (!this.credentialsRequested) {
                   this.credentialsRequested = true;
                   this.socketEmit(this.signals.tryTurn, {
@@ -1657,7 +1516,6 @@ var MewConnectInitiatorV2 = /*#__PURE__*/function (_MewConnectCommon) {
           webRtcConfig: {
             initiator: true,
             trickle: this.trickle,
-            iceTransportPolicy: this.iceTransportPolicy,
             config: {
               iceServers: this.stunServers
             },
@@ -1710,7 +1568,6 @@ var MewConnectInitiatorV2 = /*#__PURE__*/function (_MewConnectCommon) {
 
               case 12:
                 encryptedSend = _context5.sent;
-                // this.uiCommunicator(this.lifeCycle.sendOffer);
                 this.states.offer = true;
                 this.socketEmit(this.signals.offerSignal, {
                   data: encryptedSend,
@@ -1815,22 +1672,20 @@ var MewConnectInitiatorV2 = /*#__PURE__*/function (_MewConnectCommon) {
         var webRtcServers = webRtcConfig.servers || this.stunServers;
         this.iceServers = null;
         var defaultOptions = {
-          initiator: this.trickle,
+          initiator: true,
           trickle: this.trickle,
-          // iceTransportPolicy: 'all', //'relay',
           config: {
             iceServers: webRtcServers
           },
           wrtc: wrtc
-        }; //
+        };
 
         var simpleOptions = _objectSpread2(_objectSpread2({}, defaultOptions), webRtcConfig);
 
         this.webRtcCommunication.setConnectionVersion('V2');
         this.webRtcCommunication.start(simpleOptions);
         debug$c("initiatorStartRTC - options: ".concat(simpleOptions));
-        this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent); // this.p = new this.Peer(simpleOptions);
-
+        this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
         var peerID = this.webRtcCommunication.getActivePeerId();
         this.setActivePeerId(peerID);
         this.webRtcCommunication.once(this.jsonDetails.lifeCycle.RtcConnectedEvent, this.onConnect.bind(this, peerID));
@@ -2053,8 +1908,7 @@ var MewConnectInitiatorV2 = /*#__PURE__*/function (_MewConnectCommon) {
           }),
           webRtcConfig: {
             initiator: true,
-            trickle: false,
-            iceTransportPolicy: 'relay',
+            trickle: this.trickle,
             config: {
               iceServers: data.iceServers.map(function (obj) {
                 var newObject = {};
@@ -2772,7 +2626,7 @@ var PopUpCreator = /*#__PURE__*/function (_EventEmitter) {
       if (document.querySelector('.mew-wallet-modal') && document.querySelector('.mew-wallet-modal-container-mew-modal')) {
         document.querySelector('.mew-wallet-modal').classList.remove('is-visible');
         document.querySelector('.mew-wallet-modal-container-mew-modal').classList.remove('is-visible');
-        document.querySelector('.modal-dialog').classList.remove('is-visible');
+        document.querySelector('.mew-wallet-modal-dialog').classList.remove('is-visible');
       }
     }
   }, {
@@ -2784,7 +2638,7 @@ var PopUpCreator = /*#__PURE__*/function (_EventEmitter) {
       if (document.querySelector('.mew-wallet-modal') && document.querySelector('.mew-wallet-modal-container-mew-modal')) {
         document.querySelector('.mew-wallet-modal').classList.add('is-visible');
         document.querySelector('.mew-wallet-modal-container-mew-modal').classList.add('is-visible');
-        document.querySelector('.modal-dialog').classList.add('is-visible');
+        document.querySelector('.mew-wallet-modal-dialog').classList.add('is-visible');
       }
     }
   }, {
@@ -3900,7 +3754,7 @@ var WebRtcCommunication = /*#__PURE__*/function (_MewConnectCommon) {
     _this.answersReceived = [];
     _this.offersSent = -1;
     _this.turnTimer = null;
-    _this.turnWaitTime = 5000;
+    _this.turnWaitTime = 2000;
     _this.enableTimer = true;
     _this.tryingTurn = false;
     _this.connected = false;
@@ -4033,6 +3887,11 @@ var WebRtcCommunication = /*#__PURE__*/function (_MewConnectCommon) {
       this.canSignal = !this.canSignal;
       this.fallbackTimer();
       this.setActivePeerId();
+
+      if (this.p !== null) {
+        this.p.destroy();
+      }
+
       this.p = new this.Peer(simpleOptions);
       var peerID = this.getActivePeerId();
       this.answerReceived[peerID] = false;
@@ -4055,8 +3914,7 @@ var WebRtcCommunication = /*#__PURE__*/function (_MewConnectCommon) {
     key: "onConnect",
     value: function onConnect(peerID) {
       debug$9('onConnect', peerID);
-      this.connected = true; // this.emit('connect', peerID);
-
+      this.connected = true;
       this.emit(this.jsonDetails.lifeCycle.RtcConnectedEvent, peerID);
       this.clearExtraOnConnection();
     }
@@ -4144,8 +4002,6 @@ var WebRtcCommunication = /*#__PURE__*/function (_MewConnectCommon) {
   }, {
     key: "willAttemptTurn",
     value: function willAttemptTurn() {
-      this.uiCommunicator(this.lifeCycle.UsingFallback, this.activeInitiatorId);
-
       if (!this.connected && this.tryingTurn && this.usingVersion === 'V2') {
         this.refreshQrTimer();
         this.refreshEnabled = false;
@@ -4157,7 +4013,7 @@ var WebRtcCommunication = /*#__PURE__*/function (_MewConnectCommon) {
         this.tryingTurn = true;
 
         try {
-          this.useFallback(); // this.uiCommunicator(this.lifeCycle.UsingFallback);
+          this.useFallback();
         } catch (e) {
           // eslint-disable-next-line
           console.error(e);
@@ -4575,6 +4431,129 @@ var WebRtcCommunication = /*#__PURE__*/function (_MewConnectCommon) {
 
   return WebRtcCommunication;
 }(MewConnectCommon);
+
+var name = "@myetherwallet/mewconnect-web-client";
+var homepage = "https://github.com/myetherwallet/MEWconnect-web-client";
+var version = "2.2.0-beta.15";
+var main = "dist/cjs/index.js";
+var module = "dist/esm/index.js";
+var scripts = {
+	start: "./node_modules/.bin/vue-cli-service serve  --https example/app/src/main.js",
+	"test:jest": "npx jest --detectOpenHandles --forceExit --runInBand",
+	"test:browser": "npx opn ./tests/browser/browser_test.html",
+	"test:old": "npm run buildBrowserTest && npm run test:jest && npm run test:browser",
+	test: "npm run test:jest",
+	buildBrowserTest: "webpack --config tests/browser/webpack.config.js",
+	"buildBrowserTest:watch": "webpack --config tests/browser/webpack.config.js -w",
+	build: "npx npm-force-resolutions && npm install && npm run lint && rimraf dist/ && npx rollup -c",
+	"build:dev": "rimraf dist/ && npx rollup -c",
+	lint: "npx eslint --fix 'src/**.js'",
+	"update:mainlist": "node src/connectProvider/fetchLists/fetchMainLists.js",
+	"update:lists": "npm run update:mainlist && node src/connectProvider/fetchLists/index.js",
+	prepublishOnly: "npm install && npm run update:lists && npm run build",
+	prepack: "npm run build",
+	ci: "npm install && npm run update:lists && npm run build"
+};
+var gitHooks = {
+	"pre-commit": "npm run lint"
+};
+var dependencies = {
+	"@rollup/plugin-babel": "^5.3.0",
+	"@rollup/plugin-commonjs": "^20.0.0",
+	"@rollup/plugin-json": "^4.1.0",
+	"bignumber.js": "^9.0.0",
+	"browser-or-node": "^1.2.1",
+	"core-js": "^3.4.4",
+	debug: "^4.0.1",
+	"detect-browser": "^3.0.1",
+	eccrypto: "^1.1.6",
+	"eth-sig-util": "^3.0.1",
+	"ethereumjs-common": "^1.5.0",
+	"ethereumjs-tx": "^2.1.2",
+	"ethereumjs-utils": "^5.2.5",
+	"ethjs-unit": "^0.1.6",
+	events: "^3.1.0",
+	"isomorphic-ws": "^4.0.1",
+	logging: "^3.2.0",
+	mocha: "^5.2.0",
+	"node-fetch": "^2.6.0",
+	platform: "^1.3.5",
+	"promise-ws": "^1.0.0-1",
+	qrcode: "^1.5.0",
+	"query-string": "^6.10.1",
+	secp256k1: "^3.8.0",
+	"simple-peer": "^9.6.2",
+	"socket.io-client": "^2.3.0",
+	store: "^2.0.12",
+	underscore: "^1.13.2",
+	uuid: "^3.4.0",
+	vue: "^2.6.10",
+	web3: "1.5.0",
+	"web3-core-helpers": "1.5.0",
+	"web3-core-method": "1.5.0",
+	"web3-core-requestmanager": "1.5.0",
+	"web3-utils": "1.5.0",
+	"webrtc-adapter": "^6.4.3",
+	wrtc: "^0.4.6",
+	ws: "^7.5.3"
+};
+var devDependencies = {
+	"@babel/core": "^7.8.4",
+	"@babel/plugin-external-helpers": "^7.8.3",
+	"@babel/plugin-transform-async-to-generator": "^7.8.3",
+	"@babel/plugin-transform-regenerator": "^7.8.3",
+	"@babel/plugin-transform-runtime": "^7.8.3",
+	"@babel/plugin-transform-spread": "^7.8.3",
+	"@babel/preset-env": "^7.8.4",
+	"@rollup/plugin-image": "^2.1.0",
+	"@vue/cli-plugin-babel": "^4.1.0",
+	"@vue/cli-plugin-eslint": "^4.2.3",
+	"@vue/cli-service": "^4.1.0",
+	"@vue/eslint-config-prettier": "^4.0.1",
+	axios: "^0.21.4",
+	"babel-core": "^7.0.0-bridge.0",
+	"babel-eslint": "^10.0.3",
+	"babel-jest": "^25.1.0",
+	"babel-preset-es2015-rollup": "^3.0.0",
+	chai: "^4.2.0",
+	"clean-webpack-plugin": "^3.0.0",
+	eslint: "^6.8.0",
+	"eslint-config-airbnb-base": "^13.2.0",
+	"eslint-config-prettier": "^3.0.1",
+	"eslint-plugin-import": "^2.20.1",
+	"eslint-plugin-security": "^1.4.0",
+	"eslint-plugin-vue": "^6.2.1",
+	jest: "^25.2.3",
+	"node-sass": "^4.12.0",
+	nyc: "^15.0.0",
+	opn: "^5.5.0",
+	"opn-cli": "^3.1.0",
+	"regenerator-runtime": "^0.13.3",
+	rimraf: "^2.7.1",
+	rollup: "^2.56.2",
+	"rollup-plugin-json": "^3.1.0",
+	"sass-loader": "^8.0.0",
+	"style-loader": "^1.1.3",
+	"svg-inline-loader": "^0.8.0",
+	"url-loader": "^3.0.0",
+	"vue-template-compiler": "^2.6.10",
+	yorkie: "^2.0.0"
+};
+var resolutions = {
+	"xmlhttprequest-ssl": "1.6.1"
+};
+var packageJson = {
+	name: name,
+	homepage: homepage,
+	version: version,
+	main: main,
+	module: module,
+	scripts: scripts,
+	gitHooks: gitHooks,
+	dependencies: dependencies,
+	devDependencies: devDependencies,
+	resolutions: resolutions
+};
 
 var debug$8 = debugLogger('MEWconnect:initiator-base');
 var debugStages = debugLogger('MEWconnect:initiator-stages');
