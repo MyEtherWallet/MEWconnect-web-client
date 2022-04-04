@@ -22,8 +22,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.Url = options.url || 'wss://connect2.mewapi.io/staging';
       this.active = true;
       this.turnTest = options.turnTest;
-
-      this.p = null;
       this.socketConnected = false;
       this.socketV1Connected = false;
       this.connected = false;
@@ -54,12 +52,10 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.retryCount = 0;
 
       // WebRTC options
-      this.iceTransportPolicy = 'all';
-      this.trickle = true;
+      this.trickle = false;
     } catch (e) {
       debug('constructor error:', e);
     }
-
     this.webRtcCommunication.on(this.lifeCycle.UsingFallback, id => {
       debug('USING TURN FALLBACK', id, this.initiatorId);
       if (this.initiatorId === id) {
@@ -67,7 +63,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       } else {
         this.socketDisconnect();
         this.isActiveInstance = false;
-        // this.webRtcCommunication.off('data', this.onData.bind(this, ''));
       }
     });
   }
@@ -80,10 +75,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
   }
 
   isAlive() {
-    if (this.p !== null) {
-      return this.p.connected && !this.p.destroyed;
-    }
-    return false;
+    return this.webRtcCommunication.isAlive();
   }
 
   setWebRtc(webRtcCommunication) {
@@ -185,24 +177,10 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
   async useFallback() {
     this.retryCount++;
-
     if (this.retryCount >= 4) {
       this.emit('showRefresh');
       return;
-    } //prevent infinite retries
-    // prevent multiple requests
-    // There is a disconnect between the app expectation and the client.  Possibly
-    // if(!this.start){
-    //   this.start = Date.now();
-    //   this.socketEmit(this.signals.tryTurn, { connId: this.connId });
-    // }
-    // const tyrAgain =
-    //   (Date.now() - this.start) / 1000 > 30;
-    // if(tyrAgain){
-    //   this.start = Date.now();
-    //   this.socketEmit(this.signals.tryTurn, { connId: this.connId });
-    // }
-    // right now the app needs multiple sends to catch the app in the right state
+    }
     if (!this.credentialsRequested) {
       this.credentialsRequested = true;
       this.socketEmit(this.signals.tryTurn, { connId: this.connId });
@@ -373,7 +351,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
         webRtcConfig: {
           initiator: true,
           trickle: this.trickle,
-          iceTransportPolicy: this.iceTransportPolicy,
           config: {
             iceServers: this.stunServers
           },
@@ -401,7 +378,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
       this.emit('sendingOffer');
       debug('SIGNAL', JSON.stringify(data));
       const encryptedSend = await this.mewCrypto.encrypt(JSON.stringify(data));
-      // this.uiCommunicator(this.lifeCycle.sendOffer);
       this.states.offer = true;
       this.socketEmit(this.signals.offerSignal, {
         data: encryptedSend,
@@ -453,16 +429,14 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
       this.iceServers = null;
       const defaultOptions = {
-        initiator: this.trickle,
+        initiator: true,
         trickle: this.trickle,
-        // iceTransportPolicy: 'all', //'relay',
         config: {
           iceServers: webRtcServers
         },
         wrtc: wrtc
       };
 
-      //
       const simpleOptions = {
         ...defaultOptions,
         ...webRtcConfig
@@ -473,7 +447,6 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
 
       debug(`initiatorStartRTC - options: ${simpleOptions}`);
       this.uiCommunicator(this.lifeCycle.RtcInitiatedEvent);
-      // this.p = new this.Peer(simpleOptions);
       const peerID = this.webRtcCommunication.getActivePeerId();
       this.setActivePeerId(peerID);
       this.webRtcCommunication.once(
@@ -606,8 +579,7 @@ export default class MewConnectInitiatorV2 extends MewConnectCommon {
         }),
         webRtcConfig: {
           initiator: true,
-          trickle: false,
-          iceTransportPolicy: 'relay',
+          trickle: this.trickle,
           config: {
             iceServers: data.iceServers.map(obj => {
               const newObject = {};

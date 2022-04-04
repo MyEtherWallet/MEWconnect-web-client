@@ -20,7 +20,7 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.answersReceived = [];
     this.offersSent = -1;
     this.turnTimer = null;
-    this.turnWaitTime = 5000;
+    this.turnWaitTime = 2000;
     this.enableTimer = true;
     this.tryingTurn = false;
     this.connected = false;
@@ -136,6 +136,9 @@ export default class WebRtcCommunication extends MewConnectCommon {
     this.canSignal = !this.canSignal;
     this.fallbackTimer();
     this.setActivePeerId();
+    if (this.p !== null) {
+      this.p.destroy();
+    }
     this.p = new this.Peer(simpleOptions);
     const peerID = this.getActivePeerId();
     this.answerReceived[peerID] = false;
@@ -159,7 +162,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
   onConnect(peerID) {
     debug('onConnect', peerID);
     this.connected = true;
-    // this.emit('connect', peerID);
     this.emit(this.jsonDetails.lifeCycle.RtcConnectedEvent, peerID);
     this.clearExtraOnConnection();
   }
@@ -237,7 +239,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
   // Handle Socket Attempting Turn informative signal
   // Provide Notice that initial WebRTC connection failed and the fallback method will be used
   willAttemptTurn() {
-    this.uiCommunicator(this.lifeCycle.UsingFallback, this.activeInitiatorId);
     if (!this.connected && this.tryingTurn && this.usingVersion === 'V2') {
       this.refreshQrTimer();
       this.refreshEnabled = false;
@@ -248,7 +249,6 @@ export default class WebRtcCommunication extends MewConnectCommon {
       this.tryingTurn = true;
       try {
         this.useFallback();
-        // this.uiCommunicator(this.lifeCycle.UsingFallback);
       } catch (e) {
         // eslint-disable-next-line
         console.error(e);
