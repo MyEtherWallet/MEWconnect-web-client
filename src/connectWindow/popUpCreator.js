@@ -6,7 +6,8 @@ import {
   logo,
   playStoreButton,
   refresh,
-  spaceman
+  spaceman,
+  enkrypt
 } from './images/index';
 import {
   cssStyles,
@@ -16,7 +17,7 @@ import {
   noticetext,
   windowInformer
 } from './popupWindowDesign';
-import { ANDROID_LINK, IOS_LINK } from '../config';
+import { ANDROID_LINK, IOS_LINK, ENKRYPT_LINK } from '../config';
 import EventEmitter from 'events';
 
 export default class PopUpCreator extends EventEmitter {
@@ -31,6 +32,7 @@ export default class PopUpCreator extends EventEmitter {
     this.appStoreButton = appStoreButton;
     this.camera = camera;
     this.closeIconBlack = closeIconBlack;
+    this.enkryptIcon = enkrypt;
     this.popupWindowOpen = null;
     this.windowClosedListener = () => {};
 
@@ -197,7 +199,9 @@ export default class PopUpCreator extends EventEmitter {
         this.camera,
         this.closeIconBlack,
         IOS_LINK,
-        ANDROID_LINK
+        ANDROID_LINK,
+        this.enkryptIcon,
+        ENKRYPT_LINK
       )
     );
     // div.innerHTML = windowInformer(spaceman);

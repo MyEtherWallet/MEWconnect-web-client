@@ -7,6 +7,7 @@ import appStoreButton from './button-app-store';
 import camera from './camera';
 import closeIconWhite from './closeIconWhite';
 import closeIconBlack from './closeIconBlack';
+import enkrypt from './enkrypt';
 
 export {
   logoMEW,
@@ -17,5 +18,6 @@ export {
   appStoreButton,
   camera,
   closeIconWhite,
-  closeIconBlack
+  closeIconBlack,
+  enkrypt
 };

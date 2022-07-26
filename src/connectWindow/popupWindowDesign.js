@@ -17,7 +17,7 @@ const cssStyles = `
         top: 0;
         min-width: 450px;
         max-width: 450px;
-        max-height: 558px;
+        max-height: 658px;
       }
       
       .container-mew-modal {
@@ -32,7 +32,6 @@ const cssStyles = `
         justify-content: center;
         margin-left: auto;
         margin-right: auto;
-        padding-bottom: 16px;
         padding-top: 16px;
         position: relative;
         max-width: 450px;
@@ -114,20 +113,18 @@ const cssStyles = `
         padding-left: 10px;
       }
       .mew-bottom-background {
-        position: absolute;
-        bottom: 0;
-        right: 64px;
         border-radius: 0 0 16px 16px;
-        background: rgb(249, 250, 251);
-        text-align: center;
-        padding-top: 25px;
         padding-bottom: 15px;
         max-width: 450px;
         margin-left: auto;
         margin-right: auto;
       }
+
+      .enkrypt-link {
+        text-decoration: none;
+      }
+
       .bottom-container-mew-modal {
-        position: relative;
         font-family: 'Roboto', sans-serif;
         color: #050f19;
         text-align: center;
@@ -137,8 +134,9 @@ const cssStyles = `
         flex-direction: row;
         flex-flow: row wrap;
         justify-content: center;
-        left: -15px;
-        
+        background-color: #F8F9FB;
+        border-radius: 5px;
+        padding: 10px 8px;
       }
 
       .bottom-container-mew-modal > .left {
@@ -149,7 +147,7 @@ const cssStyles = `
         margin-right: 15px;
       }
 
-      .bottom-container-mew-modal > .right {
+      .bottom-container-mew-modal .right {
         align-items: flex-start;
         text-align: left;
       }
@@ -179,7 +177,6 @@ const cssStyles = `
       }
 
       .spaceman-background {
-        background-color: white;
         border-radius: 10px;
       }
 
@@ -233,6 +230,13 @@ const cssStyles = `
         font-family: 'Roboto', sans-serif;
         font-weight: normal;
         letter-spacing: 0.17px;
+        text-align: left;
+      }
+
+      .mew-get-sub-text {
+        font-size: 12px;
+        color: #60666D;
+        line-height: 20px;
       }
       
       .mew-camera-icon {
@@ -300,13 +304,15 @@ const cssStyles = `
 
 const htmlDesign = (
   refresh,
-  image,
+  mewImg,
   playStore,
   appStore,
   camera,
   iconImage,
   iosLink,
-  androidLink
+  androidLink,
+  enkryptImg,
+  enkryptLink
 ) => {
   return `
     <div class="outer-container-mew-modal">
@@ -339,7 +345,7 @@ const htmlDesign = (
           <div class="left">
             <img
               class="spaceman-background"
-              src="${image}"
+              src="${mewImg}"
               height="58"
               width="58"
             />
@@ -348,27 +354,45 @@ const htmlDesign = (
             <div class="right">
               <p class="mew-get-text">Don't have MEW&nbsp;wallet app?</p>
               <p id="popupsBlocked" class="mew-warn-color"></p>
-                      <a href="${iosLink}" target="_blank" id="appStore">               <img
+              <a href="${iosLink}" target="_blank" id="appStore">
+                <img
                   id="mew-apple-link"
                   class="left-img"
                   src="${appStore}"
-                  height="40"
-                  width="120"
-                /></a>
-
-                      <a href="${androidLink}" target="_blank" id="playStore">                <img
+                  height="30"
+                  width="95"
+                />
+              </a>
+              <a href="${androidLink}" target="_blank" id="playStore">
+                <img
                   id="mew-google-link"
                   src="${playStore}"
-                  height="40"
-                  width="135"
-                /></a>
-
-
-
+                  height="30"
+                  width="110"
+                />
+              </a>
             </div>
           </div>
-
         </div>
+
+        <a class="bottom-container-mew-modal enkrypt-link"  href="${enkryptLink}" target="_blank">
+          <div class="left">
+            <img
+              class="spaceman-background"
+              src="${enkryptImg}"
+              height="58"
+              width="58"
+            />
+          </div>
+          <div class="center">
+            <div class="right">
+              <p class="mew-get-text">Enkrypt - Our official browser extension!</p>
+              <p class="mew-get-sub-text">Manage your assets, NFTs and access web3 apps <br/> across multiple blockchains</p>
+              <p id="popupsBlocked" class="mew-warn-color"></p>              
+            </div>
+          </div>
+        </a>
+
         <div class="mew-bottom">
           Powered by <a href="https://myetherwallet.github.io/MEWconnect-Protocol-Documentation/" target="_blank" id="proto-link" class="bottom-link">MEWconnect protocol</a> <br />
           brought to you by <a href="https://www.myetherwallet.com/" target="_blank" id="mew-link" class="bottom-link">MyEtherWallet</a>
@@ -771,8 +795,8 @@ ${additionalCss}
         position: fixed;
         min-width: 448px;
         max-width: 448px;
-        min-height: 558px;
-        max-height: 558px;
+        min-height: 658px;
+        max-height: 658px;
         width: 100%;
         height: 100%;
         border-radius: 16px;
@@ -814,8 +838,8 @@ ${additionalCss}
         position: relative;
         min-width: 448px;
         max-width: 448px;
-        min-height: 558px;
-        max-height: 558px;
+        min-height: 658px;
+        max-height: 658px;
         overflow: auto;
         opacity: 0;
         visibility: hidden;

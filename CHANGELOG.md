@@ -1,3 +1,6 @@
+- ### Release 2.2.0-beta.17
+- Add update for Enkrypt
+
 - ### Release 2.2.0-beta.14
 - UI
 
