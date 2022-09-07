@@ -49,9 +49,8 @@ const cssStyles = `
       
      .close-mew-modal{
         position: absolute;
-        padding-top: 10px;
-        right: 10px !important;
-        top: 0;
+        right: 26px !important;
+        top: 19px;
         width: 20px;
         cursor: pointer;
         z-index: 10;
@@ -310,10 +309,10 @@ const htmlDesign = (
 ) => {
   return `
     <div class="outer-container-mew-modal">
+      <div class="close-mew-modal" id="close-mew-modal" aria-label="close modal" data-close>
+          <img src="${iconImage}" height="20" width="14"/>
+      </div>
       <div class="container-mew-modal">
-              <div class="close-mew-modal" id="close-mew-modal" aria-label="close modal" data-close>
-          <img src="${iconImage}" height="17" width="11"/>
-        </div>
       <div class="upper-text">
 
         <p class="mew-text-one">Connect to MEW&nbsp;wallet app</p>
