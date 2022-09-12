@@ -51,13 +51,13 @@ const cssStyles = `
         position: absolute;
         right: 16px !important;
         top: 11px;
-        height: 13px;
-        width: 13px;
+        height: 22px;
+        width: 22px;
         cursor: pointer;
-        padding: 12px;
+        padding: 7px;
         z-index: 10;
         border-radius: 50%;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.2s ease;
         display: flex;
         align-items: center;
       }
@@ -71,8 +71,9 @@ const cssStyles = `
       }
 
       .close-mew-modal img {
-        height: 13px;
-        width: 13px;
+        opacity: 0.6;
+        height: 22px;
+        width: 22px;
       }
       
       .mew-qr-code {
