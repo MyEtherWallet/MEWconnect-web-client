@@ -16,11 +16,8 @@ import {
   privateToPublic,
   isHexString,
   toBuffer as utilsToBuffer
-} from 'ethereumjs-util';
-import commonGenerator from './helpers/commonGenerator';
-import { Transaction } from 'ethereumjs-tx';
+} from 'ethereumjs-utils';
 import { toChecksumAddress } from './helpers/addressUtils';
-import Networks from './networks/index';
 
 const toBuffer = v => {
   if (isHexString(v)) {
@@ -101,26 +98,9 @@ class WalletInterface {
     if (this.isPubOnly && typeof signer !== 'function')
       throw new Error('public key only wallets needs a signer');
     return new Promise((resolve, reject) => {
-      // if (!this.isPubOnly) {
-      //   const tx = new Transaction(txParams, {
-      //     common: commonGenerator(Networks.ETH)
-      //   });
-      //   const networkId = tx.getChainId();
-      //   tx.sign(this.privateKey);
-      //   const signedChainId = calculateChainIdFromV(tx.v);
-      //   if (signedChainId !== networkId)
-      //     throw new Error(
-      //       'Invalid networkId signature returned. Expected: ' +
-      //         networkId +
-      //         ', Got: ' +
-      //         signedChainId,
-      //       'InvalidNetworkId'
-      //     );
-      //   resolve(getSignTransactionObject(tx));
-      // } else {
-        signer(txParams)
-          .then(resolve)
-          .catch(reject);
+      signer(txParams)
+        .then(resolve)
+        .catch(reject);
       // }
     });
   }

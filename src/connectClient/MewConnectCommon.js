@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-import createLogger from 'logging';
 import EventEmitter from 'events';
 import { isBrowser } from 'browser-or-node';
 import { detect } from 'detect-browser';
@@ -18,8 +16,6 @@ import {
   communicationTypes
 } from './constants/index';
 import { stunServers } from './config';
-
-const logger = createLogger('MewConnectCommon');
 
 export default class MewConnectCommon extends EventEmitter {
   constructor(version = -1) {
@@ -171,7 +167,7 @@ export default class MewConnectCommon extends EventEmitter {
         }
         return MewConnectCommon.buildBrowserResult(false, '', '');
       } catch (e) {
-        logger.error(e);
+        console.error(e);
       }
     }
   }

@@ -10,10 +10,12 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import MewConnectClient from './connectClient/index';
 import MewConnectProvider from './connectProvider/index';
+// import icons from './icon';
 
 export default {
   Initiator: MewConnectClient.Initiator,
   Crypto: MewConnectClient.Crypto,
   Client: MewConnectClient,
   Provider: MewConnectProvider
+  // icons
 };

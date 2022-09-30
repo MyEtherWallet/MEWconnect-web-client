@@ -41,7 +41,8 @@ const signalV2 = {
   initiated: 'initiated',
   socketTimeout: 'socketTimeout',
   receivedSignal: 'receivedSignal',
-  error: 'error'
+  error: 'error',
+  disconnected: 'disconnected'
 };
 
 export { signalV1, signalV2 };

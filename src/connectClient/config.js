@@ -1,8 +1,8 @@
-import * as packageJSON from '../../package.json';
+const packageJSON = require('../../package.json');
 
 const env = 'production';
 const version = packageJSON.version;
-const V1endpoint = 'wss://connect.mewapi.io';
+const V1endpoint = 'https://connect.mewapi.io';
 const V2endpoint = 'wss://connect2.mewapi.io/staging';
 
 const stunServers = [

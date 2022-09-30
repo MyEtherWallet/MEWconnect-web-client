@@ -1,6 +1,5 @@
-import createLogger from 'logging';
 import debugLogger from 'debug';
-import {V1endpoint, V2endpoint} from '../config';
+import { V1endpoint, V2endpoint } from '../config';
 
 import wrtc from 'wrtc';
 import io from 'socket.io-client';
@@ -9,7 +8,6 @@ import MewConnectCommon from '../MewConnectCommon';
 const debug = debugLogger('MEWconnect:initiator-V1');
 const debugPeer = debugLogger('MEWconnectVerbose:peer-instances-V1');
 const debugStages = debugLogger('MEWconnect:initiator-stages-V1');
-const logger = createLogger('MewConnectInitiator-V1');
 
 export default class MewConnectInitiatorV1 extends MewConnectCommon {
   constructor(options = {}) {
@@ -94,6 +92,7 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     this.socket.on(this.signals.connect, () => {
       debug(': SOCKET CONNECTED');
       this.socketConnected = true;
+      this.emit('SOCKET_CONNECTED');
     });
 
     this.socketOn(this.signals.confirmation, this.beginRtcSequence.bind(this)); // response
@@ -278,9 +277,8 @@ export default class MewConnectInitiatorV1 extends MewConnectCommon {
     try {
       const plainTextOffer = await this.mewCrypto.decrypt(data.data);
       this.webRtcCommunication.receiveAnswer(JSON.parse(plainTextOffer));
-      // this.rtcRecieveAnswer({ data: plainTextOffer });
     } catch (e) {
-      logger.error(e);
+      console.error(e);
     }
   }
 
