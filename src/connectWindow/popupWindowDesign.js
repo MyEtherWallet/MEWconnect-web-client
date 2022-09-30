@@ -51,8 +51,8 @@ const cssStyles = `
         position: absolute;
         right: 16px !important;
         top: 11px;
-        height: 22px;
-        width: 22px;
+        height: 36px;
+        width: 36px;
         cursor: pointer;
         padding: 7px;
         z-index: 10;
