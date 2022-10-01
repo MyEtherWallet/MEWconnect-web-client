@@ -2422,7 +2422,7 @@ var img = "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox=
 
 var icon = img;
 
-var cssStyles = "\n      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');\n      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');\n\n      .outer-container-mew-modal {\n        font-family: 'Roboto', sans-serif;\n        box-sizing: border-box;\n        bottom: 0;\n        color: #050f19;\n        display: flex;\n        flex-direction: column;\n        justify-content: space-between;\n        left: 0;\n        position: absolute;\n        right: 0;\n        text-align: center;\n        top: 0;\n        min-width: 450px;\n        max-width: 450px;\n        max-height: 558px;\n      }\n      \n      .container-mew-modal {\n        font-family: 'Roboto', sans-serif;\n        color: #050f19;\n        text-align: center;\n        box-sizing: border-box;\n        display: flex;\n        flex-direction: column;\n        flex-grow: 1;\n        flex-shrink: 0;\n        justify-content: center;\n        margin-left: auto;\n        margin-right: auto;\n        padding-bottom: 16px;\n        padding-top: 16px;\n        position: relative;\n        max-width: 450px;\n        max-height: 404px;\n        width: 100%;\n        top: 0;\n      }\n      \n      .upper-text {\n        position: relative;\n        left: 0;\n        bottom: 15px;\n      }\n      \n     .close-mew-modal{\n        position: absolute;\n        right: 16px !important;\n        top: 11px;\n        height: 22px;\n        width: 22px;\n        cursor: pointer;\n        padding: 7px;\n        z-index: 10;\n        border-radius: 50%;\n        transition: background-color 0.2s ease;\n        display: flex;\n        align-items: center;\n      }\n\n      .close-mew-modal:hover {\n        background-color: #ebebeb;\n      }\n\n      .close-mew-modal:active {\n        background-color: #bababa;\n      }\n\n      .close-mew-modal img {\n        opacity: 0.6;\n        height: 22px;\n        width: 22px;\n      }\n      \n      .mew-qr-code {\n        font-family: 'Roboto', sans-serif;\n        color: #050f19;\n        height: 210px;\n        width: 210px;\n        margin-left: auto;\n        margin-right: auto;\n        text-align: center;\n        box-sizing: border-box;\n        background-color: white;\n        border-radius: 8px;\n        display: inline-block;\n      }\n      .mew-text-one {\n        min-width: 380px;\n        height: 30px;\n        color: rgba(0, 0, 0);\n        font-size: 24px;\n        font-family: 'Roboto', sans-serif;\n        font-weight: 500;\n        text-align: center;\n        letter-spacing: 0.3px;\n        line-height: 30px;\n        box-sizing: border-box;\n        padding-bottom: 8px;\n      }\n      .mew-text-two {\n        font-family: 'Roboto', sans-serif;\n        font-size: 14px;\n        color: rgba(0, 0, 0, 0.55);\n        font-weight: normal;\n        height: 16px;\n        letter-spacing: 0.17px;\n        text-align: center;\n        min-width: 265px;\n        padding-top: 8px;\n      }\n      .mew-list-style {\n        width: 278px;\n        height: 48px;\n        color: rgba(0, 0, 0, 0.55);\n        font-size: 12px;\n        font-family: 'Roboto', sans-serif;\n        font-weight: normal;\n        letter-spacing: 0.15px;\n        line-height: 16px;\n        margin-left: 20px;\n        list-style-position: outside;\n        text-align: left;\n        position: relative;\n        left: 30px\n      }\n      .mew-list-style li {\n        margin-left: 0;\n        padding-left: 10px;\n      }\n      .mew-bottom-background {\n        position: absolute;\n        bottom: 0;\n        right: 64px;\n        border-radius: 0 0 16px 16px;\n        background: rgb(249, 250, 251);\n        text-align: center;\n        padding-top: 25px;\n        padding-bottom: 15px;\n        max-width: 450px;\n        margin-left: auto;\n        margin-right: auto;\n      }\n      .bottom-container-mew-modal {\n        position: relative;\n        font-family: 'Roboto', sans-serif;\n        color: #050f19;\n        text-align: center;\n        box-sizing: border-box;\n        margin-bottom: 16px;\n        display: flex;\n        flex-direction: row;\n        flex-flow: row wrap;\n        justify-content: center;\n        left: -15px;\n        \n      }\n\n      .bottom-container-mew-modal > .left {\n        margin-right: 15px;\n      }\n\n      .bottom-container-mew-modal > .center {\n        margin-right: 15px;\n      }\n\n      .bottom-container-mew-modal > .right {\n        align-items: flex-start;\n        text-align: left;\n      }\n\n      .bottom-container-mew-modal > .left-img {\n        padding-right: 10px;\n      }\n\n      .bottom-container-mew-modal-text {\n        font-family: 'Roboto', sans-serif;\n        color: #050f19;\n        box-sizing: border-box;\n        font-size: 13px;\n        margin: 0;\n        opacity: 0.5;\n        text-align: left;\n      }\n      .bottom-container-mew-modal-text-old {\n        font-family: 'Roboto', sans-serif;\n        color: #050f19;\n        box-sizing: border-box;\n        font-size: 13px;\n        margin: 0;\n        opacity: 0.5;\n        padding: 16px;\n        text-align: center;\n      }\n\n      .spaceman-background {\n        background-color: white;\n        border-radius: 10px;\n      }\n\n      p {\n        margin: 0;\n        padding-bottom: 5px;\n      }\n\n      .mew-bottom {\n        color: rgba(0, 0, 0, 0.55);\n        font-size: 12px;\n        font-family: 'Roboto', sans-serif;\n        font-weight: lighter;\n        letter-spacing: 0.15px;\n      }\n      \n      .bottom-link {\n      text-decoration: none;\n       color: rgba(5, 192, 165);\n       cursor: pointer;\n      }\n      \n      #refresh-container-mew-modal {\n      background: #33c7b0;\n      border-radius: 5px;\n      padding: 5px;\n      }\n      \n      #refresh-container-mew-modal:hover {\n      background: #238677;\n      }\n\n      .refreshIcon {\n        padding-top: 5px;\n        justify-content: center;\n        margin-left: auto;\n        margin-right: auto;\n        cursor: pointer;\n        color: #fffff;\n      }\n\n      .mew-hidden {\n        display: none;\n      }\n      \n      .mew-get-text {\n        width: 265px;\n        height: 16px;\n        color: rgb(0, 0, 0);\n        font-size: 14px;\n        font-family: 'Roboto', sans-serif;\n        font-weight: normal;\n        letter-spacing: 0.17px;\n      }\n      \n      .mew-camera-icon {\n          opacity: 0.54;\n          position: relative;\n          bottom: -2px;\n          height: 14px;\n          width: 14px;\n        }\n        \n        #mew-google-link:hover {\n        cursor: pointer;\n        }\n        \n        #mew-apple-link:hover {\n        cursor: pointer;\n        }\n        \n        .mew-warn-color {\n        color: orange;\n        }\n        \n        .loader-mew,\n        .loader-mew:after {\n          border-radius: 50%;\n          width: 10em;\n          height: 10em;\n        }\n        .loader-mew {\n          margin: 20px auto;\n          font-size: 10px;\n          position: relative;\n          text-indent: -9999em;\n          border-top: 1em solid rgba(166,183,183, 0.2);\n          border-right: 1em solid rgba(166,183,183, 0.2);\n          border-bottom: 1em solid rgba(166,183,183, 0.2);\n          border-left: 1em solid rgba(8, 165, 178, 1);\n          -webkit-transform: translateZ(0);\n          -ms-transform: translateZ(0);\n          transform: translateZ(0);\n          -webkit-animation: load8 1.1s infinite linear;\n          animation: load8 1.1s infinite linear;\n        }\n        @-webkit-keyframes load8 {\n          0% {\n            -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n          }\n          100% {\n            -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n          }\n        }\n        @keyframes load8 {\n          0% {\n            -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n          }\n          100% {\n            -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n          }\n        }\n    ";
+var cssStyles = "\n      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');\n      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');\n\n      .outer-container-mew-modal {\n        font-family: 'Roboto', sans-serif;\n        box-sizing: border-box;\n        bottom: 0;\n        color: #050f19;\n        display: flex;\n        flex-direction: column;\n        justify-content: space-between;\n        left: 0;\n        position: absolute;\n        right: 0;\n        text-align: center;\n        top: 0;\n        min-width: 450px;\n        max-width: 450px;\n        max-height: 558px;\n      }\n      \n      .container-mew-modal {\n        font-family: 'Roboto', sans-serif;\n        color: #050f19;\n        text-align: center;\n        box-sizing: border-box;\n        display: flex;\n        flex-direction: column;\n        flex-grow: 1;\n        flex-shrink: 0;\n        justify-content: center;\n        margin-left: auto;\n        margin-right: auto;\n        padding-bottom: 16px;\n        padding-top: 16px;\n        position: relative;\n        max-width: 450px;\n        max-height: 404px;\n        width: 100%;\n        top: 0;\n      }\n      \n      .upper-text {\n        position: relative;\n        left: 0;\n        bottom: 15px;\n      }\n      \n     .close-mew-modal{\n        position: absolute;\n        right: 16px !important;\n        top: 11px;\n        height: 36px;\n        width: 36px;\n        cursor: pointer;\n        padding: 7px;\n        z-index: 10;\n        border-radius: 50%;\n        transition: background-color 0.2s ease;\n        display: flex;\n        align-items: center;\n      }\n\n      .close-mew-modal:hover {\n        background-color: #ebebeb;\n      }\n\n      .close-mew-modal:active {\n        background-color: #bababa;\n      }\n\n      .close-mew-modal img {\n        opacity: 0.6;\n        height: 22px;\n        width: 22px;\n      }\n      \n      .mew-qr-code {\n        font-family: 'Roboto', sans-serif;\n        color: #050f19;\n        height: 210px;\n        width: 210px;\n        margin-left: auto;\n        margin-right: auto;\n        text-align: center;\n        box-sizing: border-box;\n        background-color: white;\n        border-radius: 8px;\n        display: inline-block;\n      }\n      .mew-text-one {\n        min-width: 380px;\n        height: 30px;\n        color: rgba(0, 0, 0);\n        font-size: 24px;\n        font-family: 'Roboto', sans-serif;\n        font-weight: 500;\n        text-align: center;\n        letter-spacing: 0.3px;\n        line-height: 30px;\n        box-sizing: border-box;\n        padding-bottom: 8px;\n      }\n      .mew-text-two {\n        font-family: 'Roboto', sans-serif;\n        font-size: 14px;\n        color: rgba(0, 0, 0, 0.55);\n        font-weight: normal;\n        height: 16px;\n        letter-spacing: 0.17px;\n        text-align: center;\n        min-width: 265px;\n        padding-top: 8px;\n      }\n      .mew-list-style {\n        width: 278px;\n        height: 48px;\n        color: rgba(0, 0, 0, 0.55);\n        font-size: 12px;\n        font-family: 'Roboto', sans-serif;\n        font-weight: normal;\n        letter-spacing: 0.15px;\n        line-height: 16px;\n        margin-left: 20px;\n        list-style-position: outside;\n        text-align: left;\n        position: relative;\n        left: 30px\n      }\n      .mew-list-style li {\n        margin-left: 0;\n        padding-left: 10px;\n      }\n      .mew-bottom-background {\n        position: absolute;\n        bottom: 0;\n        right: 64px;\n        border-radius: 0 0 16px 16px;\n        background: rgb(249, 250, 251);\n        text-align: center;\n        padding-top: 25px;\n        padding-bottom: 15px;\n        max-width: 450px;\n        margin-left: auto;\n        margin-right: auto;\n      }\n      .bottom-container-mew-modal {\n        position: relative;\n        font-family: 'Roboto', sans-serif;\n        color: #050f19;\n        text-align: center;\n        box-sizing: border-box;\n        margin-bottom: 16px;\n        display: flex;\n        flex-direction: row;\n        flex-flow: row wrap;\n        justify-content: center;\n        left: -15px;\n        \n      }\n\n      .bottom-container-mew-modal > .left {\n        margin-right: 15px;\n      }\n\n      .bottom-container-mew-modal > .center {\n        margin-right: 15px;\n      }\n\n      .bottom-container-mew-modal > .right {\n        align-items: flex-start;\n        text-align: left;\n      }\n\n      .bottom-container-mew-modal > .left-img {\n        padding-right: 10px;\n      }\n\n      .bottom-container-mew-modal-text {\n        font-family: 'Roboto', sans-serif;\n        color: #050f19;\n        box-sizing: border-box;\n        font-size: 13px;\n        margin: 0;\n        opacity: 0.5;\n        text-align: left;\n      }\n      .bottom-container-mew-modal-text-old {\n        font-family: 'Roboto', sans-serif;\n        color: #050f19;\n        box-sizing: border-box;\n        font-size: 13px;\n        margin: 0;\n        opacity: 0.5;\n        padding: 16px;\n        text-align: center;\n      }\n\n      .spaceman-background {\n        background-color: white;\n        border-radius: 10px;\n      }\n\n      p {\n        margin: 0;\n        padding-bottom: 5px;\n      }\n\n      .mew-bottom {\n        color: rgba(0, 0, 0, 0.55);\n        font-size: 12px;\n        font-family: 'Roboto', sans-serif;\n        font-weight: lighter;\n        letter-spacing: 0.15px;\n      }\n      \n      .bottom-link {\n      text-decoration: none;\n       color: rgba(5, 192, 165);\n       cursor: pointer;\n      }\n      \n      #refresh-container-mew-modal {\n      background: #33c7b0;\n      border-radius: 5px;\n      padding: 5px;\n      }\n      \n      #refresh-container-mew-modal:hover {\n      background: #238677;\n      }\n\n      .refreshIcon {\n        padding-top: 5px;\n        justify-content: center;\n        margin-left: auto;\n        margin-right: auto;\n        cursor: pointer;\n        color: #fffff;\n      }\n\n      .mew-hidden {\n        display: none;\n      }\n      \n      .mew-get-text {\n        width: 265px;\n        height: 16px;\n        color: rgb(0, 0, 0);\n        font-size: 14px;\n        font-family: 'Roboto', sans-serif;\n        font-weight: normal;\n        letter-spacing: 0.17px;\n      }\n      \n      .mew-camera-icon {\n          opacity: 0.54;\n          position: relative;\n          bottom: -2px;\n          height: 14px;\n          width: 14px;\n        }\n        \n        #mew-google-link:hover {\n        cursor: pointer;\n        }\n        \n        #mew-apple-link:hover {\n        cursor: pointer;\n        }\n        \n        .mew-warn-color {\n        color: orange;\n        }\n        \n        .loader-mew,\n        .loader-mew:after {\n          border-radius: 50%;\n          width: 10em;\n          height: 10em;\n        }\n        .loader-mew {\n          margin: 20px auto;\n          font-size: 10px;\n          position: relative;\n          text-indent: -9999em;\n          border-top: 1em solid rgba(166,183,183, 0.2);\n          border-right: 1em solid rgba(166,183,183, 0.2);\n          border-bottom: 1em solid rgba(166,183,183, 0.2);\n          border-left: 1em solid rgba(8, 165, 178, 1);\n          -webkit-transform: translateZ(0);\n          -ms-transform: translateZ(0);\n          transform: translateZ(0);\n          -webkit-animation: load8 1.1s infinite linear;\n          animation: load8 1.1s infinite linear;\n        }\n        @-webkit-keyframes load8 {\n          0% {\n            -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n          }\n          100% {\n            -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n          }\n        }\n        @keyframes load8 {\n          0% {\n            -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n          }\n          100% {\n            -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n          }\n        }\n    ";
 
 var htmlDesign = function htmlDesign(refresh, image, playStore, appStore, camera, iconImage, iosLink, androidLink) {
   return "\n    <div class=\"outer-container-mew-modal\">\n      <div class=\"close-mew-modal\" id=\"close-mew-modal\" aria-label=\"close modal\" data-close>\n          <img src=\"".concat(iconImage, "\" />\n      </div>\n      <div class=\"container-mew-modal\">\n      <div class=\"upper-text\">\n\n        <p class=\"mew-text-one\">Connect to MEW&nbsp;wallet app</p>\n        <p class=\"mew-text-two\">Scan this code to connect</p>\n       </div>\n        <div id=\"qr-failure\"></div>\n        <div id=\"qr-code-connecting-mew\" class=\"mew-hidden\"><div class=\"loader-mew\"></div><h4>Connecting...</h4> Creating encrypted peer-to-peer connection </div>\n        <div id=\"qr-code-display-container-mew\" class=\"mew-qr-code\">\n          <canvas id=\"canvas-for-mewconnect-qr-code\"></canvas>\n        </div>\n        <div id=\"refresh-container\" class=\"refreshIcon mew-hidden\">\n          Try Again <img id=\"refresh\" src=\"").concat(refresh, "\" />\n        </div>\n\n        <ol class=\"mew-list-style\">\n          <li>Open MEW wallet app on your mobile device</li>\n          <li class=\"with-image\">Click <img class=\"mew-camera-icon\" src=\"").concat(camera, "\"> icon in the top right corner</li>\n          <li>Scan this code to connect</li>\n        </ol>\n      </div>\n      <div class=\"mew-bottom-background\">\n        <div class=\"bottom-container-mew-modal\">\n          <div class=\"left\">\n            <img\n              class=\"spaceman-background\"\n              src=\"").concat(image, "\"\n              height=\"58\"\n              width=\"58\"\n            />\n          </div>\n          <div class=\"center\">\n            <div class=\"right\">\n              <p class=\"mew-get-text\">Don't have MEW&nbsp;wallet app?</p>\n              <p id=\"popupsBlocked\" class=\"mew-warn-color\"></p>\n                      <a href=\"").concat(iosLink, "\" target=\"_blank\" id=\"appStore\">               <img\n                  id=\"mew-apple-link\"\n                  class=\"left-img\"\n                  src=\"").concat(appStore, "\"\n                  height=\"40\"\n                  width=\"120\"\n                /></a>\n\n                      <a href=\"").concat(androidLink, "\" target=\"_blank\" id=\"playStore\">                <img\n                  id=\"mew-google-link\"\n                  src=\"").concat(playStore, "\"\n                  height=\"40\"\n                  width=\"135\"\n                /></a>\n\n\n\n            </div>\n          </div>\n\n        </div>\n        <div class=\"mew-bottom\">\n          Powered by <a href=\"https://myetherwallet.github.io/MEWconnect-Protocol-Documentation/\" target=\"_blank\" id=\"proto-link\" class=\"bottom-link\">MEWconnect protocol</a> <br />\n          brought to you by <a href=\"https://www.myetherwallet.com/\" target=\"_blank\" id=\"mew-link\" class=\"bottom-link\">MyEtherWallet</a>\n        </div>\n      </div>\n    </div>\n\n");
@@ -4436,7 +4436,7 @@ var WebRtcCommunication = /*#__PURE__*/function (_MewConnectCommon) {
 
 var name = "@myetherwallet/mewconnect-web-client";
 var homepage = "https://github.com/myetherwallet/MEWconnect-web-client";
-var version = "2.2.0-beta.17";
+var version = "2.2.0-beta.18";
 var main = "dist/cjs/index.js";
 var module = "dist/esm/index.js";
 var scripts = {
@@ -7741,7 +7741,7 @@ var tokens$5 = [
 		decimals: 11
 	},
 	{
-		symbol: "ADS.CX",
+		symbol: "ADS.cx",
 		address: "0x68CBC28321666cF93d933c495631e81051fE656E",
 		decimals: 8
 	},
@@ -8348,6 +8348,11 @@ var tokens$5 = [
 	{
 		symbol: "AMANA",
 		address: "0xa685a61171bb30d4072B338c80Cb7b2c865c873E",
+		decimals: 18
+	},
+	{
+		symbol: "AMATICB",
+		address: "0x99534Ef705Df1FFf4e4bD7bbaAF9b0dFf038EbFe",
 		decimals: 18
 	},
 	{
@@ -11821,6 +11826,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "BTBS",
+		address: "0x32E6C34Cd57087aBBD59B5A4AECC4cB495924356",
+		decimals: 18
+	},
+	{
 		symbol: "BTC++",
 		address: "0x0327112423F3A68efdF1fcF402F6c5CB9f7C33fd",
 		decimals: 18
@@ -15209,6 +15219,11 @@ var tokens$5 = [
 		symbol: "DAV",
 		address: "0xd82Df0ABD3f51425Eb15ef7580fDA55727875f14",
 		decimals: 18
+	},
+	{
+		symbol: "DAWGS",
+		address: "0x64A77277e37D44957FE5815d6FF442ab8b16cC29",
+		decimals: 9
 	},
 	{
 		symbol: "DAWN",
@@ -20554,6 +20569,11 @@ var tokens$5 = [
 		symbol: "GMT",
 		address: "0xb3Bd49E28f8F832b8d1E246106991e546c323502",
 		decimals: 18
+	},
+	{
+		symbol: "GMT",
+		address: "0xe3c408BD53c31C085a1746AF401A4042954ff740",
+		decimals: 8
 	},
 	{
 		symbol: "GMX",
@@ -26696,6 +26716,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "MIDA",
+		address: "0x6CD13E1856286dE773a435C8Ba93A7C73A04F82d",
+		decimals: 18
+	},
+	{
 		symbol: "MIDBEAR",
 		address: "0xC82abB524257C8ee4790BFDefB452b2d6a395e21",
 		decimals: 18
@@ -32736,6 +32761,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "RIV",
+		address: "0xCa5e32d44F1744001b5600Dc2F5F5e0BbB6E9D3e",
+		decimals: 18
+	},
+	{
 		symbol: "RIYA",
 		address: "0x0b1724cc9FDA0186911EF6a75949e9c0d3F0f2F3",
 		decimals: 8
@@ -35858,6 +35888,11 @@ var tokens$5 = [
 	{
 		symbol: "SWD",
 		address: "0x1Fd154B4d0E3753B714B511a53Fe1fb72dc7AE1C",
+		decimals: 18
+	},
+	{
+		symbol: "SWEAT",
+		address: "0xB4b9DC1C77bdbb135eA907fd5a08094d98883A35",
 		decimals: 18
 	},
 	{
@@ -40036,6 +40071,11 @@ var tokens$5 = [
 		decimals: 18
 	},
 	{
+		symbol: "WEC",
+		address: "0xcC1a8BD438BebC4b2a885a34475BB974f2124317",
+		decimals: 18
+	},
+	{
 		symbol: "WEFI",
 		address: "0x31735f0292D42801dce3b0f83B0d9A09bFf75b07",
 		decimals: 18
@@ -43495,6 +43535,11 @@ var tokens$3 = [
 		decimals: 18
 	},
 	{
+		symbol: "AMATICB",
+		address: "0x03A97594aA5ecE130E2E956fc0cEd2fea8ED8989",
+		decimals: 18
+	},
+	{
 		symbol: "AMATICC",
 		address: "0x0E9b89007eEE9c958c0EDA24eF70723C2C93dD58",
 		decimals: 18
@@ -43752,6 +43797,11 @@ var tokens$3 = [
 	{
 		symbol: "B2M",
 		address: "0xE613a914bbb433855378183c3aB13003285da40A",
+		decimals: 18
+	},
+	{
+		symbol: "BABY",
+		address: "0xA4E26Bd6DCBa9021DCd3A1159BA52e97CD770b8a",
 		decimals: 18
 	},
 	{
@@ -44370,6 +44420,11 @@ var tokens$3 = [
 		decimals: 18
 	},
 	{
+		symbol: "DELOT",
+		address: "0x86A298581388bc199e61BFeCDcA8eA22Cf6C0Da3",
+		decimals: 18
+	},
+	{
 		symbol: "DERI",
 		address: "0x3D1D2aFd191b165D140e3E8329E634665fFB0E5e",
 		decimals: 18
@@ -44740,6 +44795,11 @@ var tokens$3 = [
 		decimals: 18
 	},
 	{
+		symbol: "EXO",
+		address: "0xbd8005612124DC30601E22D8B5d188A89767c640",
+		decimals: 18
+	},
+	{
 		symbol: "EZ",
 		address: "0x34C1b299A74588D6Abdc1b85A53345A48428a521",
 		decimals: 18
@@ -44817,6 +44877,11 @@ var tokens$3 = [
 	{
 		symbol: "FLY",
 		address: "0x486FFAf06A681bf22B5209e9fFCE722662A60E8C",
+		decimals: 18
+	},
+	{
+		symbol: "FNC",
+		address: "0x7f280daC515121DcdA3EaC69eB4C13a52392CACE",
 		decimals: 18
 	},
 	{
@@ -46895,6 +46960,11 @@ var tokens$3 = [
 		decimals: 18
 	},
 	{
+		symbol: "REMI",
+		address: "0xbB6129911d3bBdAdB447241d433b4eD529aeBBd8",
+		decimals: 18
+	},
+	{
 		symbol: "renBCH",
 		address: "0xc3fEd6eB39178A541D274e6Fc748d48f0Ca01CC3",
 		decimals: 8
@@ -46945,6 +47015,11 @@ var tokens$3 = [
 		decimals: 18
 	},
 	{
+		symbol: "RGT",
+		address: "0xF4BB0ED25Ac7bcc9c327B88BaC5CA288A08eC41e",
+		decimals: 18
+	},
+	{
 		symbol: "RHOUSDC",
 		address: "0xaE67678A62fBBad8eF675f312F2417E42394c311",
 		decimals: 18
@@ -46982,6 +47057,11 @@ var tokens$3 = [
 	{
 		symbol: "RISE",
 		address: "0xC17c30e98541188614dF99239cABD40280810cA3",
+		decimals: 18
+	},
+	{
+		symbol: "RIV",
+		address: "0xCa5e32d44F1744001b5600Dc2F5F5e0BbB6E9D3e",
 		decimals: 18
 	},
 	{
@@ -47120,6 +47200,11 @@ var tokens$3 = [
 		decimals: 8
 	},
 	{
+		symbol: "SERUM",
+		address: "0x623a1350f6B749575F92Ea54D0F745f9F07D3665",
+		decimals: 0
+	},
+	{
 		symbol: "SFF",
 		address: "0xdf9B4b57865B403e08c85568442f95c26b7896b0",
 		decimals: 18
@@ -47177,6 +47262,11 @@ var tokens$3 = [
 	{
 		symbol: "SKILL",
 		address: "0x863D6074aFaF02D9D41A5f8Ea83278DF7089aA86",
+		decimals: 18
+	},
+	{
+		symbol: "SKP",
+		address: "0x4c665BBafd28Ec9e5D792345f470ebFcA21E3d15",
 		decimals: 18
 	},
 	{
@@ -47632,6 +47722,11 @@ var tokens$3 = [
 	{
 		symbol: "UFT",
 		address: "0x5B4CF2C120A9702225814E18543ee658c5f8631e",
+		decimals: 18
+	},
+	{
+		symbol: "ULE",
+		address: "0x3a549866a592C81719F3b714a356A8879E20F5d0",
 		decimals: 18
 	},
 	{
@@ -48115,6 +48210,11 @@ var tokens$3 = [
 		decimals: 18
 	},
 	{
+		symbol: "YAYO",
+		address: "0xf7058856f405542cd660e8ce4751248F2d037f2B",
+		decimals: 4
+	},
+	{
 		symbol: "YEL",
 		address: "0xD3b71117E6C1558c1553305b44988cd944e97300",
 		decimals: 18
@@ -48223,6 +48323,11 @@ var tokens$2 = [
 		symbol: "10SET",
 		address: "0x1F64fdAD335ED784898EFFb5ce22D54d8f432523",
 		decimals: 18
+	},
+	{
+		symbol: "1AMD",
+		address: "0x03e93598Ea83DfD1A3c02e34576F75dA1b8e1407",
+		decimals: 9
 	},
 	{
 		symbol: "1ART",
@@ -48396,6 +48501,11 @@ var tokens$2 = [
 	},
 	{
 		symbol: "ADAO",
+		address: "0x3b76374Cc2DfE28Cc373DcA6d5024791B2586335",
+		decimals: 18
+	},
+	{
+		symbol: "ADAO",
 		address: "0xA0Ad976E66518C8fd92021C027C531cD12CA2Df6",
 		decimals: 18
 	},
@@ -48420,14 +48530,29 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "ADMC",
+		address: "0xF978bAa68aEe5Cd5425187BcE97f75C2817E6892",
+		decimals: 9
+	},
+	{
 		symbol: "ADOGE",
 		address: "0x0EBc30459551858e81306d583025d12C7d795FA2",
 		decimals: 9
 	},
 	{
+		symbol: "ADR",
+		address: "0x36F1f32c728C3F330409eC1F0928Fa3aB3C8A76F",
+		decimals: 18
+	},
+	{
 		symbol: "ADS",
 		address: "0xcfcEcFe2bD2FED07A9145222E8a7ad9Cf1Ccd22A",
 		decimals: 11
+	},
+	{
+		symbol: "ADTX",
+		address: "0x11Fe7a37f2923566cAA0dE7D37C868631c695205",
+		decimals: 18
 	},
 	{
 		symbol: "ADVAR",
@@ -48485,9 +48610,19 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "AGGL",
+		address: "0x1042aA383CAb145dc77121ca75650804A5c134ff",
+		decimals: 18
+	},
+	{
 		symbol: "AGN",
 		address: "0x2317f8C321954070b57019BfBD9A1FAE1F3C04D9",
 		decimals: 18
+	},
+	{
+		symbol: "AGRO",
+		address: "0x39cC67690D0F2d4aCD68d3d9B612a80D780b84c0",
+		decimals: 4
 	},
 	{
 		symbol: "AIMX",
@@ -48605,6 +48740,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "ALTRUCOIN",
+		address: "0x377Ef66728d344BFa2BB370186AB4B57092577bD",
+		decimals: 18
+	},
+	{
 		symbol: "ALTS",
 		address: "0x2ec79904C2aB4F8b6e8e89c743CB7F7a88DFc0fE",
 		decimals: 9
@@ -48622,6 +48762,11 @@ var tokens$2 = [
 	{
 		symbol: "AMA",
 		address: "0xFC3dA4A1b6faDaB364039525dD2AB7c0c16521cd",
+		decimals: 18
+	},
+	{
+		symbol: "AMA",
+		address: "0xa77d560e34bD6A8d7265F754b4fcd65d9a8e5619",
 		decimals: 18
 	},
 	{
@@ -48735,6 +48880,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "APAD",
+		address: "0x366d71ab095735b7Dae83ce2b82D5262ef655F10",
+		decimals: 18
+	},
+	{
 		symbol: "APE",
 		address: "0xa9eA4b786ee5b7A733c035564Bfd9341A4c9FC1e",
 		decimals: 18
@@ -48743,6 +48893,11 @@ var tokens$2 = [
 		symbol: "APE",
 		address: "0xed3D88d3321f82E5C25CA9ac6d5B427ec93f567e",
 		decimals: 18
+	},
+	{
+		symbol: "APES",
+		address: "0x4c2a5a1A4B01d293aFfaA4739F884d7a905A5A8f",
+		decimals: 9
 	},
 	{
 		symbol: "APO",
@@ -48885,9 +49040,19 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "ASV",
+		address: "0x1Cd9D494bfdD8bB4132E6D1f905952b654dd1DeA",
+		decimals: 18
+	},
+	{
 		symbol: "ATA",
 		address: "0xA2120b9e674d3fC3875f415A7DF52e382F141225",
 		decimals: 18
+	},
+	{
+		symbol: "ATC",
+		address: "0x0fAD86Cc1b412b330494E350Bf1dC1994AC55c9e",
+		decimals: 2
 	},
 	{
 		symbol: "ATD",
@@ -48945,6 +49110,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "AVAX",
+		address: "0x1CE0c2827e2eF14D5C4f29a091d735A204794041",
+		decimals: 18
+	},
+	{
 		symbol: "AVG",
 		address: "0xa41F142b6eb2b164f8164CAE0716892Ce02f311f",
 		decimals: 18
@@ -48990,6 +49160,16 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "BABY",
+		address: "0xA4E26Bd6DCBa9021DCd3A1159BA52e97CD770b8a",
+		decimals: 18
+	},
+	{
+		symbol: "BABYCATS",
+		address: "0x1Bd5ddCD740F2D13b2255fc325c02509da35C4e4",
+		decimals: 18
+	},
+	{
 		symbol: "BABYDOGE",
 		address: "0x43f102bbd52259f2CFd0EF82e8807e3610aE3e40",
 		decimals: 9
@@ -49003,6 +49183,11 @@ var tokens$2 = [
 		symbol: "BABYDOGECASH",
 		address: "0x4cDa4daAd72340B28925cCd6fA78db631267D3C4",
 		decimals: 9
+	},
+	{
+		symbol: "BABYDOGO",
+		address: "0x6eB52Af9541BC5a7e9f671dAeCd300Cb55831A1E",
+		decimals: 0
 	},
 	{
 		symbol: "BABYKISHU",
@@ -49145,6 +49330,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "BCAT",
+		address: "0x3a310e6EAf960F9EA208764e9D299ea62A0ea53d",
+		decimals: 9
+	},
+	{
 		symbol: "bCFX",
 		address: "0x045c4324039dA91c52C55DF5D785385Aab073DcF",
 		decimals: 18
@@ -49200,6 +49390,11 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "BEACH",
+		address: "0x4f4543Fa5F7FE28a7758ef43FeA71d11fCCDAD5c",
+		decimals: 9
+	},
+	{
 		symbol: "BEAR",
 		address: "0x580f500cC7Da45B7B058De7dF325F6D8f83065E1",
 		decimals: 18
@@ -49230,6 +49425,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "BELLY",
+		address: "0x3dfa90540cCDC77d543E6e61cacD5880F5C62391",
+		decimals: 18
+	},
+	{
 		symbol: "BELT",
 		address: "0xE0e514c71282b6f4e823703a39374Cf58dc3eA4f",
 		decimals: 18
@@ -49243,6 +49443,11 @@ var tokens$2 = [
 		symbol: "BEND",
 		address: "0x13AbEC309d958c7900e8DEA7d930D794981507Ad",
 		decimals: 9
+	},
+	{
+		symbol: "BENX",
+		address: "0x217ca5cE67166a3024527eE3a3289635603AED31",
+		decimals: 8
 	},
 	{
 		symbol: "Berry",
@@ -49465,6 +49670,11 @@ var tokens$2 = [
 		decimals: 8
 	},
 	{
+		symbol: "BLN",
+		address: "0xE90334c19c798C3A18d81b8cd16594247D5B19dd",
+		decimals: 18
+	},
+	{
 		symbol: "BLOCK",
 		address: "0xbC7A566b85eF73F935e640A06b5a8b031Cd975Df",
 		decimals: 6
@@ -49473,6 +49683,11 @@ var tokens$2 = [
 		symbol: "BLOGGER",
 		address: "0x3928a3Dd66d142F312E638dEEE055540FE332d1A",
 		decimals: 18
+	},
+	{
+		symbol: "BLOVELY",
+		address: "0x04Df8C91FCcFd703cD15047bF6C1cE76D335C6cE",
+		decimals: 9
 	},
 	{
 		symbol: "BLS",
@@ -49563,6 +49778,11 @@ var tokens$2 = [
 		symbol: "BNBTC",
 		address: "0xE7Cb24F449973D5B3520E5b93D88B405903c75Fb",
 		decimals: 8
+	},
+	{
+		symbol: "BNBX",
+		address: "0x1bdd3Cf7F79cfB8EdbB955f20ad99211551BA275",
+		decimals: 18
 	},
 	{
 		symbol: "BNF",
@@ -49700,8 +49920,18 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "BRG",
+		address: "0x6e4a971B81CA58045a2AA982EaA3d50C4Ac38F42",
+		decimals: 18
+	},
+	{
 		symbol: "BRGX",
 		address: "0x0e2114955023B736fa97D9E2FCDe2836d10b7A5C",
+		decimals: 18
+	},
+	{
+		symbol: "BRICK",
+		address: "0x4e5aB517719a2BDbafEFC22C712d7b5BC5F5544E",
 		decimals: 18
 	},
 	{
@@ -49713,6 +49943,11 @@ var tokens$2 = [
 		symbol: "BRIDGE",
 		address: "0x92868A5255C628dA08F550a858A802f5351C5223",
 		decimals: 18
+	},
+	{
+		symbol: "BRISE",
+		address: "0x8FFf93E810a2eDaaFc326eDEE51071DA9d398E83",
+		decimals: 9
 	},
 	{
 		symbol: "BRKL",
@@ -49820,6 +50055,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "BST",
+		address: "0x3783Ba99A39A178DC6Dd46048Ba1d70461217c74",
+		decimals: 18
+	},
+	{
 		symbol: "BSW",
 		address: "0x965F527D9159dCe6288a2219DB51fc6Eef120dD1",
 		decimals: 18
@@ -49832,6 +50072,11 @@ var tokens$2 = [
 	{
 		symbol: "BTA",
 		address: "0xAd9787017e82f6368BbE4893b475CaadA2258564",
+		decimals: 18
+	},
+	{
+		symbol: "BTBS",
+		address: "0x6feFd97F328342a8A840546A55FDcfEe7542F9A8",
 		decimals: 18
 	},
 	{
@@ -49858,6 +50103,11 @@ var tokens$2 = [
 		symbol: "BTCST",
 		address: "0x78650B139471520656b9E7aA7A5e9276814a38e9",
 		decimals: 17
+	},
+	{
+		symbol: "BTCZ",
+		address: "0xcBBB3e5099F769F6d4E2b8b92DC0e268f7E099D8",
+		decimals: 8
 	},
 	{
 		symbol: "BTD",
@@ -49927,6 +50177,11 @@ var tokens$2 = [
 	{
 		symbol: "BULLAF",
 		address: "0x740a00c764E8d9c7946A751526e2ba4C8A44212B",
+		decimals: 9
+	},
+	{
+		symbol: "BUMN",
+		address: "0x3AefF4E27E1F9144eD75Ba65a80BdfEE345F413e",
 		decimals: 9
 	},
 	{
@@ -50095,6 +50350,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "CATBOY",
+		address: "0x39C3F75B837EAE0d6d0eA87425Ac99bD646a7B1E",
+		decimals: 18
+	},
+	{
 		symbol: "CATBREAD",
 		address: "0x74A6E371F95073005b3a5fAF4A9E25aE30290F94",
 		decimals: 9
@@ -50130,6 +50390,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "CBIX-P",
+		address: "0x39BfF8613deFD221b0410eD3D4E5C07512d55F2d",
+		decimals: 18
+	},
+	{
 		symbol: "CBT",
 		address: "0x0853eABE53157D911E0137a9ef987874289ae9d0",
 		decimals: 18
@@ -50143,6 +50408,11 @@ var tokens$2 = [
 		symbol: "CCG",
 		address: "0x7B8d8Bcf426E1fad8E3C02d57F6a4a6FCB912fcD",
 		decimals: 18
+	},
+	{
+		symbol: "CCS",
+		address: "0x3e3B357061103DC040759aC7DceEaba9901043aD",
+		decimals: 0
 	},
 	{
 		symbol: "CCV2",
@@ -50167,6 +50437,11 @@ var tokens$2 = [
 	{
 		symbol: "CDT",
 		address: "0x0cBD6fAdcF8096cC9A43d90B45F65826102e3eCE",
+		decimals: 18
+	},
+	{
+		symbol: "CDTC",
+		address: "0x0fAf802036E30B4b58a20C359012821152872397",
 		decimals: 18
 	},
 	{
@@ -50235,6 +50510,16 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "CHARGE",
+		address: "0x1C6bc8e962427dEb4106aE06A7fA2d715687395c",
+		decimals: 18
+	},
+	{
+		symbol: "CHECK",
+		address: "0x0F17771cCF1B990DbE2a6D7f61183C9b29997e36",
+		decimals: 6
+	},
+	{
 		symbol: "CHER",
 		address: "0x8f36Cc333F55B09Bb71091409A3d7ADE399e3b1C",
 		decimals: 18
@@ -50270,6 +50555,11 @@ var tokens$2 = [
 		decimals: 8
 	},
 	{
+		symbol: "CHIM",
+		address: "0x3544a07e9f771EF0f6c80C6E79715869Ed291086",
+		decimals: 18
+	},
+	{
 		symbol: "CHIP",
 		address: "0xa25FC408EF05321103243557C851101f9AceE608",
 		decimals: 18
@@ -50285,8 +50575,18 @@ var tokens$2 = [
 		decimals: 6
 	},
 	{
+		symbol: "CHRP",
+		address: "0xeD00Fc7D48B57B81FE65D1cE71c0985e4CF442CB",
+		decimals: 18
+	},
+	{
 		symbol: "CHS",
 		address: "0xaDD8A06fd58761A5047426e160B2B88AD3B9D464",
+		decimals: 18
+	},
+	{
+		symbol: "CHTS",
+		address: "0x1CdB9b4465F4e65B93D0aD802122C7C9279975c9",
 		decimals: 18
 	},
 	{
@@ -50320,6 +50620,16 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "CJET",
+		address: "0x38FC43bbdDB64cd23bC8d085F88722AB1F9a6C50",
+		decimals: 18
+	},
+	{
+		symbol: "CKT",
+		address: "0x3837e18B901629fcB200e0aD9c2f2441804bd6c8",
+		decimals: 18
+	},
+	{
 		symbol: "CLEAR",
 		address: "0x09Faf80c7Df27d0Fb8A717324963cB871f6814f7",
 		decimals: 18
@@ -50333,6 +50643,11 @@ var tokens$2 = [
 		symbol: "CLIMB",
 		address: "0x2A1d286ed5edAD78BeFD6E0d8BEb38791e8cD69d",
 		decimals: 8
+	},
+	{
+		symbol: "CLIQ",
+		address: "0xe795347731Bc547F4E4643F7945738cE2BC18529",
+		decimals: 18
 	},
 	{
 		symbol: "CLS",
@@ -50380,9 +50695,19 @@ var tokens$2 = [
 		decimals: 6
 	},
 	{
+		symbol: "COB",
+		address: "0x4312b655c6de6eA86b8159D16FcAdF5B937a6721",
+		decimals: 18
+	},
+	{
 		symbol: "COC",
 		address: "0xbDC3b3639f7AA19e623A4d603A3Fb7Ab20115A91",
 		decimals: 18
+	},
+	{
+		symbol: "COCA",
+		address: "0x44516Eb3D488175128D257748610426a866937D8",
+		decimals: 9
 	},
 	{
 		symbol: "CODEX",
@@ -50447,6 +50772,11 @@ var tokens$2 = [
 	{
 		symbol: "COPI",
 		address: "0xFeA292e5ea4510881bDB840E3CeC63aBd43f936f",
+		decimals: 18
+	},
+	{
+		symbol: "COR",
+		address: "0x3581a7B7BE2eD2EDf98710910fD05b0e8545f1DB",
 		decimals: 18
 	},
 	{
@@ -50540,6 +50870,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "CPLT",
+		address: "0x1cCAbE9A0d53636770f0d5c6Ce33f797E698C9D0",
+		decimals: 18
+	},
+	{
 		symbol: "CPO",
 		address: "0xea395DFaFEd39924988b475f2Ca7f4C72655203A",
 		decimals: 18
@@ -50558,6 +50893,11 @@ var tokens$2 = [
 		symbol: "CPS",
 		address: "0x569f4957176Ffa0dff76c507604f6a66d4B9C578",
 		decimals: 18
+	},
+	{
+		symbol: "CPX",
+		address: "0x1e2b832EDD325e85EAC987d3E6A95861f6280C46",
+		decimals: 9
 	},
 	{
 		symbol: "CPX",
@@ -50755,6 +51095,16 @@ var tokens$2 = [
 		decimals: 8
 	},
 	{
+		symbol: "CSM",
+		address: "0x35754E4650c8ab582F4e2Cb9225E77e6685be25A",
+		decimals: 18
+	},
+	{
+		symbol: "CST",
+		address: "0x368eB5efdca39126e8e76Aae5187166De7c2766c",
+		decimals: 18
+	},
+	{
 		symbol: "CSWAP",
 		address: "0xe0b0C16038845BEd3fCf70304D3e167Df81ce225",
 		decimals: 18
@@ -50928,6 +51278,11 @@ var tokens$2 = [
 		symbol: "DATA",
 		address: "0x0864c156b3C5F69824564dEC60c629aE6401bf2a",
 		decimals: 18
+	},
+	{
+		symbol: "DAWGS",
+		address: "0x222cF80A8514f8ce551C06D1b8d01DB3678688AD",
+		decimals: 9
 	},
 	{
 		symbol: "DBA",
@@ -51110,6 +51465,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "DFC",
+		address: "0x09890eDFF4b2445cB5D8121fdf2AeC5003fB00c4",
+		decimals: 18
+	},
+	{
 		symbol: "DFD",
 		address: "0x9899a98b222fCb2f3dbee7dF45d943093a4ff9ff",
 		decimals: 18
@@ -51215,8 +51575,18 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "DIGIS",
+		address: "0x0Ff81F18bCb9519ac6027c732D196945CA4D2a9A",
+		decimals: 18
+	},
+	{
 		symbol: "DINGER",
 		address: "0x0d3843F92D622468BA67DF5A6a4149B484a75af3",
+		decimals: 9
+	},
+	{
+		symbol: "DINGO",
+		address: "0x397E6d4fd68A9E25e93fC712B8F72F826f48a8ff",
 		decimals: 9
 	},
 	{
@@ -51250,8 +51620,18 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "DKD",
+		address: "0x6e74332922C8AF262b3b8d682D85bD9D3c86D1Eb",
+		decimals: 18
+	},
+	{
 		symbol: "DKS",
 		address: "0x121235cfF4c59EEC80b14c1d38B44e7de3A18287",
+		decimals: 18
+	},
+	{
+		symbol: "DLC",
+		address: "0xdE83180dD1166D4f8E5c2b7De14A2163b1Bb4a87",
 		decimals: 18
 	},
 	{
@@ -51360,6 +51740,11 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "DOGE2",
+		address: "0x3780E00D4c60887AF38345cCd44f7617dBFB10A0",
+		decimals: 9
+	},
+	{
 		symbol: "DOGECO",
 		address: "0x7B1Ebc0C4BC34964A0673cBEEF4e1dE868E8A8b6",
 		decimals: 9
@@ -51383,6 +51768,11 @@ var tokens$2 = [
 		symbol: "DOGEDI",
 		address: "0xDc49d53330317cBc6924fA53042e0C9bCa0A8d63",
 		decimals: 12
+	},
+	{
+		symbol: "DOGEFOOD",
+		address: "0x1bEc41a36356D5574Aeb068B599Ab7e48dD008b8",
+		decimals: 9
 	},
 	{
 		symbol: "DOGEMETA",
@@ -51440,6 +51830,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "DOP",
+		address: "0x1316F8e84c03e236355639f4d18018c55D3E23f9",
+		decimals: 9
+	},
+	{
 		symbol: "DOS",
 		address: "0x70861e862E1Ac0C96f853C8231826e469eAd37B1",
 		decimals: 18
@@ -51495,6 +51890,11 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "DRAC",
+		address: "0x123458C167a371250d325Bd8B1ffF12C8AF692A7",
+		decimals: 18
+	},
+	{
 		symbol: "DRACE",
 		address: "0xA6c897CaaCA3Db7fD6e2D2cE1a00744f40aB87Bb",
 		decimals: 18
@@ -51517,6 +51917,11 @@ var tokens$2 = [
 	{
 		symbol: "DRUG",
 		address: "0x27e2A0E643c7f17959F84C345d2123B77bbd412c",
+		decimals: 18
+	},
+	{
+		symbol: "DSD",
+		address: "0x1E888338623c910463ba7d1c67659140fAD09E9e",
 		decimals: 18
 	},
 	{
@@ -51680,8 +52085,18 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "ECT",
+		address: "0x6Bfd4cA8eC078d613eD6a5248Eb2c7a0d5c38b7b",
+		decimals: 9
+	},
+	{
 		symbol: "ECTO",
 		address: "0x670ddE11A0AD3D10acf3E6B5EBC742A55718F315",
+		decimals: 18
+	},
+	{
+		symbol: "ECY",
+		address: "0x3a14785035CF80aD95a969Bfc750584a3C16A6E6",
 		decimals: 18
 	},
 	{
@@ -51692,6 +52107,11 @@ var tokens$2 = [
 	{
 		symbol: "EDOGE",
 		address: "0x163f182C32d24A09d91EB75820cDe9FD5832b329",
+		decimals: 9
+	},
+	{
+		symbol: "EFB",
+		address: "0x002d3C280f719c4B0444680A8C4B1785b6cC2A59",
 		decimals: 9
 	},
 	{
@@ -51790,6 +52210,16 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "EMBR",
+		address: "0x6CB8065F96d63630425fd95A408A0D6cD697C662",
+		decimals: 18
+	},
+	{
+		symbol: "EMP",
+		address: "0x3b248CEfA87F836a4e6f6d6c9b42991b88Dc1d58",
+		decimals: 18
+	},
+	{
 		symbol: "ENV",
 		address: "0x4D6B129db8A502B85FEDc3443FA4f58b50327238",
 		decimals: 18
@@ -51815,6 +52245,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "EPX",
+		address: "0xAf41054C1487b0e5E2B9250C0332eCBCe6CE9d71",
+		decimals: 18
+	},
+	{
 		symbol: "EQX",
 		address: "0x436C52A8ceE41D5e9c5E6f4Cb146e66D552Fb700",
 		decimals: 18
@@ -51825,6 +52260,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "ERA",
+		address: "0x6f9F0c4ad9Af7EbD61Ac5A1D4e0F2227F7B0E5f9",
+		decimals: 18
+	},
+	{
 		symbol: "ERC20",
 		address: "0x58730ae0FAA10d73b0cDdb5e7b87C3594f7a20CB",
 		decimals: 18
@@ -51832,6 +52272,11 @@ var tokens$2 = [
 	{
 		symbol: "ERO",
 		address: "0x22cbd249e6c68712dA6767f1077b28C87745FA6D",
+		decimals: 18
+	},
+	{
+		symbol: "ESC",
+		address: "0x4c48cca6153Db911002F965D22fdeFcD95f33BE9",
 		decimals: 18
 	},
 	{
@@ -51925,8 +52370,18 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "EVRF",
+		address: "0x3C2e501B08CF5C16061468c96b19b32bae451dA3",
+		decimals: 18
+	},
+	{
 		symbol: "EVU",
 		address: "0x18B5F22266343cCD180C6285a66cC9A23Dc262E9",
+		decimals: 9
+	},
+	{
+		symbol: "EXALT",
+		address: "0x23dff15157f2456d0FE8839Ae15438bA85734F8B",
 		decimals: 9
 	},
 	{
@@ -51968,6 +52423,11 @@ var tokens$2 = [
 		symbol: "FABRIC",
 		address: "0x73FF5Dd853Cb87c144F463a555dcE0e43954220d",
 		decimals: 18
+	},
+	{
+		symbol: "FACEMETA",
+		address: "0x0A45B65Fd550D81cf4b685613C7D19AdB0D63153",
+		decimals: 9
 	},
 	{
 		symbol: "FACTR",
@@ -52015,6 +52475,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "FAWA",
+		address: "0x3A141d768298e9fDacCF9BA59B07d5FA5705F118",
+		decimals: 18
+	},
+	{
 		symbol: "FBL",
 		address: "0x393C44A497706DDE15996BB0C7Bdf691A79De38a",
 		decimals: 18
@@ -52037,6 +52502,11 @@ var tokens$2 = [
 	{
 		symbol: "FCF",
 		address: "0x4673f018cc6d401AAD0402BdBf2abcBF43dd69F3",
+		decimals: 18
+	},
+	{
+		symbol: "FDC",
+		address: "0x6d1A4650E83708b583C35d5E0952A0B46354Ca9b",
 		decimals: 18
 	},
 	{
@@ -52065,6 +52535,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "FENOMY",
+		address: "0x1E226F8527D9F73048F4b660AF44D902d4508Bc2",
+		decimals: 9
+	},
+	{
 		symbol: "FET",
 		address: "0x031b41e504677879370e9DBcF937283A8691Fa7f",
 		decimals: 18
@@ -52072,6 +52547,11 @@ var tokens$2 = [
 	{
 		symbol: "FEVR",
 		address: "0x82030CDBD9e4B7c5bb0b811A61DA6360D69449cc",
+		decimals: 18
+	},
+	{
+		symbol: "FFS",
+		address: "0x6E9da6BC1ACDC6fCD01e89233D00F9d335BBAe99",
 		decimals: 18
 	},
 	{
@@ -52090,8 +52570,23 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "FINA",
+		address: "0x426c72701833fdDBdFc06c944737C6031645c708",
+		decimals: 18
+	},
+	{
 		symbol: "FINE",
 		address: "0x4e6415a5727ea08aAE4580057187923aeC331227",
+		decimals: 18
+	},
+	{
+		symbol: "FINO",
+		address: "0x6C9AE5d6746ee1B6bD03310079AA11d8EC409212",
+		decimals: 18
+	},
+	{
+		symbol: "FIRE",
+		address: "0x0f0Dd5E2c0e0c4A41F8908D73D36B8D142F6745a",
 		decimals: 18
 	},
 	{
@@ -52143,6 +52638,11 @@ var tokens$2 = [
 		symbol: "FLOKI",
 		address: "0xfb5B838b6cfEEdC2873aB27866079AC55363D37E",
 		decimals: 9
+	},
+	{
+		symbol: "FLOKIM",
+		address: "0x0f5351B9EAefd6687dfF143DE6eA5d01cB9c1205",
+		decimals: 18
 	},
 	{
 		symbol: "FLUF",
@@ -52325,6 +52825,11 @@ var tokens$2 = [
 		decimals: 8
 	},
 	{
+		symbol: "FTE",
+		address: "0x0FEB3BDf0D619191a25BfAe0b8069164511Cd8c9",
+		decimals: 18
+	},
+	{
 		symbol: "FTM",
 		address: "0xAD29AbB318791D579433D831ed122aFeAf29dcfe",
 		decimals: 18
@@ -52460,6 +52965,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "GALEON",
+		address: "0x1d0Ac23F03870f768ca005c84cBb6FB82aa884fD",
+		decimals: 18
+	},
+	{
 		symbol: "GAME",
 		address: "0x66109633715d2110ddA791E64a7B2afadb517aBB",
 		decimals: 5
@@ -52540,6 +53050,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "GES",
+		address: "0x01aD5C8Ca6B2470CbC81c398336F83AAE22E4471",
+		decimals: 18
+	},
+	{
 		symbol: "GFCE",
 		address: "0x94BaBBE728D9411612Ee41b20241a6FA251b26Ce",
 		decimals: 9
@@ -52557,6 +53072,11 @@ var tokens$2 = [
 	{
 		symbol: "GFX",
 		address: "0x65ad6A2288b2Dd23E466226397c8F5D1794e58fC",
+		decimals: 18
+	},
+	{
+		symbol: "GGT",
+		address: "0x0195Af07ff81E2dCdd40BB8F7719fb4426a978C9",
 		decimals: 18
 	},
 	{
@@ -52592,6 +53112,11 @@ var tokens$2 = [
 	{
 		symbol: "GLCH",
 		address: "0xF0902eB0049A4003793BAb33F3566A22D2834442",
+		decimals: 18
+	},
+	{
+		symbol: "GLD",
+		address: "0x6EF7E2D571f9806ab8FAAB73a76A97442BF78e3b",
 		decimals: 18
 	},
 	{
@@ -52645,6 +53170,16 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "GMY",
+		address: "0x4b71BD5E1DB6CCE4179E175a3A2033E4F17b7432",
+		decimals: 9
+	},
+	{
+		symbol: "GNNX",
+		address: "0x022b0f871eDc12B1549f894e3A2d721BBEf7519b",
+		decimals: 18
+	},
+	{
 		symbol: "GNT",
 		address: "0xF750A26EB0aCf95556e8529E72eD530f3b60f348",
 		decimals: 18
@@ -52658,6 +53193,11 @@ var tokens$2 = [
 		symbol: "GOAL",
 		address: "0x438Fc473Ba340D0734E2D05acdf5BEE775D1B0A4",
 		decimals: 18
+	},
+	{
+		symbol: "GOAT",
+		address: "0x08922cC5e9bD4c74Ff570E27a40B84084a7f9988",
+		decimals: 9
 	},
 	{
 		symbol: "GOC",
@@ -52780,8 +53320,18 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "GULF",
+		address: "0x014a087b646Bd90E7DCEad3993F49EB1F4B5f30a",
+		decimals: 18
+	},
+	{
 		symbol: "GUM",
 		address: "0xc53708664b99DF348dd27C3Ac0759d2DA9c40462",
+		decimals: 18
+	},
+	{
+		symbol: "GUT",
+		address: "0x36E714D63B676236B72a0a4405F726337b06b6e5",
 		decimals: 18
 	},
 	{
@@ -52855,6 +53405,16 @@ var tokens$2 = [
 		decimals: 6
 	},
 	{
+		symbol: "HARE",
+		address: "0x4AFc8c2Be6a0783ea16E16066fde140d15979296",
+		decimals: 9
+	},
+	{
+		symbol: "HAY",
+		address: "0x0782b6d8c4551B9760e74c0545a9bCD90bdc41E5",
+		decimals: 18
+	},
+	{
 		symbol: "HBEE",
 		address: "0x13b4b65E6CCB4e81b78Ae237E5A7Fac667c08B03",
 		decimals: 18
@@ -52878,6 +53438,16 @@ var tokens$2 = [
 		symbol: "Helmet",
 		address: "0x948d2a81086A075b3130BAc19e4c6DEe1D2E3fE8",
 		decimals: 18
+	},
+	{
+		symbol: "HELPS",
+		address: "0x0A6e6D2F58d22E267Fdc9bfB295F0d43985FEBB4",
+		decimals: 18
+	},
+	{
+		symbol: "HER",
+		address: "0x8c18ffD66d943C9B0AD3DC40E2D64638F1e6e1ab",
+		decimals: 9
 	},
 	{
 		symbol: "HERA",
@@ -52922,6 +53492,11 @@ var tokens$2 = [
 	{
 		symbol: "HI",
 		address: "0x77087aB5Df23cFB52449A188e80e9096201c2097",
+		decimals: 18
+	},
+	{
+		symbol: "HIFI",
+		address: "0x0A38bc18022b0cCB043F7b730B354d554C6230F1",
 		decimals: 18
 	},
 	{
@@ -52970,6 +53545,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "HON",
+		address: "0x20a30a68bEa440c34f7Ca4Aa31527c9180836f86",
+		decimals: 18
+	},
+	{
 		symbol: "HOPE",
 		address: "0x6F2aFbF4f5e5e804C5b954889d7Bf3768A3C9a45",
 		decimals: 18
@@ -52977,6 +53557,11 @@ var tokens$2 = [
 	{
 		symbol: "HORD",
 		address: "0x39d4549908e7Adcee9b439429294eEb4c65c2C9e",
+		decimals: 18
+	},
+	{
+		symbol: "HORDE",
+		address: "0x0069FF45ea9F7c28E0A2dEDb9BEf8144af8131BC",
 		decimals: 18
 	},
 	{
@@ -52997,6 +53582,11 @@ var tokens$2 = [
 	{
 		symbol: "HTX",
 		address: "0x38A0df9a08d18dc06CD91Fc7Ec94a0AcdF28D994",
+		decimals: 8
+	},
+	{
+		symbol: "HUB",
+		address: "0x46bCBBB0D888dF90Eda86c9CA159C7727a8731D5",
 		decimals: 8
 	},
 	{
@@ -53063,6 +53653,11 @@ var tokens$2 = [
 		symbol: "IAI",
 		address: "0xE495B7155Fbd040065491092b02893C8E17629Ed",
 		decimals: 18
+	},
+	{
+		symbol: "IBAT",
+		address: "0x19cd9B8e42d4EF62c3EA124110D5Cfd283CEaC43",
+		decimals: 9
 	},
 	{
 		symbol: "IBFR",
@@ -53151,6 +53746,11 @@ var tokens$2 = [
 	},
 	{
 		symbol: "INCOME",
+		address: "0x3a91A88Ef4bB813BB99EF5a745bcb56e3A3b403b",
+		decimals: 18
+	},
+	{
+		symbol: "INCOME",
 		address: "0xDFcF44e9a6D99717FC04AddD57Fb667286Bb7DC0",
 		decimals: 18
 	},
@@ -53212,6 +53812,11 @@ var tokens$2 = [
 	{
 		symbol: "IRON",
 		address: "0x7b65B489fE53fCE1F6548Db886C08aD73111DDd8",
+		decimals: 18
+	},
+	{
+		symbol: "IRT",
+		address: "0xCBE5BcA571628894A38836b0baE833ff012f71D8",
 		decimals: 18
 	},
 	{
@@ -53285,6 +53890,21 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "JIMN",
+		address: "0x393EEd64C53D766dD7d9572593be0D4B5B4f2Ca4",
+		decimals: 9
+	},
+	{
+		symbol: "JK",
+		address: "0x1eC58Fe5e681E35e490B5D4cBECdF42B29C1B063",
+		decimals: 18
+	},
+	{
+		symbol: "JKWON",
+		address: "0x4C267653e851876dEdE1c90d494c2fC3F7F01178",
+		decimals: 18
+	},
+	{
 		symbol: "JM",
 		address: "0x388D819724dD6d71760A38F00dc01D310d879771",
 		decimals: 8
@@ -53328,6 +53948,11 @@ var tokens$2 = [
 		symbol: "JUV",
 		address: "0xC40C9A843E1c6D01b7578284a9028854f6683b1B",
 		decimals: 2
+	},
+	{
+		symbol: "JYC",
+		address: "0x13b8abB1cFd7BBE1F5764fE967ED049d488d9D1d",
+		decimals: 9
 	},
 	{
 		symbol: "KABOSU",
@@ -53378,6 +54003,11 @@ var tokens$2 = [
 		symbol: "KAMPAY",
 		address: "0x8E984e03ab35795C60242c902ECe2450242C90e9",
 		decimals: 18
+	},
+	{
+		symbol: "KARA",
+		address: "0x1e155e26085Be757780B45a5420D9f16a938f76b",
+		decimals: 6
 	},
 	{
 		symbol: "KART",
@@ -53500,8 +54130,18 @@ var tokens$2 = [
 		decimals: 8
 	},
 	{
+		symbol: "KINGDOG",
+		address: "0x3BB55Ba11f1A220c7C1e15b56E6cF9c69519c50F",
+		decimals: 9
+	},
+	{
 		symbol: "KINGSHIB",
 		address: "0x84F4f7cdb4574C9556A494DaB18ffc1D1D22316C",
+		decimals: 9
+	},
+	{
+		symbol: "KINGSHIBA",
+		address: "0x22918b2b01b1809d95CaC26B3861dE9dd5EE7806",
 		decimals: 9
 	},
 	{
@@ -53582,6 +54222,11 @@ var tokens$2 = [
 	{
 		symbol: "KRD",
 		address: "0xb020805e0Bc7F0e353D1343d67A239F417D57Bbf",
+		decimals: 18
+	},
+	{
+		symbol: "KRED",
+		address: "0x1C50E72b9b7a44bf7e63FE7735d67d82c3E4bF74",
 		decimals: 18
 	},
 	{
@@ -53720,6 +54365,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "LC",
+		address: "0x39BD64E5b9e025b0C8D91ee2CFec9125A388894B",
+		decimals: 18
+	},
+	{
 		symbol: "LDFI",
 		address: "0x8F1E60D84182db487aC235acC65825e50b5477a1",
 		decimals: 18
@@ -53783,6 +54433,11 @@ var tokens$2 = [
 		symbol: "LHC",
 		address: "0x320d31183100280CcdF69366CD56180Ea442A3E8",
 		decimals: 8
+	},
+	{
+		symbol: "LIBERA",
+		address: "0x3A806A3315E35b3F5F46111ADb6E2BAF4B14A70D",
+		decimals: 18
 	},
 	{
 		symbol: "LIBRE",
@@ -53850,6 +54505,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "LLVERSE",
+		address: "0x39bca4d597062378b5669CD31a3bBFECCDd36B3c",
+		decimals: 9
+	},
+	{
 		symbol: "LMT",
 		address: "0x9617857E191354dbEA0b714d78Bc59e57C411087",
 		decimals: 18
@@ -53890,8 +54550,23 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "LOUD",
+		address: "0x3d0E22387DdfE75D1AEa9D7108a4392922740B96",
+		decimals: 18
+	},
+	{
+		symbol: "LOUVRE",
+		address: "0x24905b248dCEEb17b221A48eFA0d0388b3b38Fe4",
+		decimals: 9
+	},
+	{
 		symbol: "lowb",
 		address: "0x843D4a358471547f51534e3e51fae91cb4Dc3F28",
+		decimals: 18
+	},
+	{
+		symbol: "LPDI",
+		address: "0x20b1290DEdb94328705b21986485A447C63B8506",
 		decimals: 18
 	},
 	{
@@ -53933,6 +54608,11 @@ var tokens$2 = [
 		symbol: "LTO",
 		address: "0x857B222Fc79e1cBBf8Ca5f78CB133d1b7CF34BBd",
 		decimals: 18
+	},
+	{
+		symbol: "LTRBT",
+		address: "0x6C46422A0f7dbbAD9BEC3BbBC1189bfAf9794B05",
+		decimals: 9
 	},
 	{
 		symbol: "LTT",
@@ -53985,6 +54665,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "M-X",
+		address: "0x22e88b8AbECc7e510c98D55991c626D67cdC52Ea",
+		decimals: 18
+	},
+	{
 		symbol: "MAAPL",
 		address: "0x900AEb8c40b26A8f8DfAF283F884b03EE7Abb3Ec",
 		decimals: 18
@@ -53993,6 +54678,11 @@ var tokens$2 = [
 		symbol: "MAFA",
 		address: "0xAF44400A99a9693bF3c2e89b02652bABACc5cdb9",
 		decimals: 18
+	},
+	{
+		symbol: "MAGA",
+		address: "0x3EF144cB45C8a390EB207A6aa9bFcf3DA639cb5C",
+		decimals: 9
 	},
 	{
 		symbol: "MAGICDOGE",
@@ -54022,6 +54712,11 @@ var tokens$2 = [
 	{
 		symbol: "MANY",
 		address: "0x3E2ed75F718251Fd011312b9E33Bf10A4dbfda54",
+		decimals: 9
+	},
+	{
+		symbol: "MARS",
+		address: "0x6E53E24f0f7B273d27D92a909A30762d5734B649",
 		decimals: 9
 	},
 	{
@@ -54115,6 +54810,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "MBT",
+		address: "0x3A20c33691295da2f71B291449C137067a2c1355",
+		decimals: 18
+	},
+	{
 		symbol: "MBX",
 		address: "0x064C8E55Aa484AdBD58ca2d43343eF50137473b7",
 		decimals: 18
@@ -54195,6 +54895,11 @@ var tokens$2 = [
 		decimals: 12
 	},
 	{
+		symbol: "MEGA",
+		address: "0x079F0f5f3Ad15E01a5CD919564A8F52DdE03431B",
+		decimals: 18
+	},
+	{
 		symbol: "MEL",
 		address: "0x7D5bc7796fD62a9A27421198fc3c349B96cDD9Dc",
 		decimals: 18
@@ -54217,6 +54922,11 @@ var tokens$2 = [
 	{
 		symbol: "MEOWTH",
 		address: "0xE561479bEbEE0e606c19bB1973Fc4761613e3C42",
+		decimals: 18
+	},
+	{
+		symbol: "MERCE",
+		address: "0x6d163b653010740bfb41BED4bee23f94b3285cBA",
 		decimals: 18
 	},
 	{
@@ -54270,6 +54980,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "METAPETS",
+		address: "0x24cE3d571fBcFD9D81dc0e1a560504636a4D046d",
+		decimals: 9
+	},
+	{
 		symbol: "METAV",
 		address: "0x62858686119135cc00C4A3102b436a0eB314D402",
 		decimals: 18
@@ -54290,6 +55005,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "MFET",
+		address: "0x6d23970ce32Cb0F1929bECE7C56D71319e1b4F01",
+		decimals: 8
+	},
+	{
 		symbol: "MFI",
 		address: "0xeb5bb9d14D27F75C787cf7475e7ED00D21dc7279",
 		decimals: 18
@@ -54307,6 +55027,11 @@ var tokens$2 = [
 	{
 		symbol: "MFX",
 		address: "0x6266a18F1605DA94e8317232ffa634C74646ac40",
+		decimals: 18
+	},
+	{
+		symbol: "MGA",
+		address: "0x03aC6AB6A9a91a0fcdec7D85b38bDFBb719ec02f",
 		decimals: 18
 	},
 	{
@@ -54350,6 +55075,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "MIDA",
+		address: "0x1104918312cc9Ad88EadaBE07b5110cAE99583f6",
+		decimals: 18
+	},
+	{
 		symbol: "MILK",
 		address: "0x3CD88B61EA466b1C636302668bcbe2c033198c42",
 		decimals: 18
@@ -54367,6 +55097,11 @@ var tokens$2 = [
 	{
 		symbol: "MILK2",
 		address: "0x4A5a34212404f30C5aB7eB61b078fA4A55AdC5a5",
+		decimals: 18
+	},
+	{
+		symbol: "MILKY",
+		address: "0x11F814bf948c1e0726c738c6d42fA7234f32b6E8",
 		decimals: 18
 	},
 	{
@@ -54398,6 +55133,11 @@ var tokens$2 = [
 		symbol: "MINERS",
 		address: "0xeB6B00F8C7E1da78fb919C810C30DdE95475bdDe",
 		decimals: 18
+	},
+	{
+		symbol: "MINIBTC",
+		address: "0x3bC72EFf96752C2f66c7dE855f97C23eC4A1aC01",
+		decimals: 9
 	},
 	{
 		symbol: "MINIDOGE",
@@ -54465,6 +55205,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "MMG",
+		address: "0x1C376275791069349fef8bd9F431382D384657a3",
+		decimals: 6
+	},
+	{
 		symbol: "MMO",
 		address: "0x0aa086e7A108D387dE63294fe2A88B05820a9855",
 		decimals: 18
@@ -54507,6 +55252,11 @@ var tokens$2 = [
 	{
 		symbol: "MNFT",
 		address: "0x33BE7644c0E489b3A0c639D103392D4F3e338158",
+		decimals: 18
+	},
+	{
+		symbol: "MNFT",
+		address: "0x36953B5Ec00A13eDcEceB3aF258D034913D2A79D",
 		decimals: 18
 	},
 	{
@@ -54615,8 +55365,18 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "MONSTR",
+		address: "0x3933E1cDD51DE9b0f7d062AC8549cCdf63C219a9",
+		decimals: 18
+	},
+	{
 		symbol: "MOON",
 		address: "0x747DeECd8f34A9036dF50c8C6B9858621D226F05",
+		decimals: 18
+	},
+	{
+		symbol: "MOOND",
+		address: "0x6cA5FAc496bf94345958635E6e6171Dfe78f36bb",
 		decimals: 18
 	},
 	{
@@ -54672,6 +55432,11 @@ var tokens$2 = [
 	{
 		symbol: "MOVEZ",
 		address: "0x039cD22cb49084142d55FCD4B6096A4F51ffb3B4",
+		decimals: 18
+	},
+	{
+		symbol: "MOWA",
+		address: "0x411Ec510c85C9e56271bF4E10364Ffa909E685D9",
 		decimals: 18
 	},
 	{
@@ -54890,6 +55655,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "MVX",
+		address: "0x10C9524DBF934B3B625Dce3bDC0efdc367F4E84b",
+		decimals: 8
+	},
+	{
 		symbol: "MW",
 		address: "0x1e3eB1a4C1830e7f4f231D2c7752dAE004980253",
 		decimals: 18
@@ -54913,6 +55683,11 @@ var tokens$2 = [
 		symbol: "MYP",
 		address: "0x11f59d29Ba0A7B765C4a454fd46Ff40525a85402",
 		decimals: 9
+	},
+	{
+		symbol: "MYRA",
+		address: "0x6ef238E9E8CD2A96740897761C18894Fc086B9d0",
+		decimals: 18
 	},
 	{
 		symbol: "MYST",
@@ -54948,6 +55723,11 @@ var tokens$2 = [
 		symbol: "NAOS",
 		address: "0x758d08864fB6cCE3062667225ca10b8F00496cc2",
 		decimals: 18
+	},
+	{
+		symbol: "NASADOGE",
+		address: "0x079Dd74Cc214Ac5f892f6a7271ef0722F6D0c2e6",
+		decimals: 9
 	},
 	{
 		symbol: "NASSR",
@@ -55035,6 +55815,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "NFS",
+		address: "0x6eE002Ce31Ce4E52211EEfb2d3986082663D5F60",
+		decimals: 18
+	},
+	{
 		symbol: "NFT",
 		address: "0x1fC9004eC7E5722891f5f38baE7678efCB11d34D",
 		decimals: 6
@@ -55107,6 +55892,11 @@ var tokens$2 = [
 	{
 		symbol: "NGL",
 		address: "0x0F5d8CD195a4539bcf2eC6118C6dA50287c6d5f5",
+		decimals: 18
+	},
+	{
+		symbol: "NGT",
+		address: "0x370527c29113aaD172D1dEF6c42d0C924DF124cE",
 		decimals: 18
 	},
 	{
@@ -55195,8 +55985,18 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "NRFX",
+		address: "0x3764Be118a1e09257851A3BD636D48DFeab5CAFE",
+		decimals: 18
+	},
+	{
 		symbol: "NRV",
 		address: "0x42F6f551ae042cBe50C739158b4f0CAC0Edb9096",
+		decimals: 18
+	},
+	{
+		symbol: "NSK",
+		address: "0x47fB260e384C807C7f365F754239408cD1ff34f2",
 		decimals: 18
 	},
 	{
@@ -55340,6 +56140,11 @@ var tokens$2 = [
 		decimals: 8
 	},
 	{
+		symbol: "OKA",
+		address: "0x1f3A0425f0d50F1c277B617374Ed6c2e95A4ca84",
+		decimals: 10
+	},
+	{
 		symbol: "OKBOOMER",
 		address: "0xE9db02A654b74ca04734B26ef3B2a79808d43404",
 		decimals: 9
@@ -55367,6 +56172,11 @@ var tokens$2 = [
 	{
 		symbol: "OLIVE",
 		address: "0x617724974218A18769020A70162165A539c07E8a",
+		decimals: 18
+	},
+	{
+		symbol: "OLOID",
+		address: "0x0F6266A9e9214ea129D4A001E9541d643a34C772",
 		decimals: 18
 	},
 	{
@@ -55435,6 +56245,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "OPV",
+		address: "0x36C7B164F85D6F775cD128966D5819c7d36FEfF3",
+		decimals: 18
+	},
+	{
 		symbol: "ORAI",
 		address: "0x4c11249814f11b9346808179Cf06e71ac328c1b5",
 		decimals: 18
@@ -55482,6 +56297,11 @@ var tokens$2 = [
 	{
 		symbol: "ORK",
 		address: "0xCed0CE92F4bdC3c2201E255FAF12f05cf8206dA8",
+		decimals: 18
+	},
+	{
+		symbol: "ORKL",
+		address: "0x36BC1F4D4Af21df024398150Ad39627FB2c8A847",
 		decimals: 18
 	},
 	{
@@ -55572,6 +56392,11 @@ var tokens$2 = [
 	{
 		symbol: "PALM",
 		address: "0x9768E5b2d8e761905BC81Dfc554f9437A46CdCC6",
+		decimals: 18
+	},
+	{
+		symbol: "PANTHER",
+		address: "0x1f546aD641B56b86fD9dCEAc473d1C7a357276B7",
 		decimals: 18
 	},
 	{
@@ -55715,6 +56540,11 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "PEN",
+		address: "0x3a6b593fb353FD5a3BB68Ea120f3bA4f78637C30",
+		decimals: 8
+	},
+	{
 		symbol: "PERI",
 		address: "0xb49B7e0742EcB4240ffE91661d2A580677460b6A",
 		decimals: 18
@@ -55815,6 +56645,11 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "PIGGY",
+		address: "0x1bEaC6DF550be0ad146DD99b4726c6bec9C5c6a5",
+		decimals: 18
+	},
+	{
 		symbol: "PIKA",
 		address: "0x50D370cc853217099Bef3815FaaBfc563139eC2A",
 		decimals: 18
@@ -55882,6 +56717,11 @@ var tokens$2 = [
 	{
 		symbol: "PKR",
 		address: "0xc49DDe62B4A0810074721fAcA54Aab52369f486a",
+		decimals: 18
+	},
+	{
+		symbol: "PLACE",
+		address: "0x07728696eE70A28c9C032926577AF1D524Df30f9",
 		decimals: 18
 	},
 	{
@@ -55982,6 +56822,11 @@ var tokens$2 = [
 	{
 		symbol: "POC",
 		address: "0x1b6609830C695F1c0692123Bd2FD6D01f6794B98",
+		decimals: 18
+	},
+	{
+		symbol: "POCO",
+		address: "0x394bBA8F309f3462b31238B3fd04b83F71A98848",
 		decimals: 18
 	},
 	{
@@ -56190,6 +57035,16 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "PSB",
+		address: "0x36bfBb1d5B3C9b336f3D64976599B6020cA805F1",
+		decimals: 18
+	},
+	{
+		symbol: "PSI",
+		address: "0x6e70194F3A2D1D0a917C2575B7e33cF710718a17",
+		decimals: 9
+	},
+	{
 		symbol: "PSP",
 		address: "0xcAfE001067cDEF266AfB7Eb5A286dCFD277f3dE5",
 		decimals: 18
@@ -56208,6 +57063,21 @@ var tokens$2 = [
 		symbol: "PSWAP",
 		address: "0x42539F50c5F8a0c929E7895EB265391F58b22a19",
 		decimals: 18
+	},
+	{
+		symbol: "PTA",
+		address: "0x3843F234B35A311e195608D32283a68284B3c44D",
+		decimals: 9
+	},
+	{
+		symbol: "PTE",
+		address: "0x424B50dcB78f459d11A95bedDd13788296281987",
+		decimals: 18
+	},
+	{
+		symbol: "PTN",
+		address: "0x3999565294cA158d3D7cde9C74C86be928317ea0",
+		decimals: 6
 	},
 	{
 		symbol: "PTS",
@@ -56267,6 +57137,11 @@ var tokens$2 = [
 	{
 		symbol: "PWAR",
 		address: "0x16153214E683018D5aA318864c8e692b66E16778",
+		decimals: 18
+	},
+	{
+		symbol: "PWG",
+		address: "0x1e70f310c902edff4F6176142831b02dc68564d5",
 		decimals: 18
 	},
 	{
@@ -56350,6 +57225,16 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "RAHO",
+		address: "0x0206CFD417f7BfA500B029558232a5f5294dAEd2",
+		decimals: 18
+	},
+	{
+		symbol: "RAID",
+		address: "0xeb90A6273F616A8ED1cf58A05d3ae1C1129b4DE6",
+		decimals: 18
+	},
+	{
 		symbol: "RAIN",
 		address: "0x6Bcd897D4BA5675F860C7418ddc034f6c5610114",
 		decimals: 18
@@ -56422,6 +57307,11 @@ var tokens$2 = [
 	{
 		symbol: "RC",
 		address: "0x229a54Fb9De889C271380452C0483ce89b8C1e0D",
+		decimals: 18
+	},
+	{
+		symbol: "RC2",
+		address: "0x38330281b627240b1F5470014091F69ad5a84146",
 		decimals: 18
 	},
 	{
@@ -56635,6 +57525,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "RIFF",
+		address: "0x1bDAF24Bdf9BFa845AF9F8D037b44E345bD968a0",
+		decimals: 18
+	},
+	{
 		symbol: "RIFICO",
 		address: "0x4da8265bE61b9DA59c8e207BFcBC075F1D611F36",
 		decimals: 9
@@ -56657,6 +57552,11 @@ var tokens$2 = [
 	{
 		symbol: "RISE",
 		address: "0xC17c30e98541188614dF99239cABD40280810cA3",
+		decimals: 18
+	},
+	{
+		symbol: "RITE",
+		address: "0x0F5D54b27bDb556823F96f2536496550f8816dC5",
 		decimals: 18
 	},
 	{
@@ -56693,6 +57593,11 @@ var tokens$2 = [
 		symbol: "ROCK",
 		address: "0xC3387E4285e9F80A7cFDf02B4ac6cdF2476A528A",
 		decimals: 18
+	},
+	{
+		symbol: "ROCKETFI",
+		address: "0x6e61579c22F9a6dA63a33e819f29B6697d2a126E",
+		decimals: 9
 	},
 	{
 		symbol: "ROCKI",
@@ -56905,6 +57810,11 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "SAFEZONE",
+		address: "0x10F181B87E2A4Af6120452A29570fcf74B082c16",
+		decimals: 8
+	},
+	{
 		symbol: "SAFTI",
 		address: "0x84952dd90cdC57170b13D2291A8afCEdC8F97c71",
 		decimals: 5
@@ -57037,6 +57947,11 @@ var tokens$2 = [
 	{
 		symbol: "SCOOBI",
 		address: "0x16dFEfF64c532370e8FAa73a7e94e2cCda9342EF",
+		decimals: 18
+	},
+	{
+		symbol: "SCOTTY",
+		address: "0x000351d035D8BBf2aa3131EbFECD66Fb21836f6c",
 		decimals: 18
 	},
 	{
@@ -57200,6 +58115,11 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "SHEEP",
+		address: "0x0025B42bfc22CbbA6c02d23d4Ec2aBFcf6E014d4",
+		decimals: 9
+	},
+	{
 		symbol: "SHEESHA",
 		address: "0x232FB065D9d24c34708eeDbF03724f2e95ABE768",
 		decimals: 18
@@ -57213,6 +58133,11 @@ var tokens$2 = [
 		symbol: "SHI",
 		address: "0x7269d98Af4aA705e0B1A5D8512FadB4d45817d5a",
 		decimals: 18
+	},
+	{
+		symbol: "SHIBADOLLARS",
+		address: "0x3780aB762d530614F72F94c7CF3396c488c0B57c",
+		decimals: 9
 	},
 	{
 		symbol: "SHIBAKEN",
@@ -57305,6 +58230,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "SISTA",
+		address: "0xCA6d25C10dad43ae8Be0bc2af4D3CD1114583C08",
+		decimals: 18
+	},
+	{
 		symbol: "SITX",
 		address: "0x492A5dAd5db7B8F3ccf9c77D01f33F142B229b2B",
 		decimals: 18
@@ -57357,6 +58287,11 @@ var tokens$2 = [
 	{
 		symbol: "SLP",
 		address: "0x070a08BeEF8d36734dD67A491202fF35a6A16d97",
+		decimals: 18
+	},
+	{
+		symbol: "SMASH",
+		address: "0x3D0e93bfCb8FB46331Ea8c98B6ab8C575aB424C3",
 		decimals: 18
 	},
 	{
@@ -57447,6 +58382,11 @@ var tokens$2 = [
 	{
 		symbol: "SOME",
 		address: "0xc039C13470be809beD1C2CD42339Ccb22e0970f2",
+		decimals: 18
+	},
+	{
+		symbol: "SON",
+		address: "0x3b0E967cE7712EC68131A809dB4f78ce9490e779",
 		decimals: 18
 	},
 	{
@@ -57545,9 +58485,19 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "SPHYNX",
+		address: "0x6e281f90c6D1b5E5A01FB6f14C428afF69c04C3F",
+		decimals: 18
+	},
+	{
 		symbol: "SPI",
 		address: "0x78A18Db278F9c7c9657F61dA519e6Ef43794DD5D",
 		decimals: 18
+	},
+	{
+		symbol: "SPO",
+		address: "0x3b56a620d8a4f68049964CfFe674Da9174193bC2",
+		decimals: 9
 	},
 	{
 		symbol: "SPO",
@@ -57578,6 +58528,11 @@ var tokens$2 = [
 		symbol: "SPS",
 		address: "0x1633b7157e7638C4d6593436111Bf125Ee74703F",
 		decimals: 18
+	},
+	{
+		symbol: "SPT",
+		address: "0x6CAF6B9761b786a9E9f3634320Ee5061d3C0Ab59",
+		decimals: 8
 	},
 	{
 		symbol: "SQM",
@@ -57612,6 +58567,11 @@ var tokens$2 = [
 	{
 		symbol: "ST",
 		address: "0x1e4f2Ab406aa9764Ff05a9a8c8bF6B1c8B6f531F",
+		decimals: 18
+	},
+	{
+		symbol: "ST",
+		address: "0x6F706319C46D1b28508E8e4bCaA59e47D15e028C",
 		decimals: 18
 	},
 	{
@@ -57662,6 +58622,11 @@ var tokens$2 = [
 	{
 		symbol: "STEEL",
 		address: "0x9001eE054F1692feF3A48330cB543b6FEc6287eb",
+		decimals: 18
+	},
+	{
+		symbol: "STELIA",
+		address: "0x0019450b0FB021ad2e9f7928101B171272cd537C",
 		decimals: 18
 	},
 	{
@@ -57755,6 +58720,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "SV",
+		address: "0x374827A70f08805650f2408B4aaC1B490275eF0B",
+		decimals: 18
+	},
+	{
 		symbol: "SWAMP",
 		address: "0xc5A49b4CBe004b6FD55B30Ba1dE6AC360FF9765d",
 		decimals: 18
@@ -57785,8 +58755,18 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "SWFTC",
+		address: "0xE64E30276C2F826FEbd3784958d6Da7B55DfbaD3",
+		decimals: 18
+	},
+	{
 		symbol: "SWGb",
 		address: "0xE40255C5d7fa7ceEc5120408C78C787CECB4cfdb",
+		decimals: 18
+	},
+	{
+		symbol: "SWHAL",
+		address: "0x4048A31e0A4fA577D343290835b34eBB4e3dBB1b",
 		decimals: 18
 	},
 	{
@@ -57850,6 +58830,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "TAMA",
+		address: "0x0F1C6791a8b8D764c78dd54F0A151EC4D3A0c090",
+		decimals: 9
+	},
+	{
 		symbol: "TANK",
 		address: "0x4444A19C8bb86E9BDbC023709A363bbCE91aF33E",
 		decimals: 18
@@ -57865,13 +58850,33 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "TAP",
+		address: "0x35bEdBF9291b22218a0dA863170dcC9329Ef2563",
+		decimals: 18
+	},
+	{
+		symbol: "TARAL",
+		address: "0x0Fc812b96De7e910878039121938f6d5471b73Dc",
+		decimals: 18
+	},
+	{
 		symbol: "TARO",
 		address: "0x424aa711301c82252ecCaccF01301aD7Ad7b5D40",
 		decimals: 18
 	},
 	{
+		symbol: "TARP",
+		address: "0x6C0A568a3fFb61957812fb3e300e4C10B708d336",
+		decimals: 9
+	},
+	{
 		symbol: "TASTE",
 		address: "0xdB238123939637D65a03E4b2b485650B4f9D91CB",
+		decimals: 9
+	},
+	{
+		symbol: "TATA",
+		address: "0x355389292D8c963719FDaF0651f7846D6c504448",
 		decimals: 9
 	},
 	{
@@ -57930,6 +58935,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "TEDDY",
+		address: "0x10f6f2b97F3aB29583D9D38BaBF2994dF7220C21",
+		decimals: 18
+	},
+	{
 		symbol: "TEM",
 		address: "0x19e6BfC1A6e4B042Fb20531244D47E252445df01",
 		decimals: 9
@@ -57947,6 +58957,11 @@ var tokens$2 = [
 	{
 		symbol: "TENFI",
 		address: "0xd15C444F1199Ae72795eba15E8C1db44E47abF62",
+		decimals: 18
+	},
+	{
+		symbol: "TEX",
+		address: "0x049Dd7532148826CdE956c7B45fec8c30b514052",
 		decimals: 18
 	},
 	{
@@ -57980,9 +58995,19 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "THS",
+		address: "0x6C5FF116bFFc50Ff59d0334d5643e15b71C6414A",
+		decimals: 18
+	},
+	{
 		symbol: "THUNDER",
 		address: "0xCf8F936D880a93E571cC2476C1B65508A918B5F9",
 		decimals: 9
+	},
+	{
+		symbol: "THUNDERADA",
+		address: "0x0A7bB2bddA1c0eA02d98a7b048f4bF809F40277b",
+		decimals: 18
 	},
 	{
 		symbol: "TIC",
@@ -58260,6 +59285,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "TST",
+		address: "0x12Aa33065EDf46d41e42945046aAE8A6f5c1622F",
+		decimals: 18
+	},
+	{
 		symbol: "TSUGA",
 		address: "0x58d372A8db7696C0C066F25c9eAF2AF6F147B726",
 		decimals: 18
@@ -58268,6 +59298,11 @@ var tokens$2 = [
 		symbol: "TSX",
 		address: "0x270388e0CA29CFd7C7E73903D9d933a23D1BAB39",
 		decimals: 18
+	},
+	{
+		symbol: "TSY",
+		address: "0x2033f3599E070C3BECd09B0b28988A9c45a059d5",
+		decimals: 9
 	},
 	{
 		symbol: "TT",
@@ -58373,6 +59408,21 @@ var tokens$2 = [
 		symbol: "UFT",
 		address: "0x2645d5f59D952ef2317C8e0AaA5A61c392cCd44d",
 		decimals: 18
+	},
+	{
+		symbol: "UIM",
+		address: "0x1BB132D6039b81FaEdc524a30E52586b6Ca15f48",
+		decimals: 18
+	},
+	{
+		symbol: "ULE",
+		address: "0x3a549866a592C81719F3b714a356A8879E20F5d0",
+		decimals: 18
+	},
+	{
+		symbol: "ULTGG",
+		address: "0x2065E3BD318f155abE5Ad6aa263596f197112261",
+		decimals: 9
 	},
 	{
 		symbol: "ULTI",
@@ -58605,6 +59655,11 @@ var tokens$2 = [
 		decimals: 8
 	},
 	{
+		symbol: "VDORA",
+		address: "0x3a5FcCBdcc2684be588575f063acbA78e09AAD4a",
+		decimals: 9
+	},
+	{
 		symbol: "vDOT",
 		address: "0x1610bc33319e9398de5f57B33a5b184c806aD217",
 		decimals: 8
@@ -58660,6 +59715,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "VICAT",
+		address: "0x3BFAD48181C9E88E1dD9C1B48887E33E2653dB4d",
+		decimals: 7
+	},
+	{
 		symbol: "VICE",
 		address: "0xeea06FC74182B195f679f31d735D95EE502f03F3",
 		decimals: 18
@@ -58700,6 +59760,11 @@ var tokens$2 = [
 		decimals: 8
 	},
 	{
+		symbol: "VLTY",
+		address: "0x38A5cbe2FB53d1d407Dd5A22C4362daF48EB8526",
+		decimals: 18
+	},
+	{
 		symbol: "VLX",
 		address: "0xE9C803F48dFFE50180Bd5B01dC04DA939E3445Fc",
 		decimals: 18
@@ -58707,6 +59772,11 @@ var tokens$2 = [
 	{
 		symbol: "VLXPAD",
 		address: "0xb8e3bB633F7276cc17735D86154E0ad5ec9928C0",
+		decimals: 18
+	},
+	{
+		symbol: "VNES",
+		address: "0x252d8F5847204960255fD0bA654848076b57D551",
 		decimals: 18
 	},
 	{
@@ -58730,6 +59800,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "VPK",
+		address: "0x37Ac5F3bfd18a164Fc6cF0f0f0ECD334D9179d57",
+		decimals: 18
+	},
+	{
 		symbol: "VPP",
 		address: "0xe069Af87450fB51Fc0d0E044617f1C134163e591",
 		decimals: 18
@@ -58747,6 +59822,11 @@ var tokens$2 = [
 	{
 		symbol: "VTX",
 		address: "0x070625d5A14706c30b8E2264753B2f5D035Bc1B4",
+		decimals: 18
+	},
+	{
+		symbol: "VULC",
+		address: "0x3810a078AA274Ea6d06a480588eFf8fE517220a4",
 		decimals: 18
 	},
 	{
@@ -58825,6 +59905,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "WEAVE",
+		address: "0x6CC97eF7D330C090681c3a6d266F6AdeDf80e56B",
+		decimals: 18
+	},
+	{
 		symbol: "WEB",
 		address: "0x7786B28826e2DDA4dBe344bE66A0bFbfF3d3362f",
 		decimals: 1
@@ -58837,6 +59922,11 @@ var tokens$2 = [
 	{
 		symbol: "WEB3ALLBI",
 		address: "0xec3297C5d521FEEB058320B05B823a4510D0c06e",
+		decimals: 18
+	},
+	{
+		symbol: "WEC",
+		address: "0x3623f2B63d8F50b477849d29e7C9A6625331E89D",
 		decimals: 18
 	},
 	{
@@ -58960,8 +60050,23 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "WNYC",
+		address: "0x6c015277B0f9b8c24B20BD8BbbD29FDb25738A69",
+		decimals: 18
+	},
+	{
 		symbol: "WOD",
 		address: "0x298632D8EA20d321fAB1C9B473df5dBDA249B2b6",
+		decimals: 18
+	},
+	{
+		symbol: "WOM",
+		address: "0xAD6742A35fB341A9Cc6ad674738Dd8da98b94Fb1",
+		decimals: 18
+	},
+	{
+		symbol: "WONE",
+		address: "0x03fF0ff224f904be3118461335064bB48Df47938",
 		decimals: 18
 	},
 	{
@@ -58985,8 +60090,18 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "WPKT",
+		address: "0x1C25222994531C4AC35E4d94bbf7552c9aa92E32",
+		decimals: 18
+	},
+	{
 		symbol: "WQT",
 		address: "0xe89508D74579A06A65B907c91F697CF4F8D9Fac7",
+		decimals: 18
+	},
+	{
+		symbol: "WRB3G",
+		address: "0x23BD85120f192AAd5f5d7590e271F1D03993aaC8",
 		decimals: 18
 	},
 	{
@@ -59120,6 +60235,11 @@ var tokens$2 = [
 		decimals: 18
 	},
 	{
+		symbol: "XGRO",
+		address: "0x4AdAE3Ad22c4e8fb56D4Ae5C7Eb3abC0dd2d3379",
+		decimals: 18
+	},
+	{
 		symbol: "XGT",
 		address: "0xC25AF3123d2420054c8fcd144c21113aa2853F39",
 		decimals: 18
@@ -59152,6 +60272,11 @@ var tokens$2 = [
 	{
 		symbol: "xMARK",
 		address: "0x26A5dFab467d4f58fB266648CAe769503CEC9580",
+		decimals: 9
+	},
+	{
+		symbol: "XMN",
+		address: "0x0fA9651a0ecC19906843C13c60443300B9d37355",
 		decimals: 9
 	},
 	{
@@ -59310,6 +60435,11 @@ var tokens$2 = [
 		decimals: 9
 	},
 	{
+		symbol: "YLGY",
+		address: "0x3A4329758940Fd7ea94b3754158795Eb412b824a",
+		decimals: 18
+	},
+	{
 		symbol: "YOLOV",
 		address: "0xD084C5a4a621914eD2992310024d2438DFde5BfD",
 		decimals: 18
@@ -59452,6 +60582,11 @@ var tokens$2 = [
 	{
 		symbol: "ZOO",
 		address: "0x09E2b83Fe5485a7c8BeAa5DffD1D324A2B2D5c13",
+		decimals: 18
+	},
+	{
+		symbol: "ZOO",
+		address: "0x1D229B958D5DDFca92146585a8711aECbE56F095",
 		decimals: 18
 	},
 	{
