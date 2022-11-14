@@ -1,35 +1,38 @@
-- ### Release 2.2.0-beta.17
-- Add update for Enkrypt
+- ### Release 2.2.0-beta.19
+- Fix ui hang up
 
-- ### Release 2.2.0-beta.14
-- UI
+* ### Release 2.2.0-beta.17
+* Add update for Enkrypt
 
-- ### Release 2.2.0-beta.12
-- add eth_signTypedData_v4
+* ### Release 2.2.0-beta.14
+* UI
 
-- ### Release 2.2.0-beta.11
-- return all lowercase address strings, fix npm resolution
+* ### Release 2.2.0-beta.12
+* add eth_signTypedData_v4
 
-- ### Release 2.2.0-beta.10
-- Fix github issues, npm audit fix
+* ### Release 2.2.0-beta.11
+* return all lowercase address strings, fix npm resolution
 
-- ### Release 2.2.0-beta.9
-- add more networks
+* ### Release 2.2.0-beta.10
+* Fix github issues, npm audit fix
 
-- ### Release 2.2.0-beta.6
-- update rollup and more cleanup
+* ### Release 2.2.0-beta.9
+* add more networks
 
-- ### Release 2.2.0-beta.4
-- cleanup and rollup updates
+* ### Release 2.2.0-beta.6
+* update rollup and more cleanup
 
-- ### Release 2.2.0-beta.3
-- change eth_decrypt, eth_getEncryptionPublicKey adhere to the standard
+* ### Release 2.2.0-beta.4
+* cleanup and rollup updates
 
-- ### Release 2.2.0-beta.2
-- Fix reference to css background class names in popUpCreator
-- Fix typo with transaction receipt event
-- Add eth_decrypt, eth_getEncryptionPublicKey, and eth_signtypeData_v3 methods
-- Remove infuraid, always use rpcURL
+* ### Release 2.2.0-beta.3
+* change eth_decrypt, eth_getEncryptionPublicKey adhere to the standard
+
+* ### Release 2.2.0-beta.2
+* Fix reference to css background class names in popUpCreator
+* Fix typo with transaction receipt event
+* Add eth_decrypt, eth_getEncryptionPublicKey, and eth_signtypeData_v3 methods
+* Remove infuraid, always use rpcURL
 
 ### Release 2.1.23-beta.9
 

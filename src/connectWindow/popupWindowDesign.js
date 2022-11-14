@@ -48,12 +48,31 @@ const cssStyles = `
       
      .close-mew-modal{
         position: absolute;
-        padding-top: 10px;
-        right: 10px !important;
-        top: 0;
-        width: 20px;
+        right: 16px !important;
+        top: 11px;
+        height: 36px;
+        width: 36px;
         cursor: pointer;
+        padding: 7px;
         z-index: 10;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
+        display: flex;
+        align-items: center;
+      }
+
+      .close-mew-modal:hover {
+        background-color: #ebebeb;
+      }
+
+      .close-mew-modal:active {
+        background-color: #bababa;
+      }
+
+      .close-mew-modal img {
+        opacity: 0.6;
+        height: 22px;
+        width: 22px;
       }
       
       .mew-qr-code {
@@ -321,10 +340,10 @@ const htmlDesign = (
 ) => {
   return `
     <div class="outer-container-mew-modal">
+      <div class="close-mew-modal" id="close-mew-modal" aria-label="close modal" data-close>
+          <img src="${iconImage}" />
+      </div>
       <div class="container-mew-modal">
-              <div class="close-mew-modal" id="close-mew-modal" aria-label="close modal" data-close>
-          <img src="${iconImage}" height="17" width="11"/>
-        </div>
       <div class="upper-text">
 
         <p class="mew-text-one">Connect to MEW&nbsp;wallet app</p>
