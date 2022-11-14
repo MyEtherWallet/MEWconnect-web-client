@@ -347,7 +347,6 @@ let web3;
 const signTx = () => {
   web3.eth.getBalance(this.userAddress).then(bal => this.balance);
   web3.eth.getGasPrice().then(gasPrice => {
-    console.log(gasPrice); // todo remove dev item
     web3.eth.getTransactionCount(this.userAddress).then(nonce => {
       web3.eth
         .sendTransaction({
@@ -418,7 +417,6 @@ export default {
   },
   mounted() {
     //localStorage.debug = '*';
-    console.log('LOADEDED'); // todo remove dev item
     this.connect = new mewConnect.Provider({
       windowClosedError: true,
       chainId: 1,
@@ -448,7 +446,6 @@ export default {
       console.log(`accountsChanged User's address is DISCONNECTED`);
       console.log('Wallet Core');
     });
-    console.log(this.ethereum.on); // todo remove dev item
     this.ethereum.on('disconnect', () => {
       console.log('Provider: disconnect');
       this.userAddress = '';
@@ -547,20 +544,16 @@ export default {
     async onClick() {
       try {
         const accounts = await this.ethereum.enable();
-        console.log('ACCOUNTS', accounts); // todo remove dev item
-        console.log(`User's address is ${accounts[0]}`);
         this.userAddress = accounts[0];
       } catch (e) {
         console.error(e); // todo replace with proper error
       }
-      console.log(mewConnect.Provider.isConnected); // todo remove dev item
     },
     disconnect() {
       this.connect.disconnect();
       this.userAddress = '';
     },
     getAccount() {
-      console.log(this.ethereum); // todo remove dev item
       this.ethereum
         .request({ method: 'eth_requestAccounts' })
         .then(accounts => {
@@ -568,23 +561,16 @@ export default {
         });
     },
     getBalance() {
-      console.log('this.userAddress', this.userAddress); // todo remove dev item
       let value = 'something';
       value = value.replace('some', '');
-      console.log(value); // todo remove dev item
-      console.log('PROVIDER this.userAddress', Object.keys(this.userAddress)); // todo remove dev item
-      console.log('this.userAddress', this.userAddress.replace('0x', '')); // todo remove dev item
       this.web3.eth.getBalance(this.userAddress).then(res => {
-        console.log(res); // todo remove dev item
         this.balance = res;
       });
     },
     sendTx() {
       this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
       this.web3.eth.getGasPrice().then(gasPrice => {
-        console.log('gasPrice', gasPrice); // todo remove dev item
         this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
-          console.log('nonce', nonce); // todo remove dev item
           this.web3.eth
             .sendTransaction({
               from: this.userAddress,
@@ -615,12 +601,10 @@ export default {
         if (this.altGasPrice !== '') {
           gasPrice = this.altGasPrice;
         }
-        console.log('gasPrice', gasPrice); // todo remove dev item
         this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
           if (this.altNonce !== '') {
             nonce = this.altNonce;
           }
-          console.log('nonce', nonce); // todo remove dev item
           this.web3.eth
             .sendTransaction({
               from: this.userAddress,
@@ -678,9 +662,7 @@ export default {
     signTx() {
       this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
       this.web3.eth.getGasPrice().then(gasPrice => {
-        console.log('gasPrice', gasPrice); // todo remove dev item
         this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
-          console.log('nonce', nonce); // todo remove dev item
           this.web3.eth
             .signTransaction({
               from: this.userAddress,
@@ -701,7 +683,6 @@ export default {
       this.web3.eth.getBalance(this.userAddress).then(bal => this.balance);
       this.web3.eth.getGasPrice().then(gasPrice => {
         this.web3.eth.getTransactionCount(this.userAddress).then(nonce => {
-          console.log('NONCE', nonce); // todo remove dev item
           this.web3.eth
             .signTransaction(
               {
@@ -1070,7 +1051,6 @@ export default {
         (err, result) => {
           if (!err) {
             this.personalSignedResult = result;
-            // console.log('result:', result); // todo remove dev item
           }
           console.log(err);
         }
@@ -1080,14 +1060,12 @@ export default {
       try {
         const msg = '1234';
         if (this.signatureToCheck === '' && this.signatureFromMessage === '') {
-          console.log('lklklklk', this.signatureFromMessage, this.userAddress); // todo remove dev item
           this.signatureFromMessage = '1234';
           this.signatureToCheck = await this.web3.eth.personal.sign(
             this.signatureFromMessage,
             this.userAddress
           );
         }
-        console.log('toCheck', this.signatureToCheck); // todo remove dev item
         const res = this.web3.eth.personal
           .ecRecover(
             this.signatureFromMessage,
@@ -1099,13 +1077,11 @@ export default {
                   'ecRecoverResult:',
                   address.toLowerCase() === this.userAddress.toLowerCase()
                 );
-                // todo remove dev item
               } else console.error(err);
             }
           )
           .then(console.log)
           .catch(console.error);
-        console.log('res', res); // todo remove dev item
       } catch (e) {
         console.error(e);
       }
