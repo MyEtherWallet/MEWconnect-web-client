@@ -391,6 +391,7 @@ Keys
     }
 
     this.webRtcCommunication.setActiveInitiatorId(this.V2.initiatorId);
+
     const connectionErrorTimeOut = setTimeout(() => {
       window.alert('Failed to start MEWconnect. Please try again.');
     }, 60000);

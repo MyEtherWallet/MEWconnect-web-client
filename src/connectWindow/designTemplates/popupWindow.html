@@ -190,7 +190,7 @@
         <div class="qr-code">
           <canvas id="canvas"></canvas>
         </div>
-        <div id="refresh-container" class="refreshIcon hidden">
+        <div id="refresh-container" class="refreshIcon mew-hidden">
           <img id="refresh" src="${refresh}" />
         </div>
 
@@ -248,7 +248,7 @@
       });
       setTimeout(() => {
         refreshContainer.className = refreshContainer.className.replace(
-          'hidden',
+          'mew-hidden',
           ''
         );
       }, 5000);

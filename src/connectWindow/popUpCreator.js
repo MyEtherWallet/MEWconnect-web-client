@@ -67,7 +67,7 @@ export default class PopUpCreator extends EventEmitter {
 
   hideNotifier() {
     const notify = document.getElementById('Notifications');
-    notify.className = 'hidden';
+    notify.className = 'mew-hidden';
   }
 
   createWindowInformer() {
@@ -78,7 +78,7 @@ export default class PopUpCreator extends EventEmitter {
     this.container.appendChild(css);
     const div = window.document.createElement('div');
     div.id = 'Notifications';
-    div.className = 'hidden';
+    div.className = 'mew-hidden';
 
     div.innerHTML = windowInformer(spaceman);
     this.container.appendChild(div);
@@ -113,46 +113,54 @@ export default class PopUpCreator extends EventEmitter {
   showQrError() {
     const notify = document.getElementById('qr-failure');
     document.querySelector('#qrcodeError').classList.remove('is-visible');
-    notify.className = 'hidden';
+    notify.className = 'mew-hidden';
   }
 
   showConnecting() {
     // todo: add existance checks because these are destroyed on a good connection
     document
       .querySelector('#qr-code-display-container-mew')
-      .classList.add('hidden');
+      .classList.add('mew-hidden');
     document
       .querySelector('#qr-code-connecting-mew')
-      .classList.remove('hidden');
+      .classList.remove('mew-hidden');
   }
 
   hideConnecting() {
     document
       .querySelector('#qr-code-display-container-mew')
-      .classList.remove('hidden');
-    document.querySelector('#qr-code-connecting-mew').classList.add('hidden');
+      .classList.remove('mew-hidden');
+    document
+      .querySelector('#qr-code-connecting-mew')
+      .classList.add('mew-hidden');
   }
 
   showRetry(callback) {
     const retry = document.getElementById('retry-button-mew');
     const retryOnModal = document.getElementById('refresh-container');
     if (document.querySelector('#refresh-container'))
-      document.querySelector('#refresh-container').classList.remove('hidden');
+      document
+        .querySelector('#refresh-container')
+        .classList.remove('mew-hidden');
     if (document.querySelector('#retry-button-mew'))
-      document.querySelector('#retry-button-mew').classList.remove('hidden');
+      document
+        .querySelector('#retry-button-mew')
+        .classList.remove('mew-hidden');
     const eventHandler = () => {
       if (document.querySelector('#qr-code-display-container-mew'))
         document
           .querySelector('#qr-code-display-container-mew')
-          .classList.remove('hidden');
+          .classList.remove('mew-hidden');
       if (document.querySelector('#qr-code-connecting-mew'))
         document
           .querySelector('#qr-code-connecting-mew')
-          .classList.add('hidden');
+          .classList.add('mew-hidden');
       if (document.querySelector('#retry-button-mew'))
-        document.querySelector('#retry-button-mew').classList.add('hidden');
+        document.querySelector('#retry-button-mew').classList.add('mew-hidden');
       if (document.querySelector('#refresh-container'))
-        document.querySelector('#refresh-container').classList.add('hidden');
+        document
+          .querySelector('#refresh-container')
+          .classList.add('mew-hidden');
       if (retry)
         retry.removeEventListener('click', eventHandler, {
           passive: false,
@@ -165,16 +173,18 @@ export default class PopUpCreator extends EventEmitter {
         });
       callback();
     };
-    if (retry)
+    if (retry) {
       retry.addEventListener('click', eventHandler, {
         passive: false,
         once: true
       });
-    if (retryOnModal)
+    }
+    if (retryOnModal) {
       retryOnModal.addEventListener('click', eventHandler, {
         passive: false,
         once: true
       });
+    }
   }
 
   createQrCodeModal() {
@@ -189,7 +199,7 @@ export default class PopUpCreator extends EventEmitter {
     this.container.appendChild(css);
     const div = window.document.createElement('div');
     div.id = modalId;
-    // div.className = 'hidden';
+    // div.className = 'mew-hidden';
     div.innerHTML = modalFrame(
       htmlDesign(
         this.refreshIcon,
@@ -260,7 +270,6 @@ export default class PopUpCreator extends EventEmitter {
 
       this.createQrCodeModal();
       this.createWindowInformer();
-
       const element = document.getElementById('canvas-for-mewconnect-qr-code');
       QrCode.toCanvas(element, qrcode, {
         errorCorrectionLevel: 'H',

@@ -215,7 +215,12 @@ const cssStyles = `
         margin-left: auto;
         margin-right: auto;
         cursor: pointer;
-        color: #fffff;
+        display: flex;
+        align-items: center;
+      }
+
+      .refreshIcon > #refresh {
+        padding-left: 5px;
       }
 
       .mew-hidden {
