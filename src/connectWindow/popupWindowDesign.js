@@ -389,7 +389,7 @@ const htmlDesign = (
 
         </div>
         <div class="mew-bottom">
-          Powered by <a href="https://myetherwallet.github.io/MEWconnect-Protocol-Documentation/" target="_blank" id="proto-link" class="bottom-link">MEWconnect protocol</a> <br />
+          Powered by <a href="https://mewconnect.myetherwallet.com/" target="_blank" id="proto-link" class="bottom-link">MEWconnect protocol</a> <br />
           brought to you by <a href="https://www.myetherwallet.com/" target="_blank" id="mew-link" class="bottom-link">MyEtherWallet</a>
         </div>
       </div>
