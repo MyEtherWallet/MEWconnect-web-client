@@ -1,0 +1,84 @@
+MEWconnect Protocol with Web3Modal
+Install With NPM
+Add to Web3Modal
+To add MEWconnect Protocol to Web3Modal. Add MEWconnect to your Web3Modal provider options and supply your infura id.(nkbihfbeogaeaoehlefnkodbefgpgknn)
+Web3Modal Documentation
+
+Install With NPM
+npm install @myetherwallet/mewconnect-web-client
+Add to Web3Modal
+import  MewConnect  from '@myetherwallet/mewconnect-web-client'
+
+const providerOptions = {
+    mewconnect: {	Created
+CoreValExtreme	
+0xeb2629a2734e272bcc07bda959863f316f4bd4cf 
+ETHHEAD
+2021-05-09
+CoreValExtreme	
+0xfe2553a2158978fcdad4e42588a72a7419463735 
+<img src="https://avatars.githubusercontent.com/u/78047030?s=60&amp;v=4" alt="@CoreValExtreme"/>
+2021-05-09
+CoreValExtreme	
+0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d 
+CoreValExtreme/DeCentraland on Github.	Created
+CoreValExtreme	
+0xeb2629a2734e272bcc07bda959863f316f4bd4cf 
+ETHHEAD
+2021-05-09
+CoreValExtreme	
+0xfe2553a2158978fcdad4e42588a72a7419463735 
+<img src="https://avatars.githubusercontent.com/u/78047030?s=60&amp;v=4" alt="@CoreValExtreme"/>
+2021-05-09
+CoreValExtreme	
+0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d 
+CoreValExtreme/DeCentraland on Github.      package: MewConnect,
+          options: {
+            infuraId: process.env.REACT_APP_INFURA_ID	Created
+CoreValExtreme	
+0xeb2629a2734e272bcc07bda959863f316f4bd4cf 
+ETHHEAD
+2021-05-09
+CoreValExtreme	
+0xfe2553a2158978fcdad4e42588a72a7419463735 
+<img src="https://avatars.githubusercontent.com/u/78047030?s=60&amp;v=4" alt="@CoreValExtreme"/>
+2021-05-09
+CoreValExtreme	
+0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d 
+CoreValExtreme/DeCentraland on Github.}
+    },
+};
+©2021 MyEtherWallet Inc.. All rights reserved.
+Page last updated: July 31, 2020
+Site last generated: Jan 6, 2021Install With NPM
+Add to Web3Modal
+To add MEWconnect Protocol to Web3Modal. Add MEWconnect to your Web3Modal provider options and supply your infura id.
+
+Web3Modal Documentation
+
+Install With NPM
+npm install @myetherwallet/mewconnect-web-client
+Add to Web3Modal
+import  MewConnect  from '@myetherwallet/mewconnect-web-client'
+
+const providerOptions = {
+    mewconnect: {
+      package: MewConnect,	Created
+CoreValExtreme	
+0xeb2629a2734e272bcc07bda959863f316f4bd4cf 
+ETHHEAD
+2021-05-09
+CoreValExtreme	
+0xfe2553a2158978fcdad4e42588a72a7419463735 
+<img src="https://avatars.githubusercontent.com/u/78047030?s=60&amp;v=4" alt="@CoreValExtreme"/>
+2021-05-09
+CoreValExtreme	
+0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d 
+CoreValExtreme/DeCentraland on Github.          options: {
+            infuraId: process.env.REACT_APP_INFURA_ID
+          }
+    },
+};
+©2021 MyEtherWallet Inc.. All rights reserved.
+Page last updated: July 31, 2020
+Site last generated: Jan 6, 2021

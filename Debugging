@@ -1,0 +1,32 @@
+Debugging
+The MEWconnect client uses the debug library to provide verbose debug logging.
+
+In local storage add the key ‘debug’ with the value:
+
+*
+to see everything
+MEWconnect: *
+to see everything related to the MEWconnect client
+MEWconnect:initiator-base
+
+MEWconnect:initiator-V1
+
+MEWconnect:initiator-V2
+
+MEWconnect:turn-V2
+
+MEWconnect:webRTC-communication
+
+MEWconnect:websocketWrapper
+
+MEWconnect:connection-state
+to see the connection state when it changes
+MEWconnect:webRTC-communication
+to see the events and signals related to webRTC
+MEWconnect:websocketWrapper
+to see the events related to setting up the webRTC connection
+MEWconnect:,MEWconnectVerbose:,simple-peer
+what we usually use for debugging
+©2021 MyEtherWallet Inc.. All rights reserved.
+Page last updated: July 31, 2020
+Site last generated: Jan 6, 2021
